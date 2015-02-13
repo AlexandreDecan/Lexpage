@@ -18,7 +18,7 @@ La racine du dépôt contient notamment :
 En quelques étapes :
 - Cloner le dépôt via `git clone https://github.com/AlexandreDecan/Lexpage`
 - Créer l'image Docker via `docker build -t lexpage:dev .`
-- Créer le container via `docker run --rm -it -p 8000:80 -v PATH:/web/ lexpage:dev` où PATH est remplacé par le chemin courant
+- Créer le container via `docker run --rm -it -p 8000:8000 -v PATH:/web/ lexpage:dev` où PATH est remplacé par le chemin courant
 - Le site est alors accessible sur le port 8000 de votre machine.
 
 **Mais c'est pas tout à fait pareil ?**

@@ -8,7 +8,7 @@ WORKDIR /web
 ADD requirements.txt /web/
 RUN pip install -r requirements.txt
 
-EXPOSE 80
+EXPOSE 8000
 
 CMD gunicorn --config gunicorn.py wsgi:application
 
