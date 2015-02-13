@@ -54,7 +54,6 @@ docs/_build/
 target/
 
 # Lexpage-specific
-app/static_pub/*
 app/db
 app/settings_prod.py
 docker-run.sh
