@@ -20,14 +20,14 @@ En quelques étapes :
 - Créer l'image Docker via `docker build -t lexpage:dev .`
 - Créer le container via `docker run --rm -it -p 8000:8000 -v PATH:/web/ lexpage:dev` où PATH est remplacé par le chemin courant
 - Le site est alors accessible sur le port 8000 de votre machine.
+Pensez à re-builder l'image si vous changez *requirements.txt* !
 
 **Mais c'est pas tout à fait pareil ?**
 
-Et bien non, forcément, il y a de nombreuses données en production qui font que Lexpage est ce qu'il est en ligne. En particulier, certaines fonctions nécessitent un "*vrai*" SGBD, alors que l'environnement de développement travaille par défaut avec SQLite. En production, nous utilisons MariaDB que vous pourrez facilement mettre en place avec Docker. Si tel est votre souhait, pensez à ajouter *django-mysql* dans votre *requirements.txt*. 
-
+Et bien non, forcément, il y a de nombreuses données en production qui font que Lexpage est ce qu'il est en ligne. En particulier, certaines fonctions nécessitent un "*vrai*" SGBD, alors que l'environnement de développement travaille par défaut avec SQLite. En production, nous utilisons MariaDB que vous pourrez facilement mettre en place avec Docker. 
 Afin que Django ne vous crâche pas une vilaine erreur au lancement, il convient d'initialiser la base de données SQLite. Pour cela, exécutez simplement `python manage.py syncdb` (nécessite que les dépendances de `requirements.txt` soient installées, pensez donc à l'exécuter via un container, par exemple, `docker run --rm -it -v PATH:/web/ lexpage:dev python app/manage.py syncdb`)
 
-L'édito, la page *À propos*, l'aide pour le balisage, etc. sont des *flatpages* qui sont stockées dans la base de données. Vous pouvez le faire directement depuis l'administration mais il va falloir choisir la bonne URL (indice : en fonction de vos besoins, consultez les fichiers *urls.py* !).
+L'édito, la page "à propos", l'aide pour le balisage, etc. sont des *flatpages* qui sont stockées dans la base de données. Vous pouvez le faire directement depuis l'administration mais il va falloir choisir la bonne URL pour chaque flatpage (indice : en fonction de vos besoins, consultez le fichier *urls.py* à la racine, ou la template *navbar.html*, par exemple).
 
 De même, en l'absence de contenu, certains éléments peuvent se comporter visuellement (voire comportementalement) anormalement (ce qui fait beaucoup de mots en -ment, je vous l'accorde). 
 
