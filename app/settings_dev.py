@@ -13,7 +13,7 @@ RECAPTCHA_PUBLIC_KEY = None
 RECAPTCHA_PRIVATE_KEY = None
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_MAIL = 'no-replay@lexpage.net'
+DEFAULT_FROM_MAIL = 'no-reply@lexpage.net'
 
 
 
