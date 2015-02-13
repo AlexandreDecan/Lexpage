@@ -59,7 +59,7 @@ class ProfileChangeView(FormView):
         if form.cleaned_data['avatar_file']:
             image_file = form.cleaned_data['avatar_file']
             file_relative_path = os.path.join('images', 'avatars', self.request.user.get_username()+'.upload')
-            file_local_path = os.path.join(settings.STATICFILES_DIRS[0], file_relative_path)
+            file_local_path = os.path.join(settings.STATIC_ROOT, file_relative_path)
             
             new_file = open(file_local_path, 'wb')
             for chunk in image_file.chunks():
