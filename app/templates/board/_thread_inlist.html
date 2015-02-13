@@ -1,0 +1,57 @@
+{# Receive thread and action #}
+{% load humanize %}
+
+
+<div class="board-threadlist">
+
+    <div class="board-threadlist-flag">
+        {% if thread.flag %}
+            {% if thread.flag.message = thread.last_message %}
+                <a data-toggle="tooltip" data-placement="top" title="Aller au dernier message" 
+                    class="btn btn-info btn-xs" href="{% url 'board_thread_show_last' thread.pk thread.slug %}#last">
+                    <span class="fa fa-eye"></span>
+                </a>
+            {% else %}
+                <a data-toggle="tooltip" data-placement="top" title="Aller au premier message non-lu" 
+                    class="btn btn-danger btn-xs" href="{% url 'board_thread_show_unread' thread.pk thread.slug %}#new">
+                    <span class="fa fa-eye-slash"></span>
+                </a>
+            {% endif %}
+        {% elif user.is_authenticated %}
+            <a data-toggle="tooltip" data-placement="top" title="Discussion non-lue" 
+                class="" href="{% url 'board_thread_show' thread.pk thread.slug %}">
+                <span class="text-muted fa fa-border fa-eye"></span>
+            </a>
+        {% endif %}
+    </div>
+
+    {% if action and user.is_authenticated %}
+        <div class="board-threadlist-actions">
+            <a class="btn btn-info btn-xs confirm-action" data-toggle="tooltip"
+                title="Marquer la discussion comme non-lue" href="{% url 'board_thread_mark_unread' thread.pk thread.slug %}">
+                <span class="fa fa-eye-slash"></span></a>
+            {% if perms.board.can_destroy %}
+                <a class="btn btn-danger btn-xs confirm-action" data-toggle="tooltip"
+                    title="Supprimer la conversation" href="{% url 'board_thread_delete' thread.pk thread.slug %}">
+                    <span class="fa fa-trash-o"></span></a>
+            {% endif %}    
+        </div>
+    {% endif %}
+
+
+    <div class="board-threadlist-avatar">
+        {% for user in thread.authors %}
+            <a href="{% url 'profile_show' user.username %}"><img src="{{ user.profile.avatar }}" title="{{ user.username }}" class="avatar verysmallavatar"/></a>
+        {% endfor %}
+    </div>    
+
+    <div class="board-threadlist-title">
+        <a href="{% url 'board_thread_show' thread.pk thread.slug %}">{{ thread.title }}</a>
+    </div>
+
+    <div class="board-threadlist-metadata">
+        <span class="badge" data-toggle="tooltip" title="Nombre de messages">{{ thread.number }}</span> 
+        Dernier message par 
+        <a href="{% url 'profile_show' thread.last_message.author.username %}">{{ thread.last_message.author.username }}</a>, {{ thread.last_message.date|naturalday }} à {{ thread.last_message.date|time:'H:i' }}
+    </div>    
+</div>

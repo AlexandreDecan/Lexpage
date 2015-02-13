@@ -1,0 +1,66 @@
+{% extends "slogan/__base_slogan.html" %}
+
+{% block content %}
+    <h3>Liste des slogans <small>({{ page_obj.paginator.count }})</small></h3>
+
+    <p class="well">Les slogans ont été introduits lors de la première version du Lexpage, entre 
+    1996 et 1998. Ils consistaient alors à reprendre les publicités et les slogans
+    de l'époque de sorte à y inclure Lexpage. Petit à petit, la liste s'est étoffée
+    et c'est maintenant {{ page_obj.paginator.count }} slogans qui ont été proposés par les visiteurs
+    du site. </p>
+
+    {% if user.is_authenticated %}
+
+        <p>Si vous désirez proposer un nouveau slogan, complétez simplement le champ
+        de texte suivant. Votre slogan sera alors proposé aux modérateurs qui pourront
+        choisir de le rendre visible ou non. </p>
+
+        <form class="form" method="post" action="{% url 'slogan_add' %}">
+        {% csrf_token %}
+        {% include "_form_errors.html" %}
+        <div class="input-group">
+        <input type="text" class="form-control" 
+            placeholder="Texte du slogan"
+            value="{{ form.slogan.initial }}"
+            name="{{ form.slogan.name }}"/>
+            <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit">Proposer</button>
+            </span>
+        </div>
+        </form>
+    {% endif %}
+
+    <div align="center">
+
+    {% include "_pagination.html" with page_obj=page_obj page_url='slogan_list' %}
+
+    <table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Slogan</th><th class="col-sm-2">Auteur</th><th class="col-sm-2">Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for slogan in slogan_list %}
+        <tr>
+            <td>
+                <span class="fa fa-quote-left text-muted"/>
+                <em>{{ slogan.slogan }}</em>
+                <span class="fa fa-quote-right text-muted"/>
+            </td>
+            <td>
+                {{ slogan.author }}
+            </td>
+            <td>
+                {{ slogan.date|date:"SHORT_DATE_FORMAT" }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+
+    {% include "_pagination.html" with page_obj=page_obj page_url='slogan_list' %}
+    </div>
+
+
+{% endblock content %}

@@ -1,0 +1,173 @@
+{% load humanize %}
+{% load markup_bbcode %}
+
+
+<div class="board-message"  id="msg-{{ message.pk }}">
+<div class="board-message-side">
+    <div class="board-message-author">
+        <a href="{% url 'profile_show' message.author %}">
+        <img src="{{ message.author.profile.avatar }}" class="avatar" title="{{ message.author.username }}"/>
+        <br/>
+        {{ message.author.username }}</a>
+    </div>
+
+    {% with count=message.author.board_post.count %}
+    <span 
+        data-toggle="tooltip"
+        title="Nombre de messages"
+        class="label label-info">{{ count }} - <span>
+        {% if count < 10 %}
+            Noob
+        {% elif count < 15 %}
+            Nerdz
+        {% elif count < 25 %}
+            Great Nerdz
+        {% elif count < 50 %}                        
+            ChtiChampiz
+        {% elif count = 69 %}
+            Pervers
+        {% elif count < 75 %}
+            Champiz
+        {% elif count < 100 %}
+            Hkiwi
+        {% elif count = 118 %} 
+            218 !
+        {% elif count < 150 %}
+            Padawan
+        {% elif count < 250 %}
+            Wookie
+        {% elif count = 271 %}
+            Wookirl271
+        {% elif count < 300 %}
+            Jedi
+        {% elif count < 500 %}
+            Maitre jedi
+        {% elif count = 666 %}
+            Satan
+        {% elif count < 750 %}
+            Geek
+        {% elif count < 1250 %}
+            Flooder
+        {% elif count < 2000 %}
+            Spammeur
+        {% elif count = 2710 %}
+            Spam271
+        {% else %}
+            Bob
+        {% endif %}
+        </span>
+        </span>
+
+    {% endwith %}
+
+    <div class="board-message-author-actions">
+     <a class="btn btn-xs btn-primary" 
+        data-toggle="tooltip"
+        title="Voir le profil"
+        href="{% url 'profile_show' message.author %}">
+        <span class="fa fa-user"></span></a>
+    {% if user.is_authenticated %}
+         <a class="btn btn-xs btn-primary" 
+            data-toggle="tooltip"
+            title="Envoyer un message"
+            href="{% url 'messaging_create' message.author.username %}">
+            <span class="fa fa-envelope"></span></a>
+    {% endif %}
+        <br/>
+    </div>
+</div>
+
+
+<div class="board-message-content" id="board-message-{{ message.pk }}">
+    <div class="board-message-date small text-muted">
+    <span class="fa fa-clock-o"></span>
+    <a class="text-muted" href="{% url 'board_message_show' message.pk %}">{{ message.date|naturalday:'l j F Y'|capfirst }} à {{ message.date|time:'H:i' }}</a>
+    {% if user.is_authenticated %}
+        {% if thread.flag.message.date >= message.date %}
+            <a data-toggle="tooltip"
+                title="Marquer ce message comme non-lu"
+                class="btn btn-xs btn-info"
+                href="{% url 'board_message_mark_unread' message.pk %}">
+                <span class="fa fa-eye"></span></a>
+        {% else %}
+            <a data-toggle="tooltip"
+                href="{% url 'board_message_mark_unread' message.pk %}"
+                title="Marquer à nouveau ce message comme non-lu"
+                class="btn btn-xs btn-danger">
+                <span class="fa fa-eye-slash"></span></a>
+        {% endif %}
+    {% endif %}
+    </div>
+
+    {% if old %}
+        <div class="text-center">
+        <strong class="label label-info">Reprise automatique du message précédent.</strong>
+        </div>
+    {% endif %}
+
+    {% if message.moderated %}
+        <div class="text-center">
+        <strong class="label label-danger">Ce message a été modéré.</strong>
+        </div>
+    {% endif %}
+
+    <div class="board-message-text">
+        <div class="bbcode">
+            {{ message.text|bbcode }}  
+        </div>
+        {% with last_modified=message.last_modified %}
+        {% if last_modified %}
+            <p class="text-muted small">
+                <br/><em>Ce message a été modifié {{ message.number_modified }} fois. 
+                Dernière modification : {{ last_modified.date|naturalday }}
+                à {{ last_modified.date|time:"H:i" }} par 
+                <a href="{% url 'profile_show' last_modified.edited_by %}">
+                {{ last_modified.edited_by.username }}</a>.</em>
+            </p>
+        {% endif %}      
+        {% endwith %}
+    </div>
+
+    {% if user.is_authenticated %}
+    <div class="board-message-actions">
+        <a class="btn btn-xs btn-primary"
+            href="#reply"
+            data-toggle="tooltip"
+            data-messageid="board-message-{{ message.pk }}"
+            data-quote="{% url 'board_message_raw' message.pk %}"
+            title="Citer le message">
+            <span class="fa fa-comment"></span></a>
+        <a class="btn btn-xs btn-info"
+            href="#reply"        
+            data-toggle="tooltip"
+            data-messageid="board-message-{{ message.pk }}"
+            data-addquote="{% url 'board_message_raw' message.pk %}"
+            title="Ajouter aux messages cités">
+            <span class="fa fa-comment">+</span></a>    
+        {% if message.author = user and not message.moderated %}
+            <a class="btn btn-xs btn-info"
+                href="{% url 'board_message_edit' message.pk %}"
+                data-toggle="tooltip"
+                title="Éditer le message"><span class="fa fa-edit"></span></a>
+        {% elif perms.board.can_moderate %}
+            <a class="btn btn-xs btn-warning"
+                href="{% url 'board_message_edit' message.pk %}"
+                data-toggle="tooltip"
+                title="Modérer le message"><span class="fa fa-edit"></span></a>
+        {% endif %}
+        {% if perms.board.can_destroy %}
+            <a class="confirm-action btn btn-xs btn-danger"
+                href="{% url 'board_message_delete' message.pk %}"
+                data-toggle="tooltip"
+                title="Supprimer le message"><span class="fa fa-trash-o"></span></a>
+        {% endif %}        
+    </div>
+    {% endif %}
+</div>
+
+
+</div>
+
+
+
+

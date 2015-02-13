@@ -1,0 +1,29 @@
+{% extends "profile/__base_activate.html" %}
+
+{% block content %}
+<h3>Échec de l'activation</h3>
+
+<p>L'activation de votre compte n'a pas pu être effectuée. 
+Cela est probablement du à l'une des raisons suivantes : </p>
+
+<ul>
+  <li> <strong>La clé que vous avez utilisée n'est pas correcte.</strong><br/>
+    Vérifiez dans votre e-mail la clé reçue. 
+    Utilisez de préférence le lien fourni dans cet e-mail pour finaliser la 
+    création de votre compte.</li>
+  <li> <strong>Votre compte a déjà été activé</strong><br/>
+    Il est possible que vous ayez déjà activé votre compte, dans ce cas, il 
+    n'est plus nécessaire d'utiliser le lien fourni dans votre e-mail, ni même
+    de conserver cet e-mail. Vous pouvez directement vous identifier sur le site
+    en utilisant le nom d'utilisateur et le mot de passe choisi lors de l'inscription.</li>
+  <li> <strong>Le délai d'activation a été dépassé</strong><br/>
+    Vous disposez de 5 jours entre la création de votre compte et son activation. 
+    Si ce délai a été dépassé, la clé fournie par e-mail ne fonctionnera pas. 
+    Vous devez recommencer le processus de création de compte afin d'obtenir une
+    nouvelle clé d'activation. Notez que vous pouvez réutiliser le même nom 
+    d'utilisateur pour votre nouvelle inscription, sauf si ce dernier a été 
+    choisi entre temps par un autre utilisateur. </li>
+</ul>
+
+
+{% endblock content %}

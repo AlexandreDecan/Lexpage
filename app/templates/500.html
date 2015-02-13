@@ -1,0 +1,17 @@
+{% extends "__base.html" %}
+
+{% block title %}500 | {{ block.super }}{% endblock title %}
+
+{% block page %}
+    <h2>Erreur 500</h2>
+    {% block content %}
+
+    <p><em>Oh, putain, Bob, t'as tout pété avec ce champignon atomique !</em></p>
+
+
+    <p>Une erreur est survenue pendant le chargement de la page !
+    Si le problème persiste et vous semble anormal, n'hésitez pas à 
+    contacter un administrateur du site.</p>
+    
+    {% endblock content %}
+{% endblock page %}

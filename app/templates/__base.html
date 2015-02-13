@@ -1,0 +1,125 @@
+{% load static %}<!DOCTYPE html>
+
+<html lang="fr">
+  <head>
+    {% block meta_tags %}{% endblock %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0">
+    <title>{% block title %}Lexpage{% endblock %}</title>
+    
+    {% block stylesheets %}
+        <link href="{% static "bootstrap/css/bootstrap.min.css" %}?v=141109" rel="stylesheet"/>
+        <link href="{% static "lexpage-bootstrap.min.css" %}?v=141113" rel="stylesheet"/>
+        <link href="{% static "font-awesome/css/font-awesome.min.css" %}?v=141012" rel="stylesheet"/>        
+        <link href="{% static "lexpage.min.css" %}?v=141116" rel="stylesheet"/>
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    {% endblock stylesheets %}
+        <link rel="icon" type="image/png" href="{% static "images/favicon.png" %}?v=140716" />
+    {% block javascript %}
+      <script>
+      var URL_PREFIX = ""; // markup.js, script.js
+      </script>
+      <script src="{% static "jquery-2.1.1.min.js" %}?v=141109"></script>      
+      <script src="{% static "scripts.min.js" %}?v=140716"></script>
+      <script src="{% static "minichat.min.js" %}?v=140716"></script>
+      <script src="{% static "markup.min.js" %}?v=140716"></script>      
+    {% endblock javascript %}    
+    {{ form.media }} 
+
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12" style="margin-top:20px;">
+        {% block slogan %}
+          {% load slogan %}
+          {% random_slogan as slogan %}
+          <p class="text-center text-muted small">
+              <span class="fa fa-quote-left"></span>
+              &nbsp; <em>{{ slogan.slogan }}</em> &nbsp;
+              <span class="fa fa-quote-right"></span>
+              &nbsp;&mdash;&nbsp; 
+              <a href="{% url 'slogan_list' %}">Slogan</a> par <cite>{{ slogan.author }}</cite>
+          </p>
+        {% endblock slogan %}
+      </div> <!-- slogan -->
+    </div> <!-- row -->
+
+    <div class="row">
+      <div class="col-md-12">
+        {% block navbar %}
+          {% include "_navbar.html" %}
+        {% endblock navbar %}
+      </div>
+    </div>
+
+    <div class="row">
+      
+      <div class="col-md-9">
+        <div class="page">
+        {% block messages %}
+          {% include "_messages.html" %}
+        {% endblock messages %}
+
+        {% block page %}{% endblock page %}
+
+        </div><!-- page -->
+      </div>
+
+
+      <div class="col-md-3">
+        <div class="sidebar">
+        {% include "_sidebar.html" %}
+        </div><!-- sidebar -->
+      </div>
+
+
+    </div><!-- row -->
+
+
+    <div class="row footer">
+      <div class="col-md-12">
+        <div class="text-center">
+          {% block footer %}
+            {% include "_footer.html" %}
+          {% endblock %}
+        </div>
+      </div>
+    </div><!-- row -->
+  </div><!-- container -->
+
+
+
+    <div class="modal fade" id="confirm-action" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Êtes-vous sûr ?</h4>
+          </div>
+          <div class="modal-body" align="center">
+            <a id="confirm-action-yes" class="btn btn-primary">Oui</a>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+          </div>
+        </div>
+      </div>
+    </div> <!-- modal -->
+
+    {% block javascript_bottom %}
+      <script src="{% static "bootstrap/js/bootstrap.min.js" %}?v=141109"></script>
+      <script src="{% static "autocomplete.min.js" %}"></script>
+      <script src="{% static "jquery.oembed.min.js" %}"></script>
+      <script src="{% static "modernizr.min.js" %}"></script>
+    {% endblock %}
+
+
+    {% include "_analytics.html" %}
+
+  </body>
+</html>
+

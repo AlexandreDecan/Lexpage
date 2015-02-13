@@ -1,0 +1,18 @@
+{% extends "board/__base_board.html" %}
+
+{% block title %}Nouvelle discussion | {{ block.super }}{% endblock %}
+
+{% block content %}
+    <h3>Nouvelle discussion</h3>
+
+    <form method="post" class="form" action="">
+    {% csrf_token %}
+    {% include "_form_errors.html" %}
+    {% for field in form %}
+        {% include "_form_field.html" with field=field %}
+    {% endfor %}
+
+    <button class="btn btn-primary" type="submit">Enregistrer</button>
+    </form>    
+
+{% endblock %}

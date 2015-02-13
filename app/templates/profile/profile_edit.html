@@ -1,0 +1,24 @@
+{% extends "profile/__base_profile.html" %}
+
+{% block content %}
+<h3>Modification de votre profil</h3>
+
+<div class="well">
+<p>Complétez votre profil. Certaines informations ne seront jamais affichées 
+publiquement, notamment votre nom et votre adresse e-mail. A l'exception de 
+l'adresse e-mail, les informations de votre profil sont facultatives.</p>
+
+<p>Vous pouvez à tout moment consulter votre <a href="{% url 'profile_show' user.username %}">profil public</a>.</p>
+</div>
+
+<form {% if form.is_multipart %}enctype="multipart/form-data" {% endif %}method="post" class="form" action="{% url 'profile_edit' %}">
+{% csrf_token %}
+{% include "_form_errors.html" %}
+{% for field in form %}
+    {% include "_form_field.html" with field=field %}
+{% endfor %}
+
+<button class="btn btn-primary" type="submit">Valider</button>
+</form>
+
+{% endblock content %}

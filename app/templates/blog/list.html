@@ -1,0 +1,61 @@
+{% extends "blog/__base_archives.html" %}
+
+
+{% block content %}
+
+
+    <h3>Archives de {{ date_current|date:'F Y' }} <small>({{ post_list|length }})</small></h3>
+
+    <p>Les billets ci-dessous sont les billets publiés en 
+    {{ date_current|date:'F Y' }}. Vous pouvez choisir une autre période parmi
+    les périodes suivantes : <br/>
+
+    {% regroup date_list by year as date_year_list %}
+        <ul>
+        {% for year in date_year_list %}
+            <li>Année {{ year.grouper }} : 
+            {% for month in year.list %}
+                {% if date_current.year = year.grouper and date_current.month = month.month %}
+                    {{ month|date:"F" }}
+                {% else %}
+                    <a href="{% url 'blog_archives' year.grouper month.month %}">
+                    {{ month|date:"F" }}
+                    </a>
+                {% endif %}
+                {% if not forloop.last %}/{% endif %}
+            {% endfor %}
+            </li> 
+        {% endfor %}
+        </ul>
+    </p>
+
+    {% for post in post_list %}
+        {% ifchanged post.date_published|date %}
+            <h3>{{ post.date_published|date:"l j F"|capfirst }}</h3>
+        {% endifchanged %}
+        {% include "blog/_post_inlist.html" with post=post %}
+    {% empty %}
+        <em>Aucun billet pour la période choisie.</em>    
+    {% endfor %}
+
+    <hr/>
+
+
+    <div class="pull-left">
+        {% if previous_month %}
+            <a class="btn btn-primary btn-sm" href="{% url 'blog_archives' previous_month.year previous_month.month %}"> <span class="fa fa-arrow-left"></span> {{ previous_month|date:"F Y"|capfirst }}</a>
+        {% else %}
+            <a class="btn btn-primary btn-sm disabled" href="#"><span class="fa fa-arrow-left"></span> Mois précédent</a>
+        {% endif %}
+    </div>
+
+    <div class="pull-right">
+        {% if next_month %}
+            <a class="btn btn-primary btn-sm" href="{% url 'blog_archives' next_month.year next_month.month %}">{{ next_month|date:"F Y"|capfirst }}<span class="fa fa-arrow-right"></span></a>
+        {% else %}
+            <a class="btn btn-primary btn-sm disabled" href="#">Mois suivant <span class="fa fa-arrow-right"></span></a>
+        {% endif %}
+    </div>
+
+
+{% endblock content %}

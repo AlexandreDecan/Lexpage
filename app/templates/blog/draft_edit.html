@@ -1,0 +1,27 @@
+{% extends "blog/__base_blog.html" %}
+
+{% block title %}Modifier un billet | {{ block.super }}{% endblock %}
+
+
+{% block content %}
+    <h3>Modifier un billet</h3>
+
+    {% if perms.blog.can_approve %}
+        <p class="well">Vous disposez de droits supplémentaires vous permettant de valider 
+        des billets. Par facilité, vous pouvez directement valider votre billet
+        depuis cette page. Dans ce cas, soyez attentif et relisez-le avant !</p>
+    {% endif %}
+
+    <form method="post" class="form" action="">
+    {% csrf_token %}
+    {% include "_form_errors.html" %}
+    {% for field in form %}
+        {% include "_form_field.html" with field=field %}
+    {% endfor %}
+
+    <button class="btn btn-primary" type="submit">Enregistrer</button>
+    <a class="btn btn-default" href="{% url 'blog_draft_list' %}">Annuler</a>
+    </form>
+
+
+{% endblock content %}

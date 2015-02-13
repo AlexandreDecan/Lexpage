@@ -1,0 +1,26 @@
+{% extends "board/__base_board.html" %}
+
+{% block title %}Liste des discussions | {{ block.super }}{% endblock %}
+
+{% block content %}
+
+    <h3>Liste des discussions <small>({{ page_obj.paginator.count }})</small></h3>
+
+    <div align="center">
+    {% include "_pagination.html" with page_obj=page_obj page_url='board_archives' %}
+    </div>
+
+    {% if thread_list %}
+        {% for thread in thread_list %}
+            {% include "board/_thread_inlist.html" with thread=thread action=True %}
+        {% endfor %}
+    {% else %}
+        <em>Aucune discussion pour la période choisie.</em>
+    {% endif %}
+
+
+    <div align="center">
+    {% include "_pagination.html" with page_obj=page_obj page_url='board_archives' %}
+    </div>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "__base.html" %}
+
+{% block title %}Rechercher | {{ block.super }}{% endblock title %}
+
+{% block page %}
+
+<h2>Rechercher</h2>
+
+
+<form method="post" class="form" action="">
+{% csrf_token %}
+{% include "_form_errors.html" %}
+{% for field in form %}
+    {% include "_form_field.html" with field=field %}
+{% endfor %}
+
+<button class="btn btn-primary" type="submit">Rechercher</button>
+</form>
+
+{% if result_title %}
+
+    <h3>Résultats - {{ result_title }} <small>({{ result_list|length }})</small></h3>
+
+    <ul>
+    {% for result in result_list %}
+        <li><a href="{{ result.get_absolute_url }}">{{ result.search_title }}</a>
+        {% if result.search_date or result.search_author %}
+            <span class="text-muted small">
+            ({{ result.search_date|date }} {{ result.search_author.username }})
+            </span>
+        {% endif %}<br/>
+        {% if result.search_summary %}
+            <em>{{ result.search_summary|truncatewords:20 }}</em>
+        {% endif %}</li>
+    {% empty %}
+        <li><em>Aucun résultat trouvé.</em></li>
+    {% endfor %}
+    </ul>
+
+{% endif %}
+
+{% endblock %} 

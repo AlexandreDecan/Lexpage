@@ -1,0 +1,18 @@
+{% extends "board/__base_board.html" %}
+
+{% block title %}Discussions actives | {{ block.super }}{% endblock %}
+
+{% block content %}
+
+    <h3>Discussions actives <small>({{ thread_list|length }})</small></h3>
+
+
+    {% if thread_list %}
+        {% for thread in thread_list %}
+            {% include "board/_thread_inlist.html" with thread=thread action=True %}
+        {% endfor %}
+    {% else %}
+        <em>Aucune discussion active pour l'instant.</em>
+    {% endif %}
+
+{% endblock %}

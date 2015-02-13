@@ -1,0 +1,10 @@
+{% load humanize %}
+Bonjour {{ user.username }}, 
+
+Vous avez {{ notifications|length }} notification{{ notifications|pluralize }} en attente sur Lexpage :
+{% for notification in notifications %}
+ - {{ notification.date|date:'d/m' }} : {{ notification.title }}
+{% endfor %}
+
+Rendez-vous sur http://www.lexpage.net pour plus de détails !
+

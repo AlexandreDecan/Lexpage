@@ -1,0 +1,30 @@
+{% extends "messaging/__base_messaging.html" %}
+
+{% block title %}Nouvelle conversation | {{ block.super}}{% endblock %}
+
+{% block content %}
+    <h3>Nouvelle conversation</h3>
+
+    <form method="post" class="form" action="{% url 'messaging_create' %}">
+    {% csrf_token %}
+    {% include "_form_errors.html" %}
+    {% for field in form %}
+        {% include "_form_field.html" with field=field %}
+    {% endfor %}
+
+    <button class="btn btn-primary" type="submit">Enregistrer</button>
+    </form>
+
+    <script>
+    $(document).ready(function () {
+        $(".username_complete").autocomplete({
+            serviceUrl: "{% url 'auth_list' %}",
+            minChars: 2,
+            autoSelectFirst:true,
+            delimiter: " ",
+            tabDisabled: true
+        });
+    });
+    </script>
+
+{% endblock content %}

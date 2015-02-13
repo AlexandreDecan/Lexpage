@@ -1,0 +1,44 @@
+{% block messages %}
+{% load flatpageblock %}
+{% flatpageblock "/announcement/" as announcement %}
+
+{% if announcement.content %}
+    <div class="messages">
+        <div class="{{ announcement.title }}">
+        {{ announcement.content }}
+        </div>
+    </div>
+{% endif %}
+
+{% if messages %}
+    <div class="messages">
+    {% for message in messages %}
+        {% if message.tags = "info" %}
+            <p class="alert alert-info">
+        {% elif message.tags = "success" %}
+            <p class="alert alert-success">
+        {% elif message.tags = "warning" %}
+            <p class="alert alert-warning">
+        {% elif message.tags = "error" %}
+            <p class="alert alert-danger">
+        {% else %}
+            <p>
+        {% endif %}
+        {{ message }}</p>
+    {% endfor %}
+    </div>
+
+    <script>
+    $(document).ready(function() {
+        var du = 200;
+        var minop = 0.5;
+        var maxop = 1;
+        var n =5
+        for (var i=0 ; i<n ; i++) {
+            $('.messages p').fadeTo(du, minop).fadeTo(du, maxop);
+        }
+    });
+    </script>
+{% endif %}
+
+{% endblock messages %}

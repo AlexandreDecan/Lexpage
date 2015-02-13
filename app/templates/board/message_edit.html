@@ -1,0 +1,39 @@
+{% extends "board/__base_board.html" %}
+
+{% load markup_bbcode %}
+{% load humanize %}
+
+{% block title %}Modifier un message | {{ block.super }}{% endblock %}
+
+
+{% block content %}
+    <h3>Modifier un message</h3>
+
+    <form method="post" class="form" action="">
+    {% csrf_token %}
+    {% include "_form_errors.html" %}
+    {% for field in form %}
+        {% include "_form_field.html" with field=field %}
+    {% endfor %}
+
+    <button class="btn btn-primary" type="submit">Enregistrer</button>
+    <a class="btn btn-default" href="{% url 'board_message_show' message.pk %}">Annuler</a>
+    </form>   
+
+    <h3>Historique du message</h3>
+
+    {% for history in history_list %}
+        <p>Message modifié par 
+        <a href="{% url 'profile_show' history.edited_by %}">{{ history.edited_by.username }}</a>
+        le {{ history.date|date:'l j F Y' }} à {{ history.date|time }}.</p>
+
+        <div class="well">
+        {{ history.text|linebreaksbr }}
+        </div>
+ 
+
+    {% empty %}
+        <em>Ce message n'a pas encore d'historique.</em>
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "board/__base_thread.html" %}
+
+{% block title %}{{ thread.title }} | {{ block.super }}{% endblock %}
+
+{% block content %}
+
+    <h3>{{ thread.title }}</h3>
+
+    {% if thread.blogboardlink %}
+        <p>Cette discussion est en relation avec le billet suivant : </p>    
+        <div class="panel panel-default">
+        {% include "blog/_post_inlist.html" with post=thread.blogboardlink.post %}
+        </div>
+    {% endif %}
+
+    <div align="center">
+    {% include "_pagination_param2.html" with page_obj=page_obj page_url='board_thread_show' page_param1=thread.pk page_param2=thread.slug %}
+    </div>
+    
+
+    <div class="board-messagelist">
+    {% if previous %}
+        {% include "board/_message.html" with message=previous old=True %}
+        {% if thread.flag.message = previous %}
+            <a name="new"></a>
+        {% endif %}
+    {% endif %}
+
+    {% for message in message_list %}
+        {% if forloop.last %}
+            <a name="last"></a>
+        {% endif %}
+        <a name="msg{{message.pk}}"></a>
+
+        {% include "board/_message.html" with message=message %}
+
+        {% if thread.flag.message = message %}
+            <a name="new"></a>
+        {% endif %}
+    {% endfor %}
+    </div>
+
+    <div align="center">
+    {% include "_pagination_param2.html" with page_obj=page_obj page_url='board_thread_show' page_param1=thread.pk page_param2=thread.slug %}
+    </div>
+
+    <h3>Répondre</h3>
+    <a name="reply"></a>
+
+    {% if user.is_authenticated %}
+        <form method="post" class="form" action="{% url 'board_thread_reply' thread.pk %}">
+        {% csrf_token %}
+        {% include "_form_errors.html" %}
+        {% for field in form %}
+            {% include "_form_field.html" with field=field %}
+        {% endfor %}
+
+        <button class="btn btn-primary" type="submit">Enregistrer</button>
+        </form>  
+
+
+        <script>
+        // Add event handler for quote and add quote links. 
+        $(document).ready(function () {
+            var target = $(".markup-bbcode").get(0);
+
+            $("a[data-quote]").click(function (e) {
+                $(this).closest(".board-message").addClass("board-message-quoted");
+                board_add_quote($(this).attr("data-messageid"), $(this).attr("data-quote"), target);
+            });
+
+            $("a[data-addquote]").click(function (e) {
+                e.preventDefault();
+                $(this).closest(".board-message").addClass("board-message-quoted");
+                board_add_quote($(this).attr("data-messageid"), $(this).attr("data-addquote"), target);
+            });
+        });
+        </script>
+                 
+    {% else %}
+
+        <em>Vous devez être inscrit et identifié.</em>
+
+    {% endif %}
+
+
+{% endblock %}

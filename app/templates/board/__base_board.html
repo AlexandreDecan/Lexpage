@@ -1,0 +1,18 @@
+{% extends "__base.html" %}
+
+{% block title %}Discussions | {{ block.super }}{% endblock %}
+
+{% block page %}
+    <h2>Discussions
+        <div class="pull-right">
+            <a class="btn btn-xs btn-primary" 
+                href="{% url 'board_rss' %}"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Flux RSS">
+                <span class="fa fa-rss"></span>
+            </a>
+        </div>
+    </h2>
+    {% block content %}{% endblock %}
+{% endblock %}

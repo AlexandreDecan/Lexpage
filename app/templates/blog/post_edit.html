@@ -1,0 +1,24 @@
+{% extends "blog/__base_blog.html" %}
+
+{% block title %}Modifier un billet publié | {{ block.super }}{% endblock %}
+
+
+{% block content %}
+    <h3>Modifier un billet publié</h3>
+
+    <p class="well">Notez que le billet que vous souhaitez modifier est <strong>déjà publié</strong>. 
+    Soyez très attentif dans vos modifications, à moins que vous ne changiez son statut.</p>
+
+    <form method="post" class="form" action="">
+    {% csrf_token %}
+    {% include "_form_errors.html" %}
+    {% for field in form %}
+        {% include "_form_field.html" with field=field %}
+    {% endfor %}
+
+    <button class="btn btn-primary" type="submit">Enregistrer</button>
+    <a class="btn btn-default" href="{% url 'blog_post_show' post.pk %}">Annuler</a>
+    </form>
+
+
+{% endblock content %}

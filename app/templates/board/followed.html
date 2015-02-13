@@ -1,0 +1,42 @@
+{% extends "board/__base_board.html" %}
+
+{% block title %}Discussions suivies | {{ block.super }}{% endblock %}
+
+{% block content %}
+
+    <h3>Discussions suivies{% if filter_unread %} non-lues{% endif %} <small>({{ page_obj.paginator.count }})</small></h3>
+
+    <p class="well">
+    Vous trouverez ci-dessous la liste de vos discussions suivies, c'est-à-dire
+    les discussions que vous avez au moins partiellement parcourues. Vous pouvez
+    choisir de <a href="{% url 'board_followed' %}">les afficher toutes</a>, ou 
+    de limiter l'affichage à <a href="{% url 'board_followed_unread' %}">celles
+    contenant de nouveaux messages</a>.
+    </p>
+
+    <div align="center">
+    {% if filter_unread %}
+        {% include "_pagination.html" with page_obj=page_obj page_url='board_followed_unread' %}
+    {% else %}
+        {% include "_pagination.html" with page_obj=page_obj page_url='board_followed' %}
+    {% endif %}
+    </div>
+
+    {% if thread_list %}
+        {% for thread in thread_list %}
+            {% include "board/_thread_inlist.html" with thread=thread action=False %}
+        {% endfor %}
+    {% else %}
+        <em>Aucune discussion suivie{% if filter_unread %} non-lue{% endif %}.</em>
+    {% endif %}
+
+    <div align="center">
+    {% if filter_unread %}
+        {% include "_pagination.html" with page_obj=page_obj page_url='board_followed_unread' %}
+    {% else %}
+        {% include "_pagination.html" with page_obj=page_obj page_url='board_followed' %}
+    {% endif %}
+    </div>
+    
+
+{% endblock %}

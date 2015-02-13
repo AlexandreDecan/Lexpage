@@ -1,0 +1,17 @@
+{% extends "__base.html" %}
+
+{% block title %}Messagerie | {{ block.super }}{% endblock title %}
+
+
+{% block page %}
+    <h2>Messagerie</h2>
+
+    <div class="text-center">
+        <a class="btn btn-xs btn-info" href="{% url 'messaging_create' %}"><span class="fa fa-pencil"></span> Nouvelle conversation</a>
+        <a class="btn btn-xs btn-info" href="{% url 'messaging_inbox' %}"><span class="fa fa-inbox"></span> Boîte de réception</a>
+        <a class="btn btn-xs btn-info" href="{% url 'messaging_archived' %}"><span class="fa fa-folder-open"></span> Messages archivés</a>
+    </div>
+
+
+    {% block content %}{% endblock content %}
+{% endblock page %}

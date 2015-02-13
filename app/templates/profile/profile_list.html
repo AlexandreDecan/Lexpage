@@ -1,0 +1,33 @@
+{% extends "profile/__base_profile.html" %}
+
+{% block content %}
+    <h3>Liste des profils <small>({{ page_obj.paginator.count }})</small></h3>
+
+    <div align="center">
+    {% include "_pagination.html" with page_obj=page_obj page_url='profile_list' %}
+
+
+
+    <table class="table table-unbordered">
+    <tbody>
+    {% for user in user_list %}
+        {% cycle '<tr><td>' '<td>' '<td>' '<td>' '<td>' %}
+        <div align="center">
+            <a href="{% url 'profile_show' user.username %}">
+            <img src="{{ user.profile.avatar }}" title="{{ user.username }}" class="avatar"/>
+            <br/>
+            {{ user.username }}</a>
+        </div>
+        {% cycle '</td>' '</td>' '</td>' '</td>' '</td></tr>' %}
+    {% endfor %}
+    </tbody>
+    </table>
+
+    
+    {% include "_pagination.html" with page_obj=page_obj page_url='profile_list' %}
+
+
+    </div>
+
+
+{% endblock content %}

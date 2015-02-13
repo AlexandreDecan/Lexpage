@@ -1,0 +1,107 @@
+{% extends "__base.html" %}
+
+{% load flatpageblock %}
+{% load static %}
+
+{# Notice that this template does not extend something that extends 
+__base.html, so you HAVE to do the job here... #}
+
+
+{% block title %}Accueil | {{ block.super }}{% endblock title %}
+
+{% block page %}
+
+    {% flatpageblock "/edito/" as edito %}
+
+    {% if edito.title != "-" %}
+        <h2>{{ edito.title }}</h2>
+        {{ edito.content }}
+
+        <script>
+        $(document).ready(function() {
+            var hidden = $('.edito #edito-content');
+            var show = $('<div id="edito-next"><span class="btn btn-xs btn-info fa fa-angle-double-down"></span></div>');
+            hidden.before(show);
+
+            show.click(function() {
+                hidden.slideToggle();
+                show.find('span').toggleClass('fa-angle-double-down');
+                show.find('span').toggleClass('fa-angle-double-up');
+            });
+        });
+        </script>
+    {% endif %}
+
+    <a name="blog"></a><h2>Derniers billets
+    <div class="pull-right">
+    {% if user.is_authenticated %}
+            <a class="btn btn-xs btn-primary" 
+                href="{% url 'blog_draft_create' %}"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Nouveau billet">
+              <span class="fa fa-pencil"></span></a>
+    {% endif %}
+    <a class="btn btn-xs btn-primary" 
+            href="{% url 'blog_archives' %}"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Liste des billets">
+          <span class="fa fa-list"></span></a>
+    <a class="btn btn-xs btn-primary" 
+            href="{% url 'blog_rss' %}"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Flux RSS">
+          <span class="fa fa-rss"></span></a>          
+    </div></h2>
+
+    {% for post in post_list %}
+        {% include 'blog/_post_inlist.html' with post=post %}
+    {% endfor %}
+
+    <a name="board"></a><h2>Discussions récentes
+    <div class="pull-right">
+    {% if user.is_authenticated %}
+            <a class="btn btn-xs btn-primary" 
+                href="{% url 'board_create' %}"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Nouvelle discussion">
+              <span class="fa fa-pencil"></span></a>
+    {% endif %}
+    <a class="btn btn-xs btn-primary" 
+            href="{% url 'board_archives' %}"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Liste des discussions">
+          <span class="fa fa-comments"></span></a>
+    <a class="btn btn-xs btn-primary" 
+            href="{% url 'board_rss' %}"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Flux RSS">
+          <span class="fa fa-rss"></span></a>          
+    </div></h2>
+
+    {% if thread_list %}
+        {% for thread in thread_list %}
+            {% include "board/_thread_inlist.html" with thread=thread action=False %}
+        {% endfor %}
+    {% else %}
+        <em>Aucun discussion récente.</em>
+    {% endif %}
+
+{% endblock page %}
+
+{% block sidebar_context %}
+<!--     <div class="panel panel-primary">
+        <div class="panel-body">
+        Défilement rapide
+        <ul>
+            <li><a href="#posts">Derniers billets</a></li>
+            <li><a href="#forum">Sur le forum</a></li>
+        </ul>
+        </div>
+    </div> -->
+{% endblock %}

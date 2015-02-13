@@ -1,0 +1,90 @@
+{% extends "profile/__base_profile.html" %}
+{% load humanize %}
+
+{% block title %}{{ profile.username }} | {{ block.super }}{% endblock %}
+
+{% block content %}
+
+    <h3>{{ profile.username }}</h3>
+
+    <p class="well">Seules les informations publiques fournies par {{ profile.username }} 
+    sont affichées.</p>
+
+    <div class="media">
+        <span class="pull-left">
+        <img src="{{ profile.profile.avatar }}" title="{{ profile.username }}" class="avatar"/>
+        </span>
+
+    <div class="media-body">    
+        <dl class="dl-horizontal">
+            <dt>Prénom</dt>
+            <dd>{{ profile.first_name|default:'-' }}</dd>
+            <dt>Genre</dt>
+            <dd>{{ profile.profile.get_gender_display|default:'-' }}</dd>
+            <dt>Date de naissance</dt>
+            <dd>{{ profile.profile.birthdate|default:'-' }}
+                {% if profile.profile.get_age %}
+                    ({{ profile.profile.get_age }} ans)
+                {% endif %}
+            </dd>
+        </dl>
+
+        <dl class="dl-horizontal">
+            <dt>Pays</dt>
+            <dd>{{ profile.profile.get_country_display|default:'-' }}</dd>
+            <dt>Ville</dt>
+            <dd>{{ profile.profile.city|default:'-' }}</dd>
+        </dl>
+
+        <dl class="dl-horizontal">
+            <dt>Site web</dt>
+            <dd>{{ profile.profile.website_name|default:'-' }}</dd>
+            <dt>Adresse</dt>
+            <dd>{{ profile.profile.website_url|urlize|default:'-' }}</dd>
+        </dl>
+
+    {% if perms.profile.can_see_details or user.username = profile.username %}
+        <hr/>
+        <p class="text-muted">Les informations suivantes ne sont pas rendues publiques.</p> 
+
+        <dl class="dl-horizontal text-muted">
+            <dt>Nom</dt>
+            <dd>{{ profile.last_name|default:'-' }}</dd>
+            <dt>Adresse e-mail</dt>
+            <dd>{{ profile.email|urlize|default:'-' }}</dd>
+            <dt>Création du compte</dt>
+            <dd>{{ profile.date_joined|naturalday }} à {{ profile.date_joined|time:"H:i:s" }} ({{ profile.date_joined|naturaltime }})</dd>
+            <dt>Dernière identification</dt>
+            <dd>{{ profile.last_login|naturalday }} à {{ profile.last_login|time:"H:i:s" }} ({{ profile.last_login|naturaltime }})</dd>
+            <dt>Dernière visite</dt>
+            <dd>{{ profile.profile.last_visit|naturalday }} 
+                à {{ profile.profile.last_visit|time:"H:i:s" }} ({{ profile.profile.last_visit|naturaltime }})</dd>
+        </dl>
+    {% endif %}
+    </div>
+
+    <div class="pull-left">
+        {% with profile_previous=profile.get_previous_by_date_joined %}
+        {% if profile_previous %}
+            <a class="btn btn-primary btn-sm" href="{% url 'profile_show' profile_previous %}"> <span class="fa fa-arrow-left"></span> {{ profile_previous.username }}</a>
+        {% else %}
+            <a class="btn btn-primary btn-sm disabled" href="#"><span class="fa fa-arrow-left"></span> Précédent</a>
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="pull-right">
+        {% with profile_next=profile.get_next_by_date_joined %}
+        {% if profile_next %}
+            <a class="btn btn-primary btn-sm" href="{% url 'profile_show' profile_next %}">{{ profile_next.username }} <span class="fa fa-arrow-right"></span></a>
+        {% else %}
+            <a class="btn btn-primary btn-sm disabled" href="#">Suivant <span class="fa fa-arrow-right"></span></a>
+        {% endif %}
+        {% endwith %}
+    </div>
+
+
+
+</div>
+
+{% endblock content %}

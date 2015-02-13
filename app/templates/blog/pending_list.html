@@ -1,0 +1,87 @@
+{% extends "blog/__base_blog.html" %}
+{% load humanize %}
+
+{% block title %}Billets en attente | {{ block.super }}{% endblock %}
+
+
+{% block content %}
+    <h3>Billets en attente de validation <small>({{ post_submitted|length }})</small></h3>
+
+    <p>Les billets suivants ont été proposés par les utilisateurs et sont en 
+    attente pour la validation.</p>
+
+    {% if post_submitted %}
+    <table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Titre</th>
+        <th>Auteur</th>
+        <th>Date de création</th>
+        <th>Priorité</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for post in post_submitted %}
+        <tr>
+            <td>
+                <a href="{% url 'blog_pending_edit' post.pk %}">{{ post.title }}</a>
+            </td>
+            <td>
+                <a href="{% url 'profile_show' post.author %}">{{ post.author.username }}</a>
+            </td>
+            <td>
+                {{ post.date_created|naturalday|capfirst }} à {{ post.date_created|time:"H:i" }}
+            </td>
+            <td>
+                {{ post.get_priority_display }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+    {% else %}
+    <p><em>Aucun billet actuellement en attente de validation</em></p>
+    {% endif %}
+
+    <h3>Billets en attente de publication <small>({{ post_approved|length }})</small></h3>
+
+    <p>Les billets suivants ont déjà été validés et sont en attente pour la 
+    publication. Vous pouvez encore les modifier tant qu'ils ne sont pas publiés.</p>
+
+    {% if post_approved %}
+    <table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Titre <span class="text-muted small">(Validateur et date)</span></th>
+        <th>Auteur</th>
+        <th>Date de création</th>
+        <th>Priorité</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for post in post_approved %}
+        <tr>
+            <td>
+                <a href="{% url 'blog_pending_edit' post.pk %}">{{ post.title }}</a><br/>
+                <span class="text-muted small">
+                    Validé le {{ post.date_approved|date:'j F à H\\hi' }}
+                par <a href="{% url 'profile_show' post.approved_by %}">{{ post.approved_by.username }}</a></span>
+            </td>
+            <td>
+                <a href="{% url 'profile_show' post.author %}">{{ post.author.username }}</a>
+            </td>
+            <td>
+                {{ post.date_created|naturalday:'j b.' }} à {{ post.date_created|time:"H:i" }}
+            </td>
+            <td>
+                {{ post.get_priority_display }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+    {% else %}
+    <p><em>Aucun billet actuellement en attente de publication</em></p>
+    {% endif %}
+
+{% endblock content %}

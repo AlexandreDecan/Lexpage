@@ -1,0 +1,24 @@
+{% extends "minichat/__base_minichat.html" %}
+
+{% block content %}
+    <h3>Attention !</h3> 
+
+    <div class="well">
+    <p>Vous n'êtes pas supposé pouvoir vous rendre sur cette page... </p>
+
+    <p>Si vous désirez émuler le comportement du minichat en Ajax, voici le 
+    formulaire nécessaire :</p>
+    </div>
+
+    <form method="post" class="form" action="{% url 'minichat_post' %}">
+    {% csrf_token %}
+    {% include "_form_errors.html" %}
+    {% for field in form %}
+        {% include "_form_field.html" with field=field %}
+    {% endfor %}
+
+    <button class="btn btn-primary" type="submit">Valider</button>
+    </form>
+
+
+{% endblock content %}

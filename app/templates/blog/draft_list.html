@@ -1,0 +1,74 @@
+{% extends "blog/__base_blog.html" %}
+{% load humanize %}
+
+{% block title %}Mes brouillons | {{ block.super }}{% endblock %}
+
+
+{% block content %}
+    <h3>Mes brouillons <small>({{ post_list|length }})</small></h3>
+
+    <p>
+    Voici la liste des billets enregistrés en tant que 
+    brouillons. Vous pouvez modifier ces brouillons autant que vous le désirez, 
+    les supprimer ou les proposer pour publication. </p>
+
+    {% if post_list %}
+    <table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Titre</th><th class="col-sm-4">Dernière modification</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for post in post_list %}
+        <tr>
+            <td>
+                <a href="{% url 'blog_draft_edit' post.pk %}">{{ post.title }}</a>
+            </td>
+            <td>
+                {{ post.date_created|naturalday|capfirst }} à {{ post.date_created|time }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+    {% else %}
+    <p><em>Vous n'avez aucun brouillon enregistré.</em></p>
+    {% endif %}
+
+    <h3>Billets en attente <small>({{ pending_list|length }})</small></h3>
+
+    <p>
+    Les billets ci-dessous sont en attente soit d'une validation 
+    par l'un des modérateurs, soit d'une publication dans les jours à venir. Ces
+    billets étant potentiellement modifiés ou en cours de modification, vous ne 
+    pourrez consulter leur contenu avant la publication.</p>
+
+    {% if pending_list %}
+    <table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Titre</th><th class="col-sm-4">Date de création</th><th class="col-sm-1">Statut</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for post in pending_list %}
+        <tr>
+            <td>
+                {{ post.title }}
+            </td>
+            <td>
+                {{ post.date_created|naturalday|capfirst }} à {{ post.date_created|time }}
+            </td>
+            <td>
+                 {{ post.get_status_display }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+    {% else %}
+    <p><em>Vous n'avez aucun billet en attente.</em></p>
+    {% endif %}
+
+{% endblock content %}

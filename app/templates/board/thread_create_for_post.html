@@ -1,0 +1,26 @@
+{% extends "board/__base_board.html" %}
+
+{% block title %}Nouvelle discussion | {{ block.super }}{% endblock %}
+
+{% block content %}
+    <h3>Nouvelle discussion</h3>
+
+    <p class="well">Cette discussion sera automatiquement associée au billet 
+    <a href="{% url 'blog_post_show' post.pk %}">{{ post.title }}</a>,
+    proposé par <a href="{% url 'profile_show' post.author %}">{{ post.author.username }}</a>
+    et publié le {{ post.date_published|date }}.
+
+    Vous pouvez bien entendu modifier le titre de la discussion, mais il est 
+    préférable de conserver un lien avec le titre du billet.</p>
+
+    <form method="post" class="form" action="">
+    {% csrf_token %}
+    {% include "_form_errors.html" %}
+    {% for field in form %}
+        {% include "_form_field.html" with field=field %}
+    {% endfor %}
+
+    <button class="btn btn-primary" type="submit">Enregistrer</button>
+    </form>    
+
+{% endblock %}

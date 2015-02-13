@@ -1,0 +1,12 @@
+{% extends "profile/__base_activate.html" %}
+
+{% block content %}
+<h3>Activation réussie</h3>
+
+<p>Votre compte est maintenant activé ! Il ne vous reste plus qu'à 
+vous rendre sur <a href="{% url 'auth_login' %}">cette page</a> 
+afin de vous identifier. </p>
+
+
+{% endblock content %}
+ 

@@ -1,0 +1,20 @@
+{% extends "profile/__base_registration.html" %}
+
+{% block content %}
+<h3>Formulaire de création de compte</h3>
+
+<p class="well">Veuillez compléter le formulaire ci-dessous. Une fois complété et validé, un 
+e-mail vous sera envoyé afin de finaliser la création de votre compte. </p>
+
+
+<form class="form" method="post" action="{% url 'registration_register' %}">
+{% csrf_token %}
+{% include "_form_errors.html" %}
+{% for field in form %}
+    {% include "_form_field.html" with field=field %}
+{% endfor %}
+<button class="btn btn-primary" type="submit">Enregistrer</button>
+</form>
+
+
+{% endblock content %}

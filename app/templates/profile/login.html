@@ -1,0 +1,36 @@
+{% extends "profile/__base_auth.html" %}
+{% load static %}
+
+
+{% block content %}
+<h3>Connexion</h3>
+
+{% if password_reset %}
+    <p>La demande de réinitialisation du mot de passe a été enregistrée. 
+    Un e-mail a été envoyé à l'adresse fournie. Cet e-mail contient un lien 
+    permettant d'entrer un nouveau mot de passe. </p>
+{% endif %}
+
+<form class="form" method="post" action="{% url 'auth_login' %}">
+{% csrf_token %}
+<input type="hidden" name="next" value="{{ next }}"/>
+{% include "_form_errors.html" %}
+{% for field in form %}
+    {% include "_form_field.html" with field=field %}
+{% endfor %}
+
+<button class="btn btn-primary" type="submit">S'identifier</button>
+<a href="{% url 'registration_register' %}" class="btn btn-default">S'inscrire</a>  
+<a href="{% url 'auth_password_reset' %}" class="btn btn-default">Mot de passe oublié ?</a>
+</form>
+
+<script>
+$(".username_complete").autocomplete({
+    serviceUrl: "{% url 'auth_list' %}",
+    minChars: 2,
+    autoSelectFirst:true
+});
+</script>
+
+
+{% endblock %}

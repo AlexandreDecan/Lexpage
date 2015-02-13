@@ -1,0 +1,38 @@
+{% extends "blog/__base_blog.html" %}
+
+{% block title %}Nouveau billet | {{ block.super }}{% endblock %}
+
+
+{% block content %}
+    <h3>Nouveau billet</h3>
+
+    <div class="well">
+    <p>Complétez le formulaire ci-dessous pour créer un nouveau billet. Notez
+    que vous pouvez sauvegarder ce billet en tant que brouillon, afin de le 
+    compléter ou le modifier ultérieurement, avant de le proposer pour 
+    publication.</p>
+
+    <p>Si vous êtes en panne d'inspiration, votre billet peut simplement contenir
+    un lien ou l'essentiel de l'information. Un modérateur se chargera alors
+    de le compléter et de le mettre en forme, dans la mesure du possible. 
+    Un <a href="{% url 'blog_draft_help' %}">bookmarklet</a> est disponible pour 
+    facilement partager du contenu sur Lexpage.</p>
+
+    {% if perms.blog.can_approve %}
+        <p>Vous disposez de droits supplémentaires vous permettant de valider 
+        des billets. Par facilité, vous pouvez directement valider votre billet
+        depuis cette page. Dans ce cas, soyez attentif et relisez-le avant !</p>
+    {% endif %}
+    </div>
+    
+    <form method="post" class="form" action="">
+    {% csrf_token %}
+    {% include "_form_errors.html" %}
+    {% for field in form %}
+        {% include "_form_field.html" with field=field %}
+    {% endfor %}
+
+    <button class="btn btn-primary" type="submit">Enregistrer</button>
+    </form>
+
+{% endblock content %}

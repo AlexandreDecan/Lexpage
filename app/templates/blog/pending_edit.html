@@ -1,0 +1,23 @@
+{% extends "blog/__base_blog.html" %}
+
+{% block title %}Modifier un billet en attente | {{ block.super }}{% endblock %}
+
+
+{% block content %}
+    <h3>Modifier un billet en attente</h3>
+
+
+
+    <form method="post" class="form" action="">
+    {% csrf_token %}
+    {% include "_form_errors.html" %}
+    {% for field in form %}
+        {% include "_form_field.html" with field=field %}
+    {% endfor %}
+
+    <button class="btn btn-primary" type="submit">Enregistrer</button>
+    <a class="btn btn-default" href="{% url 'blog_pending_list' %}">Annuler</a>
+    </form>
+
+
+{% endblock content %}

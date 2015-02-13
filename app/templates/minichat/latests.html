@@ -1,0 +1,23 @@
+{% load humanize %}
+{% load minichat %}
+{% load markup_bbcode %}
+
+<div class="minichat-content">
+{% for message in message_list %}
+    {% ifchanged message.date|date:'DATE_FORMAT' %}
+        <div class="minichat-date">
+            {{ message.date|naturalday:'l j b.'|capfirst }}
+        </div>
+    {% endifchanged %}
+
+    <div class="minichat-message">
+        <span class="minichat-time">{{ message.date|time }}, </span>
+        <a class="minichat-user" href="{% url 'profile_show' message.user %}">
+            <img src="{{ message.user.profile.avatar }}" title="{{ message.user.username }}" class="avatar verysmallavatar"/></a>
+        <a class="minichat-user" href="{% url 'profile_show' message.user %}">
+            {{ message.user.username }}
+        </a>
+    <div class="minichat-text">{{ message.text|urlize3|smiley }}</div>
+    </div>
+{% endfor %}
+</div>

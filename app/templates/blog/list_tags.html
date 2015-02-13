@@ -1,0 +1,83 @@
+{% extends "blog/__base_tags.html" %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block javascript %}
+{{ block.super }}
+<script src="{% static "jquery.tagcloud.min.js" %}"></script>
+{% endblock javascript %}
+
+
+
+{% block content %}
+    <h3>Liste des étiquettes</h3>
+    
+    <p>Les étiquettes les moins populaires sont masquées. </p>
+
+    <p id="tag_list" class="text-center">
+    {% for tag in tag_list %}
+        {% if tag.1 > 30 %}
+        <a href="#" rel="{{ tag.1 }}" data-tag="{{ tag.0 }}">{{ tag.0 }}</a>
+        {% endif %}
+    {% endfor %}
+    </p>
+
+    <script>
+    $(document).ready(function(){
+        $.fn.tagcloud.defaults = {
+            size: {start: 10, end: 18, unit:'pt'},
+            color: {start: "#9ca3a8", end: "#5e84ab"}
+        }
+        $('#tag_list a').tagcloud();
+
+        var tag_input = $("#{{ form.tags.id_for_label }}");
+        $("#tag_list a[data-tag]").click(function (){
+            var val = $(tag_input).val();
+            var tag = $(this).attr("data-tag");
+            var pattern = new RegExp("(\\s|^)"+tag+"(\\s|$)", "i");
+            if (val.search(pattern) == -1) {
+                val = val + " " + tag + " ";
+            } else {
+                val = val.replace(pattern, " ");
+            }
+            val = val.replace(/^\s/, "");
+            val = val.replace(/\s{2,}/, " ");
+            $(tag_input).val(val);
+            $(tag_input).focus();
+        }); 
+    });
+    </script>
+
+    <form class="form" method="post" action="{% url 'blog_tags' %}">
+    {% csrf_token %}
+    {% if form.tags.errors %}
+        {% for error in form.tags.errors %}
+            <span class="label label-danger">
+                {{ error }}
+            </span>
+        {% endfor %}
+    {% endif %}
+    <div class="input-group">
+        {{ form.tags|add_class:"form-control" }}
+        <span class="input-group-btn">
+            <button class="btn btn-primary" type="submit">Chercher</button>
+        </span>
+    </div>
+    </form>
+
+
+    {% if searched_tags %}
+    <h3>Résultat pour {{ searched_tags|join:", " }} <small>({{ page_obj.paginator.count }})</small></h3>
+
+    <div align="center">
+    {% include "_pagination_param1.html" with page_obj=page_obj page_url='blog_tags' page_param1=searched_tags_raw %}
+    </div>
+
+    {% for post in post_list %}
+        {% include "blog/_post_inlist.html" with post=post %}
+    {% empty %}
+    <p><em>Aucun billet correspondant.</em></p>
+    {% endfor %}
+    {% endif %}
+
+{% endblock content %}

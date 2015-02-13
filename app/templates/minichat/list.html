@@ -1,0 +1,82 @@
+{% extends "minichat/__base_minichat.html" %}
+{% load humanize %}
+{% load minichat %}
+{% load markup_bbcode %}
+
+{% block content %}
+    <h3>Archives de {{ date_current|date:'F Y' }} <small>({{ message_list|length }})</small></h3>
+
+
+    <p>Les messages ci-dessous sont les messages postés en 
+    {{ date_current|date:'F Y' }}. Vous pouvez choisir une autre période parmi
+    les périodes suivantes : <br/>
+
+    {% regroup date_list by year as date_year_list %}
+        <ul>
+        {% for year in date_year_list %}
+            <li>Année {{ year.grouper }} : 
+            {% for month in year.list %}
+                {% if date_current.year = year.grouper and date_current.month = month.month %}
+                    {{ month|date:"F" }}
+                {% else %}
+                    <a href="{% url 'minichat_archives' year.grouper month.month %}">
+                    {{ month|date:"F" }}
+                    </a>
+                {% endif %}
+                {% if not forloop.last %}/{% endif %}
+            {% endfor %}
+            </li> 
+        {% endfor %}
+        </ul>
+    </p>
+
+    <hr/>
+
+    {% if message_list %}
+        <table class="table table-striped table-condensed">
+        <tbody>
+        {% for message in message_list %}
+            <tr>
+                <td class="col-md-1">
+                    <img src="{{ message.user.profile.avatar }}" title="{{ message.user.username }}" class="avatar smallavatar" />
+                </td>
+                <td class="col-md-2">
+                    <a href="{% url 'profile_show' message.user %}">{{ message.user.username }}</a>
+                </td>
+                <td class="col-md-3">
+                    <a name="{{ message.date|date:'dHi' }}"></a>{{ message.date|naturalday:'l d' }} à {{ message.date|time }}
+                </td>
+                <td>
+                    {{ message.text|urlize3|smiley }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    {% else %}
+        <em>Aucun message pour la période choisie.</em>
+    {% endif %}
+
+
+    <hr/>
+
+
+    <div class="pull-left">
+        {% if previous_month %}
+            <a class="btn btn-primary btn-sm" href="{% url 'minichat_archives' previous_month.year previous_month.month %}"> <span class="fa fa-arrow-left"></span> {{ previous_month|date:"F Y"|capfirst }}</a>
+        {% else %}
+            <a class="btn btn-primary btn-sm disabled" href="#"><span class="fa fa-arrow-left"></span> Mois précédent</a>
+        {% endif %}
+    </div>
+
+    <div class="pull-right">
+        {% if next_month %}
+            <a class="btn btn-primary btn-sm" href="{% url 'minichat_archives' next_month.year next_month.month %}">{{ next_month|date:"F Y"|capfirst }}<span class="fa fa-arrow-right"></span></a>
+        {% else %}
+            <a class="btn btn-primary btn-sm disabled" href="#">Mois suivant <span class="fa fa-arrow-right"></span></a>
+        {% endif %}
+    </div>
+
+
+{% endblock content %}
+

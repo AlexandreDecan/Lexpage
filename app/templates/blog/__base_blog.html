@@ -1,0 +1,33 @@
+{% extends "__base.html" %}
+ 
+{% block title %}Billets | {{ block.super }}{% endblock title %}
+
+{% block page %}
+    <h2>Billets 
+        <div class="pull-right">
+            <a class="btn btn-xs btn-primary" 
+                href="{% url 'blog_rss' %}"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Flux RSS">
+                <span class="fa fa-rss"></span>
+            </a>
+        </div>
+    </h2>
+    {% block content %}{% endblock content %}
+
+    <script>
+    $(document).ready(function () {
+        $(".tags_complete").autocomplete({
+            serviceUrl: "{% url 'blog_tags_json' %}",
+            minChars: 2, 
+            autoSelectFirst: true,
+            delimiter: " ",
+            tabDisabled: true,
+            formatResult: function(suggestion, query) {
+                return suggestion.value+" ("+suggestion.data+")";
+            }
+        });
+    });
+    </script>
+{% endblock page %}

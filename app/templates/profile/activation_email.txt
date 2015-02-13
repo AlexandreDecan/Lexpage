@@ -1,0 +1,14 @@
+Bonjour, 
+
+Pour compléter votre inscription sur le site http://www.lexpage.net, vous 
+devez activer votre compte. Vous disposez de {{ expiration_days }} jours 
+pour activer votre compte. 
+
+La procédure d'activation est très simple : il suffit de vous rendre à l'adresse
+http://www.lexpage.net{% url "registration_activate" %} et d'y entrer la clé
+d'activation suivante : 
+{{ activation_key }}
+
+Si le lien ne fonctionne pas, ou que vous rencontrez le moindre problème durant
+la procédure, veuillez prendre contact avec le webmaster via le site. N'oubliez 
+pas de préciser votre clé d'activation.

@@ -1,0 +1,5 @@
+Django==1.6.2
+django-recaptcha==1.0.3
+django-widget-tweaks==1.3
+gunicorn==19.2.1
+whitenoise==1.0.6

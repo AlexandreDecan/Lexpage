@@ -1,0 +1,19 @@
+{% extends "profile/__base_activate.html" %}
+
+{% block content %}
+<h3>Confirmation de l'activation du compte</h3>
+
+<p>Pour finaliser l'activation de votre compte, vous devez entrer la clé reçue 
+par e-mail dans le formulaire ci-dessous. </p>
+
+<form class="form" method="post" action="">
+{% csrf_token %}
+{% include "_form_errors.html" %}
+{% for field in form %}
+    {% include "_form_field.html" with field=field %}
+{% endfor %}
+<button class="btn btn-primary" type="submit">Confirmer</button>
+</form>
+
+{% endblock content %}
+ 

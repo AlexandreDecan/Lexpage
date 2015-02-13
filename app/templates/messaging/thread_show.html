@@ -1,0 +1,102 @@
+{% extends "messaging/__base_messaging.html" %}
+
+{% load markup_bbcode %}
+{% load humanize %}
+
+
+{% block title %}{{ box.thread.title }} | {{ block.super}}{% endblock %}
+
+{% block content %}
+    <br/>
+    <table class="well table table-unbordered">
+    <tbody>
+    {% for user in user_list %}
+        {% cycle '<tr><td>' '<td>' '<td>' '<td>' '<td>' %}
+        <div align="center">
+            <a href="{% url 'profile_show' user.username %}">
+            <img src="{{ user.profile.avatar }}" title="{{ user.username }}" class="avatar smallavatar"/>
+            <br/>
+            {{ user.username }}</a>
+        </div>
+        {% cycle '</td>' '</td>' '</td>' '</td>' '</td></tr>' %}
+    {% endfor %}
+    </tbody>
+    </table>
+
+
+    <div class="text-center">
+        {% if box.is_starred %}
+            <a class="btn btn-xs btn-warning" href="{% url 'messaging_mark_unstarred' box.thread.pk %}?next=thread"><span class="fa fa-star-o"></span> Retirer l'étoile</a>
+        {% else %}
+            <a class="btn btn-xs btn-warning" href="{% url 'messaging_mark_starred' box.thread.pk %}?next=thread"><span class="fa fa-star"></span> Ajouter l'étoile</a>
+        {% endif %}
+        <a class="btn btn-xs btn-info" href="{% url 'messaging_mark_unread' box.thread.pk %}?next="><span class="fa fa-eye-slash"></span> Marquer non-lue</a>
+        {% if box.is_archived %}
+            <a class="btn btn-xs btn-info" href="{% url 'messaging_mark_unarchived' box.thread.pk %}?next=thread"><span class="fa fa-inbox"></span> Hors des archives</a>
+        {% else %}
+            <a class="btn btn-xs btn-info" href="{% url 'messaging_mark_archived' box.thread.pk %}?next=thread"><span class="fa fa-folder-open"></span> Vers les archives</a>
+        {% endif %}
+        <a class="btn btn-xs btn-danger confirm-action" href="{% url 'messaging_mark_deleted' box.thread.pk %}?next=thread"><span class="fa fa-trash-o"></span> Supprimer</a>
+    </div>
+
+
+    <h3>{{ box.thread.title }}</h3>
+
+    <div class="msg-message-thread">
+    {% for message in message_list %}
+        {% if message.date > date_read %}
+            {% ifchanged date_read %}
+                {% if not forloop.first %}
+                    <a name="unread"></a>
+                {% endif %}
+            {% endifchanged %}
+        {% endif %}
+
+        {% ifchanged message.date|date %}
+            <div class="msg-message-newdate">
+            {{ message.date|date:"l j F Y"|capfirst }}
+            </div>
+        {% endifchanged %}
+
+        <div class="msg-message-message{% if message.author = user %}-own {% else %}-other {%endif %}{% if message.date > date_read %}msg-message-unread {% endif %}">
+
+            <div class="msg-message-avatar">
+                <a href="{% url 'profile_show' message.author.username %}">
+                <img src="{{ message.author.profile.avatar }}" title="{{ message.author.username }}" class="avatar"/><br/>
+                {{ message.author.username }}
+                </a>
+            </div>
+
+            <div class="msg-message-content">
+
+                <span class="msg-message-date">
+                    <span class="fa fa-clock-o"{% if message.date > date_read %}
+                    data-toggle="tooltip" title="Message non-lu"
+                    {% endif %}>
+                    {{ message.date|time:'H:i' }}
+                    </span>
+                </span>
+
+                <div class="msg-message-text">
+                    {{ message.text|urlize|smiley|linebreaksbr }}
+                </div>
+            </div>
+
+        </div>
+    {% endfor %}
+    <a name="last"></a>
+    </div>
+
+
+    <h3>Répondre</h3>
+
+    <form method="post" class="form" action="{% url 'messaging_reply' box.thread.pk %}">
+    {% csrf_token %}
+    {% include "_form_errors.html" %}
+    {% for field in form %}
+        {% include "_form_field.html" with field=field %}
+    {% endfor %}
+    <button class="btn btn-primary" type="submit">Enregistrer</button>
+    </form>
+
+{% endblock content %}
