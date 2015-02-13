@@ -4,7 +4,7 @@ Le présent dépôt contient les sources à la base de la v4 du Lexpage. Il s'ag
 ## Que contient le dépôt ?
 Le répertoire */app* contient tout ce qui est propre à Django et au Lexpage : 
  - Les répertoires *blog*, *board*, *commons*, *messaging*, *minichat*, *notifications*, *profile* et *slogan* contiennent les applications. 
- - Les répertoires *media*, *media_pub*, *static*, *static_pub* contiennent les fichiers statiques. A noter que seul *static* est utilisé (*media* est bypassé pour l'upload des avatars, et les répertoires **_pub* sont présents pour que WhiteNoise accepte de servir les fichiers statiques). 
+ - Les répertoires *media*, *media_pub*, *static*, *static_pub* contiennent les fichiers statiques. *media* et *media_pub* ne sont pas utilisés. *static* contient les fichiers statiques du site, qui seront collectés automatiquement dans *static_pub* qui contiendra également les avatars uploadés.
  - Le répertoire *templates* et ses sous-répertoires contiennent toutes les templates du site. Idéalement, ces templates devraient être situées dans un sous-répertoire de l'application correspondante. 
  - Les fichiers *settings.py*, *settings_base.py* et *settings_dev.py* contiennent les paramètres de Django. Par défaut, *settings.py* charge *settings_dev.py* qui lui-même charge les paramètres communs de *settings_base.py*. 
  - Le reste est classique pour du Django. 
@@ -15,21 +15,33 @@ La racine du dépôt contient notamment :
  - *requirements.txt* contient la liste des dépendances Python nécessaires (à utiliser avec `pip install -r requirements.txt`).
  
 ## Comment tester localement ?
-En quelques étapes :
+
+Pour ne pas saloper votre environnement, utilisez Docker, virtualenv ou pew. Une image Docker est proposée via un Dockerfile sur le dépôt :
 - Cloner le dépôt via `git clone https://github.com/AlexandreDecan/Lexpage`
 - Créer l'image Docker via `docker build -t lexpage:dev .`
 - Créer le container via `docker run --rm -it -p 8000:8000 -v PATH:/web/ lexpage:dev` où PATH est remplacé par le chemin courant
 - Le site est alors accessible sur le port 8000 de votre machine.
-Pensez à re-builder l'image si vous changez *requirements.txt* !
+
+Quoiqu'il en soit, n'oubliez pas : 
+- `pip install -r requirements.txt` si vous n'avez pas les dépendances (effectué automatiquement dans l'image Docker)
+- `python manage.py collectstatic` va récupérer les fichiers statiques (notamment de l'admin ainsi que du répertoire *static*) et les placer dans *static_pub*. Notez que ce répertoire contiendra aussi les avatars uploadés par les utilisateurs. 
+- `python manage.py runserver` si vous n'aimez pas Gunicorn.
+
+Si vous souhaitez employer un autre fichier de configuration que *settings_dev*, pensez à le préciser dans la ligne de commande. En fonction de l'usage :
+- `python manage.py runserver --settings=votrefichier` 
+- ou ajouter `-e DJANGO_SETTINGS_MODULE=votrefichier` dans le `docker run`.
 
 **Mais c'est pas tout à fait pareil ?**
 
 Et bien non, forcément, il y a de nombreuses données en production qui font que Lexpage est ce qu'il est en ligne. En particulier, certaines fonctions nécessitent un "*vrai*" SGBD, alors que l'environnement de développement travaille par défaut avec SQLite. En production, nous utilisons MariaDB que vous pourrez facilement mettre en place avec Docker. 
-Afin que Django ne vous crâche pas une vilaine erreur au lancement, il convient d'initialiser la base de données SQLite. Pour cela, exécutez simplement `python manage.py syncdb` (nécessite que les dépendances de `requirements.txt` soient installées, pensez donc à l'exécuter via un container, par exemple, `docker run --rm -it -v PATH:/web/ lexpage:dev python app/manage.py syncdb`)
 
-L'édito, la page "à propos", l'aide pour le balisage, etc. sont des *flatpages* qui sont stockées dans la base de données. Vous pouvez le faire directement depuis l'administration mais il va falloir choisir la bonne URL pour chaque flatpage (indice : en fonction de vos besoins, consultez le fichier *urls.py* à la racine, ou la template *navbar.html*, par exemple).
+1) Afin que Django ne vous crâche pas une vilaine erreur au lancement, il convient d'initialiser la base de données SQLite. Pour cela, exécutez simplement `python manage.py syncdb` (nécessite que les dépendances de `requirements.txt` soient installées, pensez donc à l'exécuter via un container, par exemple, `docker run --rm -it -v PATH:/web/ lexpage:dev python app/manage.py syncdb`)
 
-De même, en l'absence de contenu, certains éléments peuvent se comporter visuellement (voire comportementalement) anormalement (ce qui fait beaucoup de mots en -ment, je vous l'accorde). 
+2) L'édito, la page "à propos", l'aide pour le balisage, etc. sont des *flatpages* qui sont stockées dans la base de données. Vous pouvez le faire directement depuis l'administration mais il va falloir choisir la bonne URL pour chaque flatpage (indice : en fonction de vos besoins, consultez le fichier *urls.py* à la racine, ou la template *navbar.html*, par exemple).
+
+3) De même, en l'absence de contenu, certains éléments peuvent se comporter visuellement (voire comportementalement) anormalement (ce qui fait beaucoup de mots en -ment, je vous l'accorde). 
+
+4) Au fait, vous n'avez pas oublié de faire un `python manage.py collectstatic` ?
 
 
 ## Comment contribuer ?
