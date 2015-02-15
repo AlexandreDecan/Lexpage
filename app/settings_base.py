@@ -120,7 +120,6 @@ INSTALLED_APPS = (
     'django.contrib.webdesign', 
     'django.contrib.humanize',
     'django.contrib.flatpages',
-    'gunicorn',
     'captcha',
 
     'profile',
