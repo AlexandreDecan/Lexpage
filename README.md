@@ -20,7 +20,8 @@ La racine du dépôt contient notamment :
 
 Pour ne pas saloper votre environnement, nous vous conseillons d'utiliser Docker, virtualenv ou encore pew. 
 
-### Docker
+
+### Avec Docker
 
 Une image Docker est disponible via le *Dockerfile* du dépôt :
  - Créez l'image via `docker build -t lexpage:dev .`
@@ -29,7 +30,7 @@ Une image Docker est disponible via le *Dockerfile* du dépôt :
  
 Si vous effectuez des changements dans les dépendances (autrement dit, *requirements.txt*), pensez à rebuilder l'image du container. 
 
-### Rien, Virtualenv ou Pew
+### Avec Virtualenv, Pew ou... rien !
 
 Si vous utilisez virtualenv ou pew, créez un environnement virtuel à la racine du dépôt. Puis, quelque soit votre choix, faites
 `pip install -r requirements.txt`
@@ -43,22 +44,32 @@ Dans tous les cas, n'oubliez pas que Django nécessite que les fichiers statique
 `python app/manage.py collecstatic`
  
 
-**Mais c'est pas tout à fait pareil ?**
+## Les problèmes fréquents et leurs solutions connues
 
-Et bien non, forcément, il y a de nombreuses données en production qui font que Lexpage est ce qu'il est en ligne. En particulier, certaines fonctions nécessitent un "*vrai*" SGBD, alors que l'environnement de développement travaille par défaut avec SQLite. En production, nous utilisons MariaDB que vous pourrez facilement mettre en place avec Docker. 
+** mysql-python refuse de s'installer dans mon environnement virtuel **
 
-1) Afin que Django ne vous crâche pas une vilaine erreur au lancement, il convient d'initialiser la base de données SQLite. Pour cela, exécutez simplement `python manage.py syncdb` (nécessite que les dépendances de `requirements.txt` soient installées, pensez donc à exécuter `docker run --rm -it -v PATH:/web/ lexpage:dev python app/manage.py syncdb` si vous travaillez avec le container Docker)
+Essayez d'installer la librairie de développement, par exemple, via `apt-get install libmysqlclient-dev`
 
-2) L'édito, la page "à propos", l'aide pour le balisage, etc. sont des *flatpages* qui sont stockées dans la base de données. Vous pouvez le faire directement depuis l'administration mais il va falloir choisir la bonne URL pour chaque flatpage (indice : en fonction de vos besoins, consultez le fichier *urls.py* à la racine, ou la template *navbar.html*, par exemple).
+** Django retourne une erreur à propos de la base de données **
 
-3) De même, en l'absence de contenu, certains éléments peuvent se comporter visuellement (voire comportementalement) anormalement (ce qui fait beaucoup de mots en -ment, je vous l'accorde). 
+Pensez à créer la base de données localement si ce n'est pas encore fait, via `python manage.py syncdb` ou encore via `python manage.py migrate` (Django 1.7+).
+Si vous travaillez avec Docker, il conviendra de le faire via l'image :
+`docker run --rm -it -v PATH:/web/ lexpage:dev python app/manage.py syncdb` 
 
-4) Au fait, vous n'avez pas oublié de faire un `python manage.py collectstatic` ?
+** Aucune ressource statique ne semble s'afficher correctement **
+
+Vous n'avez pas oublié `python manage.py collecstatic` ?
+
+** L'édito ne s'affiche pas, mais il y a une barre bleue à la place **
+
+Une partie du contenu "pratiquement statique" est géré via les *flatpages* de Django. Il vous faudra créer ces mêmes *flatpages* si vous souhaitez avoir le même rendu (l'édito, la page "à propos", les aides pour le balisage, etc.). 
+
 
 
 ## Comment contribuer ?
 De n'importe quelle manière :
-- soit en me contacter pour poser vos questions ou indiquer vos remarques, 
-- soit en créant une issue sur le bugtracker, 
-- soit en effectuant un pull request, 
-- ...
+  - soit en me contacter pour poser vos questions ou indiquer vos remarques, 
+  - soit en créant une issue sur le bugtracker, 
+  - soit en effectuant un pull request, 
+  - ...
+  
