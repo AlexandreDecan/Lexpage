@@ -30,7 +30,6 @@ urlpatterns = patterns('',
     url(r'^about/$', 'django.contrib.flatpages.views.flatpage', {'url': '/about/'}, name='about'),
 
     # Django admin URLs
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
 
     # Flatpages URLs
