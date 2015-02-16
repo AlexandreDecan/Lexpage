@@ -83,8 +83,8 @@ class PostManager(models.Manager):
         self._status = status
         self._ordering = ordering
 
-    def get_query_set(self):
-        return super(PostManager, self).get_query_set().filter(status=self._status).order_by(*self._ordering)
+    def get_queryset(self):
+        return super(PostManager, self).get_queryset().filter(status=self._status).order_by(*self._ordering)
 
     def get_tags_list(self, sort_name=False, relative=True):
         """

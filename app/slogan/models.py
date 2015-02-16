@@ -12,8 +12,8 @@ class SloganManager(models.Manager):
         except IndexError: 
             return {'slogan': 'aucun', 'author': 'aucun'}
 
-    def get_query_set(self):
-        return super(SloganManager, self).get_query_set().filter(is_visible=True)
+    def get_queryset(self):
+        return super(SloganManager, self).get_queryset().filter(is_visible=True)
 
 
 class Slogan(models.Model):

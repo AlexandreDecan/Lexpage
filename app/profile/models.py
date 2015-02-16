@@ -33,8 +33,8 @@ def createProfileForUser(sender, **kwargs):
 
 
 class ActiveUserManager(UserManager):
-    def get_query_set(self):
-        return super(ActiveUserManager, self).get_query_set().filter(is_active=True)
+    def get_queryset(self):
+        return super(ActiveUserManager, self).get_queryset().filter(is_active=True)
 
 
 class ActiveUser(User):

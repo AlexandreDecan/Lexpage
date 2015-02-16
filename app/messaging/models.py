@@ -118,8 +118,8 @@ class MessageBoxManager(models.Manager):
         super(MessageBoxManager, self).__init__()
         self._status = status
 
-    def get_query_set(self):
-        return super(MessageBoxManager, self).get_query_set().filter(status=self._status)
+    def get_queryset(self):
+        return super(MessageBoxManager, self).get_queryset().filter(status=self._status)
 
 
 class MessageBox(models.Model):
