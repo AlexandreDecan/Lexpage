@@ -46,21 +46,21 @@ Dans tous les cas, n'oubliez pas que Django nécessite que les fichiers statique
 
 ## Les problèmes fréquents et leurs solutions connues
 
-*mysql-python refuse de s'installer dans mon environnement virtuel*
+##### mysql-python refuse de s'installer dans mon environnement virtuel
 
 Essayez d'installer la librairie de développement, par exemple, via `apt-get install libmysqlclient-dev`
 
-*Django retourne une erreur à propos de la base de données*
+##### Django retourne une erreur à propos de la base de données
 
 Pensez à créer la base de données localement si ce n'est pas encore fait, via `python manage.py syncdb` ou encore via `python manage.py migrate` (Django 1.7+).
 Si vous travaillez avec Docker, il conviendra de le faire via l'image :
 `docker run --rm -it -v PATH:/web/ lexpage:dev python app/manage.py syncdb` 
 
-*Aucune ressource statique ne semble s'afficher correctement*
+##### Aucune ressource statique ne semble s'afficher correctement
 
 Vous n'avez pas oublié `python manage.py collecstatic` ?
 
-*L'édito ne s'affiche pas, mais il y a une barre bleue à la place*
+##### L'édito ne s'affiche pas, mais il y a une barre bleue à la place
 
 Une partie du contenu "pratiquement statique" est géré via les *flatpages* de Django. Il vous faudra créer ces mêmes *flatpages* si vous souhaitez avoir le même rendu (l'édito, la page "à propos", les aides pour le balisage, etc.). 
 
