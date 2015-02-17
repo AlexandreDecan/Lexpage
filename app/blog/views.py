@@ -365,5 +365,5 @@ class JSONTagListView(View):
             suggestion = {'value': tag, 'data': nb}
             output['suggestions'].append(suggestion)
 
-        return HttpResponse(json.dumps(output), mimetype='application/json')
+        return HttpResponse(json.dumps(output), content_type='application/json')
 

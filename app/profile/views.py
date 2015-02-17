@@ -167,4 +167,4 @@ class AccountListView(View):
             suggestion = {'value': user.get_username()}
             output['suggestions'].append(suggestion)
 
-        return HttpResponse(json.dumps(output), mimetype='application/json')
+        return HttpResponse(json.dumps(output), content_type='application/json')

@@ -328,7 +328,7 @@ class MessageJSONView(View):
         output = {'text': message.text, 
                 'author': message.author.username,
                 'date' : str(message.date)}
-        return HttpResponse(json.dumps(output), mimetype='application/json')
+        return HttpResponse(json.dumps(output), content_type='application/json')
 
 
 

@@ -137,7 +137,7 @@ class LatestsJSONView(View):
                 'timestamp': timegm(message.date.utctimetuple())
             })
 
-        return HttpResponse(simplejson.dumps(output), mimetype='application/json')
+        return HttpResponse(simplejson.dumps(output), content_type='application/json')
 """
 
 
@@ -153,4 +153,4 @@ class UsersListView(View):
             suggestion = {'value': '@%s' % user.get_username()}
             output['suggestions'].append(suggestion)
 
-        return HttpResponse(json.dumps(output), mimetype='application/json')
+        return HttpResponse(json.dumps(output), content_type='application/json')
