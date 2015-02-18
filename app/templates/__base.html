@@ -9,10 +9,10 @@
     <title>{% block title %}Lexpage{% endblock %}</title>
     
     {% block stylesheets %}
-        <link href="{% static "bootstrap/css/bootstrap.min.css" %}?v=141109" rel="stylesheet"/>
-        <link href="{% static "lexpage-bootstrap.min.css" %}?v=141113" rel="stylesheet"/>
-        <link href="{% static "font-awesome/css/font-awesome.min.css" %}?v=141012" rel="stylesheet"/>        
-        <link href="{% static "lexpage.min.css" %}?v=141116" rel="stylesheet"/>
+        <link href="{% static "libs/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet"/>
+        <link href="{% static "libs/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet"/>        
+        <link href="{% static "css/lexpage-bootstrap.min.css" %}" rel="stylesheet"/>
+        <link href="{% static "css/lexpage.min.css" %}" rel="stylesheet"/>        
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -23,10 +23,10 @@
       <script>
       var URL_PREFIX = ""; // markup.js, script.js
       </script>
-      <script src="{% static "jquery-2.1.1.min.js" %}?v=141109"></script>      
-      <script src="{% static "scripts.min.js" %}?v=140716"></script>
-      <script src="{% static "minichat.min.js" %}?v=140716"></script>
-      <script src="{% static "markup.min.js" %}?v=140716"></script>      
+      <script src="{% static "libs/jquery/dist/jquery.min.js" %}"></script>      
+      <script src="{% static "js/scripts.min.js" %}"></script>
+      <script src="{% static "js/minichat.min.js" %}"></script>
+      <script src="{% static "js/markup.min.js" %}"></script>     
     {% endblock javascript %}    
     {{ form.media }} 
 
@@ -111,10 +111,11 @@
     </div> <!-- modal -->
 
     {% block javascript_bottom %}
-      <script src="{% static "bootstrap/js/bootstrap.min.js" %}?v=141109"></script>
-      <script src="{% static "autocomplete.min.js" %}"></script>
-      <script src="{% static "jquery.oembed.min.js" %}"></script>
-      <script src="{% static "modernizr.min.js" %}"></script>
+      <script src="{% static "libs/bootstrap/js/bootstrap.min.js" %}"></script>
+      <script src="{% static "libs/autocomplete.min.js" %}"></script>
+      <script src="{% static "libs/jquery.oembed.min.js" %}"></script>
+      <script src="{% static "libs/jquery.tagcloud.min.js" %}"></script>      
+      <script src="{% static "libs/modernizr.min.js" %}"></script>
     {% endblock %}
 
 

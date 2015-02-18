@@ -57,3 +57,6 @@ target/
 app/db
 app/settings_prod.py
 docker-run.sh
+
+# Bower
+bower_components

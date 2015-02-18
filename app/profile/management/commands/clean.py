@@ -1,6 +1,6 @@
 from django.core.management.base import NoArgsCommand
 
-from registration.models import ActivationKey
+from profile.models import ActivationKey
 
 
 class Command(NoArgsCommand):
