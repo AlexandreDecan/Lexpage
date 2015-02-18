@@ -73,8 +73,8 @@ class DateTimePicker(DateTimeInput):
         </script>'''
 
     def __init__(self, attrs=None, format=None, options=None, div_attrs=None, icon_attrs=None):
-        if not icon_attrs:
-            icon_attrs = {'class': 'fa fa-calendar'}
+        # Force fa-calendar
+        icon_attrs = {'class': 'fa fa-calendar'}
         if not div_attrs:
             div_attrs = {'class': 'input-group date'}
         if format is None and options and options.get('format'):
