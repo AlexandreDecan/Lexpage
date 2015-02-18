@@ -26,7 +26,7 @@ class DateTimePicker(DateTimeInput):
                 yield 'libs/datetimewidget/js/bootstrap-datetimepicker.fr.js'
 
         js = JsFiles()
-        css = {'all': ('dlibs/atetimewidget/css/bootstrap-datetimepicker.min.css',), }
+        css = {'all': ('libs/datetimewidget/css/bootstrap-datetimepicker.min.css',), }
     
     # http://momentjs.com/docs/#/parsing/string-format/
     # http://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
