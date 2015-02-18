@@ -21,49 +21,52 @@ La racine du dépôt contient notamment :
 Pour ne pas saloper votre environnement, nous vous conseillons d'utiliser Docker, virtualenv ou encore pew. 
 
 
-### Avec Docker
+##### Avec Docker
 
 Une image Docker est disponible via le *Dockerfile* du dépôt :
- - Créez l'image via `docker build -t lexpage:dev .`
- - Créez le container via `docker run --rm -it -p 8000:8000 -v PATH:/web/ lexpage:dev` où vous remplacez *PATH* par le chemin courant. 
+ - Créez l'image via `docker build -t lexpage/dev .` (n'oubliez pas le "." à la fin de la ligne !)
+ - Créez le container via `docker run --rm -it -p 8000:8000 -v PATH:/web/ lexpage/dev` où vous remplacez *PATH* par le chemin courant. 
  - Le site est alors supporté par uWSGI et disponible sur le port 8000 de votre machine.
  
 Si vous effectuez des changements dans les dépendances (autrement dit, *requirements.txt*), pensez à rebuilder l'image du container. 
 
-### Avec Virtualenv, Pew ou... rien !
 
-Si vous utilisez virtualenv ou pew, créez un environnement virtuel à la racine du dépôt. Puis, quelque soit votre choix, faites
-`pip install -r requirements.txt`
+##### Avec Virtualenv, Pew ou... rien !
 
-Ensuite :
- - soit vous utilisez le serveur de développement de Django, via `python app/manage.py runserver`
+Si vous utilisez virtualenv ou pew, créez un environnement virtuel à la racine du dépôt :
+ - `pew new Lexpage -a .` si vous utilisez `pew`, 
+ - `mkvirtualenv Lexpage -a .` si vous utilisez `virtualenv`.
+  
+Que vous soyez dans un environnement virtuel ou non, la suite est la même pour tout le monde. Installez les dépendances automatiquement avec `pip` : `pip install -r requirements.txt`
+
+Si vous n'avez pas `pip`, ce ne sont pas les [moyens qui manquent](https://pip.pypa.io/en/latest/installing.html) tant que vous avez un Python qui tourne. 
+
+Ensuite, par ordre de préférence : 
+ - soit vous utilisez uWSGI (déjà installé) via `uwsgi --ini uwsgi.conf` 
  - soit vous utilisez Gunicorn (à installer via `pip install gunicorn`) via `gunicorn --config gunicorn.conf wsgi:application`
- - soit vous utilisez uWSGI (déjà installé) via `uwsgi --ini uwsgi.conf`
-
-Dans tous les cas, n'oubliez pas que Django nécessite que les fichiers statiques soient collectés dans le répertoire *static_pub*. Cela peut être fait automatiquement :
-`python app/manage.py collecstatic`
+ - soit vous utilisez le serveur de développement de Django, via `python app/manage.py runserver`
  
 
 ## Les problèmes fréquents et leurs solutions connues
 
 ##### mysql-python refuse de s'installer dans mon environnement virtuel
 
-Essayez d'installer la librairie de développement, par exemple, via `apt-get install libmysqlclient-dev`
+Essayez d'installer la bibliothèque de développement, par exemple, via `apt-get install libmysqlclient-dev`. 
+Si cela ne convient pas, vous pouvez toujours utiliser le module `PyMySQL` plutôt que `mysql-python` en modifiant le fichier *requirements.txt*.
 
 ##### Django retourne une erreur à propos de la base de données
 
-Pensez à créer la base de données localement si ce n'est pas encore fait, via `python manage.py syncdb` ou encore via `python manage.py migrate` (Django 1.7+).
+Pensez à créer la base de données localement si ce n'est pas encore fait, via `python app/manage.py migrate`
 Si vous travaillez avec Docker, il conviendra de le faire via l'image :
-`docker run --rm -it -v PATH:/web/ lexpage:dev python app/manage.py syncdb` 
+`docker run --rm -it -v PATH:/web/ lexpage/dev python app/manage.py syncdb` 
 
 ##### Aucune ressource statique ne semble s'afficher correctement
 
-Vous n'avez pas oublié `python manage.py collecstatic` ?
+Les fichiers statiques doivent être collectés et placés dans le répertoire *static_pub/*. Django peut le faire pour vous : `python app/manage.py collecstatic` ?
 
 ##### L'édito ne s'affiche pas, mais il y a une barre bleue à la place
 
 Une partie du contenu "pratiquement statique" est géré via les *flatpages* de Django. Il vous faudra créer ces mêmes *flatpages* si vous souhaitez avoir le même rendu (l'édito, la page "à propos", les aides pour le balisage, etc.). 
-
 
 
 ## Comment contribuer ?
