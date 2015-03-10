@@ -45,7 +45,12 @@ Ensuite, par ordre de préférence :
  - soit vous utilisez uWSGI (déjà installé) via `uwsgi --ini uwsgi.conf` 
  - soit vous utilisez Gunicorn (à installer via `pip install gunicorn`) via `gunicorn --config gunicorn.conf wsgi:application`
  - soit vous utilisez le serveur de développement de Django, via `python app/manage.py runserver`
- 
+
+#### Dans tous les cas...
+
+N'oubliez pas que vous n'avez probablement pas, à ce stade, de base de données prêtes. Il convient d'utiliser `python app/manage.py migrate` pour créer la base de données (localement, par défaut, avec SQLite). Afin de pouvoir tester le site, il est pratique d'avoir un compte superuser : `python app/manage.py createsuperuser` qui va vous demander d'entrer quelques informations. A l'aide de ce compte utilisateur, vous pourrez par la suite créer d'autres utilisateurs via l'administration de Django (accessible dans un menu du site). 
+
+Enfin, afin que le site puisse fournir les fichiers statiques nécessaires à son affichage et à son fonctionnement, il convient d'indiquer à Django de collecter ces fichiers statiques dans les différentes applications qui sont utilisées, et de les réunir dans un répertoire qui sert à fournir les fichiers statiques. La commande `python app/manage.py collectstatic` fera cela pour vous. Bien entendu, c'est une commande à répéter à chaque fois que vous faites des modifications dans les fichiers statiques. 
 
 ## Les problèmes fréquents et leurs solutions connues
 
@@ -58,7 +63,9 @@ Si cela ne convient pas, vous pouvez toujours utiliser le module `PyMySQL` plut�
 
 Pensez à créer la base de données localement si ce n'est pas encore fait, via `python app/manage.py migrate`
 Si vous travaillez avec Docker, il conviendra de le faire via l'image :
-`docker run --rm -it -v PATH:/web/ lexpage/dev python app/manage.py syncdb` 
+`docker run --rm -it -v PATH:/web/ lexpage/dev python app/manage.py migrate` 
+
+N'oubliez pas de vous créer un superuser pour accéder au site via `python app/manage.py createsuperuser`
 
 ##### Aucune ressource statique ne semble s'afficher correctement
 
@@ -67,6 +74,14 @@ Les fichiers statiques doivent être collectés et placés dans le répertoire *
 ##### L'édito ne s'affiche pas, mais il y a une barre bleue à la place
 
 Une partie du contenu "pratiquement statique" est géré via les *flatpages* de Django. Il vous faudra créer ces mêmes *flatpages* si vous souhaitez avoir le même rendu (l'édito, la page "à propos", les aides pour le balisage, etc.). 
+
+#### J'ai des erreurs 500 dès que je tente de me logguer
+
+Vous avez créé un compte utilisateur, mais il est possible que ce compte n'ait aucun profil associé. Dans ce cas, accédez directement à l'administration du site (adresse `/admin/`) et créez un `Profil` que vous associez à votre compte. Cela devrait résoudre le problème. 
+
+#### Il est impossible de s'inscrire sur le site en local
+
+Notez qu'il n'est pas possible de s'inscrire sur le site via la procédure classique, essentiellement parce que les clés du captcha ne sont pas renseignées dans le fichier de `settings` présent sur le dépôt. Si vous souhaitez créer d'autres comptes utilisateurs, il va falloir passer par l'administration de Django et faire cela à la main.
 
 
 ## Comment contribuer ?
