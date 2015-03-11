@@ -56,7 +56,8 @@ Enfin, afin que le site puisse fournir les fichiers statiques nécessaires à so
 
 ##### mysql-python refuse de s'installer dans mon environnement virtuel
 
-Essayez d'installer la bibliothèque de développement, par exemple, via `apt-get install libmysqlclient-dev`. 
+Essayez d'installer la bibliothèque de développement, par exemple, via `apt-get install libmysqlclient-dev`. Nous conseillons aussi d'avoir les bibliothèques de développement Python installées : `apt-get install python-dev`
+
 Si cela ne convient pas, vous pouvez toujours utiliser le module `PyMySQL` plutôt que `mysql-python` en modifiant le fichier *requirements.txt*.
 
 ##### Django retourne une erreur à propos de la base de données
