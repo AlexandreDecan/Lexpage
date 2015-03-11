@@ -10,6 +10,9 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+# Additional directories for fixtures
+FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures'),)
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.

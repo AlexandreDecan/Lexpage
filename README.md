@@ -1,5 +1,19 @@
 # Lexpage v4
-Le présent dépôt contient les sources à la base de la v4 du Lexpage. Il s'agit essentiellement d'une "grosse" application Django (fragmentée en plusieurs petites applications) ainsi que les templates et les fichiers statiques nécessaires pour faire tourner le site. 
+
+Bienvenue sur le dépôt *officiel* du Lexpage ! 
+
+Ce dépôt contient le code source de la v4 du Lexpage, tel qu'il est actuellement en production à l'adresse http://www.lexpage.net
+Il s'agit essentiellement d'un ensemble de petites applications Django ainsi que des templates et les fichiers statiques
+associés pour faire tourner le site. 
+
+Certains fichiers (avatars, configuration en prod, flatpages, sniffer de la NSA, etc.) ne sont pas présents sur le dépôt pour des raisons évidentes qu'il ne faut bien entendu pas vous détailler. 
+
+La suite de ce README s'organise ainsi : 
+ - Une description rapide de ce que contient le dépôt. 
+ - Des explications pour pouvoir builder et tester ce qui s'y trouve.
+ - Des informations sur la manière de contribuer.
+ 
+Bonne lecture !
 
 
 ## Que contient le dépôt ?
@@ -12,16 +26,21 @@ Le répertoire */app* contient tout ce qui est propre à Django et au Lexpage :
   
 La racine du dépôt contient notamment :
  - *Dockerfile* : permet de créer une image pour des containers Docker. L'image va créer un environnement Python à jour (via le fichier *requirements.txt*) et utilise Gunicorn comme serveur WSGI.
- - *gunicorn.conf* et *uwsgi.conf* contiennent des configurations initiales pour lancer Lexpage en dev.
+ - *uwsgi.conf* contiet la configuration initiale pour lancer Lexpage en dev.
  - *requirements.txt* contient la liste des dépendances Python nécessaires (à utiliser avec `pip install -r requirements.txt`).
  
  
 ## Comment tester localement ?
 
-Pour ne pas saloper votre environnement, nous vous conseillons d'utiliser Docker, virtualenv ou encore pew. 
+Tester localement le site se fait de manière assez simple, pour peu que vous sachiez suivre une documentation :-) 
 
+### Mettre en place un environnement virtuel
+
+La première chose à faire, pour ne pas saloper votre environnement, c'est d'isoler le futur Lexpage. Pour cela, nous vous proposons soit d'utiliser Docker, soit d'utiliser Virtualenv/Pew. Si vous ne vous souciez pas d'installer certaines librairies dans des versions spécifiques sur votre machine de travail, vous pouvez directement passer à l'étape suivante. Bien entendu, n'importe quelle solution de virtualisation devrait vous permettre d'arriver au même résultat, mais nous ne documenterons ici que les solutions basées sur Docker et sur Virtualenv/Pew.
 
 ##### Avec Docker
+
+Bien entendu, il est nécessaire que Docker soit installé sur votre machine. Si c'est votre première fois avec Docker, le mieux est de se rapporter à leur documentation et de suivre un bon gros tutoriel avant de vous lancer là-dedans. Enfin, rien n'est impossible, mais ça devrait vous aider.
 
 Une image Docker est disponible via le *Dockerfile* du dépôt :
  - Créez l'image via `docker build -t lexpage/dev .` (n'oubliez pas le "." à la fin de la ligne !)
@@ -43,14 +62,33 @@ Si vous n'avez pas `pip`, ce ne sont pas les [moyens qui manquent](https://pip.p
 
 Ensuite, par ordre de préférence : 
  - soit vous utilisez uWSGI (déjà installé) via `uwsgi --ini uwsgi.conf` 
- - soit vous utilisez Gunicorn (à installer via `pip install gunicorn`) via `gunicorn --config gunicorn.conf wsgi:application`
  - soit vous utilisez le serveur de développement de Django, via `python app/manage.py runserver`
 
-#### Dans tous les cas...
+Si vous préférez *gunicorn*, rien ne vous empêche de l'utiliser également... 
 
-N'oubliez pas que vous n'avez probablement pas, à ce stade, de base de données prêtes. Il convient d'utiliser `python app/manage.py migrate` pour créer la base de données (localement, par défaut, avec SQLite). Afin de pouvoir tester le site, il est pratique d'avoir un compte superuser : `python app/manage.py createsuperuser` qui va vous demander d'entrer quelques informations. A l'aide de ce compte utilisateur, vous pourrez par la suite créer d'autres utilisateurs via l'administration de Django (accessible dans un menu du site). 
+### Configurer et utiliser Django pour servir Lexpage
+
+Des paramètres de base sont proposés sur le dépôt. Les paramètres considérés comme spécifiques à l'environnement sont repris dans le fichier `settings_dev.py` qui s'occupe de charger le reste venant de `settings_base.py`. A priori, vous n'aurez pas à modifier autre chose que les paramètres de développement, mais qui sait ? Quoiqu'il en soit, si vous souhaitez utiliser un autre fichier de configuration que `settings_dev.py`, il conviendra de le signaler à Django lors de chaque appel à `python app/manage.py` (la principale commande que vous allez utiliser ici !). Faites un tour dans la documentation de Django, et vous verrez comment faire (via une variable d'environnement, ou un paramètre long, etc.). 
+
+Avant de pouvoir tester le site, il y a quelques opérations à faire :
+  
+#### Mettre en place la base de données
+
+Par défaut, la configuration de développement travaille avec SQLite. En production, nous tournons avec MariaDB. Si vous n'aimez pas SQLite ou que vous voulez utiliser autre chose, pensez à adapter le fichier de configuration. Dans tous les cas, si c'est la première fois que vous lancez le site, il faudra créer la base de données :
+`python app/manage.py migrate`
+
+A ce stade, une base va être créée et contiendra les différents modèles. La base est globalement vide. Des données de test sont fournies dans le répertoire `app/fixtures/`. Vous pouvez notamment charger ces données dans la base de données via : 
+`python app/manage.py loaddata devel`
+
+Si vous ne souhaitez pas utiliser ces données, mais que vous voulez tester l'authentification et ces machins-là sur le site, il vous faudra au moins un compte administrateur. Utilisez donc Django pour ça :
+`python app/manage.py createsuperuser`
+
+
+
+#### Mettre en place les fichiers statiques
 
 Enfin, afin que le site puisse fournir les fichiers statiques nécessaires à son affichage et à son fonctionnement, il convient d'indiquer à Django de collecter ces fichiers statiques dans les différentes applications qui sont utilisées, et de les réunir dans un répertoire qui sert à fournir les fichiers statiques. La commande `python app/manage.py collectstatic` fera cela pour vous. Bien entendu, c'est une commande à répéter à chaque fois que vous faites des modifications dans les fichiers statiques. 
+
 
 ## Les problèmes fréquents et leurs solutions connues
 
@@ -60,6 +98,7 @@ Essayez d'installer la bibliothèque de développement, par exemple, via `apt-ge
 
 Si cela ne convient pas, vous pouvez toujours utiliser le module `PyMySQL` plutôt que `mysql-python` en modifiant le fichier *requirements.txt*.
 
+
 ##### Django retourne une erreur à propos de la base de données
 
 Pensez à créer la base de données localement si ce n'est pas encore fait, via `python app/manage.py migrate`
@@ -68,13 +107,16 @@ Si vous travaillez avec Docker, il conviendra de le faire via l'image :
 
 N'oubliez pas de vous créer un superuser pour accéder au site via `python app/manage.py createsuperuser`
 
+
 ##### Aucune ressource statique ne semble s'afficher correctement
 
 Les fichiers statiques doivent être collectés et placés dans le répertoire *static_pub/*. Django peut le faire pour vous : `python app/manage.py collecstatic` ?
 
+
 ##### L'édito ne s'affiche pas, mais il y a une barre bleue à la place
 
 Une partie du contenu "pratiquement statique" est géré via les *flatpages* de Django. Il vous faudra créer ces mêmes *flatpages* si vous souhaitez avoir le même rendu (l'édito, la page "à propos", les aides pour le balisage, etc.). 
+
 
 #### J'ai des erreurs 500 dès que je tente de me logguer
 
@@ -82,13 +124,14 @@ Vous avez créé un compte utilisateur, mais il est possible que ce compte n'ait
 
 #### Il est impossible de s'inscrire sur le site en local
 
-Notez qu'il n'est pas possible de s'inscrire sur le site via la procédure classique, essentiellement parce que les clés du captcha ne sont pas renseignées dans le fichier de `settings` présent sur le dépôt. Si vous souhaitez créer d'autres comptes utilisateurs, il va falloir passer par l'administration de Django et faire cela à la main.
+Notez qu'il n'est pas possible de s'inscrire sur le site via la procédure classique, essentiellement parce que les clés du captcha ne sont pas renseignées dans le fichier de configuration présent sur le dépôt. Si vous souhaitez créer d'autres comptes utilisateurs, il va falloir passer par l'administration de Django et faire cela à la main.
 
 
 ## Comment contribuer ?
+
 De n'importe quelle manière :
   - soit en me contacter pour poser vos questions ou indiquer vos remarques, 
   - soit en créant une issue sur le bugtracker, 
   - soit en effectuant un pull request, 
   - ...
-  
+
