@@ -11,17 +11,17 @@ from django.views.generic import View, ListView
 from django.views.generic.base import RedirectView
 from django.views.generic.edit import FormView
 
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
-from django.db.models import F, Q
+from django.db.models import F
 from django.contrib import messages
 
 from models import Message, Thread, Flag, MessageHistory, BlogBoardLink
 
 from blog.models import BlogPost
-from notifications import notify 
+from notifications import notify
 
 from forms import MessageForm, MessageModerateForm, ThreadForm
 
@@ -37,6 +37,10 @@ MESSAGES_PER_PAGE = 50  # archives
 
 # Provide form
 class ThreadView(ListView):
+    """
+    List of threads.
+    """
+
     template_name = 'board/thread_show.html'
     context_object_name = 'message_list'
     allow_empty = False
@@ -70,9 +74,11 @@ class ThreadView(ListView):
         return context
 
 
-
-
 class ThreadUnreadRedirectView(RedirectView):
+    """
+    Redirect to the first unread message in the given thread.
+    """
+
     permanent = False
 
     dispatch = method_decorator(login_required)(RedirectView.dispatch)
@@ -88,15 +94,19 @@ class ThreadUnreadRedirectView(RedirectView):
         else:
             # First new message is at position + 1
             position = position + 1
-        
+
         page = (position / MESSAGES_PER_THREAD) + 1
         anchor = '#new'
-        
-        return reverse('board_thread_show', 
-                kwargs={'thread': kwargs['thread'], 'slug': message.thread.slug, 'page': page}) + anchor
+
+        return reverse('board_thread_show',
+                       kwargs={'thread': kwargs['thread'], 'slug': message.thread.slug, 'page': page}) + anchor
 
 
 class ThreadReplyView(FormView):
+    """
+    Form and logical handling for a reply in the given thread.
+    """
+
     template_name = 'board/thread_reply.html'
     form_class = MessageForm
     success_url = None
@@ -113,17 +123,19 @@ class ThreadReplyView(FormView):
 
     def form_valid(self, form):
         data = form.cleaned_data
-        self.thread.postMessage(self.request.user, data['text'])
+        self.thread.post_message(self.request.user, data['text'])
         return FormView.form_valid(self, form)
 
     def get_success_url(self):
-        return reverse_lazy('board_thread_show_last', 
-                    kwargs={'thread': self.thread.pk, 'slug': self.thread.slug}) + '#last'
-
-
+        return reverse_lazy('board_thread_show_last',
+                            kwargs={'thread': self.thread.pk, 'slug': self.thread.slug}) + '#last'
 
 
 class ThreadMarkUnreadView(RedirectView):
+    """
+    Mark the given thread unread and redirect.
+    """
+
     permanent = False
 
     dispatch = method_decorator(login_required)(RedirectView.dispatch)
@@ -140,8 +152,11 @@ class ThreadMarkUnreadView(RedirectView):
         return reverse_lazy('board_latests')
 
 
-
 class ThreadDeleteView(RedirectView):
+    """
+    Delete the given thread and redirect.
+    """
+
     permanent = False
 
     dispatch = method_decorator(login_required)(RedirectView.dispatch)
@@ -156,8 +171,11 @@ class ThreadDeleteView(RedirectView):
             raise Http404
 
 
-
 class ThreadCreateView(FormView):
+    """
+    Create a new thread and display its content on form submission.
+    """
+
     template_name = 'board/thread_create.html'
     form_class = ThreadForm
     success_url = None
@@ -168,10 +186,10 @@ class ThreadCreateView(FormView):
         data = form.cleaned_data
         thread = Thread(title=data['title'])
         thread.save()
-        
-        self.thread = thread    # For success url
 
-        message = thread.postMessage(self.request.user, data['text'])
+        self.thread = thread  # For success url
+
+        message = thread.post_message(self.request.user, data['text'])
         return FormView.form_valid(self, form)
 
     def get_success_url(self):
@@ -179,6 +197,11 @@ class ThreadCreateView(FormView):
 
 
 class ThreadCreateForPostView(FormView):
+    """
+    Create a new thread and display its content on form submission.
+    This view must be used when the newly created thread is linked with a
+    post from the blog application.
+    """
     template_name = 'board/thread_create_for_post.html'
     form_class = ThreadForm
     success_url = None
@@ -187,13 +210,13 @@ class ThreadCreateForPostView(FormView):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        self.blogpost = get_object_or_404(BlogPost.published, pk=kwargs['post'])
+        self.blogpost = get_object_or_404(BlogPost.published, pk=self.kwargs['post'])
         return FormView.dispatch(self, request, *args, **kwargs)
- 
+
     def get_initial(self):
-        initial = {}
-        initial['title'] = 'Billet - %s' % (self.blogpost.title)
-        return initial
+        return {
+            'title': 'Billet - {}'.format(self.blogpost.title)
+        }
 
     def get_context_data(self, **kwargs):
         context = FormView.get_context_data(self, **kwargs)
@@ -202,49 +225,62 @@ class ThreadCreateForPostView(FormView):
 
     def form_valid(self, form):
         data = form.cleaned_data
+        # Create thread
         thread = Thread(title=data['title'])
         thread.save()
-        
+
+        # Post message
+        thread.post_message(self.request.user, data['text'])
+
+        # Create link with blogpost
         link = BlogBoardLink(thread=thread, post=self.blogpost)
         link.save()
 
-        self.thread = thread    # For success url
+        # We'll need this in get_succes_url()
+        self.thread = thread
 
-        message = thread.postMessage(self.request.user, data['text'])
         return FormView.form_valid(self, form)
 
     def get_success_url(self):
-        return reverse_lazy('board_thread_show_last', kwargs={'thread': self.thread.pk, 'slug': self.thread.slug})
-
+        return reverse_lazy('board_thread_show_last',
+                            kwargs={'thread': self.thread.pk,
+                                    'slug': self.thread.slug})
 
 
 class MessageRedirectView(RedirectView):
+    """
+    Given a Message id, redirect to the related page on the related thread.
+    """
     permanent = False
 
     def get_redirect_url(self, **kwargs):
         message = get_object_or_404(Message.objects, pk=kwargs['message'])
         position = message.position()
         page = (position / MESSAGES_PER_THREAD) + 1
-        return reverse('board_thread_show', 
-               kwargs={'thread': message.thread.pk, 
-                        'slug': message.thread.slug, 
-                        'page': page}) + "#msg" + str(message.pk)
-
-
-
+        return reverse('board_thread_show',
+                       kwargs={'thread': message.thread.pk,
+                               'slug': message.thread.slug,
+                               'page': page}) + "#msg" + str(message.pk)
 
 
 class MessageEditView(FormView):
+    """
+    View that allow the edition of a message.
+    Can be used by every user that is the message's author and if the message
+    is not already moderated, or by any user that has board.can_moderate permission.
+    """
     template_name = 'board/message_edit.html'
     form_class = MessageForm
     success_url = None
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
+        # Message is saved as an instance attribute because we need it
+        # in get_initial and in form_valid and in get_context_data.
         self.message = get_object_or_404(Message.objects, pk=self.kwargs['message'])
-        
+
         can_we = (((self.message.author == self.request.user) and not self.message.moderated)
-                    or (self.request.user.has_perm('board.can_moderate')))
+                  or (self.request.user.has_perm('board.can_moderate')))
         if not can_we:
             raise Http404
         return FormView.dispatch(self, request, *args, **kwargs)
@@ -257,10 +293,10 @@ class MessageEditView(FormView):
         return FormView.get_form(self, form_class)
 
     def get_initial(self):
-        initial = {}
-        initial['text'] = self.message.text
-        initial['moderated'] = self.message.moderated
-        return initial
+        return {
+            'text': self.message.text,
+            'moderated': self.message.moderated
+        }
 
     def form_valid(self, form):
         data = form.cleaned_data
@@ -288,8 +324,10 @@ class MessageEditView(FormView):
         return reverse_lazy('board_message_show', kwargs={'message': self.message.pk})
 
 
-
 class MessageDeleteView(RedirectView):
+    """
+    Delete given message and redirect to the thread.
+    """
     permanent = False
 
     dispatch = method_decorator(login_required)(RedirectView.dispatch)
@@ -308,8 +346,10 @@ class MessageDeleteView(RedirectView):
             raise Http404
 
 
-
 class MessageMarkUnreadView(RedirectView):
+    """
+    Mark given message as unread and redirect to thread list.
+    """
     permanent = False
 
     dispatch = method_decorator(login_required)(RedirectView.dispatch)
@@ -319,20 +359,25 @@ class MessageMarkUnreadView(RedirectView):
         Flag.objects.unread(self.request.user, message)
         messages.success(self.request, "Le nouveau marqueur de lecture a été enregistré.")
         return reverse_lazy('board_latests')
-        
 
 
 class MessageJSONView(View):
+    """
+    Return a message in JSON format.
+    """
+
     def get(self, request, **kwargs):
         message = get_object_or_404(Message.objects, pk=kwargs['message'])
-        output = {'text': message.text, 
-                'author': message.author.username,
-                'date' : str(message.date)}
+        output = {'text': message.text,
+                  'author': message.author.username,
+                  'date': str(message.date)}
         return HttpResponse(json.dumps(output), content_type='application/json')
 
 
-
 class BoardLatestsView(ListView):
+    """
+    List of latest threads (by message date).
+    """
     template_name = 'board/latests.html'
     context_object_name = 'thread_list'
     queryset = None
@@ -347,6 +392,9 @@ class BoardLatestsView(ListView):
 
 
 class BoardArchivesView(ListView):
+    """
+    Full list of threads.
+    """
     template_name = 'board/archives.html'
     context_object_name = 'thread_list'
     allow_empty = True
@@ -362,6 +410,9 @@ class BoardArchivesView(ListView):
 
 
 class BoardArchivesMessagesView(ListView):
+    """
+    Full list of messages.
+    """
     template_name = 'board/archives_messages.html'
     context_object_name = 'message_list'
     allow_empty = True
@@ -371,6 +422,11 @@ class BoardArchivesMessagesView(ListView):
 
 
 class FollowedView(ListView):
+    """
+    List of followed threads. A thread is followed by a user if this user
+    has a flag on the thread (either read or unread). If filter_unread is
+    set, then only the threads with an unread flag are returned.
+    """
     template_name = 'board/followed.html'
     context_object_name = 'thread_list'
     allow_empty = True
@@ -382,7 +438,7 @@ class FollowedView(ListView):
     def dispatch(self, *args, **kwargs):
         if 'filter_unread' in kwargs:
             self.filter_unread = kwargs['filter_unread']
-        else: 
+        else:
             self.filter_unread = False
         return ListView.dispatch(self, *args, **kwargs)
 

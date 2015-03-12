@@ -8,7 +8,7 @@ from django.db import models
 class SloganManager(models.Manager):
     def get_random(self):
         try:
-            return self.get_query_set().order_by('?')[0]
+            return self.get_queryset().order_by('?')[0]
         except IndexError: 
             return {'slogan': 'aucun', 'author': 'aucun'}
 

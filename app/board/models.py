@@ -5,27 +5,24 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.timezone import now
 from django.core.urlresolvers import reverse
 
 from django.utils.text import slugify
 
 from blog.models import BlogPost
 
-import datetime
 import difflib
 
 
 USE_DIFF_FOR_HISTORY = True
 
 
-
 class Thread(models.Model):
     title = models.CharField(verbose_name='Titre', max_length=80)
     slug = models.SlugField(max_length=90, unique=False)
     number = models.IntegerField(verbose_name='Nombre de messages', default=0)
-    date_created = models.DateTimeField(verbose_name='Date de création', auto_now_add=True)      
-    last_message = models.ForeignKey('Message', verbose_name='Dernier message', related_name='+', default=-1) 
+    date_created = models.DateTimeField(verbose_name='Date de création', auto_now_add=True)
+    last_message = models.ForeignKey('Message', verbose_name='Dernier message', related_name='+', default=-1)
 
     class Meta():
         get_latest_by = 'date_created'
@@ -36,16 +33,18 @@ class Thread(models.Model):
         return reverse('board_thread_show', kwargs={'thread': self.pk})
 
     def annotate_flag(self, user):
-        """ 
-        Add an attribute flag to the current field if any. 
+        """
+        Annotate the current Thread by adding the related Flag object (if it
+        exists for given user) as a `flag` attribute.
+        :param user: Related user
+        :return: None
         """
         if not user.is_authenticated():
-            return 
+            return
         try:
             self.flag = Flag.objects.all().get(thread=self, user=user)
         except Flag.DoesNotExist:
             pass
-
 
     def save(self, *args, **kwargs):
         # Slug handler
@@ -62,17 +61,19 @@ class Thread(models.Model):
         authors = Message.objects.all().filter(thread=self).order_by('date').values_list('author')
         tmp_set = set()
         # http://stackoverflow.com/questions/6197409/ordered-sets-python-2-7
-        output = [User.objects.all().get(pk=x[0]) for x in authors if 
-             x[0] not in tmp_set and not tmp_set.add(x[0])] 
-        if N is None: 
+        output = [User.objects.all().get(pk=x[0]) for x in authors
+                  if x[0] not in tmp_set and not tmp_set.add(x[0])]
+        if N is None:
             return output
         else:
             return output[:N]
 
-    def postMessage(self, user, text):
-        """ 
-        Post a new message in the current thread. 
-        Return the newly created message. 
+    def post_message(self, user, text):
+        """
+        Post a new message in this thread.
+        :param user: Author of the message.
+        :param text: Text content.
+        :return: The newly created Message instance.
         """
         # Create a new message
         message = Message(author=user, thread=self, text=text)
@@ -90,21 +91,22 @@ class Message(models.Model):
     author = models.ForeignKey(User, verbose_name='Auteur', related_name='board_post')
     thread = models.ForeignKey(Thread, verbose_name='Sujet')
     text = models.TextField(verbose_name='Message', help_text='Mis en page avec le BBCode.')
-    moderated = models.BooleanField(verbose_name='Message modéré ?', default=False, help_text='Si le message est modéré, son auteur ne pourra plus le modifier.')
-    date = models.DateTimeField(verbose_name='Date', auto_now_add=True)      
-    
+    moderated = models.BooleanField(verbose_name='Message modéré ?', default=False,
+                                    help_text='Si le message est modéré, son auteur ne pourra plus le modifier.')
+    date = models.DateTimeField(verbose_name='Date', auto_now_add=True)
+
     class Meta():
         get_latest_by = 'date'
         ordering = ['date']
         verbose_name = 'Message'
         permissions = (('can_moderate', 'Peut modérer'),
-                       ('can_destroy', 'Peut détruire'))        
+                       ('can_destroy', 'Peut détruire'))
 
     def get_absolute_url(self):
         return reverse('board_message_show', kwargs={'message': self.pk})
 
     def __unicode__(self):
-        return self.text[:50]+"..."
+        return self.text[:50] + "..."
 
     def position(self):
         """
@@ -112,11 +114,12 @@ class Message(models.Model):
         """
         return Message.objects.all().filter(thread=self.thread, date__lt=self.date).count()
 
-    def delete(self):
+    def delete(self, **kwargs):
         """
         Remove given message from thread. If this is the only message in the
         thread, remove the thread. Update flags. Return previous message, or 
         None
+        :param **kwargs:
         """
         if self.thread.number == 1:
             # Delete thread (and by cascade, this message)
@@ -126,25 +129,24 @@ class Message(models.Model):
             # Get previous message
             previous = self.previous()
             # If there is no previous, then remove the flags
-            if previous == None:
+            if previous is None:
                 Flag.objects.all().filter(thread=self.thread, message=self).delete()
                 anchor = self.next()
             else:
                 anchor = previous
                 # Update flags
                 Flag.objects.all().filter(thread=self.thread, message=self).update(message=previous)
-            
+
                 # Update last_message, if needed
                 if self.thread.last_message == self:
                     self.thread.last_message = previous
-            
+
             self.thread.number = self.thread.number - 1
             self.thread.save()
 
             # Remove message
             super(Message, self).delete()
             return anchor
-            
 
     def previous(self):
         """ 
@@ -170,11 +172,11 @@ class Message(models.Model):
         """
         if USE_DIFF_FOR_HISTORY:
             diff = difflib.unified_diff(self.text.splitlines(),
-                            text.splitlines(),
-                            fromfile='ancien',
-                            tofile='nouveau',
-                            n=0,
-                            lineterm='')
+                text.splitlines(),
+                fromfile='ancien',
+                tofile='nouveau',
+                n=0,
+                lineterm='')
             ntext = '\n'.join([unicode(x) for x in diff])
         else:
             ntext = self.text
@@ -197,7 +199,6 @@ class Message(models.Model):
         return MessageHistory.objects.all().filter(message=self).count()
 
 
-
 class MessageHistory(models.Model):
     message = models.ForeignKey(Message, verbose_name='Message', related_name='history')
     edited_by = models.ForeignKey(User, verbose_name='Auteur de la modification', related_name='+')
@@ -209,7 +210,6 @@ class MessageHistory(models.Model):
         ordering = ['date']
         verbose_name = 'Édition de message'
         verbose_name_plural = 'Éditions de message'
-
 
 
 class FlagManager(models.Manager):
@@ -249,9 +249,6 @@ class FlagManager(models.Manager):
             flag.delete()
 
 
-
-
-
 class Flag(models.Model):
     user = models.ForeignKey(User, verbose_name='Auteur', related_name='+')
     thread = models.ForeignKey(Thread, verbose_name='Sujet')
@@ -264,7 +261,11 @@ class Flag(models.Model):
         unique_together = (('user', 'thread'),)
 
 
-
 class BlogBoardLink(models.Model):
+    """
+    Pseudo OneToOne through model between BlogPost and Thread.
+    This class is used to make a direct link when a Thread is created
+    for a BlogPost.
+    """
     thread = models.OneToOneField(Thread)
     post = models.OneToOneField(BlogPost)
