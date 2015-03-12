@@ -133,22 +133,6 @@ def _handle_status(request, post, action):
         messages.warning(request, 'Action invalide sur ce billet.')
 
 
-def _can_we_show_this_post(user, post_pk):
-    """
-    Quick-and-dirty shortcut that returns True if given user may display 
-    the post whose pk is given by post_pk. 
-    """
-    post = get_object_or_404(BlogPost.objects, pk=post_pk)
-    is_own = post.author == user
-    status = post.status
-
-    if not user.has_perm('blog.can_approve'):
-        return is_own and (status == BlogPost.STATUS_DRAFT)
-    else:
-        return (is_own and status == BlogPost.STATUS_DRAFT) or (BlogPost.STATUS_DRAFT < status <= BlogPost.STATUS_PUBLISHED)
-
-
-
 class PostCreateView(FormView):
     """
     Provide a form that can be used to create a new post. 
@@ -204,17 +188,21 @@ class PostEditView(FormView):
         return reverse_lazy('blog_post_show', kwargs={'pk': self.kwargs['pk']})
 
     def get_initial(self):
-        if not _can_we_show_this_post(self.request.user, self.kwargs['pk']):
+        # Raise 404 if post does not exist
+        post = get_object_or_404(BlogPost, pk=self.kwargs['pk'])
+        if not post.can_be_viewed_by(self.request.user):
+            # Raise 404, do not expose that this id exists with 403
             raise Http404
-        post = BlogPost.objects.get(pk=self.kwargs['pk'])
-        initial = {}
-        initial['title'] = post.title
-        initial['tags'] = post.tags
-        initial['abstract'] = post.abstract
-        initial['text'] = post.text
-        initial['priority'] = post.priority
-        initial['action'] = post.status        
-        return initial
+
+        return {
+            'title': post.title,
+            'tags': post.tags,
+            'abstract': post.abstract,
+            'text': post.text,
+            'priority': post.priority,
+            'action': post.status
+        }
+
 
     def get_context_data(self, *args, **kwargs):
         context = FormView.get_context_data(self, *args, **kwargs)
@@ -228,9 +216,10 @@ class PostEditView(FormView):
         return FormView.get_form(self, form_class)
 
     def form_valid(self, form):
-        # Alike get_or_404. Maybe this should be a "challenge" function used
-        # as a decorator... 
-        if not _can_we_show_this_post(self.request.user, self.kwargs['pk']):
+        # Raise 404 if post does not exist
+        post = get_object_or_404(BlogPost, pk=self.kwargs['pk'])
+        if not post.can_be_viewed_by(self.request.user):
+            # Raise 404, do not expose that this id exists with 403
             raise Http404
 
         data = form.cleaned_data

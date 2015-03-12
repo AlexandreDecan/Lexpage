@@ -6,12 +6,9 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
-
 from django.core.urlresolvers import reverse
-
 from django.utils.text import slugify
 
-import math
 
 POST_ICONS = {
     'achat': 'fa-shopping-cart',
@@ -83,17 +80,22 @@ class PostManager(models.Manager):
         self._status = status
         self._ordering = ordering
 
+
     def get_queryset(self):
         return super(PostManager, self).get_queryset().filter(status=self._status).order_by(*self._ordering)
 
+
     def get_tags_list(self, sort_name=False, relative=True):
         """
-        Return a list of every tag already used in a post, with the 
-        number of posts having this tag. The resulting structure is 
-        ordered by this number, except if sort_name is True. 
-        If relative is True, then the number will be a percentage wrt. the most
-        viewed tag. Otherwise, the number will be a simple count.
+        Return a list of every tag that occured in at least one post.
+        This list is composed of couples (tag_name, number_of_posts).
+
+        :param sort_name: If True, the list is sorted by the number of posts
+        :param relative: If True, the number of posts will be a percentage wrt.
+        biggest value occuring in the list.
+        :return: A list of (tag_name, number_of_posts)
         """
+
         if sort_name == False:
             sort_name = lambda x: -x[1]
         else:
@@ -167,37 +169,60 @@ class BlogPost(models.Model):
     def get_absolute_url(self):
         return reverse('blog_post_show', kwargs={'pk': self.pk})
 
+
     def get_icon(self):
         """
-        Return the first icon that can be associated to a tag. 
+        Return the first icon that can be associated to this post based on the tag list..
         """
+
         tags = self.tags_list()
         for tag in tags:
             if tag in POST_ICONS:
                 return POST_ICONS[tag]
         return 'fa-chevron-right'
 
+
     def get_next(self):
-        """ Return the next post by date_published, only for 
-        published post. """
+        """ Return the next published post."""
+
         try:
             return BlogPost.published.filter(date_published__gt=self.date_published).order_by('date_published')[0]
         except IndexError:
             pass
 
+
     def get_previous(self):
-        """ Return the previous post by date_published, only for
-        published post. """
+        """ Return the previous published post. """
+
         try:
             return BlogPost.published.filter(date_published__lt=self.date_published).order_by('-date_published')[0]
         except IndexError:
             pass
 
 
-    def change_status(self, user, new_status):
-        """ 
-        Change the current status according to the new status.
+    def can_be_viewed_by(self, user):
         """
+        Return True if given user has access to current post.
+        :param user: user to challenge
+        :return: True or False
+        """
+
+        is_owner = self.author == user
+        if not user.has_perm('blog.can_approve'):
+            return is_owner and (self.status == BlogPost.STATUS_DRAFT)
+        else:
+            return (is_owner and self.status == BlogPost.STATUS_DRAFT) or (self.status > BlogPost.STATUS_DRAFT)
+
+
+    def change_status(self, user, new_status):
+        """
+        Save the fact that given user has changed the current status to new_status.
+        :param user: User that makes the request
+        :param new_status: New status (see STATUS_* constants)
+        :return: None
+        """
+
+
         if new_status == BlogPost.STATUS_DRAFT:
             self.author = user
 
@@ -213,19 +238,30 @@ class BlogPost(models.Model):
 
 
         self.status = new_status
-        self.save()
+        return self.save()
+
 
     def save(self, *args, **kwargs):
-        # Slug handler
+        """
+        Override save behavior by computing the value of the slug field.
+        """
+
         self.slug = slugify(self.title)
         return super(BlogPost, self).save(*args, **kwargs)
 
+
     def tags_list(self):
-        """ Return a list of tags. """
+        """
+        Return a list of tags for this post.
+        :return: list of tags
+        """
+
         return [unicode(x) for x in self.tags.split(' ') if len(x) > 0]
+
 
     def __unicode__(self):
         return unicode(self.title)
+
 
     class Meta():
         get_latest_by = 'date_published'
