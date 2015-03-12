@@ -25,6 +25,10 @@ import copy
 
 
 class ReplyView(FormView):
+    """
+    Handle form submission for a reply in an existing thread.
+    """
+
     template_name = None
     form_class = ReplyForm
     success_url = None
@@ -33,7 +37,7 @@ class ReplyView(FormView):
 
     def form_valid(self, form):
         box = get_object_or_404(MessageBox.objects, thread=self.kwargs['thread'], user=self.request.user)
-        box.thread.postMessage(self.request.user, form.cleaned_data['text'])
+        box.thread.post_message(self.request.user, form.cleaned_data['text'])
         notify.messaging_mesage_new(self.request.user, box.thread)
         messages.success(self.request, "Message enregistré.")
         return redirect(reverse_lazy('messaging_show', kwargs={'thread': self.kwargs['thread']}))
@@ -44,6 +48,10 @@ class ReplyView(FormView):
 
 
 class MarkThreadView(View):
+    """
+    Mark thread as archived, unarchived, starred, unstarred, read, unread, or deleted and redirect
+    according to a `next` parameter if it exists.
+    """
     dispatch = method_decorator(login_required)(View.dispatch)
 
     def get(self, request, *args, **kwargs):
@@ -93,6 +101,11 @@ class MarkThreadView(View):
 
 
 class NewThreadView(FormView):
+    """
+    Display and handle the form needed to create a new thread.
+    If a `username` is specified, then this username is used as a default recipient.
+    """
+
     template_name = 'messaging/thread_new.html'
     form_class = NewThreadForm
     success_url = None  # Is set according to the new created thread
@@ -124,7 +137,7 @@ class NewThreadView(FormView):
             if recipient.get_username() == self.request.user.get_username():
                 data['recipients'].remove(recipient)
                 break
-        new_box = Thread.objects.createThread(self.request.user, data['title'], data['text'], data['recipients'])
+        new_box = Thread.objects.create_thread(self.request.user, data['title'], data['text'], data['recipients'])
         notify.messaging_thread_new(self.request.user, new_box.thread)
         messages.success(self.request, 'La nouvelle conversation a été enregistrée.')
         return redirect(reverse_lazy('messaging_show', kwargs={'thread': new_box.thread.pk}))
@@ -132,6 +145,9 @@ class NewThreadView(FormView):
 
 
 class MessageListView(ListView):
+    """
+    Display the content of a given thread.
+    """
     template_name = 'messaging/thread_show.html'
     context_object_name = 'message_list'
 
@@ -143,7 +159,7 @@ class MessageListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = ListView.get_context_data(self, **kwargs)
-        context['user_list'] = self.box.thread.get_recipients()
+        context['user_list'] = self.box.thread.recipients
         context['date_read'] = copy.copy(self.box.date_read)
         context['box'] = self.box
         context['form'] = ReplyForm()
@@ -159,6 +175,9 @@ class MessageListView(ListView):
 
 
 class ThreadListView(ListView):
+    """
+    Display the content of the given message box (chosen from `filter` url parameter).
+    """
     template_name = 'messaging/thread_list.html'
     context_object_name = 'box_list'
 

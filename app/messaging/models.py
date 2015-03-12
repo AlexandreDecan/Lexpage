@@ -11,12 +11,17 @@ import datetime
 
 
 class ThreadManager(models.Manager):
-    def createThread(self, user, title, text, targets):
-        """ Create a new thread with the given title and post
-        a message with given text inside. Create and update 
-        targets' MessageBoxes (and user's one) accordingly. 
-        Return the newly created user's MessageBox. """
-        
+    def create_thread(self, user, title, text, targets):
+        """
+        Create a new thread for the given user and the given targets.
+
+        :param user: author of the thread
+        :param title: title of the thread (if empty, is autopopulated from involved users)
+        :param text: content of the first message
+        :param targets: a list of User instances
+        :return: newly created MessageBox instance
+        """
+
         # Empty title -> autopopulate!
         if len(title) == 0:
             usernames = [user.get_username()] + [x.get_username() for x in targets]
@@ -37,7 +42,7 @@ class ThreadManager(models.Manager):
             targetMBox.save()
 
         # Post message
-        thread.postMessage(user, text)
+        thread.post_message(user, text)
         return userMBox
 
 
@@ -57,7 +62,8 @@ class Thread(models.Model):
     def __unicode__(self):
         return self.title
 
-    def get_recipients(self):
+    @property
+    def recipients(self):
         boxes = MessageBox.objects.all().filter(thread=self)
         users = []
         for box in boxes:
@@ -65,10 +71,17 @@ class Thread(models.Model):
         users.sort(key=lambda x: x.username)
         return users
 
+    @property
     def number(self):
         return Message.objects.all().filter(thread=self).count()
 
-    def postMessage(self, user, text):
+    def post_message(self, user, text):
+        """
+        Post a message in the current thread and update the MessageBox instances of the participants.
+        :param user: author of the new message
+        :param text: text of the new message
+        :return: user's MessageBox instance
+        """
         """ Post a message in the current thread and update
         the MessageBoxes according to their status. 
         Return user's MessageBox. """
@@ -80,20 +93,20 @@ class Thread(models.Model):
         self.save()
 
         # Update MessageBoxes
-        messageBoxes = MessageBox.objects.filter(thread=self)
-        for messageBox in messageBoxes:
-            if messageBox.status == MessageBox.STATUS_DELETED:
-                messageBox.mark_normal()
-            elif messageBox.status == MessageBox.STATUS_ARCHIVED:
-                messageBox.mark_normal()
-            messageBox.save()
+        message_boxes = MessageBox.objects.filter(thread=self)
+        for message_box in message_boxes:
+            if message_box.status == MessageBox.STATUS_DELETED:
+                message_box.mark_normal()
+            elif message_box.status == MessageBox.STATUS_ARCHIVED:
+                message_box.mark_normal()
+            message_box.save()
 
         # Update current user MessageBox's date_read
-        messageBox = MessageBox.objects.get(user=user, thread=self)
-        messageBox.mark_read()
-        messageBox.save()
+        message_box = MessageBox.objects.get(user=user, thread=self)
+        message_box.mark_read()
+        message_box.save()
 
-        return messageBox
+        return message_box
 
 
 
@@ -153,9 +166,11 @@ class MessageBox(models.Model):
     def __unicode__(self):
         return '%s: %s' % (self.user, self.thread)
 
+    @property
     def is_read(self):
         return self.thread.last_message.date <= self.date_read
         
+    @property
     def is_archived(self):
         return self.status == MessageBox.STATUS_ARCHIVED
 
@@ -184,18 +199,23 @@ class MessageBox(models.Model):
         self.save()
 
     def mark_deleted(self):
+        """
+        Mark current MessageBox as deleted. If every MessageBox instance related to the thread are deleted,
+        then the thread is deleted too.
+        :return: None
+        """
         # Mark as deleted
         self.is_starred = False
         self.status = MessageBox.STATUS_DELETED
         self.save()
 
         # Get MessageBoxes
-        messageBoxes = MessageBox.objects.filter(thread=self.thread)
+        message_boxes = MessageBox.objects.filter(thread=self.thread)
 
         # If every authors' MessageBox for this Thread is 
         # STATUS_DELETED, then remove everything related...
-        for messageBox in messageBoxes:
-            if messageBox.status != MessageBox.STATUS_DELETED: 
+        for message_box in message_boxes:
+            if message_box.status != MessageBox.STATUS_DELETED:
                 return
         # Removing the thread will normally do the job...
         self.thread.delete()

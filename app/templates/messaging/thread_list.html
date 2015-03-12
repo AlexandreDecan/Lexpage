@@ -80,7 +80,7 @@
 
         <td>
         <div class="msg-msglist-authors">
-        {% for user in box.thread.get_recipients %}
+        {% for user in box.thread.recipients %}
             <a href="{% url 'profile_show' user %}">
                 <img src="{{ user.profile.avatar }}" title="{{ user.username }}" class="avatar verysmallavatar"/>
             </a>

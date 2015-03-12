@@ -89,7 +89,7 @@ def messaging_thread_new(user, thread):
     Notify the participants (except the author) that a new thread is 
     created. 
     """
-    recipients = thread.get_recipients()
+    recipients = thread.recipients
     recipients.remove(user)
     notify(recipients, 'Nouvelle conversation', '%s a entamé une nouvelle conversation avec vous : <em>%s</em>.' % (user.get_username(), escape(thread.title)),
            reverse('messaging_show', kwargs={'thread': thread.pk}), 'messaging', 'thread-%d' % thread.pk)
@@ -100,7 +100,7 @@ def messaging_mesage_new(user, thread):
     Notify the participants (except the author) that a new message has
     been posted, except if a notification for a new thread is pending. 
     """
-    recipients = thread.get_recipients()
+    recipients = thread.recipients
     recipients.remove(user)
     notify(recipients, 'Nouveau message', '%s a posté un nouveau message dans la conversation <em>%s</em>.' % (user.get_username(), escape(thread.title)),
            reverse('messaging_show', kwargs={'thread': thread.pk})+'#unread', 'messaging', 'thread-%d' % thread.pk)

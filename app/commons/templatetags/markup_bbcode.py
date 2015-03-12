@@ -105,7 +105,7 @@ smiley_list = [
 
 def replace_smiley(value):
     # List of available smileys in smileys directory
-    local_smiley_dir = os.path.join('static', 'images', 'smiley')
+    local_smiley_dir = os.path.join(settings.STATIC_ROOT, 'images', 'smiley')
     online_smiley_dir = os.path.join(settings.STATIC_URL, 'images', 'smiley')
 
     smiley_other = [(x[:-4],x[-3:]) for x in os.listdir(local_smiley_dir) \
