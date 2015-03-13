@@ -30,9 +30,7 @@ class ProfileChangeView(FormView):
     form_class = ChangeProfileForm
     template_name = 'profile/profile_edit.html'
 
-
     dispatch = method_decorator(login_required)(FormView.dispatch)
-
 
     def get_initial(self):
         initial = {}

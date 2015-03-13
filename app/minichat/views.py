@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 
 from django.http import HttpResponse, Http404
 from django.views.generic import ListView, View
-#from django.views.generic.base import View
 from django.views.generic.edit import FormView
 from django.views.generic.dates import MonthArchiveView
 
@@ -29,6 +28,9 @@ import re
 
 
 class MessageListView(MonthArchiveView):
+    """
+    Display all the messages by month.
+    """
     queryset = Message.objects.all()
     date_field = 'date'
     make_object_list = True
@@ -45,12 +47,18 @@ class MessageListView(MonthArchiveView):
 
 
 class LatestsView(ListView):
+    """
+    Display the 20 latest messages.
+    """
     queryset = Message.objects.order_by('-date')[:20]
     template_name = 'minichat/latests.html'
     context_object_name = 'message_list'
 
 
 class MessagePostView(FormView):
+    """
+    Handle message submission.
+    """
     form_class = MessageForm
     template_name = 'minichat/post.html'
     success_url = reverse_lazy('minichat_post')
@@ -69,7 +77,7 @@ class MessagePostView(FormView):
         else:
             return response
 
-    def notifications(self, user, message):
+    def notifications(self, message):
         """
         Parse the given message to find @name anchors. For every (unique) 
         anchor x, check if x is a username. If it is, send a notification 
@@ -100,8 +108,6 @@ class MessagePostView(FormView):
 
         return targets
 
-
-
     def form_valid(self, form):
         response = super(MessagePostView, self).form_valid(form)
         user = self.request.user
@@ -111,7 +117,7 @@ class MessagePostView(FormView):
         
         # Check for notifications
         try:
-            self.notifications(self.request.user, message)
+            self.notifications(message)
         except Exception as e: 
             print e, e.message
 
@@ -142,6 +148,9 @@ class LatestsJSONView(View):
 
 
 class UsersListView(View):
+    """
+    Return a list of available users whose username starts with the value in `query`.
+    """
     def get(self, request):
         query = request.GET.get('query', None)
         if not query or len(query) < 3:

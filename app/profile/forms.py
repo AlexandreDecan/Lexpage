@@ -25,28 +25,31 @@ class ActivationForm(forms.Form):
 
 class MyPasswordChangeForm(PasswordChangeForm):
     new_password1 = forms.CharField(widget=forms.PasswordInput,
-                                required=True,
-                                label='Nouveau mot de passe', 
-                                min_length=8)
+                                    required=True,
+                                    label='Nouveau mot de passe',
+                                    min_length=8)
+
 
 class MyPasswordSetForm(SetPasswordForm):
     new_password1 = forms.CharField(widget=forms.PasswordInput,
-                                required=True,
-                                label='Nouveau mot de passe', 
-                                min_length=8)
+                                    required=True,
+                                    label='Nouveau mot de passe',
+                                    min_length=8)
 
 
 
 class ChangeProfileForm(forms.ModelForm):
     first_name = forms.CharField(max_length=30, required=False, label='Prénom')
-    last_name = forms.CharField(max_length=30, required=False, label='Nom', help_text='Cette information ne sera pas affichée publiquement.')
+    last_name = forms.CharField(max_length=30, required=False, label='Nom',
+                                help_text='Cette information ne sera pas affichée publiquement.')
     email = forms.EmailField(label='Adresse e-mail', required=True, 
                              help_text='Cette information ne sera pas affichée publiquement.')
 
     birthdate = forms.DateField(required=False, label='Date de naissance', 
-                    widget=DateTimePicker(options={'format': 'DD/MM/YYYY', 'pickTime': False}))
+                                widget=DateTimePicker(options={'format': 'DD/MM/YYYY', 'pickTime': False}))
 
-    avatar_file = forms.ImageField(required=False, label='Envoyer un avatar depuis votre disque', help_text='Vous pouvez envoyer un avatar depuis votre disque. Il doit s\'agir d\'un fichier image, en .gif, .jpg ou .png et de moins de 120x120 pixels. Votre ancien avatar sera automatiquement effacé et remplacé par le nouvel avatar.')
+    avatar_file = forms.ImageField(required=False, label='Envoyer un avatar depuis votre disque',
+                                   help_text='Vous pouvez envoyer un avatar depuis votre disque. Il doit s\'agir d\'un fichier image, en .gif, .jpg ou .png et de moins de 120x120 pixels. Votre ancien avatar sera automatiquement effacé et remplacé par le nouvel avatar.')
 
     class Meta:
         model = Profile
@@ -77,13 +80,12 @@ class ChangeProfileForm(forms.ModelForm):
             else:
                 raise forms.ValidationError('L\'image doit faire moins de 120x120 pixels.')
         except Exception:
-            raise
             raise forms.ValidationError('Une erreur est survenue lors de l\'analyse de votre image.')
 
     def clean_birthdate(self):
         if self.cleaned_data['birthdate']:
             if (self.cleaned_data['birthdate'] > datetime.date.today() - datetime.timedelta(365*5)) \
-                or (self.cleaned_data['birthdate'] < datetime.date.today() - datetime.timedelta(365*100)):
+                    or (self.cleaned_data['birthdate'] < datetime.date.today() - datetime.timedelta(365*100)):
                 raise forms.ValidationError('La date choisie n\'est pas cohérente.')
         return self.cleaned_data['birthdate']
 
@@ -104,7 +106,7 @@ class RegistrationForm(forms.Form):
                                 label='Nom d\'utilisateur',
                                 error_messages={'invalid': 'Ce champ ne peut contenir que des lettres, des nombres et les caractères @/./+/-/_.'})
     email = forms.EmailField(label='E-mail',
-                                required=True)
+                             required=True)
     password1 = forms.CharField(widget=forms.PasswordInput,
                                 required=True,
                                 label='Mot de passe', 

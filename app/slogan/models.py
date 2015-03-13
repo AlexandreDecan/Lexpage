@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+
 class SloganManager(models.Manager):
     def get_random(self):
         try:
@@ -18,7 +19,7 @@ class SloganManager(models.Manager):
 
 class Slogan(models.Model):
     author = models.CharField(max_length=50,
-                           verbose_name='Auteur')
+                              verbose_name='Auteur')
     slogan = models.TextField(verbose_name='Slogan')
     date = models.DateField(verbose_name='Date d\'ajout', auto_now_add=True)
     is_visible = models.BooleanField(verbose_name='Visible ?', default=False)

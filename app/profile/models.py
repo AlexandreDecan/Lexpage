@@ -21,15 +21,16 @@ try:
 except ImportError:
     datetime_now = datetime.datetime.now
 
-
-
 @receiver(post_save, sender=User)
-def createProfileForUser(sender, **kwargs):
+def create_profile_for_user(sender, **kwargs):
+    """
+    Post save signal handler for User model. Add a Profile instance to any newly created
+    User instance.
+    """
     if kwargs['created']:
         profile, is_new = Profile.objects.get_or_create(user=kwargs['instance'])
         if is_new:
             profile.save()
-
 
 
 class ActiveUserManager(UserManager):
@@ -56,7 +57,7 @@ class ActivationKeyManager(models.Manager):
     def activate_user(self, key):
         """
         Activate a user. If the key is not valid or has expired, return 
-        False, otherwise return the user. 
+        False, otherwise return the user.
         """
         try:
             activationKey = self.get(key=key)
@@ -83,23 +84,22 @@ class ActivationKeyManager(models.Manager):
             username = username.encode('utf-8')
         key = hashlib.sha1(salt+username).hexdigest()
 
-        activationKey = self.create(user=new_user, key=key)
-        return new_user, activationKey
+        activation_key = self.create(user=new_user, key=key)
+        return new_user, activation_key
 
     def delete_expired(self):
         """
         Remove the users and the keys that expired. 
         """
-        for activationKey in self.all():
+        for activation_key in self.all():
             try:
-                if activationKey.has_expired():
-                    user = activationKey.user
+                if activation_key.has_expired():
+                    user = activation_key.user
                     if not user.is_active:
                         user.delete()
-                        activationKey.delete()
+                        activation_key.delete()
             except User.DoesNotExist:
-                activationKey.delete()
-
+                activation_key.delete()
 
 
 class ActivationKey(models.Model):
@@ -139,11 +139,11 @@ class Profile(models.Model):
     GENDER_CHOICES = (
         ('M', 'Homme'), 
         ('F', 'Femme'), 
-        #('?', 'Inconnu')
+        # ('?', 'Inconnu')
     )
 
     COUNTRY_CHOICES = (
-        #(0, 'Inconnue'),
+        # (0, 'Inconnue'),
         (1, 'Afghanistan'),
         (2, 'Afrique du Sud'),
         (3, 'Akrotiri'),
@@ -404,32 +404,32 @@ class Profile(models.Model):
 
     user = models.OneToOneField(User)
     gender = models.CharField(max_length=1, 
-                           choices=GENDER_CHOICES, 
-                           blank=True, 
-                           verbose_name='Genre')
+                              choices=GENDER_CHOICES,
+                              blank=True,
+                              verbose_name='Genre')
     country = models.IntegerField(choices=COUNTRY_CHOICES,
-                            blank=True, null=True,
-                            verbose_name='Pays actuel')
+                                  blank=True, null=True,
+                                  verbose_name='Pays actuel')
     city = models.CharField(max_length=100, 
-                         blank=True, 
-                         verbose_name='Ville actuelle')
+                            blank=True,
+                            verbose_name='Ville actuelle')
     website_name = models.CharField(max_length=200, 
-                                blank=True, 
-                                verbose_name='Nom du site web', 
-                                help_text='Cela peut être une page Facebook, un compte Twitter ou votre site personnel.')
+                                    blank=True,
+                                    verbose_name='Nom du site web',
+                                    help_text='Cela peut être une page Facebook, un compte Twitter ou votre site personnel.')
     website_url = models.URLField(blank=True, 
-                               verbose_name='Adresse du site web', 
-                               help_text='L\'adresse doit débuter par http://')
+                                  verbose_name='Adresse du site web',
+                                  help_text='L\'adresse doit débuter par http://')
     birthdate = models.DateField(blank=True, null=True, 
-                              verbose_name='Date de naissance')
+                                 verbose_name='Date de naissance')
     avatar = models.URLField(blank=True, 
-                          verbose_name='Adresse de l\'avatar',
-                          help_text='Des exemples d\'avatars sont disponibles sur <a href="http://www.avatarsdb.com">AvatarsDB</a>. '+
-                            'Vous pouvez également utiliser <a href="http://www.gravatar.com">Gravatar</a> pour '+
-                            'héberger et centraliser votre avatar. Vous pouvez également envoyer un avatar '+
-                            'depuis votre disque en utilisant le champ ci-dessous.')
+                             verbose_name='Adresse de l\'avatar',
+                             help_text='Des exemples d\'avatars sont disponibles sur <a href="http://www.avatarsdb.com">AvatarsDB</a>. '+
+                                       'Vous pouvez également utiliser <a href="http://www.gravatar.com">Gravatar</a> pour '+
+                                       'héberger et centraliser votre avatar. Vous pouvez également envoyer un avatar '+
+                                       'depuis votre disque en utilisant le champ ci-dessous.')
     last_visit = models.DateTimeField(blank=True, null=True,
-                                       verbose_name='Dernière visite')
+                                      verbose_name='Dernière visite')
 
     class Meta():
         permissions = (('can_see_details', 'Peut voir les détails des profils'),)

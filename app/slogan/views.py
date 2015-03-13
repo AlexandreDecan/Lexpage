@@ -24,7 +24,7 @@ class SloganListView(ListView):
     paginate_orphans = 6
 
     def get_context_data(self, **kwargs):
-        kwargs['form']= SloganAddForm
+        kwargs['form'] = SloganAddForm
         return super(SloganListView, self).get_context_data(**kwargs)
 
 
@@ -32,9 +32,7 @@ class SloganAddView(CreateView):
     form_class = SloganAddForm
     template_name = 'slogan/list.html'
 
-
     dispatch = method_decorator(login_required)(CreateView.dispatch)
-
 
     def form_valid(self, form):
         user = self.request.user
@@ -48,7 +46,6 @@ class SloganAddView(CreateView):
         messages.success(self.request, 'Votre slogan a été enregistré. Il sera visible en ligne prochainement.')
         
         return redirect('slogan_list')
-
 
     def form_invalid(self, form):
         messages.error(self.request, 'Le formulaire n\'a pas été complété correctement.')
