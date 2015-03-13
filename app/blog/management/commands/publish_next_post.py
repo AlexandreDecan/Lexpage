@@ -17,12 +17,13 @@ class Command(NoArgsCommand):
             return 'No blog entry available!?'
 """
 
+
 class Command(NoArgsCommand):
     help = "Publish the first available blog entry. "
 
     # (min available, nb per day)
-    #number_per_day = [(4, 2), (1, 1)]
-    number_per_day = [(1,2),] 
+    # number_per_day = [(4, 2), (1, 1)]
+    number_per_day = [(1, 2), ]
 
     def handle_noargs(self, **options):
         try:
@@ -32,7 +33,7 @@ class Command(NoArgsCommand):
 
             # Dismiss in case of public holiday
             day, month = (datetime.date.today().day, datetime.date.today().month)
-            if (day, month) in [(1,1), (1,5), (14,7), (21,7), (15,8), (1,11), (11,11), (25,12)]:
+            if (day, month) in [(1, 1), (1, 5), (14, 7), (21, 7), (15, 8), (1, 11), (11, 11), (25, 12)]:
                 return None
 
             # Get number of available posts
@@ -54,13 +55,13 @@ class Command(NoArgsCommand):
             latest = BlogPost.published.latest()
             delta = (datetime.datetime.now() - latest.date_published)
             delta = (delta.seconds + delta.days * 24 * 3600)/3600.0
-            delta = delta + 0.5   # Dismiss OVH delay
+            delta += 0.5  # Dismiss OVH delay
 
             # If delta (in hour) > time_frame, publish!
             if delta >= time_frame:
                 posts[0].change_status(None, BlogPost.STATUS_PUBLISHED)
                 return 'Task: publish "%s"' % unicode(posts[0].title)
             else:
-		return None
+                return None
         except Exception as e: 
             return str(e)

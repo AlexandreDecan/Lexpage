@@ -8,21 +8,19 @@ from models import BlogPost
 
 import re
 
-
-
 def clean_tags(tagstr):
     """
     Take a string and returns a list of unique tags, 
     in lowercase. Raise a forms.ValidationError if there is 
     one tag with less than 2 chars. """
-    RE_TAG = re.compile(r'^[\w\-]{2,}$', re.UNICODE)
+    re_tag = re.compile(r'^[\w\-]{2,}$', re.UNICODE)
     
     tags = [x.lower().strip() for x in tagstr.split()]
     new_tags = []
     for tag in tags: 
         if len(tag) < 2:
             raise forms.ValidationError('Le tag "%s" est trop court, il doit au moins faire 2 caractères.' % tag)
-        if RE_TAG.match(tag) == None:
+        if re_tag.match(tag) is None:
             raise forms.ValidationError('Le tag "%s" contient des caractères non-autorisés.' % tag)
         if not (tag in new_tags):
             new_tags.append(tag)

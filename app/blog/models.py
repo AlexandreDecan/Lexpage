@@ -3,6 +3,8 @@
 
 from __future__ import unicode_literals
 
+import math
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
@@ -80,10 +82,8 @@ class PostManager(models.Manager):
         self._status = status
         self._ordering = ordering
 
-
     def get_queryset(self):
         return super(PostManager, self).get_queryset().filter(status=self._status).order_by(*self._ordering)
-
 
     def get_tags_list(self, sort_name=False, relative=True):
         """
@@ -96,7 +96,7 @@ class PostManager(models.Manager):
         :return: A list of (tag_name, number_of_posts)
         """
 
-        if sort_name == False:
+        if not sort_name:
             sort_name = lambda x: -x[1]
         else:
             sort_name = lambda x: x[0]
@@ -110,7 +110,7 @@ class PostManager(models.Manager):
 
         if relative:
             for k,v in count.items():
-                count[k] = int(100*math.log10(v))
+                count[k] = int(100 * math.log10(v))
 
         ordered_count = count.items()
         ordered_count.sort(key=sort_name)
@@ -169,7 +169,6 @@ class BlogPost(models.Model):
     def get_absolute_url(self):
         return reverse('blog_post_show', kwargs={'pk': self.pk})
 
-
     def get_icon(self):
         """
         Return the first icon that can be associated to this post based on the tag list..
@@ -181,7 +180,6 @@ class BlogPost(models.Model):
                 return POST_ICONS[tag]
         return 'fa-chevron-right'
 
-
     def get_next(self):
         """ Return the next published post."""
 
@@ -190,7 +188,6 @@ class BlogPost(models.Model):
         except IndexError:
             pass
 
-
     def get_previous(self):
         """ Return the previous published post. """
 
@@ -198,7 +195,6 @@ class BlogPost(models.Model):
             return BlogPost.published.filter(date_published__lt=self.date_published).order_by('-date_published')[0]
         except IndexError:
             pass
-
 
     def can_be_viewed_by(self, user):
         """
@@ -213,7 +209,6 @@ class BlogPost(models.Model):
         else:
             return (is_owner and self.status == BlogPost.STATUS_DRAFT) or (self.status > BlogPost.STATUS_DRAFT)
 
-
     def change_status(self, user, new_status):
         """
         Save the fact that given user has changed the current status to new_status.
@@ -222,24 +217,21 @@ class BlogPost(models.Model):
         :return: None
         """
 
-
         if new_status == BlogPost.STATUS_DRAFT:
             self.author = user
 
-        if self.status < BlogPost.STATUS_SUBMITTED and new_status >= BlogPost.STATUS_SUBMITTED:
+        if self.status < BlogPost.STATUS_SUBMITTED <= new_status:
             self.date_created = now()
 
-        if self.status < BlogPost.STATUS_APPROVED and new_status >= BlogPost.STATUS_APPROVED:
+        if self.status < BlogPost.STATUS_APPROVED <= new_status:
             self.approved_by = user
             self.date_approved = now()
 
-        if self.status < BlogPost.STATUS_PUBLISHED and new_status >= BlogPost.STATUS_PUBLISHED:
+        if self.status < BlogPost.STATUS_PUBLISHED <= new_status:
             self.date_published = now()
-
 
         self.status = new_status
         return self.save()
-
 
     def save(self, *args, **kwargs):
         """
@@ -249,7 +241,6 @@ class BlogPost(models.Model):
         self.slug = slugify(self.title)
         return super(BlogPost, self).save(*args, **kwargs)
 
-
     def tags_list(self):
         """
         Return a list of tags for this post.
@@ -258,10 +249,8 @@ class BlogPost(models.Model):
 
         return [unicode(x) for x in self.tags.split(' ') if len(x) > 0]
 
-
     def __unicode__(self):
         return unicode(self.title)
-
 
     class Meta():
         get_latest_by = 'date_published'

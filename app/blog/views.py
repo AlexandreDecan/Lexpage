@@ -69,8 +69,8 @@ class PostCommentsView(RedirectView):
     def get_redirect_url(self, **kwargs):
         post = get_object_or_404(BlogPost.published, pk=kwargs['pk'])
         try:
-            link = post.blogboardlink
-            return reverse_lazy('board_thread_show', kwargs={'thread': post.blogboardlink.thread.pk, 'slug': post.blogboardlink.thread.slug})
+            return reverse_lazy('board_thread_show',
+                                kwargs={'thread': post.blogboardlink.thread.pk, 'slug': post.blogboardlink.thread.slug})
         except ObjectDoesNotExist:
             return reverse_lazy('board_create_for_post', kwargs={'post': post.pk})
 
@@ -81,7 +81,7 @@ class DraftPostListView(ListView):
     """
     template_name = 'blog/draft_list.html'
     context_object_name = 'post_list'
-    
+
     dispatch = method_decorator(login_required)(ListView.dispatch)
 
     def get_queryset(self):
@@ -89,7 +89,8 @@ class DraftPostListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = ListView.get_context_data(self, **kwargs)
-        context['pending_list'] = BlogPost.submitted.filter(author=self.request.user) | BlogPost.approved.filter(author=self.request.user)
+        context['pending_list'] = BlogPost.submitted.filter(author=self.request.user) | BlogPost.approved.filter(
+            author=self.request.user)
         return context
 
 
@@ -105,10 +106,9 @@ def _handle_status(request, post, action):
 
     # Clean the notifications if post.pk exists, ie. if it is already saved
     # in the database and thus, if it has already generated notifications. 
-    if post.pk != None:
+    if post.pk is not None:
         notify.blog_pending_clean(request.user, post)
 
-        
     if action == UserCreatePostForm.ACTION_DELETE:
         notify.blog_pending_delete(request.user, post)
         post.delete()
@@ -117,18 +117,18 @@ def _handle_status(request, post, action):
         post.change_status(request.user, BlogPost.STATUS_DRAFT)
         messages.success(request, 'Le billet a été sauvegardé dans vos brouillons.')
     elif action == UserCreatePostForm.ACTION_SUBMIT:
-        post.change_status(request.user, BlogPost.STATUS_SUBMITTED)  
+        post.change_status(request.user, BlogPost.STATUS_SUBMITTED)
         notify.blog_draft_new(request.user, post)
         messages.success(request, 'Le billet va être soumis aux modérateurs.')
     elif action == UserCreatePostForm.ACTION_APPROVE:
         post.change_status(request.user, BlogPost.STATUS_APPROVED)
         # Only notify if the post wasn't yet accepted
         if post.status != BlogPost.STATUS_APPROVED:
-            notify.blog_pending_approve(request.user, post)         
-        messages.success(request, 'Le billet a été approuvé pour la publication.')   
+            notify.blog_pending_approve(request.user, post)
+        messages.success(request, 'Le billet a été approuvé pour la publication.')
     elif action == UserCreatePostForm.ACTION_PUBLISH:
-        post.change_status(request.user, BlogPost.STATUS_PUBLISHED)           
-        messages.success(request, 'Le billet est maintenant publié.') 
+        post.change_status(request.user, BlogPost.STATUS_PUBLISHED)
+        messages.success(request, 'Le billet est maintenant publié.')
     else:
         messages.warning(request, 'Action invalide sur ce billet.')
 
@@ -151,7 +151,7 @@ class PostCreateView(FormView):
         return FormView.get_form(self, form_class)
 
     def get_initial(self):
-        initial = {} 
+        initial = {}
         # Check for title/url in GET, and populate the form accordingly
         if 'title' in self.request.GET and 'url' in self.request.GET:
             initial['title'] = self.request.GET['title']
@@ -161,16 +161,16 @@ class PostCreateView(FormView):
 
     def form_valid(self, form):
         data = form.cleaned_data
-        post = BlogPost(title = data['title'], 
-                 author = self.request.user,
-                 tags = data['tags'], 
-                 abstract = data['abstract'],
-                 text = data['text'],
-                 priority = data['priority'])
+        post = BlogPost(title=data['title'],
+                        author=self.request.user,
+                        tags=data['tags'],
+                        abstract=data['abstract'],
+                        text=data['text'],
+                        priority=data['priority'])
         _handle_status(self.request, post, data['action'])
         post.save()
         return FormView.form_valid(self, form)
-                   
+
 
 class PostEditView(FormView):
     """
@@ -203,7 +203,6 @@ class PostEditView(FormView):
             'action': post.status
         }
 
-
     def get_context_data(self, *args, **kwargs):
         context = FormView.get_context_data(self, *args, **kwargs)
         context['post'] = BlogPost.objects.get(pk=self.kwargs['pk'])
@@ -229,10 +228,9 @@ class PostEditView(FormView):
         post.abstract = data['abstract']
         post.text = data['text']
         post.priority = data['priority']
-        _handle_status(self.request, post, data['action'])        
+        _handle_status(self.request, post, data['action'])
 
         return FormView.form_valid(self, form)
-                 
 
 
 class DraftPostEditView(PostEditView):
@@ -251,7 +249,7 @@ class PendingPostListView(TemplateView):
     Provide a list of posts for the staff.
     """
     template_name = 'blog/pending_list.html'
-    
+
     dispatch = method_decorator(login_required)(TemplateView.dispatch)
 
     def get_context_data(self, **kwargs):
@@ -272,7 +270,6 @@ class PendingPostEditView(PostEditView):
         return reverse_lazy('blog_pending_list')
 
 
-
 class TagListView(ListView):
     """
     Provide a list of tags that can be used to filter the list of 
@@ -284,19 +281,19 @@ class TagListView(ListView):
     paginate_orphans = 2
     allow_empty = True
     queryset = None
-    
+
     def get_queryset(self):
         queryset = BlogPost.published.all()
         for tag in self.searched_tags:
             # Will fail with SQLite!!
             queryset = queryset.filter(tags__iregex=u'[[:<:]]%s[[:>:]]' % tag.lower())
-        
+
         return queryset
 
     def get_context_data(self, **kwargs):
         context = ListView.get_context_data(self, **kwargs)
         # context now has a key 'post_list' with the right queryset
-        
+
         context['tag_list'] = BlogPost.published.get_tags_list(sort_name=True, relative=True)
         context['post_number'] = sum([x[1] for x in context['tag_list']])
         context['searched_tags'] = self.searched_tags
@@ -308,8 +305,8 @@ class TagListView(ListView):
     def post(self, request, *args, **kwargs):
         return self.get(request, *args, **kwargs)
 
-    def dispatch(self, request, *args, **kwargs):    
-        if self.kwargs['taglist']:    
+    def dispatch(self, request, *args, **kwargs):
+        if self.kwargs['taglist']:
             self.searched_tags = self.kwargs['taglist'].split('+')
         else:
             self.searched_tags = []
@@ -325,14 +322,14 @@ class TagListView(ListView):
         else:
             # Prepopulate form with current tags
             self.form = SearchByTagsForm({'tags': ' '.join(self.searched_tags)})
-        return ListView.dispatch(self, request, *args, **kwargs)    
-
+        return ListView.dispatch(self, request, *args, **kwargs)
 
 
 class JSONTagListView(View):
     """
     Autocomplete-feature for the tags.
     """
+
     def get(self, request):
         query = request.GET.get('query', None)
         if not query:
