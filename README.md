@@ -110,7 +110,7 @@ N'oubliez pas de vous créer un superuser pour accéder au site via `python app/
 
 ##### Aucune ressource statique ne semble s'afficher correctement
 
-Les fichiers statiques doivent être collectés et placés dans le répertoire *static_pub/*. Django peut le faire pour vous : `python app/manage.py collecstatic` ?
+Les fichiers statiques doivent être collectés et placés dans le répertoire *static_pub/*. Django peut le faire pour vous : `python app/manage.py collectstatic`.
 
 
 ##### L'édito ne s'affiche pas, mais il y a une barre bleue à la place
