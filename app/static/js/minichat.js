@@ -57,6 +57,7 @@ function minichat_update_chars_count() {
     var remaining = $(minichat_input_text).attr("maxlength") - $(minichat_input_text).val().length;
     var plural = "";
     if (remaining > 1) plural = "s";
+    $(minichat_input_text).parent().toggleClass("has-warning", remaining == 0);
     $(minichat_chars_output).text(remaining + "  caractère"+plural+" restant"+plural);
 }
 
