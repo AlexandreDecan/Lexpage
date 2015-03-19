@@ -5,11 +5,10 @@ from __future__ import unicode_literals
 
 from django import template
 from django.utils.safestring import mark_safe
-from django.utils.encoding import force_text
 from htmlentitydefs import codepoint2name
 from django.conf import settings
 
-import re, os 
+import re, os
 
 register = template.Library()
 
@@ -40,10 +39,10 @@ tag = [
     # embed
     (r'\[embed\](.*?)\[/embed\]', r'<a class="oembed" href="\1">\1</a>', r'\1'),
 
-    # url 
+    # url
     (r'\[url\](.*?)\[/url\]', r'<a href="\1">\1</a>', r'\1'),
     (r'\[url=(.*?)\](.*?)\[/url\]', r'<a href="\1">\2</a>', r'\2'),
-    #(r'([^"])((?:https?|ftp|file):\/\/[-a-zA-Z0-9+&@#\/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#\/%=~_|])([^"])', r'\1<a href="\2">\2</a>\3', r'\1\2\3'), 
+    #(r'([^"])((?:https?|ftp|file):\/\/[-a-zA-Z0-9+&@#\/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#\/%=~_|])([^"])', r'\1<a href="\2">\2</a>\3', r'\1\2\3'),
 
     # spoiler
     (r'\[spoiler\](.*?)\[/spoiler\]', '<span class="spoiler" onclick="$(this).toggleClass(\'spoiler-show\');"><span>\\1</span></span>', r'\1'),
@@ -52,8 +51,8 @@ tag = [
 advancedtag = [
     # code
     (r'\[code\]([^\n]*?)\[/code\]', r'<code>\1</code>', r'\1'),
-    (r'(?:\n)*\[code\](?:\n)?(.*?)(?:\n)?\[/code\](?:\n)*', r'<pre><code>\1</code></pre>', r'\1'), 
-    
+    (r'(?:\n)*\[code\](?:\n)?(.*?)(?:\n)?\[/code\](?:\n)*', r'<pre><code>\1</code></pre>', r'\1'),
+
     # quote
     (r'(?:\n)*\[quote\](?:\n)?(.*?)(?:\n)?\[/quote\](?:\n)*', r'<blockquote>\1</blockquote>', r' \1 '),
     (r'(?:\n)*\[quote=(.*?)\](?:\n)?(.*?)(?:\n)?\[/quote\](?:\n)*', r'<blockquote><cite>\1</cite>\2</blockquote>', r' \1: \2 '),
@@ -66,8 +65,8 @@ taglist = None
 advancedtaglist = None
 def load_regex():
     """
-    Compile the regex if they are not available in taglist and 
-    advancedtaglist. 
+    Compile the regex if they are not available in taglist and
+    advancedtaglist.
     """
     global taglist
     global advancedtaglist
@@ -92,14 +91,14 @@ smiley_list = [
     (':-D', 'bigsmile'),
     (':-((', 'angry2'),
     (':-(', 'angry'),
-    (':\'((', 'bawling'),     
+    (':\'((', 'bawling'),
     (':\'(', 'sad'),
     (':-/', 'upset'),
-    ('o.O', 'odd'), 
+    ('o.O', 'odd'),
     ('o_O', 'odd'),
     (':o)', 'blush'),
-    (':-x', 'kiss'), 
-    (':-X', 'kiss2'), 
+    (':-x', 'kiss'),
+    (':-X', 'kiss2'),
     ('8-)', 'showoff'),
 ]
 
@@ -110,7 +109,7 @@ def replace_smiley(value):
 
     smiley_other = [(x[:-4],x[-3:]) for x in os.listdir(local_smiley_dir) \
                         if x[-3:] == 'gif']
-    
+
     # Convert special smiley's
     for s,name in smiley_list:
         value = value.replace(s, '<img src="%s"/>' % os.path.join(online_smiley_dir, name+".gif"))
