@@ -849,3 +849,26 @@ a.btn.btn-share:hover {
     margin-top:-28px;
     margin-right:4px;
 }
+
+div.sign{
+    display: inline-block;
+    max-width: 140px;
+    vertical-align: text-top;
+}
+
+div.sign div{
+    padding: 0.2em;
+    margin: 0;
+    font-weight: bold;
+    border: 1px solid black;
+    text-align: center;
+    font-size: 0.8em;
+}
+
+div.sign-base{
+    min-width: 49px;
+    padding-bottom: 17px;
+    background-image: url('../images/sign/base.png');
+    background-position: center bottom;
+    background-repeat: no-repeat;
+}
