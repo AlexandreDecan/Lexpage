@@ -150,7 +150,7 @@ function get_markup_toolbar(markup, target) {
             ['h1', 'h2', 'h3'],
             ['bold', 'italic'],
             ['quote', 'code', 'list'],
-            ['url', 'image', 'embed'], 
+            ['url', 'image', 'embed'],
         ];
     } else {
         return false;
@@ -234,6 +234,7 @@ function get_markup_toolbar(markup, target) {
         link.append($("<span>", {class: "fa fa-smile-o"}));
 
         div.append(link);
+        div.append(get_button(target, markup, 'sign'));
         html.append(div);
     }
 
@@ -510,10 +511,21 @@ MARKUP =  {
                 'offset': 8
             }
         },
+        'sign': {
+            'desc': 'Panneau smiley',
+            'syntaxe': '[sign=smiley]texte[/sign]',
+            'icon': 'fa-comment-o',
+            'before': '[sign=]',
+            'after': '[/sign]',
+            'cursor': {
+                'position': 'before',
+                'offset': 6
+            }
+        },
         'spoiler': {
             'desc': 'Masquer le texte',
             'syntaxe': '[spoiler]texte[/spoiler]',
-            'icon': 'fa-square', 
+            'icon': 'fa-eraser',
             'before': '[spoiler]',
             'after': '[/spoiler]', 
             'cursor': {
@@ -535,7 +547,7 @@ MARKUP =  {
         'quote': {
             'desc': 'Citation',
             'syntaxe': '[quote]texte[/quote] ou [quote=auteur]texte[/quote]',
-            'icon': 'fa-comment',
+            'icon': 'fa-quote-right',
             'before': '[quote]',
             'after': '[/quote]', 
             'cursor': {
