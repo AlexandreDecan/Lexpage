@@ -58,7 +58,7 @@ advancedtag = [
     (r'(?:\n)*\[quote=(.*?)\](?:\n)?(.*?)(?:\n)?\[/quote\](?:\n)*', r'<blockquote><cite>\1</cite>\2</blockquote>', r' \1: \2 '),
  
     # sign=
-    (r'\[sign=(.*?)\](.*?)\[/sign\]', r'<div class="sign sign-base"><div class="text">\2</div><div class="smiley">\1</div></div>', r'\2'),
+    (r'\[sign=(.*?)\](.*?)\[/sign\]', r'<div class="sign"><div class="text">\2</div><div class="smiley">\1</div></div>', r'\2'),
 ]
 
 
