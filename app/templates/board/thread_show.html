@@ -54,8 +54,9 @@
         {% for field in form %}
             {% include "_form_field.html" with field=field %}
         {% endfor %}
-
-        <button class="btn btn-primary" type="submit">Enregistrer</button>
+        {% with "Envoyer Publier Poster Z'yva Yes! Troller Wesh +1 Plusun! Ping Flooder" as txt %}
+            <button class="btn btn-primary" type="submit">{{ txt.split|random }}</button>
+        {% endwith %}
         </form>  
 
 
