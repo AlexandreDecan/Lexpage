@@ -331,7 +331,6 @@ button:hover {
 /*********** Posts */
 
 .post-list {
-    margin-left: 40px;
     margin-right: 5px;
     padding-top: 6px;
     padding-bottom: 6px;
@@ -367,7 +366,14 @@ button:hover {
     float: right;
 }
 
+.post-list .post-thumbnail {
+    float:left;
+    max-width:150px;
+    margin-right:15px;
+}
+
 .post-list .post-icon {
+    display: none;
     float:left; 
     margin-left: -40px;
     margin-top: -1px;

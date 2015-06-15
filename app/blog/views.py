@@ -17,6 +17,7 @@ from django.utils.decorators import method_decorator
 
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
+from django.conf import settings
 
 from notifications import notify
 
@@ -25,7 +26,11 @@ from forms import UserCreatePostForm, StaffCreatePostForm, UserEditPostForm, Sta
 from models import BlogPost
 from datetime import date
 
+import subprocess
 import json
+import os
+import shutil
+import re
 
 
 class PostListView(MonthArchiveView):
@@ -56,6 +61,33 @@ class PostShowView(TemplateView):
         context = TemplateView.get_context_data(self, **kwargs)
         context['post'] = get_object_or_404(BlogPost.published, pk=kwargs['pk'])
         return context
+
+
+class PostThumbnailView(View):
+    def get(self, request, **kwargs):
+        pk = kwargs.get('pk', None)
+        post = get_object_or_404(BlogPost.published, pk=pk)
+        folder = os.path.join(settings.STATIC_ROOT, 'images', 'blog')
+        filepath = os.path.join(folder, pk+'.png')
+        defaultpath = os.path.join(folder, 'default.png')
+
+        # Need to grab the screenshot?
+        if not os.path.isfile(filepath):
+            # Set default file
+            shutil.copyfile(defaultpath, filepath)
+
+            # Grab URL
+            matches = re.search(r'\[.+?\]\((https?:\/\/.+?)\)', post.abstract)
+            if matches:
+                # Get screenshot
+                try:
+                    subprocess.check_call(['phantomjs', os.path.join(folder, 'rasterize.js'), matches.group(1),
+                                           filepath, '300px*150px', '0.4'])
+                except subprocess.CalledProcessError:
+                    pass
+
+        # Return file if it exists
+        return HttpResponse(open(filepath).read(), content_type='image/png')
 
 
 class PostCommentsView(RedirectView):

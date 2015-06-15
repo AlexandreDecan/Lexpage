@@ -3,19 +3,18 @@
 {% load time_helper %}
 
 <div class="post-list">
+
     <div class="post-avatar">
         <a href="{% url 'profile_show' post.author %}">
         <img title="{{ post.author.username }}" src="{{ post.author.profile.avatar }}" class="avatar smallavatar"/>
         </a>
     </div>
 
+    <img src="{% url 'blog_post_thumbnail' post.pk %}" class="post-thumbnail"/>
+
     <div class="post-metadata">
         <div class="post-date">
-            {% if post.date_published|timedelta:"h" <= 18 %}
-                <span class="fa fa-clock-o text-warning"></span>
-            {% else %}
-                <span class="fa fa-clock-o"></span>
-            {% endif %}
+            <span class="fa fa-clock-o"></span>
             {{ post.date_published|naturalday:'D. j F'|capfirst }}, {{ post.date_published|time }}
        </div>
        <div class="post-comment">
@@ -63,5 +62,5 @@
             </span>
         {% endif %}
     </div>
-
+    <div class="clearfix"></div>
 </div>

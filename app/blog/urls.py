@@ -5,7 +5,7 @@ from django.conf.urls import url
 from django.core.urlresolvers import reverse_lazy
 
 from django.views.generic import RedirectView
-from views import PostListView, PostShowView, PendingPostListView
+from views import PostListView, PostShowView, PostThumbnailView, PendingPostListView
 from views import DraftPostListView, PostCreateView, PostEditView, DraftPostEditView, PendingPostEditView
 from views import JSONTagListView, TagListView, PostCommentsView
 
@@ -24,6 +24,9 @@ post_patterns = patterns('',
                          url(r'^comments/$',
                              PostCommentsView.as_view(),
                              name='blog_post_comments'),
+                         url(r'^thumbnail/$',
+                             PostThumbnailView.as_view(),
+                             name='blog_post_thumbnail'),
                          )
 
 draft_patterns = patterns('',
