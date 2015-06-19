@@ -470,15 +470,15 @@ a.btn.btn-share:hover {
 .msg-message-avatar {
     text-align: center;
     vertical-align: top;
-    width: 150px;
+    width: 90px;
 }
 
 .msg-message-message-own .msg-message-avatar {
-    float:left;
+    float:right;
 }
 
 .msg-message-message-other .msg-message-avatar {
-    float:right;
+    float:left;
 }
 
 .msg-message-message-own, 
@@ -497,13 +497,13 @@ a.btn.btn-share:hover {
 
 
 .msg-message-message-own .msg-message-content {
-    margin-left: 150px;
-    margin-right: 75px;
+    margin-left: 10px;
+    margin-right: 105px;
 }
 
 .msg-message-message-other .msg-message-content {
-    margin-left: 75px;
-    margin-right: 150px;
+    margin-left: 105px;
+    margin-right: 10px;
 }
 
 .msg-message-content {
@@ -514,31 +514,31 @@ a.btn.btn-share:hover {
     content: '';
     position: absolute;
     border-style: solid;
-    border-width: 10px 0 10px 20px;
+    border-width: 8px 15px 8px 0;
     border-color: transparent lightgray;
     display: block;
     width: 0;
     z-index: 1;
-    right: -20px;
     top: 5px;
+    left: -15px;
 }
 
 .msg-message-message-own .msg-message-content:after  {
     content: "";
     position: absolute;
     border-style: solid;
-    border-width: 10px 20px 10px 0;
+    border-width: 8px 0 8px 15px;
     border-color: transparent lightgray;
     display: block;
     width: 0;
     z-index: 1;
     top: 5px;
-    left: -20px;    
+    right: -15px;
 }
 
 .msg-message-date {
     float:right;
-    font-size:85%;
+    font-size:70%;
     color: #9ca3a8;
     margin-top: -2px;
 }
@@ -698,8 +698,8 @@ a.btn.btn-share:hover {
 .markdown iframe,
 .bbcode img,
 .bbcode iframe {
-    max-width:100%;
-    max-height:auto;
+    max-width: 100%;
+    max-height: auto;
 }
 
 .bbcode .spoiler {
