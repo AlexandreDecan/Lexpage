@@ -65,12 +65,12 @@
             <span>
             {% if user.is_authenticated %}
                 {% if thread.flag.message.date >= message.date %}
-                    <a data-toggle="tooltip"
+                    <a data-toggle="tooltip" class="btn btn-info btn-xs btn-circle"
                     title="Marquer ce message comme non-lu"
                     href="{% url 'board_message_mark_unread' message.pk %}">
                     <span class="fa fa-eye-slash"></span></a>
                 {% else %}
-                    <a data-toggle="tooltip" class="text-danger"
+                    <a data-toggle="tooltip" class="btn btn-danger btn-xs btn-circle"
                         href="{% url 'board_message_mark_unread' message.pk %}"
                         title="Marquer à nouveau ce message comme non-lu">
                          <span class="fa fa-eye-slash"></span></a>
@@ -110,14 +110,14 @@
 
         {% if user.is_authenticated %}
             <div class="board-message-actions">
-                <a class="btn btn-xs btn-primary"
+                <a class="btn btn-xs btn-primary btn-circle"
                     href="#reply"
                     data-toggle="tooltip"
                     data-messageid="board-message-{{ message.pk }}"
                     data-quote="{% url 'board_message_raw' message.pk %}"
                     title="Citer le message">
                     <span class="fa fa-reply"></span></a>
-                <a class="btn btn-xs btn-info"
+                <a class="btn btn-xs btn-info btn-circle"
                     href="#reply"
                     data-toggle="tooltip"
                     data-messageid="board-message-{{ message.pk }}"
@@ -125,18 +125,18 @@
                     title="Ajouter aux messages cités">
                     <span class="fa fa-comments-o"></span></a>
                 {% if message.author = user and not message.moderated %}
-                    <a class="btn btn-xs btn-info"
+                    <a class="btn btn-xs btn-info btn-circle"
                         href="{% url 'board_message_edit' message.pk %}"
                         data-toggle="tooltip"
                         title="Éditer le message"><span class="fa fa-edit"></span></a>
                 {% elif perms.board.can_moderate %}
-                    <a class="btn btn-xs btn-warning"
+                    <a class="btn btn-xs btn-warning btn-circle"
                         href="{% url 'board_message_edit' message.pk %}"
                         data-toggle="tooltip"
                         title="Modérer le message"><span class="fa fa-edit"></span></a>
                 {% endif %}
                 {% if perms.board.can_destroy %}
-                    <a class="confirm-action btn btn-xs btn-danger"
+                    <a class="confirm-action btn btn-xs btn-danger btn-circle"
                         href="{% url 'board_message_delete' message.pk %}"
                         data-toggle="tooltip"
                         title="Supprimer le message"><span class="fa fa-trash-o"></span></a>
