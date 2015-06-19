@@ -268,7 +268,16 @@ button:hover {
 /* Full minichat, internal div */
 .minichat-content {    
     font-size:10pt;
+    padding-right: 5px;
 }
+
+/* Date (DD/MM) */
+.minichat-date {
+    text-align: center;
+    margin-top: 5px;
+    color: gray;
+}
+
 
 /* Full message (time, text, user, ...) */
 .minichat-message {
@@ -276,38 +285,70 @@ button:hover {
 }
 
 .minichat-message .avatar {
-    float:right;
-    margin-left:5px;
-    margin-right:5px;
+    vertical-align: top;
 }
 
-/* Date (DD/MM) */
-.minichat-date {
-    font-weight:bold;
-    text-align: center;
-    border-top:1px solid lightgray;
-    color: gray;
-    margin-bottom:5px;
+.minichat-message.self-author .avatar {
+    float: right;
+}
+
+.minichat-message.other-author .avatar {
+    float: left;
 }
 
 /* Time (HH:MM) */
 .minichat-time {
-    font-size:9pt;
-}
-
-/* Username (+link) */
-.minichat-user {
-    font-weight:bold;
+    float:right;
+    font-size: 75%;
+    color: #9ca3a8;
+    margin-top: -2px;
 }
 
 /* Actual text of the message */
 .minichat-text {
-    /*
-    border-left:1px solid lightgray;
-    padding-left:5px;
-    margin-left:5px;
-    */
+    position: relative;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 1px 4px 1px 4px;
+    border: 2px solid lightgray;
+    border-radius: 6px;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
 }
+
+.minichat-message.self-author .minichat-text {
+    margin-right: 40px;
+}
+
+.minichat-message.other-author .minichat-text {
+    margin-left: 40px;
+}
+
+.minichat-message.self-author .minichat-text:after {
+    content: "";
+    position: absolute;
+    border-style: solid;
+    border-width: 5px 0 5px 10px;
+    border-color: transparent lightgray;
+    display: block;
+    width: 0;
+    z-index: 1;
+    top: 5px;
+    right: -10px;
+}
+
+.minichat-message.other-author .minichat-text:after {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 5px 10px 5px 0;
+    border-color: transparent lightgray;
+    display: block;
+    width: 0;
+    z-index: 1;
+    top: 5px;
+    left: -10px;
+}
+
 
 .minichat-remainingChars {
     margin-top:12px;
@@ -473,16 +514,15 @@ a.btn.btn-share:hover {
     width: 90px;
 }
 
-.msg-message-message-own .msg-message-avatar {
+.msg-message-message.self-author .msg-message-avatar {
     float:right;
 }
 
-.msg-message-message-other .msg-message-avatar {
+.msg-message-message.other-author .msg-message-avatar {
     float:left;
 }
 
-.msg-message-message-own, 
-.msg-message-message-other {
+.msg-message-message {
     min-height: 100px;
 }
 
@@ -496,12 +536,12 @@ a.btn.btn-share:hover {
 }
 
 
-.msg-message-message-own .msg-message-content {
+.msg-message-message.self-author .msg-message-content {
     margin-left: 10px;
     margin-right: 105px;
 }
 
-.msg-message-message-other .msg-message-content {
+.msg-message-message.other-author .msg-message-content {
     margin-left: 105px;
     margin-right: 10px;
 }
@@ -510,20 +550,7 @@ a.btn.btn-share:hover {
     position:relative;
 }
 
-.msg-message-message-other .msg-message-content:after {
-    content: '';
-    position: absolute;
-    border-style: solid;
-    border-width: 8px 15px 8px 0;
-    border-color: transparent lightgray;
-    display: block;
-    width: 0;
-    z-index: 1;
-    top: 5px;
-    left: -15px;
-}
-
-.msg-message-message-own .msg-message-content:after  {
+.msg-message-message.self-author .msg-message-content:after  {
     content: "";
     position: absolute;
     border-style: solid;
@@ -534,6 +561,19 @@ a.btn.btn-share:hover {
     z-index: 1;
     top: 5px;
     right: -15px;
+}
+
+.msg-message-message.other-author .msg-message-content:after {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 8px 15px 8px 0;
+    border-color: transparent lightgray;
+    display: block;
+    width: 0;
+    z-index: 1;
+    top: 5px;
+    left: -15px;
 }
 
 .msg-message-date {

@@ -10,14 +10,13 @@
         </div>
     {% endifchanged %}
 
-    <div class="minichat-message">
-        <span class="minichat-time">{{ message.date|time }}, </span>
+    <div class="minichat-message {% if message.user == user %}self-author{% else %}other-author{% endif %}">
         <a class="minichat-user" href="{% url 'profile_show' message.user %}">
             <img src="{{ message.user.profile.avatar }}" title="{{ message.user.username }}" class="avatar verysmallavatar"/></a>
-        <a class="minichat-user" href="{% url 'profile_show' message.user %}">
-            {{ message.user.username }}
-        </a>
-    <div class="minichat-text">{{ message.text|urlize3|smiley }}</div>
+        <div class="minichat-text">
+            <span class="minichat-time">{{ message.date|time }}</span>
+            {{ message.text|urlize3|smiley }}
+        </div>
     </div>
 {% endfor %}
 </div>
