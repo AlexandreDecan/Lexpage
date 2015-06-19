@@ -58,7 +58,7 @@
             </div>
         {% endifchanged %}
 
-        <div class="msg-message-message{% if message.author = user %}-own {% else %}-other {%endif %}{% if message.date > date_read %}msg-message-unread {% endif %}">
+        <div class="msg-message-message {% if message.author = user %}self-author {% else %}other-author {% endif %}{% if message.date > date_read %}msg-message-unread {% endif %}">
 
             <div class="msg-message-avatar">
                 <a href="{% url 'profile_show' message.author.username %}">

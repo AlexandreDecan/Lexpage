@@ -767,7 +767,6 @@ a.btn.btn-share:hover {
     visibility: visible;
 }
 
-
 .bbcode .sign {
     display: inline-block;
     min-width: 25px;
@@ -850,75 +849,162 @@ a.btn.btn-share:hover {
     max-width: 40%;
 }
 
-
-
-
 .board-messagelist {
 
 }
 
 .board-message {
-    border: 1px solid gray;
-    border-radius: 5px;
-    min-height:182px;
-    margin-bottom:15px;
+    clear:both;
 }
 
-.board-message-quoted {
-    border: 1px dashed gray;
+.board-message.board-message-quoted .board-message-content {
+    border: 2px dashed lightgray;
 }
 
-.board-message-side {
-    float:left;
-    padding:10px 0px 0px 0px;
-    margin-right: 10px;
-
-    width: 130px;
-    height:181px;
-
-    background-color: #dfe6ee;
-    border-top: 0px solid #2c3e50;
-    border-left: 0px solid #2c3e50;
-    border-right: 1px solid #2c3e50;
-    border-bottom: 1px solid #2c3e50;
-    border-radius: 5px 0px 5px 0px;
+.board-message .board-message-side {
     text-align: center;
+    vertical-align: top;
+    width: 90px;
 }
 
-.board-message-content {
-    padding-left: 10px;
+.board-message .board-message-side .board-message-number,
+.board-message .board-message-side .board-message-level {
+    font-size: 80%;
 }
 
-@media (min-width: 768px) {
-    .board-message-content {
-        margin-left: 130px;
+.board-message .board-message-content {
+    min-height: 155px;
+    margin-bottom:35px;
+    padding: 5px 10px 5px 10px;
+    border: 2px solid lightgray;
+    border-radius:10px;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+.board-message .board-message-flag {
+    float: right;
+    margin-left: 5px;
+}
+
+.board-message .board-message-date {
+    float: right;
+    margin-top: -20px;
+    font-size: 70%;
+}
+
+.board-message .board-message-date a {
+    color: #9ca3a8 !important;
+}
+
+.board-message .board-message-content {
+    position:relative;
+    padding-bottom: 10px;
+}
+
+.board-message .board-message-side {
+    float: left;
+}
+
+@media (max-width: 768px) {
+    .board-message .board-message-side {
+        text-align: left;
+        width: 100%;
+        margin-bottom: 3px;
+    }
+
+    .board-message .board-message-side .avatar {
+        width: 30px;
+        height: 30px;
+        box-shadow: none;
+    }
+
+    .board-message .board-message-side span {
+        display: inline;
+    }
+
+    .board-message .board-message-content {
+        clear: both;
     }
 }
 
-.board-message-author {
-    
+@media (min-width: 768px) {
+    .board-message.self-author .board-message-content {
+        margin-left: 10px;
+        margin-right: 105px;
+    }
+
+    .board-message.other-author .board-message-content {
+        margin-left: 105px;
+        margin-right: 10px;
+    }
+
+    .board-message.self-author .board-message-side {
+        float: right;;
+    }
+
+    .board-message .board-message-side .board-message-level {
+        display: block;
+    }
+
+    .board-message .board-message-side .board-message-number {
+        margin-top: 8px;
+        display: block;
+    }
+
+    .board-message.self-author .board-message-content:after {
+        content: "";
+        position: absolute;
+        border-style: solid;
+        border-width: 8px 0 8px 15px;
+        border-color: transparent lightgray;
+        display: block;
+        width: 0;
+        z-index: 1;
+        top: 5px;
+        right: -15px;
+        }
+
+    .board-message.other-author .board-message-content:after {
+        content: '';
+        position: absolute;
+        border-style: solid;
+        border-width: 8px 15px 8px 0;
+        border-color: transparent lightgray;
+        display: block;
+        width: 0;
+        z-index: 1;
+        top: 5px;
+        left: -15px;
+    }
 }
 
-.board-message-author-actions {
-    text-align: center;
-    margin-top:10px;
-    margin-bottom:4px;
+.board-message .board-message-actions {
+    position: absolute;
+    right: 1em;
+    bottom: -0.9em;
 }
 
-.board-message-date {
-    text-align:right;
-    margin-top:4px;
-    margin-right:4px;
+.board-message .board-message-actions .btn {
+    border-radius: 50%;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
+    width: 1.95em;
+    height: 1.95em;
+    border: 2px solid lightgray;
+    background-color: white;
 }
 
-.board-message-text {
-    padding-bottom:28px;
-    padding-right: 8px;
+.board-message .board-message-actions .btn:hover {
+    transition: color 0.3s ease, border-color 0.3s ease-out;
 }
 
-.board-message-actions {
-    clear:both;
-    float:right;   
-    margin-top:-28px;
-    margin-right:4px;
-}
+.board-message .board-message-actions .btn-primary { color: #2c3e50; }
+.board-message .board-message-actions .btn-primary:hover { border-color: #5e84ab; color: #5e84ab; }
+
+.board-message .board-message-actions .btn-info { color: #5e84ab; }
+.board-message .board-message-actions .btn-info:hover { border-color: #a1b7ce; color: #a1b7ce; }
+
+.board-message .board-message-actions .btn-warning { color: #f39c12; }
+.board-message .board-message-actions .btn-warning:hover { border-color: #FFEB71; color: #FFEB71; }
+
+.board-message .board-message-actions .btn-danger { color: #e74c3c; }
+.board-message .board-message-actions .btn-danger:hover { border-color: #FF9481; color: #FF9481; }

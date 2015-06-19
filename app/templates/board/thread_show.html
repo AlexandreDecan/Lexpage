@@ -1,4 +1,6 @@
 {% extends "board/__base_thread.html" %}
+{% load humanize %}
+
 
 {% block title %}{{ thread.title }} | {{ block.super }}{% endblock %}
 
@@ -30,11 +32,12 @@
         {% if forloop.last %}
             <a name="last"></a>
         {% endif %}
+
         <a name="msg{{message.pk}}"></a>
 
         {% include "board/_message.html" with message=message %}
 
-        {% if thread.flag.message = message %}
+        {% if thread.flag.message == message %}
             <a name="new"></a>
         {% endif %}
     {% endfor %}
