@@ -1,0 +1,999 @@
+/* IE10 W8, WP8 hack */
+@-ms-viewport       { width: extend-to-zoom; zoom: 1.0; }
+@viewport           { width: extend-to-zoom; zoom: 1.0; }
+
+
+/*********** Transitions */
+a:hover,
+.btn:hover,
+button:hover,
+.navbar .badge {
+  @include transition(color, 0.3s, ease);
+  @include transition(background-color, 0.3s, ease-out);
+}
+
+/*********** General layout */
+body {
+  padding-top: 50px;
+  background-image: url('/static/images/bg_body.jpg');
+}
+
+/* Decal anchors because of the fixed navbar */
+a[name] {
+  padding-top:70px;
+  margin-top:-70px;
+}
+
+.footer {
+  margin-top: 40px;
+}
+
+.page .panel  {
+  padding: 5px;
+}
+
+.page .panel  > .panel-header {
+  padding: 0px;
+}
+
+.pagecontent, .sidebar-block {
+  background-color: white;
+  @include box-shadow(rgba(0, 0, 0, 0.1) 0 0 2px 1px);
+  padding: 5px 10px 5px 10px;
+  border-top: 3px solid $mainColor;
+  border-radius: 10px 10px 0px 0px;
+}
+
+.sidebar-block + .sidebar-block {
+  margin-top: 30px;
+}
+
+.sidebar, .page {
+  margin-bottom:40px;
+}
+
+.help-block {
+  font-size: $font-size-small;
+}
+
+.table.table-unbordered th, .table.table-unbordered td {
+  border-top: none !important;
+}
+
+.table.table-middle tr td {
+  vertical-align:middle;
+}
+
+.pagination {
+  margin:10px;
+}
+
+.btn.btn-circle {
+  border-radius:50%;
+}
+
+
+
+/*********** Bootstrap override */
+h2 {
+  font-size: 2em;
+  padding: 4px 10px 8px 15px;
+  color: #2c3e50;
+  border: none;
+  border-radius: 0px 0px;
+  border-bottom: 2px dotted $mainColor;
+  margin-top: 25px;
+}
+
+
+div h2:first-child {
+  margin-top: 5px;
+}
+
+h3 {
+  font-size: $font-size-h3;
+  padding-left: 30px;
+}
+
+h2 .btn {
+  background-color: white;
+  border-radius: 50%;
+  font-size: 0.5em;
+  color: lightgray;
+  border: 1px solid $mutedColor;
+  width: 2em;
+  height: 2em;
+  padding: 0.2em 0.5em;
+}
+
+
+.navbar {
+  @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 2px 2px);
+
+  border: none;
+  border-top: 5px solid $mainColor !important;
+  border-radius: 15px 15px 0px 0px;
+
+  .navbar-brand {
+    font-size: $font-size-large;
+    font-weight: bold;
+  }
+
+  .navbar-toggle {
+    border: 1px solid $mainColor!important;
+
+    .icon-bar {
+      background-color: $mainColor !important;
+    }
+  }
+
+  .badge {
+    color: $brand-danger;
+  }
+
+  li.dropdown {
+    > a {
+      color: $mainColor;
+      margin-top: 10px;
+      margin-bottom: 2px;
+      padding-top: 3px;
+      padding-bottom: 7px;
+      border-top: 2px dotted $navbar-default-bg;
+    }
+
+    &:hover > a {
+      border-color: $mainColor;
+    }
+  }
+
+  .dropdown-menu {
+    border-bottom: 3px solid $mainColor;
+    border-radius: 0px 0px 10px 10px;
+  }
+
+  .navbar-right {
+    .avatar {
+      float:right;
+      margin-top:-10px;
+      margin-left:10px;
+      margin-bottom:-40px;
+      width: 60px;
+      height: 60px;
+      @include box-shadow(rgba(0, 0, 0, 0.1) 0 0 2px 2px);
+    }
+
+    .badge {
+      color: $btn-danger-color;
+      background-color: $btn-danger-bg;
+
+      &:hover {
+        background-color: lighten($btn-danger-bg, 20%);
+      }
+    }
+
+    li.dropdown:hover a {
+      border-color: $navbar-default-bg!important;
+    }
+  }
+}
+
+form.form {
+  margin-left: 5px;
+  padding-left: 15px;
+  margin-bottom: 20px;
+}
+
+
+input[type="file"] {
+  padding-bottom:35px;
+}
+
+select { padding-top: 2px !important; }
+
+.pagination {
+  padding: 2px 15px 2px 15px;
+  border-top: 2px solid $secondColor;
+  border-bottom: 2px solid $secondColor;
+  border-radius: 15px;
+  background-color: white;
+}
+
+.pagination li a {
+  background-color: transparent;
+  color: $secondColor;
+  border-radius:50% !important;
+  min-width: 2.5em;
+  min-height: 2.5em;
+}
+
+.input-group-btn .btn {
+  margin-left: 0px !important;
+  padding: 5px 10px 5px 10px;
+  height:32px;
+}
+
+.tooltip-inner {
+  white-space:pre-wrap;
+}
+
+.btn-toolbar .btn-group .btn {
+  border-radius: 50%;
+  min-width: 2.5em;
+}
+
+
+/*********** Avatar */
+.avatar, .smallavatar, .verysmallavatar {
+  border-radius: 50%;
+}
+
+.avatar {
+  width:80px;
+  height:80px;
+  border:1px solid black;
+  @include box-shadow(rgba(0, 0, 0, 0.1) 3px 3px 8px);
+}
+
+.smallavatar {
+  width:40px;
+  height:40px;
+  @include box-shadow(rgba(0, 0, 0, 0.1) 3px 3px 8px);
+}
+
+.verysmallavatar {
+  width:30px;
+  height:30px;
+  @include box-shadow(rgba(0, 0, 0, 0.1) 3px 3px 8px);
+}
+
+/*********** Autocomplete */
+.autocomplete-suggestions {
+  border: 1px solid #999;
+  background: #FFF;
+  cursor: default;
+  overflow: auto;
+  @include box-shadow(rgba(50, 50, 50, 0.64) 1px 4px 3px);
+}
+
+.autocomplete-suggestion {
+  padding: 2px 5px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.autocomplete-selected {
+  background: #F0F0F0;
+}
+
+.autocomplete-suggestions strong {
+  font-weight: normal; color: #3399FF;
+}
+
+/*********** Notifications */
+
+.notification_list {
+  width: 350px;
+  padding: 5px;
+  background-color: $navbar-default-bg!important;
+}
+
+.notification {
+  padding: 5px;
+  border-top: none;
+}
+
+.notification + .notification {
+  border-top: 1px solid $mutedColor;
+}
+
+.notification .notification_title {
+  margin-left: 30px;
+}
+
+.notification .notification_icon {
+  float: left;
+  color: $text-muted !important;
+  text-align: center;
+}
+
+.notification .notification_descr {
+  margin-left: 30px;
+  font-size: $font-size-small;
+}
+
+.notification .notification_descr em:before {
+  content:"\00ab";
+}
+
+.notification .notification_descr em:after {
+  content:"\00bb";
+}
+
+.notification .notification_date {
+  white-space: nowrap;
+  color: $text-muted;
+}
+
+.notification .notification_dismiss {
+  float: right;
+  font-size: $font-size-small;
+}
+
+
+/*********** Edito */
+
+.well.edito {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.edito #edito-next {
+  float: right;
+}
+
+.edito #edito-content {
+  display: none;
+}
+
+
+/*********** Minichat */
+
+
+.sidebar-online {
+  text-align: center;
+  margin-bottom: 10px;
+  padding:3px;
+  background-color: $well-bg;
+  border-radius: 4px;
+}
+
+/* Full minichat, external div */
+#minichat_content {
+  max-height:350px;
+  overflow:auto;
+  margin-bottom:25px;
+}
+
+
+/* Full minichat, internal div */
+.minichat-content {
+  font-size: 10pt;
+  padding-right: 5px;
+
+  /* Full message (time, text, user, ...) */
+  .minichat-message {
+    margin-bottom: 18px;
+
+    .avatar {
+      vertical-align: top;
+    }
+
+    &.self-author {
+      .avatar {
+        float: right;
+      }
+      .minichat-text {
+        margin-right: 40px;
+        &:after {
+          content: "";
+          position: absolute;
+          border-style: solid;
+          border-width: 5px 0 5px 10px;
+          border-color: transparent lightgray;
+          display: block;
+          width: 0;
+          z-index: 1;
+          top: 5px;
+          right: -10px;
+        }
+      }
+    }
+
+    &.other-author {
+      .avatar {
+        float: left;
+      }
+      .minichat-text {
+        margin-left: 40px;
+        &:after {
+          content: '';
+          position: absolute;
+          border-style: solid;
+          border-width: 5px 10px 5px 0;
+          border-color: transparent lightgray;
+          display: block;
+          width: 0;
+          z-index: 1;
+          top: 5px;
+          left: -10px;
+        }
+      }
+    }
+  }
+
+  /* Time (HH:MM) */
+  .minichat-time {
+    float: right;
+    font-size: 75%;
+    color: #9ca3a8;
+    margin-top: -2px;
+  }
+
+  .minichat-date {
+    text-align: center;
+    margin-top: 3px;
+    color: $text-muted;
+  }
+
+  /* Actual text of the message */
+  .minichat-text {
+    position: relative;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 1px 4px 1px 4px;
+    border: 1px solid $mutedColor;
+    border-radius: 6px;
+    @include box-shadow(rgba(0, 0, 0, 0.1) 1px 1px 2px);
+  }
+}
+
+.minichat-remainingChars {
+  margin-top:12px;
+  text-align: center;
+  font-size: $font-size-small;
+  color: $text-muted;
+}
+
+
+/*********** Birthday */
+.birthday .birthday_avatar {
+  float: right;
+}
+
+.birthday .birthday_date {
+  display: block;
+  font-size: $font-size-small;
+  color: $text-muted;
+}
+
+
+/*********** Posts */
+
+.post-show,
+.post-list {
+  margin-right: 5px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-top: none;
+
+  .post-content {
+    margin-left: 50px;
+  }
+
+  + .post_list {
+    border-top: 1px dotted $mutedColor;
+  }
+
+  .post-title {
+    display: inline;
+  }
+
+  .post-avatar {
+    float: right;
+  }
+
+  .post-date, .post-comment, .post-tags, .post-share {
+    display: inline;
+    color: $text-muted;
+    font-size: $font-size-small;
+    margin-right:10px;
+    a {
+      text-decoration: none;
+      color: $text-muted;
+    }
+  }
+
+  .post-share {
+    display: none;
+  }
+
+  .post-next {
+    display: inline;
+    margin-left:10px;
+    white-space: nowrap;
+  }
+}
+
+.post-list {
+  .post-icon {
+    float: left;
+    margin-top: 5px;
+    span {
+      margin-left: -5px;
+      width: 50px;
+      color: $secondColor;
+      text-align: center;
+    }
+  }
+
+  .post-title a {
+    padding-right: 25px;
+    color: $mainColor;
+    font-weight:bold;
+  }
+
+  .post-content p {
+    display: inline;
+  }
+}
+
+.post-show {
+  .post-avatar {
+    margin-top: -30px;
+    span {
+      display: block;
+      text-align: center;
+    }
+  }
+}
+
+
+/*********** Messaging */
+
+.msg-message-newdate {
+  text-align:center;
+  margin-top:20px;
+  color:$text-muted;
+}
+
+.msg-message-avatar {
+  text-align: center;
+  vertical-align: top;
+  width: 150px;
+}
+
+.msg-message-message {
+  min-height: 100px;
+
+  .msg-message-content {
+    position: relative;
+    margin-top:10px;
+    margin-bottom:10px;
+    padding: 5px 10px 5px 10px;
+    border: 2px solid $mutedColor;
+    border-radius:10px;
+    @include box-shadow(rgba(0, 0, 0, 0.1) 2px 2px 3px);
+  }
+
+  &.self-author {
+    .msg-message-avatar {
+      float: right;
+    }
+
+    .msg-message-content {
+      margin-left: 10px;
+      margin-right: 105px;
+
+      &:after {
+        content: "";
+        position: absolute;
+        border-style: solid;
+        border-width: 8px 0 8px 15px;
+        border-color: transparent $mutedColor;
+        display: block;
+        width: 0;
+        z-index: 1;
+        top: 5px;
+        right: -15px;
+      }
+    }
+  }
+
+  &.other-author {
+    .msg-message-avatar {
+      float: left;
+    }
+
+    .msg-message-content {
+      margin-left: 105px;
+      margin-right: 10px;
+
+      &:after {
+        content: '';
+        position: absolute;
+        border-style: solid;
+        border-width: 8px 15px 8px 0;
+        border-color: transparent $mutedColor;
+        display: block;
+        width: 0;
+        z-index: 1;
+        top: 5px;
+        left: -15px;
+      }
+    }
+  }
+}
+
+.msg-message-date {
+  float:right;
+  font-size:70%;
+  color: $text-muted;
+  margin-top: -2px;
+}
+
+.msg-message-unread .msg-message-date {
+  color: $brand-danger;
+}
+
+.msg-msglist thead th {
+  text-align:center;
+}
+
+.msg-msglist tr {
+  border-bottom: 1px solid $mutedColor!important;
+}
+
+.msg-msglist tr:last-child {
+  border-bottom: 0px !important;
+}
+
+.msg-msglist-flag {
+  float:left;
+}
+
+.msg-msglist-authors {
+  text-align:center;
+}
+
+.msg-msglist-actions {
+  text-align:center;
+}
+
+
+/* ************* Markup **/
+
+.markup-preview {
+  border: 1px solid $mutedColor;
+  padding:5px;
+  background-color: #ecf0f1;
+}
+
+.markup-toolbar {
+  margin-bottom:10px;
+}
+
+.markup-toolbar .btn {
+  background-color: #ffffff;
+  color: gray;
+  border:1px solid $mutedColor;
+}
+
+.markup-toolbar .btn:hover {
+  color: $mainColor;
+  background-color: $mutedColor;
+}
+
+.smiley-popup {
+  background-color: #ffffff;
+  border:1px solid $mutedColor;
+  border-radius:5px;
+
+  @include box-shadow(rgba(0, 0, 0, 0.5) 5px 5px 10px);
+
+  padding: 5px;
+
+  max-width:550px;
+  max-height: 200px;
+  overflow:auto;
+  margin-left: 0px;
+  margin-top:-250px;
+
+  text-align: center;
+  z-index: 9999;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  height: 25px;
+  font-size:14pt;
+  padding: 2px 0px 0px 5px;
+  color: $mainColor;
+  font-weight: bold;
+  background: none;
+  border: 0px solid $mainColor;
+  border-radius: 3px;
+  margin: 10px 0px 10px 0px;
+}
+
+.markdown h1 {
+  border-left-width: 100px;
+}
+
+.markdown h2 {
+  border-left-width: 80px;
+}
+
+.markdown h3 {
+  border-left-width: 60px;
+}
+
+.markdown h4 {
+  border-left-width: 40px;
+}
+
+.markdown h5 {
+  border-left-width: 20px;
+}
+
+.markdown h6 {
+  border-left-width: 0px;
+}
+
+.markdown blockquote,
+.bbcode blockquote {
+  padding: 5px 5px 5px 10px;
+  margin: 10px 10px 10px 10px;
+  line-height: 12pt;
+  font-size: 11pt;
+  border-color: $secondColor;
+}
+
+.bbcode blockquote {
+  border-top: 1px solid $mutedColor;
+  border-right: 1px solid $mutedColor;
+  border-bottom: 1px solid $mutedColor;
+  @include box-shadow(rgba(0, 0, 0, 0.1) 2px 2px 3px);
+}
+
+.bbcode blockquote /* blockquote */ {
+  margin-top: 25px;
+  margin-bottom: 10px;
+  background-color: rgba(94,132,171, 0.1);
+}
+
+.bbcode blockquote cite {
+  margin-left:15px;
+  margin-bottom:5px;
+  display: block;
+  font-weight: bold;
+}
+
+.markdown img,
+.markdown iframe,
+.bbcode img,
+.bbcode iframe {
+  max-width: 100%;
+  max-height: auto;
+}
+
+.bbcode .spoiler {
+  cursor: pointer;
+}
+
+.bbcode .spoiler span,
+.bbcode .spoiler a {
+  text-shadow: 0px 0px 8px black;
+  text-shadow: 0px 0px 8px 0.5px black; /* for ie */
+  color: transparent;
+}
+
+.bbcode .spoiler img {
+  visibility: hidden;
+}
+
+.bbcode .spoiler:hover span,
+.bbcode .spoiler:hover a {
+  text-shadow: none;
+  color: inherit;
+}
+
+.bbcode .spoiler:hover img {
+  visibility: visible;
+}
+
+.bbcode .sign {
+  display: inline-block;
+  min-width: 25px;
+  max-width: 180px;
+  vertical-align: text-top;
+}
+
+.bbcode .sign .text {
+  padding: 0.2em 0.5em 0.2em 0.5em;
+  margin: 0;
+  border: 1px solid black;
+  border-radius: 2px;
+
+  background: linear-gradient(135deg, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%);
+  background: -moz-linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(229,229,229,1)));
+  text-align: center;
+}
+
+.bbcode .sign-base {
+  position: relative;
+  background-image: url('../images/sign/sign-base.png');
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+
+.bbcode .sign .smiley {
+  margin-top: 1px;
+  margin-bottom: -1px;
+  margin-left: 50%;
+  padding-left: 5px;
+}
+
+/* ********** Board ***/
+
+.board-threadlist {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-top: none;
+  clear: both;
+
+  + .board-threadlist {
+    border-top: 1px dotted $mutedColor;
+  }
+
+  .board-threadlist-flag {
+    float: left;
+    height: 100%;
+    margin-top: 10px;
+    margin-left: 5px;
+    margin-right: 15px;
+  }
+
+  .board-threadlist-metadata {
+    color: $text-muted;
+  }
+
+  .board-threadlist-avatar {
+    float: right;
+    max-width: 40%;
+    margin-top: 6px;
+    margin-right: 5px;
+    text-align: right;
+    .avatar {
+      margin-bottom: 2px;
+    }
+  }
+
+  .board-threadlist-actions {
+    float: right;
+    margin-top: 12px;
+    margin-left: 10px;
+    margin-right: 5px;
+    max-width: 40%;
+  }
+}
+
+.board-message {
+  clear:both;
+
+  &.board-message-quoted .board-message-content {
+    border: 2px dashed lightgray;
+  }
+
+  .board-message-side {
+    text-align: center;
+    vertical-align: top;
+    width: 90px;
+    float: left;
+
+    .board-message-number, .board-message-level {
+      font-size: $font-size-small;
+    }
+
+    @media (max-width: $screen-sm) {
+      text-align: left;
+      width: 100%;
+      margin-bottom: 3px;
+
+      .avatar {
+        width: 30px;
+        height: 30px;
+        box-shadow: none;
+      }
+      span {
+        display: inline;
+      }
+    }
+
+    @media (min-width: $screen-sm) {
+      .board-message-level {
+        display: block;
+      }
+      .board-message-number {
+        display: block;
+        margin-top: 8px;
+      }
+    }
+  }
+
+  .board-message-content {
+    position:relative;
+    min-height: 155px;
+    margin-bottom: 35px;
+    padding: 5px 10px 10px 10px;
+    border: 2px solid $mutedColor;
+    border-radius: 10px;
+    @include box-shadow(rgba(0, 0, 0, 0.1) 2px 2px 3px);
+
+    @media (max-width: $screen-sm) {
+      clear: both;
+    }
+  }
+
+  @media (min-width: $screen-sm) {
+    &.self-author {
+      .board-message-content {
+        margin-left: 10px;
+        margin-right: 105px;
+
+        &:after {
+          content: "";
+          position: absolute;
+          border-style: solid;
+          border-width: 8px 0 8px 15px;
+          border-color: transparent $mutedColor;
+          display: block;
+          width: 0;
+          z-index: 1;
+          top: 5px;
+          right: -15px;
+        }
+      }
+
+      .board-message-side {
+        float: right;
+      }
+    }
+
+    &.other-author {
+      .board-message-content {
+        margin-left: 105px;
+        margin-right: 10px;
+
+        &:after {
+          content: '';
+          position: absolute;
+          border-style: solid;
+          border-width: 8px 15px 8px 0;
+          border-color: transparent $mutedColor;
+          display: block;
+          width: 0;
+          z-index: 1;
+          top: 5px;
+          left: -15px;
+        }
+      }
+    }
+  }
+
+  .board-message-date {
+    float: right;
+    margin-top: -24px;
+    font-size: $font-size-small;
+
+    a {
+      color: $text-muted !important;
+    }
+  }
+
+  .board-message-flag {
+    position: absolute;
+    right: 0.5em;
+    top: 0.5em;
+  }
+
+  .board-message-actions {
+    position: absolute;
+    right: 0.5em;
+    bottom: 0.5em;
+  }
+}

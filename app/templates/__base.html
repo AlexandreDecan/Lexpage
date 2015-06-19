@@ -10,8 +10,7 @@
 
     {% with static_ext=debug|yesno:",.min" %}
         {% block stylesheets %}
-            <link href="{% static "css/lexpage-bootstrap"|add:static_ext|add:".css" %}" rel="stylesheet"/>
-            <link href="{% static "css/lexpage"|add:static_ext|add:".css" %}" rel="stylesheet"/>
+            <link href="{% static "css/style"|add:static_ext|add:".css" %}" rel="stylesheet"/>
             <link href="{% static "libs/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet"/>
             <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>

@@ -23,13 +23,6 @@
             {{ post.date_published|naturalday:'l j F'|capfirst }} à {{ post.date_published|time }}
         </div>
 
-        <div class="post-comment">
-            <a class="fa fa-comments" href="{% url 'blog_post_comments' post.pk %}">
-                {% with post.blogboardlink.thread.number as count %}
-                    {{ count|default:0 }} commentaire{{ count|pluralize }}</a>
-                {% endwith %}
-        </div>
-
         <div class="post-share">
             <a class="fa fa-facebook" href="http://www.facebook.com/sharer.php?u=http://{{ site.domain }}{% url 'blog_post_show' post.pk post.slug %}"
                 data-toggle="tooltip" data-placement="top" data-container="body"
@@ -52,6 +45,13 @@
                     // <a href="{% url 'blog_post_show' post.pk post.slug %}">lire la suite</a>
                 </div>
             {% endif %}
+        </div>
+
+        <div class="post-comment">
+            <a class="fa fa-comments" href="{% url 'blog_post_comments' post.pk %}">
+                {% with post.blogboardlink.thread.number as count %}
+                    {{ count|default:0 }}</a>
+                {% endwith %}
         </div>
 
         <div class="post-tags">

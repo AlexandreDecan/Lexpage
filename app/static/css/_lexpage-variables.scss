@@ -1,0 +1,39 @@
+/* main variables for the site */
+$mainColor:         #2c3e50;
+$secondColor:       #5e84ab;
+$mutedColor:        lightgray;
+
+
+$brand-primary: $mainColor;
+$brand-info: $secondColor;
+
+$font-family-sans-serif:  "Helvetica Neue",Helvetica,Arial,sans-serif;
+$font-family-serif:  serif;
+$font-family-base: $font-family-sans-serif;
+$link-color: $secondColor;
+$link-hover-color: $mainColor;
+
+// panels
+$panel-primary-heading-bg: $mainColor;
+$panel-primary-border: $mainColor;
+
+// navbar
+$navbar-height:                    50px;
+$navbar-default-color:             $mainColor;
+$navbar-default-bg:                white;
+$navbar-default-border:            $mainColor;
+$navbar-default-link-color:                $mainColor;
+$navbar-default-link-hover-color:          $mainColor;
+$navbar-default-link-hover-bg:             #fff;
+$navbar-default-link-active-bg:            #fff;
+$navbar-default-brand-color:               $mainColor;
+$navbar-default-brand-hover-color:         lighten($navbar-default-brand-color, 20%);
+$nav-link-hover-bg:  $navbar-default-bg;
+
+// Dropdown
+$dropdown-link-color: $mainColor;
+$dropdown-link-hover-color: #fff;
+$dropdown-link-hover-bg: $mainColor;
+
+
+
