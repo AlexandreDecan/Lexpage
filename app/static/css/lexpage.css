@@ -151,7 +151,7 @@ h2 .btn {
 .navbar .navbar-brand {
     padding-top:15px;
     color: #2c3e50;
-    height:40px;
+    height:50px;
 }
 
 .navbar .navbar-text {
@@ -487,6 +487,7 @@ button:hover,
 
 /*********** Posts */
 
+.post-show,
 .post-list {
     margin-right: 5px;
     padding-top: 6px;
@@ -494,18 +495,32 @@ button:hover,
     border-top: none;
 }
 
+.post-show .post-content,
 .post-list .post-content {
     margin-left: 50px;
 }
 
+.post-show + .post-list,
 .post-list + .post-list {
     border-top: 1px dotted lightgray;
 }
 
+.post-show .post-title,
 .post-list .post-title {
     display: inline;
 }
 
+.post-show .post-avatar,
+.post-show .post-share,
+.post-list .post-avatar,
+.post-list .post-share {
+    float:right;
+}
+
+.post-show .post-date,
+.post-show .post-comment,
+.post-show .post-tags,
+.post-show .post-share,
 .post-list .post-date,
 .post-list .post-comment,
 .post-list .post-tags,
@@ -516,17 +531,16 @@ button:hover,
     margin-right:10px;
 }
 
-.post-list .post-avatar,
-.post-list .post-share {
-    float:right;
-}
-
+.post-show .post-comment a,
+.post-show .post-tags a,
+.post-show .post-share a,
 .post-list .post-comment a,
 .post-list .post-tags a,
 .post-list .post-share a {
     color: #a4acb2;
 }
 
+.post-show .post-share a,
 .post-list .post-share a {
     margin-right: 5px;
 }
@@ -553,66 +567,20 @@ button:hover,
     display: inline;
 }
 
+.post-show .post-next,
 .post-list .post-next {
     display: inline;
     margin-left:10px;
     white-space: nowrap;
 }
 
-
-
-.post-show .post-subheader {
-    margin-top: -10px;
-}
-
-.post-show .post-tags {
-    color: #a4acb2;
-    font-size: 85%;
-    float:left; 
-}
-
-.post-show .post-author {
-    float:right;
-    font-size: 85%;
-    color: #a4acb2;
-}
-
-.post-show .post-author a,  
-.post-show .post-tags a {
-    color: #a4acb2;
-}
-
-.post-show .post-abstract {
-    clear: both;
-}
-
-.post-show .post-abstract {
-    border-left: 2px solid #92A4B6;
-    margin-left:20px;
-    padding: 6px 0px 1px 20px;
-}
-
-.post-show .post-text {
-    margin-top:30px;
-}
-
 .post-show .post-avatar {
-    float: right;
-    margin-left: 10px;
+    margin-top: -30px;
 }
 
-.post-show .post-share {
-    float:right;
-}
-
-a.btn.btn-share {
-    width:22px;
-    color: #a4acb2;
-    background: none;
-}
-
-a.btn.btn-share:hover {
-    color: #2c3e50;
+.post-show .post-avatar span {
+    display: block;
+    text-align: center;
 }
 
 /*********** Messaging */
