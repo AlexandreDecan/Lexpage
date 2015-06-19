@@ -1,127 +1,118 @@
 {% load static %}<!DOCTYPE html>
 
 <html lang="fr">
-  <head>
+<head>
     {% block meta_tags %}{% endblock %}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1.0">
     <title>{% block title %}Lexpage{% endblock %}</title>
 
-      {% with static_ext=debug|yesno:",.min" %}
-          {% block stylesheets %}
-              <link href="{% static "libs/bootstrap/css/bootstrap.min.css" %}" rel="stylesheet"/>
-              <link href="{% static "libs/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet"/>
-              <link href="{% static "css/lexpage-bootstrap"|add:static_ext|add:".css" %}" rel="stylesheet"/>
-              <link href="{% static "css/lexpage"|add:static_ext|add:".css" %}" rel="stylesheet"/>
-              <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-          {% endblock stylesheets %}
-          <link rel="icon" type="image/png" href="{% static "images/favicon.png" %}?v=140716" />
-          {% block javascript %}
-              <script>
-                  var URL_PREFIX = ""; // markup.js, script.js
-              </script>
-              <script src="{% static "libs/jquery/dist/jquery.min.js" %}"></script>
-              <script src="{% static "js/scripts"|add:static_ext|add:".js" %}"></script>
-              <script src="{% static "js/minichat"|add:static_ext|add:".js" %}"></script>
-              <script src="{% static "js/markup"|add:static_ext|add:".js" %}"></script>
-          {% endblock javascript %}
-          {{ form.media }}
-      {% endwith %}
-  </head>
-  <body>
+    {% with static_ext=debug|yesno:",.min" %}
+        {% block stylesheets %}
+            <link href="{% static "css/lexpage-bootstrap"|add:static_ext|add:".css" %}" rel="stylesheet"/>
+            <link href="{% static "css/lexpage"|add:static_ext|add:".css" %}" rel="stylesheet"/>
+            <link href="{% static "libs/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet"/>
+            <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+            <![endif]-->
+        {% endblock stylesheets %}
+        <link rel="icon" type="image/png" href="{% static "images/favicon.png" %}?v=140716" />
+        {% block javascript %}
+            <script>
+                var URL_PREFIX = ""; // markup.js, script.js
+            </script>
+            <script src="{% static "libs/jquery/dist/jquery.min.js" %}"></script>
+            <script src="{% static "js/scripts"|add:static_ext|add:".js" %}"></script>
+            <script src="{% static "js/minichat"|add:static_ext|add:".js" %}"></script>
+            <script src="{% static "js/markup"|add:static_ext|add:".js" %}"></script>
+        {% endblock javascript %}
+        {{ form.media }}
+    {% endwith %}
+</head>
+<body>
 
-  <div class="container">
+<div class="container">
     <div class="row">
-      <div class="col-md-12" style="margin-top:20px;">
-        {% block slogan %}
-          {% load slogan %}
-          {% random_slogan as slogan %}
-          <p class="text-center text-muted small">
-              <span class="fa fa-quote-left"></span>
-              &nbsp; <em>{{ slogan.slogan }}</em> &nbsp;
-              <span class="fa fa-quote-right"></span>
-              &nbsp;&mdash;&nbsp; 
-              <a href="{% url 'slogan_list' %}">Slogan</a> par <cite>{{ slogan.author }}</cite>
-          </p>
-        {% endblock slogan %}
-      </div> <!-- slogan -->
+        <div class="col-md-12" style="margin-top:20px;">
+            {% block slogan %}
+                {% load slogan %}
+                {% random_slogan as slogan %}
+                <p class="text-center text-muted small">
+                    <span class="fa fa-quote-left"></span>
+                    &nbsp; <em>{{ slogan.slogan }}</em> &nbsp;
+                    <span class="fa fa-quote-right"></span>
+                    &nbsp;&mdash;&nbsp;
+                    <a href="{% url 'slogan_list' %}">Slogan</a> par <cite>{{ slogan.author }}</cite>
+                </p>
+            {% endblock slogan %}
+        </div> <!-- slogan -->
     </div> <!-- row -->
 
     <div class="row">
-      <div class="col-md-12">
-        {% block navbar %}
-          {% include "_navbar.html" %}
-        {% endblock navbar %}
-      </div>
+        <div class="col-md-12">
+            {% block navbar %}
+                {% include "_navbar.html" %}
+            {% endblock navbar %}
+        </div>
     </div>
 
     <div class="row">
-      
-      <div class="col-md-9">
-        <div class="page">
-        {% block messages %}
-          {% include "_messages.html" %}
-        {% endblock messages %}
+        <div class="col-md-9">
+            <div class="page">
+                {% block messages %}
+                    {% include "_messages.html" %}
+                {% endblock messages %}
 
-        {% block page %}{% endblock page %}
+                {% block page %}{% endblock page %}
 
-        </div><!-- page -->
-      </div>
-
-
-      <div class="col-md-3">
-        <div class="sidebar">
-        {% include "_sidebar.html" %}
-        </div><!-- sidebar -->
-      </div>
-
-
+            </div><!-- page -->
+        </div>
+        <div class="col-md-3">
+            <div class="sidebar">
+                {% include "_sidebar.html" %}
+            </div><!-- sidebar -->
+        </div>
     </div><!-- row -->
-
 
     <div class="row footer">
-      <div class="col-md-12">
-        <div class="text-center">
-          {% block footer %}
-            {% include "_footer.html" %}
-          {% endblock %}
+        <div class="col-md-12">
+            <div class="text-center">
+                {% block footer %}
+                    {% include "_footer.html" %}
+                {% endblock %}
+            </div>
         </div>
-      </div>
     </div><!-- row -->
-  </div><!-- container -->
+</div><!-- container -->
 
-
-
-    <div class="modal fade" id="confirm-action" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog modal-sm">
+<div class="modal fade" id="confirm-action" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">Êtes-vous sûr ?</h4>
-          </div>
-          <div class="modal-body" align="center">
-            <a id="confirm-action-yes" class="btn btn-primary">Oui</a>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
-          </div>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Êtes-vous sûr ?</h4>
+            </div>
+            <div class="modal-body" align="center">
+                <a id="confirm-action-yes" class="btn btn-primary">Oui</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+            </div>
         </div>
-      </div>
-    </div> <!-- modal -->
+    </div>
+</div> <!-- modal -->
 
-    {% block javascript_bottom %}
-      <script src="{% static "libs/bootstrap/js/bootstrap.min.js" %}"></script>
-      <script src="{% static "libs/autocomplete.min.js" %}"></script>
-      <script src="{% static "libs/jquery.oembed.min.js" %}"></script>
-      <script src="{% static "libs/jquery.tagcloud.min.js" %}"></script>      
-      <script src="{% static "libs/modernizr.min.js" %}"></script>
-    {% endblock %}
+{% block javascript_bottom %}
+    <script src="{% static "libs/bootstrap/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "libs/autocomplete.min.js" %}"></script>
+    <script src="{% static "libs/jquery.oembed.min.js" %}"></script>
+    <script src="{% static "libs/jquery.tagcloud.min.js" %}"></script>
+    <script src="{% static "libs/modernizr.min.js" %}"></script>
+{% endblock %}
 
 
-    {% include "_analytics.html" %}
+{% include "_analytics.html" %}
 
-  </body>
+</body>
 </html>
 
