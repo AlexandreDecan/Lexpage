@@ -30,7 +30,7 @@ a[name] {
 .pagecontent, .sidebar-block {
     background-color: white;
     box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.1);
-    padding: 5px 5px 5px 5px;
+    padding: 5px 10px 5px 10px;
     border-top: 3px solid #2c3e50;
     border-radius: 10px 10px 0px 0px;
 }
@@ -79,7 +79,7 @@ h2 {
     color: #2c3e50;
     border: none;
     border-radius: 0px 0px;
-    border-bottom: 1px dotted lightgray;
+    border-bottom: 2px dotted #2c3e50;
     margin-top: 25px;
 }
 
@@ -103,22 +103,24 @@ h2 .btn {
     padding: 0.2em 0.5em;
 }
 
-.navbar-collapse {
-    background-color:white;
-    border-top: 2px solid #2c3e50;
-    border-bottom: 2px solid #2c3e50;
-    border-radius: 10px 10px 10px 10px;
-    box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.1);
-}
+@media (max-width: 767px) {
+    .navbar-collapse {
+        background-color: white;
+        border-top: 2px solid #2c3e50;
+        border-bottom: 2px solid #2c3e50;
+        border-radius: 10px 10px 10px 10px;
+        box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.1);
+    }
 
-.navbar-collapse a {
-    background-color: white!important;
-    color: #2c3e50 !important;
-}
+    .navbar-collapse a {
+        background-color: white !important;
+        color: #2c3e50 !important;
+    }
 
-.navbar-collapse .dropdown-menu {
-    border-left: 30px solid #2c3e50 !important;
-    border-radius: 0px !important;
+    .navbar-collapse .dropdown-menu {
+        border-left: 30px solid #2c3e50 !important;
+        border-radius: 0px !important;
+    }
 }
 
 .navbar-toggle {
@@ -129,10 +131,12 @@ h2 .btn {
 }
 
 .navbar {
-    min-height: 55px;
-    height: 55px;
+    min-height: 50px;
+    height: 50px;
     background-color: white;
-    box-shadow: 0px 0px 2px 2px rgba(0,0,0,0.1)!important;
+    border-top: 5px solid #2c3e50 !important;
+    border-radius: 15px 15px 0px 0px;
+    box-shadow: 0px 0px 2px 2px rgba(0,0,0,0.3)!important;
     border: none;
 }
 
@@ -145,8 +149,9 @@ h2 .btn {
 }
 
 .navbar .navbar-brand {
+    padding-top:15px;
     color: #2c3e50;
-    height:50px;
+    height:40px;
 }
 
 .navbar .navbar-text {
@@ -155,7 +160,7 @@ h2 .btn {
 
 .navbar li.dropdown > a {
     color: #2c3e50;
-    margin-top: 15px;
+    margin-top: 10px;
     padding-top: 5px;
     padding-bottom: 7px;
     margin-bottom: 2px;
@@ -483,20 +488,27 @@ button:hover,
 /*********** Posts */
 
 .post-list {
-    margin-left: 40px;
     margin-right: 5px;
     padding-top: 6px;
     padding-bottom: 6px;
     border-top: none;
 }
 
+.post-list .post-content {
+    margin-left: 50px;
+}
+
 .post-list + .post-list {
-    border-top: 1px solid lightgray;
+    border-top: 1px dotted lightgray;
+}
+
+.post-list .post-title {
+    display: inline;
 }
 
 .post-list .post-date,
-.post-list .post-comment, 
-.post-list .post-tags, 
+.post-list .post-comment,
+.post-list .post-tags,
 .post-list .post-share {
     display: inline;
     color: #a4acb2;
@@ -504,7 +516,12 @@ button:hover,
     margin-right:10px;
 }
 
-.post-list .post-comment a, 
+.post-list .post-avatar,
+.post-list .post-share {
+    float:right;
+}
+
+.post-list .post-comment a,
 .post-list .post-tags a,
 .post-list .post-share a {
     color: #a4acb2;
@@ -514,31 +531,22 @@ button:hover,
     margin-right: 5px;
 }
 
-.post-list .post-avatar {
-    margin-left: 10px;
-    float: right;
-}
-
 .post-list .post-icon {
-    float:left; 
-    margin-left: -40px;
-    margin-top: -1px;
+    float:left;
+    margin-top: 5px;
 }
 
 .post-list .post-icon span {
-    width: 35px;
+    margin-left: -5px;
+    width: 50px;
     color: #5e84ab;
     text-align: center;
 }
 
 .post-list .post-title a {
-    padding-right: 6px;
+    padding-right: 25px;
     color: #2c3e50;
     font-weight:bold;
-}
-
-.post-list .post-abstract {
-    padding-left: 6px;
 }
 
 .post-list .post-content p {
@@ -546,6 +554,7 @@ button:hover,
 }
 
 .post-list .post-next {
+    display: inline;
     margin-left:10px;
     white-space: nowrap;
 }
@@ -920,7 +929,7 @@ a.btn.btn-share:hover {
 }
 
 .board-threadlist + .board-threadlist {
-    border-top: 1px solid lightgray;
+    border-top: 1px dotted lightgray;
 }
 
 

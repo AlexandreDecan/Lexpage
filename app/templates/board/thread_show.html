@@ -10,7 +10,7 @@
 
     {% if thread.blogboardlink %}
         <p>Cette discussion est en relation avec le billet suivant : </p>    
-        <div class="panel panel-default">
+        <div class="well">
         {% include "blog/_post_inlist.html" with post=thread.blogboardlink.post %}
         </div>
     {% endif %}
