@@ -14,38 +14,8 @@ a[name] {
     margin-top:-70px;
 }
 
-.page {
-    margin-left:0px;
-    margin-right:0px;
-    margin-bottom:30px;
-    margin-top:-20px;
-}
-
 .footer {
     margin-top:40px;
-}
-
-.page .messages {
-    margin-top:20px;
-}
-
-.page h2 {
-    height: 32px;
-    padding: 5px 15px 0px 15px;
-    font-size: 18px;
-    color: #ffffff;
-    background-color: #2c3e50;
-    border-color: #2c3e50;
-    border-radius: 3px;
-}
-
-.page h3 {
-    font-size: 16pt;
-    border-radius: 3px;
-    border-left:30px solid #5e84ab;
-    border-bottom:2px solid #5e84ab;
-    padding-left:10px;
-    padding-bottom:2px;
 }
 
 .page .panel  {
@@ -56,13 +26,17 @@ a[name] {
     padding: 0px;
 }
 
-.sidebar .panel ul {
-    margin-left:-20px;
-    margin-top:7px;
-    margin-bottom:7px;
+.pagecontent, .sidebar-block {
+    background-color: white;
+    box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.1);
+    padding: 5px 5px 5px 5px;
 }
 
-.sidebar {
+.sidebar-block + .sidebar-block {
+    margin-top: 30px;
+}
+
+.sidebar, .page {
     margin-bottom:40px;
 }
 
@@ -90,9 +64,35 @@ a[name] {
     margin:10px;
 }
 
-
-
 /*********** Bootstrap override */
+
+body {
+    background-color: #eee;
+}
+
+h2 {
+    height: 32px;
+    padding: 5px 15px 0px 15px;
+    font-size: 18px;
+    color: #ffffff;
+    background-color: #2c3e50;
+    border-color: #2c3e50;
+    border-radius: 3px;
+    margin-top: 15px;
+}
+
+div h2:first-child {
+    margin-top: 5px;
+}
+
+h3 {
+    font-size: 16pt;
+    border-radius: 3px;
+    border-left:30px solid #5e84ab;
+    border-bottom:2px solid #5e84ab;
+    padding-left:10px;
+    padding-bottom:2px;
+}
 
 .navbar .badge {
     background-color:#e74c3c;
@@ -135,6 +135,10 @@ button:hover {
 
 
 /*********** Avatar */
+.avatar, .smallavatar, .verysmallavatar {
+    border-radius: 50%;
+}
+
 .avatar {
     width:80px;
     height:80px;
@@ -248,7 +252,6 @@ button:hover {
 
 /*********** Minichat */
 
-
 .sidebar-online {
     text-align: center;
     margin-bottom: 10px;
@@ -274,14 +277,14 @@ button:hover {
 /* Date (DD/MM) */
 .minichat-date {
     text-align: center;
-    margin-top: 5px;
+    margin-top: 3px;
     color: gray;
 }
 
 
 /* Full message (time, text, user, ...) */
 .minichat-message {
-    margin-bottom:10px;
+    margin-bottom:18px;
 }
 
 .minichat-message .avatar {

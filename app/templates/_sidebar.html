@@ -6,20 +6,19 @@
 
 {% block sidebar_minichat %}
   <div style="clear:both;"></div>
-  <div id="minichat" class="panel panel-primary">
-    <div class="panel-heading">
-       <div class="pull-right">
-        <a class="btn btn-xs btn-primary" 
-            href="{% url 'minichat_archives' %}"
-            data-toggle="tooltip"
-            data-placement="top"
-            title="Archives">
-          <span class="fa fa-folder-open"></span>
-        </a>
-      </div>
-      <h3 class="panel-title">Minichat</h3>
-    </div>
-    <div class="panel-body">
+  <div id="minichat" class="sidebar-block">
+      <h2>Minichat
+          <div class="pull-right">
+              <a class="btn btn-xs btn-primary"
+                 href="{% url 'minichat_archives' %}"
+                 data-toggle="tooltip"
+                 data-placement="top"
+                 title="Archives">
+                  <span class="fa fa-folder-open"></span>
+              </a>
+          </div>
+      </h2>
+
       <div id="minichat_wrapper">
           {% if user.is_authenticated %}
             {% load online %}
@@ -73,44 +72,43 @@
           });
           </script>    
         {% endif %}               
-      </div><!-- minichat_content -->     
-    </div> <!-- wrapper -->        
-    <script>
-    $(document).ready(function() {
-      minichat_init_display($("#minichat_content"), "{% url 'minichat_latests' %}");
-      {% if user.is_authenticated %}
-        minichat_init_post();
-        minichat_init_remaining_chars();
-      {% endif %}
-    });
-    </script>      
+      </div><!-- minichat_content -->
+
+      <script>
+          $(document).ready(function() {
+              minichat_init_display($("#minichat_content"), "{% url 'minichat_latests' %}");
+              {% if user.is_authenticated %}
+                  minichat_init_post();
+                  minichat_init_remaining_chars();
+              {% endif %}
+          });
+      </script>
   </div> <!-- panel -->
 {% endblock sidebar_minichat %} 
 
 
 
 {% block sidebar_events %}
-    {% load birthday %}
-    {% birthday as birthday_users %}
-    {% if user.is_authenticated and birthday_users|length > 0 %}
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-          <h3 class="panel-title">Anniversaires</h3>
-        </div>
-        <div class="panel-body birthday">
-            {% for user in birthday_users %}
-                <div class="birthday_avatar">
-                    <a href="{% url 'profile_show' user %}">
-                    <img src="{{ user.profile.avatar }}" title="{{ user.username }}" class="avatar verysmallavatar"/></a>
-                </div>            
-                <a class="birtday_user" href="{% url 'profile_show' user %}">
-                {{ user.username }}</a>
-                <span class="birthday_date">
-                    {{ user.profile.get_birthdate|naturalday|capfirst }}
-                    ({{ user.profile.birthdate }})
-                </span>
-            {% endfor %}
-        </div>
-    </div>
+    {% if user.is_authenticated %}
+        {% load birthday %}
+        {% birthday as birthday_users %}
+        {% if birthday_users|length > 0 %}
+            <div class="birthday sidebar-block">
+                <h2>Anniversaires</h2>
+
+                {% for user in birthday_users %}
+                    <div class="birthday_avatar">
+                        <a href="{% url 'profile_show' user %}">
+                            <img src="{{ user.profile.avatar }}" title="{{ user.username }}" class="avatar verysmallavatar"/></a>
+                    </div>
+                    <a class="birtday_user" href="{% url 'profile_show' user %}">
+                        {{ user.username }}</a>
+                    <span class="birthday_date">
+                {{ user.profile.get_birthdate|naturalday|capfirst }}
+                ({{ user.profile.birthdate }})
+            </span>
+                {% endfor %}
+            </div>
+        {% endif %}
     {% endif %}
 {% endblock sidebar_events %}
