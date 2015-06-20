@@ -71,7 +71,7 @@ Si vous préférez *gunicorn*, rien ne vous empêche de l'utiliser également...
 Des paramètres de base sont proposés sur le dépôt. Les paramètres considérés comme spécifiques à l'environnement sont repris dans le fichier `settings_dev.py` qui s'occupe de charger le reste venant de `settings_base.py`. A priori, vous n'aurez pas à modifier autre chose que les paramètres de développement, mais qui sait ? Quoiqu'il en soit, si vous souhaitez utiliser un autre fichier de configuration que `settings_dev.py`, il conviendra de le signaler à Django lors de chaque appel à `python app/manage.py` (la principale commande que vous allez utiliser ici !). Faites un tour dans la documentation de Django, et vous verrez comment faire (via une variable d'environnement, ou un paramètre long, etc.). 
 
 Avant de pouvoir tester le site, il y a quelques opérations à faire :
-  
+
 #### Mettre en place la base de données
 
 Par défaut, la configuration de développement travaille avec SQLite. En production, nous tournons avec MariaDB. Si vous n'aimez pas SQLite ou que vous voulez utiliser autre chose, pensez à adapter le fichier de configuration. Dans tous les cas, si c'est la première fois que vous lancez le site, il faudra créer la base de données :
@@ -83,12 +83,16 @@ A ce stade, une base va être créée et contiendra les différents modèles. La
 Si vous ne souhaitez pas utiliser ces données, mais que vous voulez tester l'authentification et ces machins-là sur le site, il vous faudra au moins un compte administrateur. Utilisez donc Django pour ça :
 `python app/manage.py createsuperuser`
 
-
-
 #### Mettre en place les fichiers statiques
 
 Enfin, afin que le site puisse fournir les fichiers statiques nécessaires à son affichage et à son fonctionnement, il convient d'indiquer à Django de collecter ces fichiers statiques dans les différentes applications qui sont utilisées, et de les réunir dans un répertoire qui sert à fournir les fichiers statiques. La commande `python app/manage.py collectstatic` fera cela pour vous. Bien entendu, c'est une commande à répéter à chaque fois que vous faites des modifications dans les fichiers statiques. 
 
+
+#### Modifier le style CSS
+
+Ce n'est pas un pré-requis pour pouvoir tester localement le site, mais si vous êtes intéressé par la modification de la charte graphique du site, le dossier */static/css/* contient ce qu'il vous faut. En particulier, il contient le point d'entrée Sass dans le fichier *style.scss*. Les éléments partiels sont dans le dossier *lexpage* (ceux de Bootstrap sont, naturellement, dans le dossier *bootstrap*). Les éléments partiels sont décomposés en plusieurs fichiers dont la sémantique est assez facile à identifier. En particulier, le fichier *_variables.scss* contient la définition des variables (antérieures à celles de Bootstrap) nécessaire pour le thème. Le fichier *_mixins.scss* contient des mixins nécessaires aux éléments partiels (ou des ré-écriture de certains mixins Bootstrap, dans le cas où des modifications doivent être appliquées directement sur ces derniers). 
+
+En environnement de développement, le fichier */static/css/style.css* sera directement utilisé lorsque le site est affiché. En environnement de production (ou de test), c'est le fichier */static_pub/css/style.min.css* qui sera utilisé. Notez deux choses : la première est la présence du *.min*, et la seconde est la présence du *_pub* (voir remarque ci-dessus). 
 
 ## Les problèmes fréquents et leurs solutions connues
 

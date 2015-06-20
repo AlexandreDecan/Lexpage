@@ -12,3 +12,6 @@ docker-run.sh
 
 # Bower
 bower_components
+
+# Sass cache
+*.sass-cache
