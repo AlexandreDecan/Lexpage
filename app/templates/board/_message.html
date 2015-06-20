@@ -3,16 +3,16 @@
 
 
 <div class="board-message {% if message.author == user %}self-author{% else %}other-author{% endif %}" id="msg-{{ message.pk }}">
-    <div class="board-message-side">
+    <div class="message-side">
         <a href="{% url 'profile_show' message.author %}">
         <img src="{{ message.author.profile.avatar }}" class="avatar" title="{{ message.author.username }}"/>
-        <span class="board-message-author">
+        <span class="message-author">
             {{ message.author.username }}
         </span></a>
 
         {% with count=message.author.board_post.count %}
-        <span class="board-message-number"><span class="badge">{{ count }}</span></span>
-        <span class="board-message-level">
+        <span class="message-number"><span class="badge">{{ count }}</span></span>
+        <span class="message-level">
             {% if count < 10 %}
                 Noob
             {% elif count < 15 %}
@@ -55,13 +55,13 @@
             </span>
         {% endwith %}
     </div>
-    <div class="board-message-content" id="board-message-{{ message.pk }}">
-        <div class="board-message-date">
+    <div class="message-content" id="board-message-{{ message.pk }}">
+        <div class="message-date">
             <span>
-                <a href="{% url 'board_message_show' message.pk %}">{{ thread.last_message.date|naturalday }} à {{ thread.last_message.date|time:'H:i' }}</a>
+                <a href="{% url 'board_message_show' message.pk %}">{{ message.date|naturalday }} à {{ message.date|time:'H:i' }}</a>
             </span>
         </div>
-        <div class="board-message-flag">
+        <div class="message-flag">
             <span>
             {% if user.is_authenticated %}
                 {% if thread.flag.message.date >= message.date %}
@@ -79,7 +79,7 @@
             </span>
         </div>
 
-        <div class="board-message-text">
+        <div class="message-text">
             {% if old %}
                 <div class="text-center">
                 <strong class="label label-info">Reprise automatique du message précédent.</strong>
@@ -109,7 +109,7 @@
         </div>
 
         {% if user.is_authenticated %}
-            <div class="board-message-actions">
+            <div class="message-actions">
                 <a class="btn btn-xs btn-primary btn-circle"
                     href="#reply"
                     data-toggle="tooltip"

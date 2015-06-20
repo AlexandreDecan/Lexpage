@@ -45,17 +45,17 @@
 .board-message {
   clear:both;
 
-  &.board-message-quoted .board-message-content {
+  &.message-quoted .message-content {
     border: 2px dashed $mutedColor;
   }
 
-  .board-message-side {
+  .message-side {
     text-align: center;
     vertical-align: top;
     width: 90px;
     float: left;
 
-    .board-message-number, .board-message-level {
+    .message-number, .message-level {
       font-size: $font-size-small;
     }
 
@@ -75,17 +75,17 @@
     }
 
     @media (min-width: $screen-sm) {
-      .board-message-level {
+      .message-level {
         display: block;
       }
-      .board-message-number {
+      .message-number {
         display: block;
         margin-top: 8px;
       }
     }
   }
 
-  .board-message-content {
+  .message-content {
     position:relative;
     min-height: 155px;
     margin-top: 40px;
@@ -101,7 +101,7 @@
 
   @media (min-width: $screen-sm) {
     &.self-author {
-      .board-message-content {
+      .message-content {
         margin-left: 10px;
         margin-right: 105px;
 
@@ -119,13 +119,13 @@
         }
       }
 
-      .board-message-side {
+      .message-side {
         float: right;
       }
     }
 
     &.other-author {
-      .board-message-content {
+      .message-content {
         margin-left: 105px;
         margin-right: 10px;
 
@@ -145,23 +145,23 @@
     }
   }
 
-  .board-message-date {
+  .message-date {
     float: right;
     margin-top: -24px;
     font-size: $font-size-small;
 
-    a {
+    &, a {
       color: $text-muted !important;
     }
   }
 
-  .board-message-flag {
+  .message-flag {
     position: absolute;
     right: 0.5em;
     top: 0.5em;
   }
 
-  .board-message-actions {
+  .message-actions {
     position: absolute;
     right: 0.5em;
     bottom: 0.5em;

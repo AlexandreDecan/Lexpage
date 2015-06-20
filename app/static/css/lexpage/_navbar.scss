@@ -2,7 +2,6 @@
   border: none;
 
   @include z-depth(5);
-  @include arceffect($navbar-default-bg);
 
   .navbar-brand {
     font-size: $font-size-large;
@@ -16,20 +15,6 @@
   .badge {
     color: $btn-danger-color;
     background-color: $btn-danger-bg;
-  }
-
-  li.dropdown {
-    > a {
-      color: $mainColor;
-      margin-top: 10px;
-      margin-bottom: 2px;
-      padding: $padding-small-vertical $padding-small-horizontal;
-      border-top: 2px dotted $navbar-default-bg;
-    }
-
-    &:hover > a {
-      border-color: $mainColor;
-    }
   }
 
   .dropdown-menu {

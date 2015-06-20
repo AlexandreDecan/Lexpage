@@ -42,11 +42,13 @@ a[name] {
 .pagecontent, .sidebar-block {
   background-color: white;
   padding: 0px 10px 10px 10px;
+  margin-bottom: 30px;
 
   @include z-depth(4);
-  @include arceffect;
 
-  margin-bottom: 30px;
+  border-top: 4px solid $mainColor;
+  border-radius: $border-radius-base $border-radius-base 0px 0px;
+  @include gradient-vertical($well-bg, white, 0, 12px);
 }
 
 .help-block {
@@ -55,6 +57,10 @@ a[name] {
 
 .table.table-unbordered th, .table.table-unbordered td {
   border-top: none !important;
+}
+
+.table.table-unbordered {
+  border: none;
 }
 
 .table.table-middle tr td {
@@ -101,15 +107,12 @@ input[type="file"] {
 
 .btn.btn-circle {
   border-radius: 50%;
+
+
 }
 
 h2 .btn {
+  @extend .btn-sm;
+  @extend .btn-default;
   @extend .btn-circle;
-  background-color: white;
-  font-size: 0.5em;
-  color: $text-muted;
-  border: 1px solid $mutedColor;
-  width: 2em;
-  height: 2em;
-  padding: 0.2em 0.5em;
 }

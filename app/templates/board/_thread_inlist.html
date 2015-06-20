@@ -18,9 +18,9 @@
                 </a>
             {% endif %}
         {% elif user.is_authenticated %}
-            <a data-toggle="tooltip" data-placement="top" title="Discussion non-lue" 
-                class="" href="{% url 'board_thread_show' thread.pk thread.slug %}">
-                <span class="text-muted fa fa-border fa-eye"></span>
+            <a data-toggle="tooltip" data-placement="top" title="Discussion non-lue"
+                    class="btn btn-default btn-xs btn-circle" href="{% url 'board_thread_show' thread.pk thread.slug %}">
+                    <span class="fa fa-eye-slash"></span>
             </a>
         {% endif %}
     </div>

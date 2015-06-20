@@ -9,7 +9,7 @@
   <div id="minichat" class="sidebar-block">
       <h2>Minichat
           <div class="pull-right">
-              <a class="btn btn-xs btn-primary"
+              <a class="btn btn-xs"
                  href="{% url 'minichat_archives' %}"
                  data-toggle="tooltip"
                  data-placement="top"
@@ -38,17 +38,16 @@
           <span class="fa fa-spinner fa-spin"></span> Chargement...</p>
         </div>
         {% if user.is_authenticated %}
-          <form action="{% url 'minichat_post' %}" method="post" id="minichat_form">
+          <form action="{% url 'minichat_post' %}" class="form-inline" method="post" id="minichat_form">
             {% csrf_token %}
-            <div class="input-group">
-              <input name="text" maxlength="150" type="text" class="form-control" 
-                placeholder="Nouveau message"/>
-                <span class="input-group-btn">
-                    <button class="btn btn-primary" type="submit">
-                        <span class="fa fa-pencil"></span>
-                    </button>
-                </span>
-            </div>
+
+            <input name="text" maxlength="150" type="text" class="form-control" placeholder="Nouveau message"/>
+
+            <button class="btn btn-default btn-circle" type="submit">
+                <span class="fa fa-pencil"></span>
+            </button>
+
+
             <div class="minichat-remainingChars">
               <span id="remainingChars"></span>
             </div>                        

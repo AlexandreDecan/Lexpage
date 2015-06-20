@@ -11,11 +11,15 @@
 
 /* Full minichat, external div */
 #minichat_content {
-  max-height:350px;
+  max-height:380px;
   overflow:auto;
-  margin-bottom:25px;
+  margin-bottom: $padding-large-vertical;
 }
 
+#minichat_form {
+  padding-top: $padding-large-vertical;
+  border-top: 2px dotted $mainColor;
+}
 
 /* Full minichat, internal div */
 .minichat-content {
@@ -100,7 +104,7 @@
 }
 
 .minichat-remainingChars {
-  margin-top:12px;
+  margin-top: $padding-large-vertical;
   text-align: center;
   font-size: $font-size-small;
   color: $text-muted;

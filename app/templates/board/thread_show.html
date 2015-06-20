@@ -69,13 +69,13 @@
             var target = $(".markup-bbcode").get(0);
 
             $("a[data-quote]").click(function (e) {
-                $(this).closest(".board-message").addClass("board-message-quoted");
+                $(this).closest(".board-message").addClass("message-quoted");
                 board_add_quote($(this).attr("data-messageid"), $(this).attr("data-quote"), target);
             });
 
             $("a[data-addquote]").click(function (e) {
                 e.preventDefault();
-                $(this).closest(".board-message").addClass("board-message-quoted");
+                $(this).closest(".board-message").addClass("message-quoted");
                 board_add_quote($(this).attr("data-messageid"), $(this).attr("data-addquote"), target);
             });
         });

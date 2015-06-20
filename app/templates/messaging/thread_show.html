@@ -52,37 +52,7 @@
             {% endifchanged %}
         {% endif %}
 
-        {% ifchanged message.date|date %}
-            <div class="msg-message-newdate">
-            {{ message.date|date:"l j F Y"|capfirst }}
-            </div>
-        {% endifchanged %}
-
-        <div class="msg-message-message {% if message.author = user %}self-author {% else %}other-author {% endif %}{% if message.date > date_read %}msg-message-unread {% endif %}">
-
-            <div class="msg-message-avatar">
-                <a href="{% url 'profile_show' message.author.username %}">
-                <img src="{{ message.author.profile.avatar }}" title="{{ message.author.username }}" class="avatar"/><br/>
-                {{ message.author.username }}
-                </a>
-            </div>
-
-            <div class="msg-message-content">
-
-                <span class="msg-message-date">
-                    <span class="fa fa-clock-o"{% if message.date > date_read %}
-                    data-toggle="tooltip" title="Message non-lu"
-                    {% endif %}>
-                    {{ message.date|time:'H:i' }}
-                    </span>
-                </span>
-
-                <div class="msg-message-text">
-                    {{ message.text|urlize|smiley|linebreaksbr }}
-                </div>
-            </div>
-
-        </div>
+        {% include "messaging/_message.html" with message=message %}
     {% endfor %}
     <a name="last"></a>
     </div>

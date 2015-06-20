@@ -45,7 +45,7 @@
 
         <div class="post-date">
             <span class="fa fa-clock-o"></span>
-            {{ post.date_published|naturalday:'D. d/m/y'|capfirst }} à {{ post.date_published|time }}
+            {{ post.date_published|naturalday:'l d/m'|capfirst }} à {{ post.date_published|time }}
         </div>
 
         <div class="post-comment">
