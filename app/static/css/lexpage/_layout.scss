@@ -1,0 +1,152 @@
+/* IE10 W8, WP8 hack */
+@-ms-viewport       { width: extend-to-zoom; zoom: 1.0; }
+@viewport           { width: extend-to-zoom; zoom: 1.0; }
+
+
+/*********** Transitions */
+a:hover,
+.btn:hover,
+button:hover,
+.navbar .badge {
+  @include transition(color, 0.3s, ease);
+  @include transition(background-color, 0.3s, ease-out);
+}
+
+/*********** General layout */
+body {
+  padding-top: 50px;
+  background-image: url('/static/images/bg_body.jpg');
+}
+
+/* Decal anchors because of the fixed navbar */
+a[name] {
+  padding-top:70px;
+  margin-top:-70px;
+}
+
+.footer {
+  margin-top: 40px;
+}
+
+.page .panel  {
+  padding: 5px;
+}
+
+.page .panel  > .panel-header {
+  padding: 0px;
+}
+
+.pagecontent, .sidebar-block {
+  background-color: white;
+  @include box-shadow(rgba(0, 0, 0, 0.1) 0 0 2px 1px);
+  padding: 5px 10px 5px 10px;
+  border-top: 3px solid $mainColor;
+  border-radius: 10px 10px 0px 0px;
+}
+
+.sidebar-block + .sidebar-block {
+  margin-top: 30px;
+}
+
+.sidebar, .page {
+  margin-bottom:40px;
+}
+
+.help-block {
+  font-size: $font-size-small;
+}
+
+.table.table-unbordered th, .table.table-unbordered td {
+  border-top: none !important;
+}
+
+.table.table-middle tr td {
+  vertical-align:middle;
+}
+
+.pagination {
+  margin:10px;
+}
+
+.btn.btn-circle {
+  border-radius:50%;
+}
+
+h2 {
+  font-size: 2em;
+  padding: 4px 10px 8px 15px;
+  color: #2c3e50;
+  border: none;
+  border-radius: 0px 0px;
+  border-bottom: 2px dotted $mainColor;
+  margin-top: 25px;
+}
+
+
+div h2:first-child {
+  margin-top: 5px;
+}
+
+h3 {
+  font-size: $font-size-h3;
+  padding-left: 30px;
+}
+
+h2 .btn {
+  background-color: white;
+  border-radius: 50%;
+  font-size: 0.5em;
+  color: lightgray;
+  border: 1px solid $mutedColor;
+  width: 2em;
+  height: 2em;
+  padding: 0.2em 0.5em;
+}
+
+
+
+
+form.form {
+  margin-left: 5px;
+  padding-left: 15px;
+  margin-bottom: 20px;
+}
+
+
+input[type="file"] {
+  padding-bottom:35px;
+}
+
+select { padding-top: 2px !important; }
+
+.pagination {
+  padding: 2px 15px 2px 15px;
+  border-top: 2px solid $secondColor;
+  border-bottom: 2px solid $secondColor;
+  border-radius: 15px;
+  background-color: white;
+}
+
+.pagination li a {
+  background-color: transparent;
+  color: $secondColor;
+  border-radius:50% !important;
+  min-width: 2.5em;
+  min-height: 2.5em;
+}
+
+.input-group-btn .btn {
+  margin-left: 0px !important;
+  padding: 5px 10px 5px 10px;
+  height:32px;
+}
+
+.tooltip-inner {
+  white-space:pre-wrap;
+}
+
+.btn-toolbar .btn-group .btn {
+  border-radius: 50%;
+  min-width: 2.5em;
+}
+

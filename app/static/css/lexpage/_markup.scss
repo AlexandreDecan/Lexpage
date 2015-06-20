@@ -1,0 +1,177 @@
+/* ************* Markup **/
+
+.markup-preview {
+  border: 1px solid $mutedColor;
+  padding:5px;
+  background-color: #ecf0f1;
+}
+
+.markup-toolbar {
+  margin-bottom:10px;
+}
+
+.markup-toolbar .btn {
+  background-color: #ffffff;
+  color: gray;
+  border:1px solid $mutedColor;
+}
+
+.markup-toolbar .btn:hover {
+  color: $mainColor;
+  background-color: $mutedColor;
+}
+
+.smiley-popup {
+  background-color: #ffffff;
+  border:1px solid $mutedColor;
+  border-radius:5px;
+
+  @include box-shadow(rgba(0, 0, 0, 0.5) 5px 5px 10px);
+
+  padding: 5px;
+
+  max-width:550px;
+  max-height: 200px;
+  overflow:auto;
+  margin-left: 0px;
+  margin-top:-250px;
+
+  text-align: center;
+  z-index: 9999;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  height: 25px;
+  font-size:14pt;
+  padding: 2px 0px 0px 5px;
+  color: $mainColor;
+  font-weight: bold;
+  background: none;
+  border: 0px solid $mainColor;
+  border-radius: 3px;
+  margin: 10px 0px 10px 0px;
+}
+
+.markdown h1 {
+  border-left-width: 100px;
+}
+
+.markdown h2 {
+  border-left-width: 80px;
+}
+
+.markdown h3 {
+  border-left-width: 60px;
+}
+
+.markdown h4 {
+  border-left-width: 40px;
+}
+
+.markdown h5 {
+  border-left-width: 20px;
+}
+
+.markdown h6 {
+  border-left-width: 0px;
+}
+
+.markdown blockquote,
+.bbcode blockquote {
+  padding: 5px 5px 5px 10px;
+  margin: 10px 10px 10px 10px;
+  line-height: 12pt;
+  font-size: 11pt;
+  border-color: $secondColor;
+}
+
+.bbcode blockquote {
+  border-top: 1px solid $mutedColor;
+  border-right: 1px solid $mutedColor;
+  border-bottom: 1px solid $mutedColor;
+  @include box-shadow(rgba(0, 0, 0, 0.1) 2px 2px 3px);
+}
+
+.bbcode blockquote /* blockquote */ {
+  margin-top: 25px;
+  margin-bottom: 10px;
+  background-color: rgba(94,132,171, 0.1);
+}
+
+.bbcode blockquote cite {
+  margin-left:15px;
+  margin-bottom:5px;
+  display: block;
+  font-weight: bold;
+}
+
+.markdown img,
+.markdown iframe,
+.bbcode img,
+.bbcode iframe {
+  max-width: 100%;
+  max-height: auto;
+}
+
+.bbcode .spoiler {
+  cursor: pointer;
+}
+
+.bbcode .spoiler span,
+.bbcode .spoiler a {
+  text-shadow: 0px 0px 8px black;
+  text-shadow: 0px 0px 8px 0.5px black; /* for ie */
+  color: transparent;
+}
+
+.bbcode .spoiler img {
+  visibility: hidden;
+}
+
+.bbcode .spoiler:hover span,
+.bbcode .spoiler:hover a {
+  text-shadow: none;
+  color: inherit;
+}
+
+.bbcode .spoiler:hover img {
+  visibility: visible;
+}
+
+.bbcode .sign {
+  display: inline-block;
+  min-width: 25px;
+  max-width: 180px;
+  vertical-align: text-top;
+}
+
+.bbcode .sign .text {
+  padding: 0.2em 0.5em 0.2em 0.5em;
+  margin: 0;
+  border: 1px solid black;
+  border-radius: 2px;
+
+  background: linear-gradient(135deg, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%);
+  background: -moz-linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(229,229,229,1)));
+  text-align: center;
+}
+
+.bbcode .sign-base {
+  position: relative;
+  background-image: url('../images/sign/sign-base.png');
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+
+.bbcode .sign .smiley {
+  margin-top: 1px;
+  margin-bottom: -1px;
+  margin-left: 50%;
+  padding-left: 5px;
+}

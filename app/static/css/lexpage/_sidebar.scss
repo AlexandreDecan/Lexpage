@@ -1,0 +1,122 @@
+/*********** Minichat */
+
+
+.sidebar-online {
+  text-align: center;
+  margin-bottom: 10px;
+  padding:3px;
+  background-color: $well-bg;
+  border-radius: 4px;
+}
+
+/* Full minichat, external div */
+#minichat_content {
+  max-height:350px;
+  overflow:auto;
+  margin-bottom:25px;
+}
+
+
+/* Full minichat, internal div */
+.minichat-content {
+  font-size: 10pt;
+  padding-right: 5px;
+
+  /* Full message (time, text, user, ...) */
+  .minichat-message {
+    margin-bottom: 18px;
+
+    .avatar {
+      vertical-align: top;
+    }
+
+    &.self-author {
+      .avatar {
+        float: right;
+      }
+      .minichat-text {
+        margin-right: 40px;
+        &:after {
+          content: "";
+          position: absolute;
+          border-style: solid;
+          border-width: 5px 0 5px 10px;
+          border-color: transparent lightgray;
+          display: block;
+          width: 0;
+          z-index: 1;
+          top: 5px;
+          right: -10px;
+        }
+      }
+    }
+
+    &.other-author {
+      .avatar {
+        float: left;
+      }
+      .minichat-text {
+        margin-left: 40px;
+        &:after {
+          content: '';
+          position: absolute;
+          border-style: solid;
+          border-width: 5px 10px 5px 0;
+          border-color: transparent lightgray;
+          display: block;
+          width: 0;
+          z-index: 1;
+          top: 5px;
+          left: -10px;
+        }
+      }
+    }
+  }
+
+  /* Time (HH:MM) */
+  .minichat-time {
+    float: right;
+    font-size: 75%;
+    color: #9ca3a8;
+    margin-top: -2px;
+  }
+
+  .minichat-date {
+    text-align: center;
+    margin-top: 3px;
+    color: $text-muted;
+  }
+
+  /* Actual text of the message */
+  .minichat-text {
+    position: relative;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 1px 4px 1px 4px;
+    border: 1px solid $mutedColor;
+    border-radius: 6px;
+    @include box-shadow(rgba(0, 0, 0, 0.1) 1px 1px 2px);
+  }
+}
+
+.minichat-remainingChars {
+  margin-top:12px;
+  text-align: center;
+  font-size: $font-size-small;
+  color: $text-muted;
+}
+
+
+
+
+
+/*********** Birthday */
+.birthday .birthday_avatar {
+  float: right;
+}
+
+.birthday .birthday_date {
+  display: block;
+  font-size: $font-size-small;
+  color: $text-muted;
+}

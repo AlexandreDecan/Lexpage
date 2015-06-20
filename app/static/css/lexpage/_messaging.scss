@@ -1,0 +1,111 @@
+/*********** Messaging */
+
+.msg-message-newdate {
+  text-align:center;
+  margin-top:20px;
+  color:$text-muted;
+}
+
+.msg-message-avatar {
+  text-align: center;
+  vertical-align: top;
+  width: 150px;
+}
+
+.msg-message-message {
+  min-height: 100px;
+
+  .msg-message-content {
+    position: relative;
+    margin-top:10px;
+    margin-bottom:10px;
+    padding: 5px 10px 5px 10px;
+    border: 2px solid $mutedColor;
+    border-radius:10px;
+    @include box-shadow(rgba(0, 0, 0, 0.1) 2px 2px 3px);
+  }
+
+  &.self-author {
+    .msg-message-avatar {
+      float: right;
+    }
+
+    .msg-message-content {
+      margin-left: 10px;
+      margin-right: 105px;
+
+      &:after {
+        content: "";
+        position: absolute;
+        border-style: solid;
+        border-width: 8px 0 8px 15px;
+        border-color: transparent $mutedColor;
+        display: block;
+        width: 0;
+        z-index: 1;
+        top: 5px;
+        right: -15px;
+      }
+    }
+  }
+
+  &.other-author {
+    .msg-message-avatar {
+      float: left;
+    }
+
+    .msg-message-content {
+      margin-left: 105px;
+      margin-right: 10px;
+
+      &:after {
+        content: '';
+        position: absolute;
+        border-style: solid;
+        border-width: 8px 15px 8px 0;
+        border-color: transparent $mutedColor;
+        display: block;
+        width: 0;
+        z-index: 1;
+        top: 5px;
+        left: -15px;
+      }
+    }
+  }
+}
+
+.msg-message-date {
+  float:right;
+  font-size:70%;
+  color: $text-muted;
+  margin-top: -2px;
+}
+
+.msg-message-unread .msg-message-date {
+  color: $brand-danger;
+}
+
+.msg-msglist thead th {
+  text-align:center;
+}
+
+.msg-msglist tr {
+  border-bottom: 1px solid $mutedColor!important;
+}
+
+.msg-msglist tr:last-child {
+  border-bottom: 0px !important;
+}
+
+.msg-msglist-flag {
+  float:left;
+}
+
+.msg-msglist-authors {
+  text-align:center;
+}
+
+.msg-msglist-actions {
+  text-align:center;
+}
+

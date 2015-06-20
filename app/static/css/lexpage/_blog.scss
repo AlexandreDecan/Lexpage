@@ -1,0 +1,79 @@
+/*********** Posts */
+
+.post-show,
+.post-list {
+  margin-right: 5px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-top: none;
+
+  .post-content {
+    margin-left: 50px;
+  }
+
+  + .post_list {
+    border-top: 1px dotted $mutedColor;
+  }
+
+  .post-title {
+    display: inline;
+  }
+
+  .post-avatar {
+    float: right;
+  }
+
+  .post-date, .post-comment, .post-tags, .post-share {
+    display: inline;
+    color: $text-muted;
+    font-size: $font-size-small;
+    margin-right:10px;
+    a {
+      text-decoration: none;
+      color: $text-muted;
+    }
+  }
+
+  .post-share {
+    display: none;
+  }
+
+  .post-next {
+    display: inline;
+    margin-left:10px;
+    white-space: nowrap;
+  }
+}
+
+.post-list {
+  .post-icon {
+    float: left;
+    margin-top: 5px;
+    span {
+      margin-left: -5px;
+      width: 50px;
+      color: $secondColor;
+      text-align: center;
+    }
+  }
+
+  .post-title a {
+    padding-right: 25px;
+    color: $mainColor;
+    font-weight:bold;
+  }
+
+  .post-content p {
+    display: inline;
+  }
+}
+
+.post-show {
+  .post-avatar {
+    margin-top: -30px;
+    span {
+      display: block;
+      text-align: center;
+    }
+  }
+}
