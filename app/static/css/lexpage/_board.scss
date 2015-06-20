@@ -1,8 +1,8 @@
 /* ********** Board ***/
 
 .board-threadlist {
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding-top: $padding-base-vertical;
+  padding-bottom: $padding-base-vertical;
   border-top: none;
   clear: both;
 
@@ -46,7 +46,7 @@
   clear:both;
 
   &.board-message-quoted .board-message-content {
-    border: 2px dashed lightgray;
+    border: 2px dashed $mutedColor;
   }
 
   .board-message-side {
@@ -88,11 +88,11 @@
   .board-message-content {
     position:relative;
     min-height: 155px;
-    margin-bottom: 35px;
-    padding: 5px 10px 10px 10px;
+    margin-top: 40px;
+    padding: $padding-base-vertical $padding-base-horizontal;
     border: 2px solid $mutedColor;
-    border-radius: 10px;
-    @include box-shadow(rgba(0, 0, 0, 0.1) 2px 2px 3px);
+    border-radius: $border-radius-base;
+    @include z-depth(2);
 
     @media (max-width: $screen-sm) {
       clear: both;

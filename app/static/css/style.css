@@ -1,4 +1,3 @@
-/* main variables for the site */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 /* line 9, bootstrap/_normalize.scss */
 html {
@@ -387,7 +386,7 @@ body {
   font-size: 14px;
   line-height: 1.42857;
   color: #333333;
-  background-color: #fff;
+  background-color: #aabdd1;
 }
 
 /* line 36, bootstrap/_scaffolding.scss */
@@ -436,16 +435,16 @@ img {
 
 /* line 86, bootstrap/_scaffolding.scss */
 .img-rounded {
-  border-radius: 6px;
+  border-radius: 24px;
 }
 
 /* line 93, bootstrap/_scaffolding.scss */
 .img-thumbnail {
   padding: 4px;
   line-height: 1.42857;
-  background-color: #fff;
+  background-color: #aabdd1;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 16px;
   -webkit-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
@@ -500,7 +499,7 @@ h1, h2, h3, h4, h5, h6,
   font-family: inherit;
   font-weight: 500;
   line-height: 1.1;
-  color: inherit;
+  color: #2c3e50;
 }
 /* line 16, bootstrap/_type.scss */
 h1 small,
@@ -962,7 +961,7 @@ code {
   font-size: 90%;
   color: #c7254e;
   background-color: #f9f2f4;
-  border-radius: 4px;
+  border-radius: 16px;
 }
 
 /* line 24, bootstrap/_code.scss */
@@ -971,7 +970,7 @@ kbd {
   font-size: 90%;
   color: #fff;
   background-color: #333;
-  border-radius: 3px;
+  border-radius: 10px;
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 /* line 32, bootstrap/_code.scss */
@@ -994,7 +993,7 @@ pre {
   color: #333333;
   background-color: #f5f5f5;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 16px;
 }
 /* line 55, bootstrap/_code.scss */
 pre code {
@@ -2186,7 +2185,7 @@ th {
 }
 /* line 62, bootstrap/_tables.scss */
 .table .table {
-  background-color: #fff;
+  background-color: #aabdd1;
 }
 
 /* line 75, bootstrap/_tables.scss */
@@ -2492,7 +2491,7 @@ output {
   background-color: #fff;
   background-image: none;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 16px;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
@@ -2695,7 +2694,7 @@ input[type="checkbox"] {
   padding: 5px 10px;
   font-size: 12px;
   line-height: 1.5;
-  border-radius: 3px;
+  border-radius: 10px;
 }
 
 /* line 79, bootstrap/mixins/_forms.scss */
@@ -2723,7 +2722,7 @@ select[multiple].input-sm,
   padding: 5px 10px;
   font-size: 12px;
   line-height: 1.5;
-  border-radius: 3px;
+  border-radius: 10px;
 }
 /* line 334, bootstrap/_forms.scss */
 .form-group-sm select.form-control {
@@ -2752,7 +2751,7 @@ select[multiple].input-sm,
   padding: 10px 16px;
   font-size: 18px;
   line-height: 1.33333;
-  border-radius: 6px;
+  border-radius: 24px;
 }
 
 /* line 79, bootstrap/mixins/_forms.scss */
@@ -2780,7 +2779,7 @@ select[multiple].input-lg,
   padding: 10px 16px;
   font-size: 18px;
   line-height: 1.33333;
-  border-radius: 6px;
+  border-radius: 24px;
 }
 /* line 360, bootstrap/_forms.scss */
 .form-group-lg select.form-control {
@@ -3091,7 +3090,7 @@ select[multiple].input-lg,
   padding: 6px 12px;
   font-size: 14px;
   line-height: 1.42857;
-  border-radius: 4px;
+  border-radius: 16px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -3135,40 +3134,40 @@ a.btn.disabled, fieldset[disabled] a.btn {
   background-color: #fff;
   border-color: #ccc;
 }
-/* line 7, lexpage/_mixins.scss */
+/* line 6, lexpage/mixins/_misc.scss */
 .btn-default:focus, .btn-default.focus {
   color: #333;
   background-color: white;
   border-color: white;
 }
-/* line 13, lexpage/_mixins.scss */
+/* line 12, lexpage/mixins/_misc.scss */
 .btn-default:hover {
   color: #333;
   background-color: white;
   border-color: #ebebeb;
 }
-/* line 18, lexpage/_mixins.scss */
+/* line 17, lexpage/mixins/_misc.scss */
 .btn-default:active, .btn-default.active, .open > .btn-default.dropdown-toggle {
   color: #333;
   background-color: white;
   border-color: #ebebeb;
 }
-/* line 25, lexpage/_mixins.scss */
+/* line 24, lexpage/mixins/_misc.scss */
 .btn-default:active:hover, .btn-default:active:focus, .btn-default:active.focus, .btn-default.active:hover, .btn-default.active:focus, .btn-default.active.focus, .open > .btn-default.dropdown-toggle:hover, .open > .btn-default.dropdown-toggle:focus, .open > .btn-default.dropdown-toggle.focus {
   color: #333;
   background-color: white;
   border-color: white;
 }
-/* line 33, lexpage/_mixins.scss */
+/* line 32, lexpage/mixins/_misc.scss */
 .btn-default:active, .btn-default.active, .open > .btn-default.dropdown-toggle {
   background-image: none;
 }
-/* line 41, lexpage/_mixins.scss */
+/* line 40, lexpage/mixins/_misc.scss */
 .btn-default.disabled, .btn-default.disabled:hover, .btn-default.disabled:focus, .btn-default.disabled.focus, .btn-default.disabled:active, .btn-default.disabled.active, .btn-default[disabled], .btn-default[disabled]:hover, .btn-default[disabled]:focus, .btn-default[disabled].focus, .btn-default[disabled]:active, .btn-default[disabled].active, fieldset[disabled] .btn-default, fieldset[disabled] .btn-default:hover, fieldset[disabled] .btn-default:focus, fieldset[disabled] .btn-default.focus, fieldset[disabled] .btn-default:active, fieldset[disabled] .btn-default.active {
   background-color: #fff;
   border-color: #ccc;
 }
-/* line 52, lexpage/_mixins.scss */
+/* line 51, lexpage/mixins/_misc.scss */
 .btn-default .badge {
   color: #fff;
   background-color: #333;
@@ -3180,40 +3179,40 @@ a.btn.disabled, fieldset[disabled] a.btn {
   background-color: #2c3e50;
   border-color: #233140;
 }
-/* line 7, lexpage/_mixins.scss */
+/* line 6, lexpage/mixins/_misc.scss */
 .btn-primary:focus, .btn-primary.focus {
   color: #fff;
   background-color: #476481;
   border-color: #507192;
 }
-/* line 13, lexpage/_mixins.scss */
+/* line 12, lexpage/mixins/_misc.scss */
 .btn-primary:hover {
   color: #fff;
   background-color: #476481;
   border-color: #395067;
 }
-/* line 18, lexpage/_mixins.scss */
+/* line 17, lexpage/mixins/_misc.scss */
 .btn-primary:active, .btn-primary.active, .open > .btn-primary.dropdown-toggle {
   color: #fff;
   background-color: #476481;
   border-color: #395067;
 }
-/* line 25, lexpage/_mixins.scss */
+/* line 24, lexpage/mixins/_misc.scss */
 .btn-primary:active:hover, .btn-primary:active:focus, .btn-primary:active.focus, .btn-primary.active:hover, .btn-primary.active:focus, .btn-primary.active.focus, .open > .btn-primary.dropdown-toggle:hover, .open > .btn-primary.dropdown-toggle:focus, .open > .btn-primary.dropdown-toggle.focus {
   color: #fff;
   background-color: #476481;
   border-color: #507192;
 }
-/* line 33, lexpage/_mixins.scss */
+/* line 32, lexpage/mixins/_misc.scss */
 .btn-primary:active, .btn-primary.active, .open > .btn-primary.dropdown-toggle {
   background-image: none;
 }
-/* line 41, lexpage/_mixins.scss */
+/* line 40, lexpage/mixins/_misc.scss */
 .btn-primary.disabled, .btn-primary.disabled:hover, .btn-primary.disabled:focus, .btn-primary.disabled.focus, .btn-primary.disabled:active, .btn-primary.disabled.active, .btn-primary[disabled], .btn-primary[disabled]:hover, .btn-primary[disabled]:focus, .btn-primary[disabled].focus, .btn-primary[disabled]:active, .btn-primary[disabled].active, fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary:hover, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary.focus, fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary.active {
   background-color: #2c3e50;
   border-color: #233140;
 }
-/* line 52, lexpage/_mixins.scss */
+/* line 51, lexpage/mixins/_misc.scss */
 .btn-primary .badge {
   color: #2c3e50;
   background-color: #fff;
@@ -3225,40 +3224,40 @@ a.btn.disabled, fieldset[disabled] a.btn {
   background-color: #5cb85c;
   border-color: #4cae4c;
 }
-/* line 7, lexpage/_mixins.scss */
+/* line 6, lexpage/mixins/_misc.scss */
 .btn-success:focus, .btn-success.focus {
   color: #fff;
   background-color: #91cf91;
   border-color: #a3d7a3;
 }
-/* line 13, lexpage/_mixins.scss */
+/* line 12, lexpage/mixins/_misc.scss */
 .btn-success:hover {
   color: #fff;
   background-color: #91cf91;
   border-color: #75c375;
 }
-/* line 18, lexpage/_mixins.scss */
+/* line 17, lexpage/mixins/_misc.scss */
 .btn-success:active, .btn-success.active, .open > .btn-success.dropdown-toggle {
   color: #fff;
   background-color: #91cf91;
   border-color: #75c375;
 }
-/* line 25, lexpage/_mixins.scss */
+/* line 24, lexpage/mixins/_misc.scss */
 .btn-success:active:hover, .btn-success:active:focus, .btn-success:active.focus, .btn-success.active:hover, .btn-success.active:focus, .btn-success.active.focus, .open > .btn-success.dropdown-toggle:hover, .open > .btn-success.dropdown-toggle:focus, .open > .btn-success.dropdown-toggle.focus {
   color: #fff;
   background-color: #91cf91;
   border-color: #a3d7a3;
 }
-/* line 33, lexpage/_mixins.scss */
+/* line 32, lexpage/mixins/_misc.scss */
 .btn-success:active, .btn-success.active, .open > .btn-success.dropdown-toggle {
   background-image: none;
 }
-/* line 41, lexpage/_mixins.scss */
+/* line 40, lexpage/mixins/_misc.scss */
 .btn-success.disabled, .btn-success.disabled:hover, .btn-success.disabled:focus, .btn-success.disabled.focus, .btn-success.disabled:active, .btn-success.disabled.active, .btn-success[disabled], .btn-success[disabled]:hover, .btn-success[disabled]:focus, .btn-success[disabled].focus, .btn-success[disabled]:active, .btn-success[disabled].active, fieldset[disabled] .btn-success, fieldset[disabled] .btn-success:hover, fieldset[disabled] .btn-success:focus, fieldset[disabled] .btn-success.focus, fieldset[disabled] .btn-success:active, fieldset[disabled] .btn-success.active {
   background-color: #5cb85c;
   border-color: #4cae4c;
 }
-/* line 52, lexpage/_mixins.scss */
+/* line 51, lexpage/mixins/_misc.scss */
 .btn-success .badge {
   color: #5cb85c;
   background-color: #fff;
@@ -3270,40 +3269,40 @@ a.btn.disabled, fieldset[disabled] a.btn {
   background-color: #5e84ab;
   border-color: #52779d;
 }
-/* line 7, lexpage/_mixins.scss */
+/* line 6, lexpage/mixins/_misc.scss */
 .btn-info:focus, .btn-info.focus {
   color: #fff;
   background-color: #90aac5;
   border-color: #a1b7ce;
 }
-/* line 13, lexpage/_mixins.scss */
+/* line 12, lexpage/mixins/_misc.scss */
 .btn-info:hover {
   color: #fff;
   background-color: #90aac5;
   border-color: #7596b7;
 }
-/* line 18, lexpage/_mixins.scss */
+/* line 17, lexpage/mixins/_misc.scss */
 .btn-info:active, .btn-info.active, .open > .btn-info.dropdown-toggle {
   color: #fff;
   background-color: #90aac5;
   border-color: #7596b7;
 }
-/* line 25, lexpage/_mixins.scss */
+/* line 24, lexpage/mixins/_misc.scss */
 .btn-info:active:hover, .btn-info:active:focus, .btn-info:active.focus, .btn-info.active:hover, .btn-info.active:focus, .btn-info.active.focus, .open > .btn-info.dropdown-toggle:hover, .open > .btn-info.dropdown-toggle:focus, .open > .btn-info.dropdown-toggle.focus {
   color: #fff;
   background-color: #90aac5;
   border-color: #a1b7ce;
 }
-/* line 33, lexpage/_mixins.scss */
+/* line 32, lexpage/mixins/_misc.scss */
 .btn-info:active, .btn-info.active, .open > .btn-info.dropdown-toggle {
   background-image: none;
 }
-/* line 41, lexpage/_mixins.scss */
+/* line 40, lexpage/mixins/_misc.scss */
 .btn-info.disabled, .btn-info.disabled:hover, .btn-info.disabled:focus, .btn-info.disabled.focus, .btn-info.disabled:active, .btn-info.disabled.active, .btn-info[disabled], .btn-info[disabled]:hover, .btn-info[disabled]:focus, .btn-info[disabled].focus, .btn-info[disabled]:active, .btn-info[disabled].active, fieldset[disabled] .btn-info, fieldset[disabled] .btn-info:hover, fieldset[disabled] .btn-info:focus, fieldset[disabled] .btn-info.focus, fieldset[disabled] .btn-info:active, fieldset[disabled] .btn-info.active {
   background-color: #5e84ab;
   border-color: #52779d;
 }
-/* line 52, lexpage/_mixins.scss */
+/* line 51, lexpage/mixins/_misc.scss */
 .btn-info .badge {
   color: #5e84ab;
   background-color: #fff;
@@ -3315,40 +3314,40 @@ a.btn.disabled, fieldset[disabled] a.btn {
   background-color: #f0ad4e;
   border-color: #eea236;
 }
-/* line 7, lexpage/_mixins.scss */
+/* line 6, lexpage/mixins/_misc.scss */
 .btn-warning:focus, .btn-warning.focus {
   color: #fff;
   background-color: #f6ce95;
   border-color: #f8d9ac;
 }
-/* line 13, lexpage/_mixins.scss */
+/* line 12, lexpage/mixins/_misc.scss */
 .btn-warning:hover {
   color: #fff;
   background-color: #f6ce95;
   border-color: #f3bc6f;
 }
-/* line 18, lexpage/_mixins.scss */
+/* line 17, lexpage/mixins/_misc.scss */
 .btn-warning:active, .btn-warning.active, .open > .btn-warning.dropdown-toggle {
   color: #fff;
   background-color: #f6ce95;
   border-color: #f3bc6f;
 }
-/* line 25, lexpage/_mixins.scss */
+/* line 24, lexpage/mixins/_misc.scss */
 .btn-warning:active:hover, .btn-warning:active:focus, .btn-warning:active.focus, .btn-warning.active:hover, .btn-warning.active:focus, .btn-warning.active.focus, .open > .btn-warning.dropdown-toggle:hover, .open > .btn-warning.dropdown-toggle:focus, .open > .btn-warning.dropdown-toggle.focus {
   color: #fff;
   background-color: #f6ce95;
   border-color: #f8d9ac;
 }
-/* line 33, lexpage/_mixins.scss */
+/* line 32, lexpage/mixins/_misc.scss */
 .btn-warning:active, .btn-warning.active, .open > .btn-warning.dropdown-toggle {
   background-image: none;
 }
-/* line 41, lexpage/_mixins.scss */
+/* line 40, lexpage/mixins/_misc.scss */
 .btn-warning.disabled, .btn-warning.disabled:hover, .btn-warning.disabled:focus, .btn-warning.disabled.focus, .btn-warning.disabled:active, .btn-warning.disabled.active, .btn-warning[disabled], .btn-warning[disabled]:hover, .btn-warning[disabled]:focus, .btn-warning[disabled].focus, .btn-warning[disabled]:active, .btn-warning[disabled].active, fieldset[disabled] .btn-warning, fieldset[disabled] .btn-warning:hover, fieldset[disabled] .btn-warning:focus, fieldset[disabled] .btn-warning.focus, fieldset[disabled] .btn-warning:active, fieldset[disabled] .btn-warning.active {
   background-color: #f0ad4e;
   border-color: #eea236;
 }
-/* line 52, lexpage/_mixins.scss */
+/* line 51, lexpage/mixins/_misc.scss */
 .btn-warning .badge {
   color: #f0ad4e;
   background-color: #fff;
@@ -3360,40 +3359,40 @@ a.btn.disabled, fieldset[disabled] a.btn {
   background-color: #d9534f;
   border-color: #d43f3a;
 }
-/* line 7, lexpage/_mixins.scss */
+/* line 6, lexpage/mixins/_misc.scss */
 .btn-danger:focus, .btn-danger.focus {
   color: #fff;
   background-color: #e7908e;
   border-color: #eba5a3;
 }
-/* line 13, lexpage/_mixins.scss */
+/* line 12, lexpage/mixins/_misc.scss */
 .btn-danger:hover {
   color: #fff;
   background-color: #e7908e;
   border-color: #df706c;
 }
-/* line 18, lexpage/_mixins.scss */
+/* line 17, lexpage/mixins/_misc.scss */
 .btn-danger:active, .btn-danger.active, .open > .btn-danger.dropdown-toggle {
   color: #fff;
   background-color: #e7908e;
   border-color: #df706c;
 }
-/* line 25, lexpage/_mixins.scss */
+/* line 24, lexpage/mixins/_misc.scss */
 .btn-danger:active:hover, .btn-danger:active:focus, .btn-danger:active.focus, .btn-danger.active:hover, .btn-danger.active:focus, .btn-danger.active.focus, .open > .btn-danger.dropdown-toggle:hover, .open > .btn-danger.dropdown-toggle:focus, .open > .btn-danger.dropdown-toggle.focus {
   color: #fff;
   background-color: #e7908e;
   border-color: #eba5a3;
 }
-/* line 33, lexpage/_mixins.scss */
+/* line 32, lexpage/mixins/_misc.scss */
 .btn-danger:active, .btn-danger.active, .open > .btn-danger.dropdown-toggle {
   background-image: none;
 }
-/* line 41, lexpage/_mixins.scss */
+/* line 40, lexpage/mixins/_misc.scss */
 .btn-danger.disabled, .btn-danger.disabled:hover, .btn-danger.disabled:focus, .btn-danger.disabled.focus, .btn-danger.disabled:active, .btn-danger.disabled.active, .btn-danger[disabled], .btn-danger[disabled]:hover, .btn-danger[disabled]:focus, .btn-danger[disabled].focus, .btn-danger[disabled]:active, .btn-danger[disabled].active, fieldset[disabled] .btn-danger, fieldset[disabled] .btn-danger:hover, fieldset[disabled] .btn-danger:focus, fieldset[disabled] .btn-danger.focus, fieldset[disabled] .btn-danger:active, fieldset[disabled] .btn-danger.active {
   background-color: #d9534f;
   border-color: #d43f3a;
 }
-/* line 52, lexpage/_mixins.scss */
+/* line 51, lexpage/mixins/_misc.scss */
 .btn-danger .badge {
   color: #d9534f;
   background-color: #fff;
@@ -3432,7 +3431,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
   padding: 10px 16px;
   font-size: 18px;
   line-height: 1.33333;
-  border-radius: 6px;
+  border-radius: 24px;
 }
 
 /* line 139, bootstrap/_buttons.scss */
@@ -3440,7 +3439,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
   padding: 5px 10px;
   font-size: 12px;
   line-height: 1.5;
-  border-radius: 3px;
+  border-radius: 10px;
 }
 
 /* line 143, bootstrap/_buttons.scss */
@@ -3448,7 +3447,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
   padding: 1px 5px;
   font-size: 12px;
   line-height: 1.5;
-  border-radius: 3px;
+  border-radius: 10px;
 }
 
 /* line 151, bootstrap/_buttons.scss */
@@ -3554,7 +3553,7 @@ tbody.collapse.in {
   background-color: #fff;
   border: 1px solid #ccc;
   border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
+  border-radius: 16px;
   -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
   background-clip: padding-box;
@@ -3868,13 +3867,13 @@ tbody.collapse.in {
 }
 /* line 175, bootstrap/_button-groups.scss */
 .btn-group-vertical > .btn:first-child:not(:last-child) {
-  border-top-right-radius: 4px;
+  border-top-right-radius: 16px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 /* line 179, bootstrap/_button-groups.scss */
 .btn-group-vertical > .btn:last-child:not(:first-child) {
-  border-bottom-left-radius: 4px;
+  border-bottom-left-radius: 16px;
   border-top-right-radius: 0;
   border-top-left-radius: 0;
 }
@@ -3982,7 +3981,7 @@ tbody.collapse.in {
   text-align: center;
   background-color: #eeeeee;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 16px;
 }
 /* line 85, bootstrap/_input-groups.scss */
 .input-group-addon.input-sm,
@@ -3990,7 +3989,7 @@ tbody.collapse.in {
 .input-group-sm > .input-group-btn > .input-group-addon.btn {
   padding: 5px 10px;
   font-size: 12px;
-  border-radius: 3px;
+  border-radius: 10px;
 }
 /* line 90, bootstrap/_input-groups.scss */
 .input-group-addon.input-lg,
@@ -3998,7 +3997,7 @@ tbody.collapse.in {
 .input-group-lg > .input-group-btn > .input-group-addon.btn {
   padding: 10px 16px;
   font-size: 18px;
-  border-radius: 6px;
+  border-radius: 24px;
 }
 /* line 97, bootstrap/_input-groups.scss */
 .input-group-addon input[type="radio"],
@@ -4143,7 +4142,7 @@ tbody.collapse.in {
   margin-right: 2px;
   line-height: 1.42857;
   border: 1px solid transparent;
-  border-radius: 4px 4px 0 0;
+  border-radius: 16px 16px 0 0;
 }
 /* line 89, bootstrap/_navs.scss */
 .nav-tabs > li > a:hover {
@@ -4152,7 +4151,7 @@ tbody.collapse.in {
 /* line 96, bootstrap/_navs.scss */
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
   color: #555555;
-  background-color: #fff;
+  background-color: #aabdd1;
   border: 1px solid #ddd;
   border-bottom-color: transparent;
   cursor: default;
@@ -4164,7 +4163,7 @@ tbody.collapse.in {
 }
 /* line 122, bootstrap/_navs.scss */
 .nav-pills > li > a {
-  border-radius: 4px;
+  border-radius: 16px;
 }
 /* line 125, bootstrap/_navs.scss */
 .nav-pills > li + li {
@@ -4223,7 +4222,7 @@ tbody.collapse.in {
 /* line 193, bootstrap/_navs.scss */
 .nav-tabs-justified > li > a, .nav-tabs.nav-justified > li > a {
   margin-right: 0;
-  border-radius: 4px;
+  border-radius: 16px;
 }
 /* line 199, bootstrap/_navs.scss */
 .nav-tabs-justified > .active > a, .nav-tabs.nav-justified > .active > a,
@@ -4237,7 +4236,7 @@ tbody.collapse.in {
   /* line 206, bootstrap/_navs.scss */
   .nav-tabs-justified > li > a, .nav-tabs.nav-justified > li > a {
     border-bottom: 1px solid #ddd;
-    border-radius: 4px 4px 0 0;
+    border-radius: 16px 16px 0 0;
   }
   /* line 210, bootstrap/_navs.scss */
   .nav-tabs-justified > .active > a, .nav-tabs.nav-justified > .active > a,
@@ -4245,7 +4244,7 @@ tbody.collapse.in {
   .nav-tabs.nav-justified > .active > a:hover,
   .nav-tabs-justified > .active > a:focus,
   .nav-tabs.nav-justified > .active > a:focus {
-    border-bottom-color: #fff;
+    border-bottom-color: #aabdd1;
   }
 }
 
@@ -4284,7 +4283,7 @@ tbody.collapse.in {
 @media (min-width: 768px) {
   /* line 11, bootstrap/_navbar.scss */
   .navbar {
-    border-radius: 4px;
+    border-radius: 16px;
   }
 }
 
@@ -4458,7 +4457,7 @@ tbody.collapse.in {
   background-color: transparent;
   background-image: none;
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: 16px;
 }
 /* line 206, bootstrap/_navbar.scss */
 .navbar-toggle:focus {
@@ -4641,8 +4640,8 @@ tbody.collapse.in {
 /* line 332, bootstrap/_navbar.scss */
 .navbar-fixed-bottom .navbar-nav > li > .dropdown-menu {
   margin-bottom: 0;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-top-right-radius: 16px;
+  border-top-left-radius: 16px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
@@ -4908,7 +4907,7 @@ tbody.collapse.in {
   display: inline-block;
   padding-left: 0;
   margin: 20px 0;
-  border-radius: 4px;
+  border-radius: 16px;
 }
 /* line 10, bootstrap/_pagination.scss */
 .pagination > li {
@@ -4923,31 +4922,31 @@ tbody.collapse.in {
   line-height: 1.42857;
   text-decoration: none;
   color: #5e84ab;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: transparent;
+  border: 1px solid lightgray;
   margin-left: -1px;
 }
 /* line 25, bootstrap/_pagination.scss */
 .pagination > li:first-child > a,
 .pagination > li:first-child > span {
   margin-left: 0;
-  border-bottom-left-radius: 4px;
-  border-top-left-radius: 4px;
+  border-bottom-left-radius: 16px;
+  border-top-left-radius: 16px;
 }
 /* line 32, bootstrap/_pagination.scss */
 .pagination > li:last-child > a,
 .pagination > li:last-child > span {
-  border-bottom-right-radius: 4px;
-  border-top-right-radius: 4px;
+  border-bottom-right-radius: 16px;
+  border-top-right-radius: 16px;
 }
 /* line 41, bootstrap/_pagination.scss */
 .pagination > li > a:hover, .pagination > li > a:focus,
 .pagination > li > span:hover,
 .pagination > li > span:focus {
   z-index: 3;
-  color: #2c3e50;
-  background-color: #eeeeee;
-  border-color: #ddd;
+  color: white;
+  background-color: #2c3e50;
+  border-color: #2c3e50;
 }
 /* line 52, bootstrap/_pagination.scss */
 .pagination > .active > a, .pagination > .active > a:hover, .pagination > .active > a:focus,
@@ -4955,8 +4954,8 @@ tbody.collapse.in {
 .pagination > .active > span:hover,
 .pagination > .active > span:focus {
   z-index: 2;
-  color: #fff;
-  background-color: #2c3e50;
+  color: #2c3e50;
+  background-color: transparent;
   border-color: #2c3e50;
   cursor: default;
 }
@@ -4968,8 +4967,8 @@ tbody.collapse.in {
 .pagination > .disabled > a:hover,
 .pagination > .disabled > a:focus {
   color: #777777;
-  background-color: #fff;
-  border-color: #ddd;
+  background-color: transparent;
+  border-color: transparent;
   cursor: not-allowed;
 }
 
@@ -4983,14 +4982,14 @@ tbody.collapse.in {
 /* line 12, bootstrap/mixins/_pagination.scss */
 .pagination-lg > li:first-child > a,
 .pagination-lg > li:first-child > span {
-  border-bottom-left-radius: 6px;
-  border-top-left-radius: 6px;
+  border-bottom-left-radius: 24px;
+  border-top-left-radius: 24px;
 }
 /* line 18, bootstrap/mixins/_pagination.scss */
 .pagination-lg > li:last-child > a,
 .pagination-lg > li:last-child > span {
-  border-bottom-right-radius: 6px;
-  border-top-right-radius: 6px;
+  border-bottom-right-radius: 24px;
+  border-top-right-radius: 24px;
 }
 
 /* line 5, bootstrap/mixins/_pagination.scss */
@@ -5003,14 +5002,14 @@ tbody.collapse.in {
 /* line 12, bootstrap/mixins/_pagination.scss */
 .pagination-sm > li:first-child > a,
 .pagination-sm > li:first-child > span {
-  border-bottom-left-radius: 3px;
-  border-top-left-radius: 3px;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
 }
 /* line 18, bootstrap/mixins/_pagination.scss */
 .pagination-sm > li:last-child > a,
 .pagination-sm > li:last-child > span {
-  border-bottom-right-radius: 3px;
-  border-top-right-radius: 3px;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
 /* line 5, bootstrap/_labels.scss */
@@ -5156,7 +5155,7 @@ a.badge:hover, a.badge:focus {
   padding: 15px;
   margin-bottom: 20px;
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: 16px;
 }
 /* line 16, bootstrap/_alerts.scss */
 .alert h4 {
@@ -5340,14 +5339,14 @@ a.badge:hover, a.badge:focus {
 }
 /* line 31, bootstrap/_list-group.scss */
 .list-group-item:first-child {
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  border-top-right-radius: 16px;
+  border-top-left-radius: 16px;
 }
 /* line 34, bootstrap/_list-group.scss */
 .list-group-item:last-child {
   margin-bottom: 0;
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 16px;
+  border-bottom-left-radius: 16px;
 }
 
 /* line 46, bootstrap/_list-group.scss */
@@ -5560,7 +5559,7 @@ button.list-group-item-danger.active:focus {
   margin-bottom: 20px;
   background-color: #fff;
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: 16px;
   -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
@@ -5583,8 +5582,8 @@ button.list-group-item-danger.active:focus {
 .panel-heading {
   padding: 10px 15px;
   border-bottom: 1px solid transparent;
-  border-top-right-radius: 3px;
-  border-top-left-radius: 3px;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
 }
 /* line 27, bootstrap/_panels.scss */
 .panel-heading > .dropdown .dropdown-toggle {
@@ -5612,8 +5611,8 @@ button.list-group-item-danger.active:focus {
   padding: 10px 15px;
   background-color: #f5f5f5;
   border-top: 1px solid #ddd;
-  border-bottom-right-radius: 3px;
-  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
 }
 
 /* line 63, bootstrap/_panels.scss */
@@ -5631,15 +5630,15 @@ button.list-group-item-danger.active:focus {
 .panel > .list-group:first-child .list-group-item:first-child,
 .panel > .panel-collapse > .list-group:first-child .list-group-item:first-child {
   border-top: 0;
-  border-top-right-radius: 3px;
-  border-top-left-radius: 3px;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
 }
 /* line 82, bootstrap/_panels.scss */
 .panel > .list-group:last-child .list-group-item:last-child,
 .panel > .panel-collapse > .list-group:last-child .list-group-item:last-child {
   border-bottom: 0;
-  border-bottom-right-radius: 3px;
-  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
 }
 /* line 89, bootstrap/_panels.scss */
 .panel > .panel-heading + .panel-collapse > .list-group .list-group-item:first-child {
@@ -5673,16 +5672,16 @@ button.list-group-item-danger.active:focus {
 /* line 121, bootstrap/_panels.scss */
 .panel > .table:first-child,
 .panel > .table-responsive:first-child > .table:first-child {
-  border-top-right-radius: 3px;
-  border-top-left-radius: 3px;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
 }
 /* line 127, bootstrap/_panels.scss */
 .panel > .table:first-child > thead:first-child > tr:first-child,
 .panel > .table:first-child > tbody:first-child > tr:first-child,
 .panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child,
 .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child {
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
 }
 /* line 131, bootstrap/_panels.scss */
 .panel > .table:first-child > thead:first-child > tr:first-child td:first-child,
@@ -5693,7 +5692,7 @@ button.list-group-item-danger.active:focus {
 .panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child th:first-child,
 .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child td:first-child,
 .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child th:first-child {
-  border-top-left-radius: 3px;
+  border-top-left-radius: 15px;
 }
 /* line 135, bootstrap/_panels.scss */
 .panel > .table:first-child > thead:first-child > tr:first-child td:last-child,
@@ -5704,21 +5703,21 @@ button.list-group-item-danger.active:focus {
 .panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child th:last-child,
 .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child td:last-child,
 .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child th:last-child {
-  border-top-right-radius: 3px;
+  border-top-right-radius: 15px;
 }
 /* line 143, bootstrap/_panels.scss */
 .panel > .table:last-child,
 .panel > .table-responsive:last-child > .table:last-child {
-  border-bottom-right-radius: 3px;
-  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
 }
 /* line 149, bootstrap/_panels.scss */
 .panel > .table:last-child > tbody:last-child > tr:last-child,
 .panel > .table:last-child > tfoot:last-child > tr:last-child,
 .panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child,
 .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child {
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 /* line 153, bootstrap/_panels.scss */
 .panel > .table:last-child > tbody:last-child > tr:last-child td:first-child,
@@ -5729,7 +5728,7 @@ button.list-group-item-danger.active:focus {
 .panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child th:first-child,
 .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child td:first-child,
 .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child th:first-child {
-  border-bottom-left-radius: 3px;
+  border-bottom-left-radius: 15px;
 }
 /* line 157, bootstrap/_panels.scss */
 .panel > .table:last-child > tbody:last-child > tr:last-child td:last-child,
@@ -5740,7 +5739,7 @@ button.list-group-item-danger.active:focus {
 .panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child th:last-child,
 .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child td:last-child,
 .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child th:last-child {
-  border-bottom-right-radius: 3px;
+  border-bottom-right-radius: 15px;
 }
 /* line 164, bootstrap/_panels.scss */
 .panel > .panel-body + .table,
@@ -5824,7 +5823,7 @@ button.list-group-item-danger.active:focus {
 /* line 226, bootstrap/_panels.scss */
 .panel-group .panel {
   margin-bottom: 0;
-  border-radius: 4px;
+  border-radius: 16px;
 }
 /* line 230, bootstrap/_panels.scss */
 .panel-group .panel + .panel {
@@ -6030,9 +6029,9 @@ button.list-group-item-danger.active:focus {
   min-height: 20px;
   padding: 19px;
   margin-bottom: 20px;
-  background-color: #f5f5f5;
-  border: 1px solid #e3e3e3;
-  border-radius: 4px;
+  background-color: #ecf1f5;
+  border: 1px solid #aabdd1;
+  border-radius: 16px;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 }
@@ -6045,13 +6044,13 @@ button.list-group-item-danger.active:focus {
 /* line 22, bootstrap/_wells.scss */
 .well-lg {
   padding: 24px;
-  border-radius: 6px;
+  border-radius: 24px;
 }
 
 /* line 26, bootstrap/_wells.scss */
 .well-sm {
   padding: 9px;
-  border-radius: 3px;
+  border-radius: 10px;
 }
 
 /* line 6, bootstrap/_close.scss */
@@ -6139,7 +6138,7 @@ button.close {
   background-color: #fff;
   border: 1px solid #999;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 6px;
+  border-radius: 24px;
   -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   background-clip: padding-box;
@@ -6310,7 +6309,7 @@ button.close {
   color: #fff;
   text-align: center;
   background-color: #000;
-  border-radius: 4px;
+  border-radius: 16px;
 }
 
 /* line 36, bootstrap/_tooltip.scss */
@@ -6416,7 +6415,7 @@ button.close {
   background-clip: padding-box;
   border: 1px solid #ccc;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 6px;
+  border-radius: 24px;
   -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
@@ -6444,7 +6443,7 @@ button.close {
   font-size: 14px;
   background-color: #f7f7f7;
   border-bottom: 1px solid #ebebeb;
-  border-radius: 5px 5px 0 0;
+  border-radius: 23px 23px 0 0;
 }
 
 /* line 42, bootstrap/_popovers.scss */
@@ -6915,24 +6914,24 @@ button.close {
   width: 80px;
   height: 80px;
   border: 1px solid black;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.1) 3px 3px 8px;
-  box-shadow: rgba(0, 0, 0, 0.1) 3px 3px 8px;
+  -webkit-box-shadow: 0 3px 6px 3px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 3px 6px 3px rgba(0, 0, 0, 0.15);
 }
 
 /* line 13, lexpage/_avatars.scss */
 .smallavatar {
   width: 40px;
   height: 40px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.1) 3px 3px 8px;
-  box-shadow: rgba(0, 0, 0, 0.1) 3px 3px 8px;
+  -webkit-box-shadow: 0 3px 4px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 4px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* line 19, lexpage/_avatars.scss */
 .verysmallavatar {
   width: 30px;
   height: 30px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.1) 3px 3px 8px;
-  box-shadow: rgba(0, 0, 0, 0.1) 3px 3px 8px;
+  -webkit-box-shadow: 0 3px 4px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 4px 2px rgba(0, 0, 0, 0.1);
 }
 
 /*********** Autocomplete */
@@ -6942,13 +6941,13 @@ button.close {
   background: #FFF;
   cursor: default;
   overflow: auto;
-  -webkit-box-shadow: rgba(50, 50, 50, 0.64) 1px 4px 3px;
-  box-shadow: rgba(50, 50, 50, 0.64) 1px 4px 3px;
+  -webkit-box-shadow: 0 3px 6px 3px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 3px 6px 3px rgba(0, 0, 0, 0.15);
 }
 
 /* line 34, lexpage/_avatars.scss */
 .autocomplete-suggestion {
-  padding: 2px 5px;
+  padding: 1px 5px;
   white-space: nowrap;
   overflow: hidden;
 }
@@ -6974,26 +6973,21 @@ button.close {
   border-top: none;
 }
 /* line 10, lexpage/_blog.scss */
-.post-show .post-content,
-.post-list .post-content {
-  margin-left: 50px;
-}
-/* line 14, lexpage/_blog.scss */
 .post-show + .post_list,
 .post-list + .post_list {
   border-top: 1px dotted lightgray;
 }
-/* line 18, lexpage/_blog.scss */
+/* line 14, lexpage/_blog.scss */
 .post-show .post-title,
 .post-list .post-title {
   display: inline;
 }
-/* line 22, lexpage/_blog.scss */
+/* line 18, lexpage/_blog.scss */
 .post-show .post-avatar,
 .post-list .post-avatar {
   float: right;
 }
-/* line 26, lexpage/_blog.scss */
+/* line 22, lexpage/_blog.scss */
 .post-show .post-date, .post-show .post-comment, .post-show .post-tags, .post-show .post-share,
 .post-list .post-date,
 .post-list .post-comment,
@@ -7004,7 +6998,7 @@ button.close {
   font-size: 12px;
   margin-right: 10px;
 }
-/* line 31, lexpage/_blog.scss */
+/* line 27, lexpage/_blog.scss */
 .post-show .post-date a, .post-show .post-comment a, .post-show .post-tags a, .post-show .post-share a,
 .post-list .post-date a,
 .post-list .post-comment a,
@@ -7012,6 +7006,13 @@ button.close {
 .post-list .post-share a {
   text-decoration: none;
   color: #777777;
+}
+/* line 33, lexpage/_blog.scss */
+.post-show .post-date, .post-show .post-comment, .post-show .post-share,
+.post-list .post-date,
+.post-list .post-comment,
+.post-list .post-share {
+  white-space: nowrap;
 }
 /* line 37, lexpage/_blog.scss */
 .post-show .post-share,
@@ -7045,15 +7046,19 @@ button.close {
   font-weight: bold;
 }
 /* line 66, lexpage/_blog.scss */
+.post-list .post-content {
+  margin-left: 50px;
+}
+/* line 70, lexpage/_blog.scss */
 .post-list .post-content p {
   display: inline;
 }
 
-/* line 72, lexpage/_blog.scss */
+/* line 76, lexpage/_blog.scss */
 .post-show .post-avatar {
   margin-top: -30px;
 }
-/* line 74, lexpage/_blog.scss */
+/* line 78, lexpage/_blog.scss */
 .post-show .post-avatar span {
   display: block;
   text-align: center;
@@ -7062,8 +7067,8 @@ button.close {
 /* ********** Board ***/
 /* line 3, lexpage/_board.scss */
 .board-threadlist {
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   border-top: none;
   clear: both;
 }
@@ -7156,12 +7161,12 @@ button.close {
 .board-message .board-message-content {
   position: relative;
   min-height: 155px;
-  margin-bottom: 35px;
-  padding: 5px 10px 10px 10px;
+  margin-top: 40px;
+  padding: 6px 12px;
   border: 2px solid lightgray;
-  border-radius: 10px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 3px;
-  box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 3px;
+  border-radius: 16px;
+  -webkit-box-shadow: 0 3px 4px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 4px 2px rgba(0, 0, 0, 0.1);
 }
 @media (max-width: 768px) {
   /* line 88, lexpage/_board.scss */
@@ -7258,171 +7263,123 @@ button:hover,
 }
 
 /*********** General layout */
-/* line 16, lexpage/_layout.scss */
-body {
-  padding-top: 50px;
-  background-image: url("/static/images/bg_body.jpg");
-}
-
 /* Decal anchors because of the fixed navbar */
-/* line 22, lexpage/_layout.scss */
+/* line 18, lexpage/_layout.scss */
 a[name] {
   padding-top: 70px;
   margin-top: -70px;
 }
 
+/* line 23, lexpage/_layout.scss */
+.tooltip-inner {
+  white-space: pre-wrap;
+}
+
 /* line 27, lexpage/_layout.scss */
-.footer {
-  margin-top: 40px;
+#slogan {
+  margin-top: 70px;
+  margin-bottom: 15px;
+  text-align: center;
 }
 
-/* line 31, lexpage/_layout.scss */
-.page .panel {
-  padding: 5px;
+/* line 34, lexpage/_layout.scss */
+#slogan p, .footer p {
+  display: inline;
+  padding: 5px 10px;
+  background-color: #ecf1f5;
+  border-radius: 10px;
 }
 
-/* line 35, lexpage/_layout.scss */
-.page .panel > .panel-header {
-  padding: 0px;
-}
-
-/* line 39, lexpage/_layout.scss */
+/* line 42, lexpage/_layout.scss */
 .pagecontent, .sidebar-block {
   background-color: white;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0 0 2px 1px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0 0 2px 1px;
-  padding: 5px 10px 5px 10px;
-  border-top: 3px solid #2c3e50;
-  border-radius: 10px 10px 0px 0px;
+  padding: 0px 10px 10px 10px;
+  -webkit-box-shadow: 0 3px 8px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 3px 8px 4px rgba(0, 0, 0, 0.2);
+  border-top: 4px solid #2c3e50;
+  border-radius: 16px 16px 0px 0px;
+  background-image: -webkit-linear-gradient(top, #a1b7ce 0, white 8px);
+  background-image: -o-linear-gradient(top, #a1b7ce 0, white 8px);
+  background-image: linear-gradient(to bottom, #a1b7ce 0%, #ffffff 8px);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFA1B7CE', endColorstr='#FFFFFFFF', GradientType=0);
+  margin-bottom: 30px;
 }
 
-/* line 47, lexpage/_layout.scss */
-.sidebar-block + .sidebar-block {
-  margin-top: 30px;
-}
-
-/* line 51, lexpage/_layout.scss */
-.sidebar, .page {
-  margin-bottom: 40px;
-}
-
-/* line 55, lexpage/_layout.scss */
+/* line 52, lexpage/_layout.scss */
 .help-block {
   font-size: 12px;
 }
 
-/* line 59, lexpage/_layout.scss */
+/* line 56, lexpage/_layout.scss */
 .table.table-unbordered th, .table.table-unbordered td {
   border-top: none !important;
 }
 
-/* line 63, lexpage/_layout.scss */
+/* line 60, lexpage/_layout.scss */
 .table.table-middle tr td {
   vertical-align: middle;
 }
 
-/* line 67, lexpage/_layout.scss */
-.pagination {
-  margin: 10px;
+/* line 64, lexpage/_layout.scss */
+h2 {
+  font-size: 30px;
+  color: #2c3e50;
+  border-bottom: 2px dotted #2c3e50;
+  padding-bottom: 6px;
 }
 
 /* line 71, lexpage/_layout.scss */
-.btn.btn-circle {
-  border-radius: 50%;
-}
-
-/* line 75, lexpage/_layout.scss */
-h2 {
-  font-size: 2em;
-  padding: 4px 10px 8px 15px;
-  color: #2c3e50;
-  border: none;
-  border-radius: 0px 0px;
-  border-bottom: 2px dotted #2c3e50;
-  margin-top: 25px;
-}
-
-/* line 86, lexpage/_layout.scss */
-div h2:first-child {
-  margin-top: 5px;
-}
-
-/* line 90, lexpage/_layout.scss */
 h3 {
   font-size: 24px;
-  padding-left: 30px;
+}
+/* line 74, lexpage/_layout.scss */
+h3 small, h3 small a {
+  color: #777777;
+  font-size: 12px;
 }
 
-/* line 95, lexpage/_layout.scss */
+/* line 80, lexpage/_layout.scss */
+form.form {
+  padding: 10px 16px;
+}
+
+/* line 84, lexpage/_layout.scss */
+input[type="file"] {
+  padding-bottom: 35px;
+}
+
+/* line 89, lexpage/_layout.scss */
+.pagination li a {
+  border-radius: 50% !important;
+}
+
+/* line 97, lexpage/_layout.scss */
+.btn-toolbar .btn-group .btn {
+  min-width: 2.5em;
+}
+
+/* line 102, lexpage/_layout.scss */
+.btn.btn-circle, .btn-toolbar .btn-group .btn, h2 .btn {
+  border-radius: 50%;
+}
+
+/* line 106, lexpage/_layout.scss */
 h2 .btn {
   background-color: white;
-  border-radius: 50%;
   font-size: 0.5em;
-  color: lightgray;
+  color: #777777;
   border: 1px solid lightgray;
   width: 2em;
   height: 2em;
   padding: 0.2em 0.5em;
 }
 
-/* line 109, lexpage/_layout.scss */
-form.form {
-  margin-left: 5px;
-  padding-left: 15px;
-  margin-bottom: 20px;
-}
-
-/* line 116, lexpage/_layout.scss */
-input[type="file"] {
-  padding-bottom: 35px;
-}
-
-/* line 120, lexpage/_layout.scss */
-select {
-  padding-top: 2px !important;
-}
-
-/* line 122, lexpage/_layout.scss */
-.pagination {
-  padding: 2px 15px 2px 15px;
-  border-top: 2px solid #5e84ab;
-  border-bottom: 2px solid #5e84ab;
-  border-radius: 15px;
-  background-color: white;
-}
-
-/* line 130, lexpage/_layout.scss */
-.pagination li a {
-  background-color: transparent;
-  color: #5e84ab;
-  border-radius: 50% !important;
-  min-width: 2.5em;
-  min-height: 2.5em;
-}
-
-/* line 138, lexpage/_layout.scss */
-.input-group-btn .btn {
-  margin-left: 0px !important;
-  padding: 5px 10px 5px 10px;
-  height: 32px;
-}
-
-/* line 144, lexpage/_layout.scss */
-.tooltip-inner {
-  white-space: pre-wrap;
-}
-
-/* line 148, lexpage/_layout.scss */
-.btn-toolbar .btn-group .btn {
-  border-radius: 50%;
-  min-width: 2.5em;
-}
-
 /* ************* Markup **/
 /* line 3, lexpage/_markup.scss */
 .markup-preview {
   border: 1px solid lightgray;
-  padding: 5px;
+  padding: 6px 12px;
   background-color: #ecf0f1;
 }
 
@@ -7448,10 +7405,10 @@ select {
 .smiley-popup {
   background-color: #ffffff;
   border: 1px solid lightgray;
-  border-radius: 5px;
+  border-radius: 10px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.5) 5px 5px 10px;
   box-shadow: rgba(0, 0, 0, 0.5) 5px 5px 10px;
-  padding: 5px;
+  padding: 6px 12px;
   max-width: 550px;
   max-height: 200px;
   overflow: auto;
@@ -7461,65 +7418,48 @@ select {
   z-index: 9999;
 }
 
-/* line 43, lexpage/_markup.scss */
-.markdown h1,
-.markdown h2,
-.markdown h3,
-.markdown h4,
-.markdown h5,
-.markdown h6 {
-  height: 25px;
-  font-size: 14pt;
-  padding: 2px 0px 0px 5px;
+/* line 44, lexpage/_markup.scss */
+.markdown h1, .markdown h2, .markdown h3, .markdown h4, .markdown h5, .markdown h6 {
+  font-weight: normal;
+  border: none;
   color: #2c3e50;
-  font-weight: bold;
-  background: none;
-  border: 0px solid #2c3e50;
-  border-radius: 3px;
-  margin: 10px 0px 10px 0px;
 }
-
-/* line 60, lexpage/_markup.scss */
+/* line 50, lexpage/_markup.scss */
 .markdown h1 {
-  border-left-width: 100px;
+  font-size: 2em;
 }
-
-/* line 64, lexpage/_markup.scss */
+/* line 51, lexpage/_markup.scss */
 .markdown h2 {
-  border-left-width: 80px;
+  font-size: 1.5em;
 }
-
-/* line 68, lexpage/_markup.scss */
+/* line 52, lexpage/_markup.scss */
 .markdown h3 {
-  border-left-width: 60px;
+  font-size: 1.3em;
 }
-
-/* line 72, lexpage/_markup.scss */
+/* line 53, lexpage/_markup.scss */
 .markdown h4 {
-  border-left-width: 40px;
+  font-size: 1em;
 }
-
-/* line 76, lexpage/_markup.scss */
+/* line 54, lexpage/_markup.scss */
 .markdown h5 {
-  border-left-width: 20px;
+  font-size: 0.8em;
 }
-
-/* line 80, lexpage/_markup.scss */
+/* line 55, lexpage/_markup.scss */
 .markdown h6 {
-  border-left-width: 0px;
+  font-size: 0.7em;
 }
 
-/* line 84, lexpage/_markup.scss */
+/* line 58, lexpage/_markup.scss */
 .markdown blockquote,
 .bbcode blockquote {
-  padding: 5px 5px 5px 10px;
+  padding: 6px 12px;
   margin: 10px 10px 10px 10px;
   line-height: 12pt;
   font-size: 11pt;
   border-color: #5e84ab;
 }
 
-/* line 93, lexpage/_markup.scss */
+/* line 67, lexpage/_markup.scss */
 .bbcode blockquote {
   border-top: 1px solid lightgray;
   border-right: 1px solid lightgray;
@@ -7528,14 +7468,14 @@ select {
   box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 3px;
 }
 
-/* line 100, lexpage/_markup.scss */
+/* line 74, lexpage/_markup.scss */
 .bbcode blockquote {
   margin-top: 25px;
   margin-bottom: 10px;
   background-color: rgba(94, 132, 171, 0.1);
 }
 
-/* line 106, lexpage/_markup.scss */
+/* line 80, lexpage/_markup.scss */
 .bbcode blockquote cite {
   margin-left: 15px;
   margin-bottom: 5px;
@@ -7543,7 +7483,7 @@ select {
   font-weight: bold;
 }
 
-/* line 113, lexpage/_markup.scss */
+/* line 87, lexpage/_markup.scss */
 .markdown img,
 .markdown iframe,
 .bbcode img,
@@ -7552,12 +7492,12 @@ select {
   max-height: auto;
 }
 
-/* line 121, lexpage/_markup.scss */
+/* line 95, lexpage/_markup.scss */
 .bbcode .spoiler {
   cursor: pointer;
 }
 
-/* line 125, lexpage/_markup.scss */
+/* line 99, lexpage/_markup.scss */
 .bbcode .spoiler span,
 .bbcode .spoiler a {
   text-shadow: 0px 0px 8px black;
@@ -7566,24 +7506,24 @@ select {
   color: transparent;
 }
 
-/* line 132, lexpage/_markup.scss */
+/* line 106, lexpage/_markup.scss */
 .bbcode .spoiler img {
   visibility: hidden;
 }
 
-/* line 136, lexpage/_markup.scss */
+/* line 110, lexpage/_markup.scss */
 .bbcode .spoiler:hover span,
 .bbcode .spoiler:hover a {
   text-shadow: none;
   color: inherit;
 }
 
-/* line 142, lexpage/_markup.scss */
+/* line 116, lexpage/_markup.scss */
 .bbcode .spoiler:hover img {
   visibility: visible;
 }
 
-/* line 146, lexpage/_markup.scss */
+/* line 120, lexpage/_markup.scss */
 .bbcode .sign {
   display: inline-block;
   min-width: 25px;
@@ -7591,7 +7531,7 @@ select {
   vertical-align: text-top;
 }
 
-/* line 153, lexpage/_markup.scss */
+/* line 127, lexpage/_markup.scss */
 .bbcode .sign .text {
   padding: 0.2em 0.5em 0.2em 0.5em;
   margin: 0;
@@ -7604,7 +7544,7 @@ select {
   text-align: center;
 }
 
-/* line 165, lexpage/_markup.scss */
+/* line 139, lexpage/_markup.scss */
 .bbcode .sign-base {
   position: relative;
   background-image: url("../images/sign/sign-base.png");
@@ -7612,7 +7552,7 @@ select {
   background-repeat: no-repeat;
 }
 
-/* line 172, lexpage/_markup.scss */
+/* line 146, lexpage/_markup.scss */
 .bbcode .sign .smiley {
   margin-top: 1px;
   margin-bottom: -1px;
@@ -7644,11 +7584,11 @@ select {
   position: relative;
   margin-top: 10px;
   margin-bottom: 10px;
-  padding: 5px 10px 5px 10px;
+  padding: 6px 12px;
   border: 2px solid lightgray;
-  border-radius: 10px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 3px;
-  box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 3px;
+  border-radius: 16px;
+  -webkit-box-shadow: 0 3px 4px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 4px 2px rgba(0, 0, 0, 0.1);
 }
 /* line 29, lexpage/_messaging.scss */
 .msg-message-message.self-author .msg-message-avatar {
@@ -7741,64 +7681,66 @@ select {
 /*********** Edito */
 /* line 3, lexpage/_misc.scss */
 .well.edito {
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 6px 12px;
 }
 
-/* line 8, lexpage/_misc.scss */
+/* line 7, lexpage/_misc.scss */
 .edito #edito-next {
   float: right;
 }
 
-/* line 12, lexpage/_misc.scss */
+/* line 11, lexpage/_misc.scss */
 .edito #edito-content {
   display: none;
 }
 
 /* line 1, lexpage/_navbar.scss */
 .navbar {
-  -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 0 2px 2px;
-  box-shadow: rgba(0, 0, 0, 0.3) 0 0 2px 2px;
   border: none;
-  border-top: 5px solid #2c3e50 !important;
-  border-radius: 15px 15px 0px 0px;
+  -webkit-box-shadow: 0 3px 10px 5px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 3px 10px 5px rgba(0, 0, 0, 0.25);
+  border-top: 4px solid #2c3e50;
+  border-radius: 16px 16px 0px 0px;
+  background-image: -webkit-linear-gradient(top, #a1b7ce 0, white 8px);
+  background-image: -o-linear-gradient(top, #a1b7ce 0, white 8px);
+  background-image: linear-gradient(to bottom, #a1b7ce 0%, #ffffff 8px);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFA1B7CE', endColorstr='#FFFFFFFF', GradientType=0);
 }
-/* line 8, lexpage/_navbar.scss */
+/* line 7, lexpage/_navbar.scss */
 .navbar .navbar-brand {
   font-size: 18px;
   font-weight: bold;
 }
-/* line 13, lexpage/_navbar.scss */
+/* line 12, lexpage/_navbar.scss */
 .navbar .navbar-toggle {
   border: 1px solid #2c3e50 !important;
 }
 /* line 16, lexpage/_navbar.scss */
-.navbar .navbar-toggle .icon-bar {
-  background-color: #2c3e50 !important;
-}
-/* line 21, lexpage/_navbar.scss */
 .navbar .badge {
-  color: #d9534f;
+  color: #fff;
+  background-color: #d9534f;
 }
-/* line 26, lexpage/_navbar.scss */
+/* line 22, lexpage/_navbar.scss */
 .navbar li.dropdown > a {
   color: #2c3e50;
   margin-top: 10px;
   margin-bottom: 2px;
-  padding-top: 3px;
-  padding-bottom: 7px;
+  padding: 5px 10px;
   border-top: 2px dotted white;
 }
-/* line 35, lexpage/_navbar.scss */
+/* line 30, lexpage/_navbar.scss */
 .navbar li.dropdown:hover > a {
   border-color: #2c3e50;
 }
-/* line 40, lexpage/_navbar.scss */
+/* line 35, lexpage/_navbar.scss */
 .navbar .dropdown-menu {
   border-bottom: 3px solid #2c3e50;
-  border-radius: 0px 0px 10px 10px;
+  border-radius: 0px 0px 16px 16px;
+  -webkit-box-shadow: 0 3px 8px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 3px 8px 4px rgba(0, 0, 0, 0.2);
 }
-/* line 46, lexpage/_navbar.scss */
+/* line 42, lexpage/_navbar.scss */
 .navbar .navbar-right .avatar {
   float: right;
   margin-top: -10px;
@@ -7806,77 +7748,77 @@ select {
   margin-bottom: -40px;
   width: 60px;
   height: 60px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0 0 2px 2px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0 0 2px 2px;
+  -webkit-box-shadow: 0 3px 6px 3px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 3px 6px 3px rgba(0, 0, 0, 0.15);
 }
-/* line 56, lexpage/_navbar.scss */
+/* line 52, lexpage/_navbar.scss */
 .navbar .navbar-right .badge {
   color: #fff;
   background-color: #d9534f;
 }
-/* line 60, lexpage/_navbar.scss */
+/* line 56, lexpage/_navbar.scss */
 .navbar .navbar-right .badge:hover {
   background-color: #eba5a3;
 }
-/* line 65, lexpage/_navbar.scss */
+/* line 61, lexpage/_navbar.scss */
 .navbar .navbar-right li.dropdown:hover a {
   border-color: white !important;
 }
 
 /*********** Notifications */
-/* line 74, lexpage/_navbar.scss */
+/* line 70, lexpage/_navbar.scss */
 .notification_list {
   width: 350px;
-  padding: 5px;
+  padding: 6px 12px;
   background-color: white !important;
 }
 
-/* line 80, lexpage/_navbar.scss */
+/* line 76, lexpage/_navbar.scss */
 .notification {
-  padding: 5px;
+  padding: 6px 12px;
   border-top: none;
 }
 
-/* line 85, lexpage/_navbar.scss */
+/* line 81, lexpage/_navbar.scss */
 .notification + .notification {
   border-top: 1px solid lightgray;
 }
 
-/* line 89, lexpage/_navbar.scss */
+/* line 85, lexpage/_navbar.scss */
 .notification .notification_title {
   margin-left: 30px;
 }
 
-/* line 93, lexpage/_navbar.scss */
+/* line 89, lexpage/_navbar.scss */
 .notification .notification_icon {
   float: left;
   color: #777777 !important;
   text-align: center;
 }
 
-/* line 99, lexpage/_navbar.scss */
+/* line 95, lexpage/_navbar.scss */
 .notification .notification_descr {
   margin-left: 30px;
   font-size: 12px;
 }
 
-/* line 104, lexpage/_navbar.scss */
+/* line 100, lexpage/_navbar.scss */
 .notification .notification_descr em:before {
   content: "\00ab";
 }
 
-/* line 108, lexpage/_navbar.scss */
+/* line 104, lexpage/_navbar.scss */
 .notification .notification_descr em:after {
   content: "\00bb";
 }
 
-/* line 112, lexpage/_navbar.scss */
+/* line 108, lexpage/_navbar.scss */
 .notification .notification_date {
   white-space: nowrap;
   color: #777777;
 }
 
-/* line 117, lexpage/_navbar.scss */
+/* line 113, lexpage/_navbar.scss */
 .notification .notification_dismiss {
   float: right;
   font-size: 12px;
@@ -7887,9 +7829,9 @@ select {
 .sidebar-online {
   text-align: center;
   margin-bottom: 10px;
-  padding: 3px;
-  background-color: #f5f5f5;
-  border-radius: 4px;
+  padding: 5px 10px;
+  background-color: #ecf1f5;
+  border-radius: 10px;
 }
 
 /* Full minichat, external div */
@@ -7904,7 +7846,7 @@ select {
 /* line 21, lexpage/_sidebar.scss */
 .minichat-content {
   font-size: 10pt;
-  padding-right: 5px;
+  padding: 1px 5px;
   /* Full message (time, text, user, ...) */
   /* Time (HH:MM) */
   /* Actual text of the message */
@@ -7977,11 +7919,11 @@ select {
   position: relative;
   margin-top: 3px;
   margin-bottom: 3px;
-  padding: 1px 4px 1px 4px;
+  padding: 1px 5px;
   border: 1px solid lightgray;
-  border-radius: 6px;
-  -webkit-box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 2px;
-  box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 2px;
+  border-radius: 10px;
+  -webkit-box-shadow: 0 3px 4px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 4px 2px rgba(0, 0, 0, 0.1);
 }
 
 /* line 102, lexpage/_sidebar.scss */

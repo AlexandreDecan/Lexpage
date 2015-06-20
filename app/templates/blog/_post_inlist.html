@@ -18,11 +18,6 @@
             <a href="{% url 'blog_post_show' post.pk post.slug %}">{{ post.title }}</a>
         </div>
 
-        <div class="post-date">
-            <span class="fa fa-clock-o"></span>
-            {{ post.date_published|naturalday:'l j F'|capfirst }} à {{ post.date_published|time }}
-        </div>
-
         <div class="post-share">
             <a class="fa fa-facebook" href="http://www.facebook.com/sharer.php?u=http://{{ site.domain }}{% url 'blog_post_show' post.pk post.slug %}"
                 data-toggle="tooltip" data-placement="top" data-container="body"
@@ -45,6 +40,12 @@
                     // <a href="{% url 'blog_post_show' post.pk post.slug %}">lire la suite</a>
                 </div>
             {% endif %}
+        </div>
+
+
+        <div class="post-date">
+            <span class="fa fa-clock-o"></span>
+            {{ post.date_published|naturalday:'D. d/m/y'|capfirst }} à {{ post.date_published|time }}
         </div>
 
         <div class="post-comment">

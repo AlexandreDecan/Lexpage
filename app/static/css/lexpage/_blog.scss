@@ -3,13 +3,9 @@
 .post-show,
 .post-list {
   margin-right: 5px;
-  padding-top: 6px;
+  padding-top: $padding-base-vertical;
   padding-bottom: 6px;
   border-top: none;
-
-  .post-content {
-    margin-left: 50px;
-  }
 
   + .post_list {
     border-top: 1px dotted $mutedColor;
@@ -32,6 +28,10 @@
       text-decoration: none;
       color: $text-muted;
     }
+  }
+
+  .post-date, .post-comment, .post-share {
+    white-space: nowrap;
   }
 
   .post-share {
@@ -61,6 +61,10 @@
     padding-right: 25px;
     color: $mainColor;
     font-weight:bold;
+  }
+
+  .post-content {
+    margin-left: 50px;
   }
 
   .post-content p {

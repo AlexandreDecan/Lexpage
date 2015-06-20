@@ -2,7 +2,7 @@
 
 .markup-preview {
   border: 1px solid $mutedColor;
-  padding:5px;
+  padding: $padding-base-vertical $padding-base-horizontal;
   background-color: #ecf0f1;
 }
 
@@ -24,11 +24,11 @@
 .smiley-popup {
   background-color: #ffffff;
   border:1px solid $mutedColor;
-  border-radius:5px;
+  border-radius: $border-radius-small;
 
   @include box-shadow(rgba(0, 0, 0, 0.5) 5px 5px 10px);
 
-  padding: 5px;
+  padding: $padding-base-vertical $padding-base-horizontal;
 
   max-width:550px;
   max-height: 200px;
@@ -40,50 +40,24 @@
   z-index: 9999;
 }
 
-.markdown h1,
-.markdown h2,
-.markdown h3,
-.markdown h4,
-.markdown h5,
-.markdown h6 {
-  height: 25px;
-  font-size:14pt;
-  padding: 2px 0px 0px 5px;
-  color: $mainColor;
-  font-weight: bold;
-  background: none;
-  border: 0px solid $mainColor;
-  border-radius: 3px;
-  margin: 10px 0px 10px 0px;
-}
+.markdown {
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+    border: none;
+    color: $mainColor;
+  }
 
-.markdown h1 {
-  border-left-width: 100px;
-}
-
-.markdown h2 {
-  border-left-width: 80px;
-}
-
-.markdown h3 {
-  border-left-width: 60px;
-}
-
-.markdown h4 {
-  border-left-width: 40px;
-}
-
-.markdown h5 {
-  border-left-width: 20px;
-}
-
-.markdown h6 {
-  border-left-width: 0px;
+  h1 { font-size: 2em; }
+  h2 { font-size: 1.5em; }
+  h3 { font-size: 1.3em; }
+  h4 { font-size: 1em; }
+  h5 { font-size: 0.8em; }
+  h6 { font-size: 0.7em; }
 }
 
 .markdown blockquote,
 .bbcode blockquote {
-  padding: 5px 5px 5px 10px;
+  padding: $padding-base-vertical $padding-base-horizontal;
   margin: 10px 10px 10px 10px;
   line-height: 12pt;
   font-size: 11pt;

@@ -34,11 +34,19 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-12" style="margin-top:20px;">
+        <div class="col-md-12">
+            {% block navbar %}
+                {% include "_navbar.html" %}
+            {% endblock navbar %}
+        </div>
+    </div>
+
+    <div class="row" id="slogan">
+        <div class="col-md-12">
             {% block slogan %}
                 {% load slogan %}
                 {% random_slogan as slogan %}
-                <p class="text-center text-muted small">
+                <p>
                     <span class="fa fa-quote-left"></span>
                     &nbsp; <em>{{ slogan.slogan }}</em> &nbsp;
                     <span class="fa fa-quote-right"></span>
@@ -48,14 +56,6 @@
             {% endblock slogan %}
         </div> <!-- slogan -->
     </div> <!-- row -->
-
-    <div class="row">
-        <div class="col-md-12">
-            {% block navbar %}
-                {% include "_navbar.html" %}
-            {% endblock navbar %}
-        </div>
-    </div>
 
     <div class="row">
         <div class="col-md-9">

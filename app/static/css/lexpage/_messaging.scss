@@ -19,10 +19,10 @@
     position: relative;
     margin-top:10px;
     margin-bottom:10px;
-    padding: 5px 10px 5px 10px;
+    padding: $padding-base-vertical $padding-base-horizontal;
     border: 2px solid $mutedColor;
-    border-radius:10px;
-    @include box-shadow(rgba(0, 0, 0, 0.1) 2px 2px 3px);
+    border-radius: $border-radius-base;
+    @include z-depth(2);
   }
 
   &.self-author {

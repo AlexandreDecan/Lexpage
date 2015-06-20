@@ -13,9 +13,7 @@
         {% if user.is_authenticated and notifications_list|length > 0 %}  
             <span class="badge"><span class="fa fa-bell"> {{ notifications_list|length }}</span></span>
         {% else %}
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
+            <span class="fa fa-navicon"></span>
         {% endif %}
       </button>
       <a href="{% url 'homepage' %}" class="navbar-brand">Lexpage</a>

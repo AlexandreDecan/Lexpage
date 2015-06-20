@@ -1,8 +1,7 @@
 /*********** Edito */
 
 .well.edito {
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: $padding-base-vertical $padding-base-horizontal;
 }
 
 .edito #edito-next {
@@ -12,6 +11,4 @@
 .edito #edito-content {
   display: none;
 }
-
-
 

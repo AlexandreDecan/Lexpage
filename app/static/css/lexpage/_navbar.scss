@@ -1,9 +1,8 @@
 .navbar {
-  @include box-shadow(rgba(0, 0, 0, 0.3) 0 0 2px 2px);
-
   border: none;
-  border-top: 5px solid $mainColor !important;
-  border-radius: 15px 15px 0px 0px;
+
+  @include z-depth(5);
+  @include arceffect($navbar-default-bg);
 
   .navbar-brand {
     font-size: $font-size-large;
@@ -12,14 +11,11 @@
 
   .navbar-toggle {
     border: 1px solid $mainColor!important;
-
-    .icon-bar {
-      background-color: $mainColor !important;
-    }
   }
 
   .badge {
-    color: $brand-danger;
+    color: $btn-danger-color;
+    background-color: $btn-danger-bg;
   }
 
   li.dropdown {
@@ -27,8 +23,7 @@
       color: $mainColor;
       margin-top: 10px;
       margin-bottom: 2px;
-      padding-top: 3px;
-      padding-bottom: 7px;
+      padding: $padding-small-vertical $padding-small-horizontal;
       border-top: 2px dotted $navbar-default-bg;
     }
 
@@ -39,7 +34,8 @@
 
   .dropdown-menu {
     border-bottom: 3px solid $mainColor;
-    border-radius: 0px 0px 10px 10px;
+    border-radius: 0px 0px $border-radius-base $border-radius-base;
+    @include z-depth(4);
   }
 
   .navbar-right {
@@ -50,7 +46,7 @@
       margin-bottom:-40px;
       width: 60px;
       height: 60px;
-      @include box-shadow(rgba(0, 0, 0, 0.1) 0 0 2px 2px);
+      @include z-depth(3);
     }
 
     .badge {
@@ -73,12 +69,12 @@
 
 .notification_list {
   width: 350px;
-  padding: 5px;
+  padding: $padding-base-vertical $padding-base-horizontal;
   background-color: $navbar-default-bg!important;
 }
 
 .notification {
-  padding: 5px;
+  padding: $padding-base-vertical $padding-base-horizontal;
   border-top: none;
 }
 
