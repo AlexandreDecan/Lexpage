@@ -7276,21 +7276,31 @@ a[name] {
 }
 
 /* line 27, lexpage/_layout.scss */
-#slogan {
+.subheader {
   margin-top: 70px;
   margin-bottom: 15px;
   text-align: center;
 }
 
-/* line 34, lexpage/_layout.scss */
-#slogan p, .footer p {
-  display: inline;
-  padding: 5px 10px;
+/* line 33, lexpage/_layout.scss */
+.footer {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* line 38, lexpage/_layout.scss */
+#slogan, #footer {
+  display: inline-block;
+  padding: 5px 10px !important;
   background-color: #9fb2c7;
   border-radius: 10px;
 }
+/* line 43, lexpage/_layout.scss */
+#slogan a, #footer a {
+  color: #041d37 !important;
+}
 
-/* line 42, lexpage/_layout.scss */
+/* line 48, lexpage/_layout.scss */
 .pagecontent, .sidebar-block {
   background-color: white;
   padding: 0px 10px 10px 10px;
@@ -7306,27 +7316,27 @@ a[name] {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF9FB2C7', endColorstr='#FFFFFFFF', GradientType=0);
 }
 
-/* line 54, lexpage/_layout.scss */
+/* line 60, lexpage/_layout.scss */
 .help-block {
   font-size: 12px;
 }
 
-/* line 58, lexpage/_layout.scss */
+/* line 64, lexpage/_layout.scss */
 .table.table-unbordered th, .table.table-unbordered td {
   border-top: none !important;
 }
 
-/* line 62, lexpage/_layout.scss */
+/* line 68, lexpage/_layout.scss */
 .table.table-unbordered {
   border: none;
 }
 
-/* line 66, lexpage/_layout.scss */
+/* line 72, lexpage/_layout.scss */
 .table.table-middle tr td {
   vertical-align: middle;
 }
 
-/* line 70, lexpage/_layout.scss */
+/* line 76, lexpage/_layout.scss */
 h2 {
   font-size: 30px;
   color: #041d37;
@@ -7334,37 +7344,37 @@ h2 {
   padding-bottom: 6px;
 }
 
-/* line 77, lexpage/_layout.scss */
+/* line 83, lexpage/_layout.scss */
 h3 {
   font-size: 24px;
 }
-/* line 80, lexpage/_layout.scss */
+/* line 86, lexpage/_layout.scss */
 h3 small, h3 small a {
   color: #777777;
   font-size: 12px;
 }
 
-/* line 86, lexpage/_layout.scss */
+/* line 92, lexpage/_layout.scss */
 form.form {
   padding: 10px 16px;
 }
 
-/* line 90, lexpage/_layout.scss */
+/* line 96, lexpage/_layout.scss */
 input[type="file"] {
   padding-bottom: 35px;
 }
 
-/* line 95, lexpage/_layout.scss */
+/* line 101, lexpage/_layout.scss */
 .pagination li a {
   border-radius: 50% !important;
 }
 
-/* line 103, lexpage/_layout.scss */
+/* line 109, lexpage/_layout.scss */
 .btn-toolbar .btn-group .btn {
   min-width: 2.5em;
 }
 
-/* line 108, lexpage/_layout.scss */
+/* line 114, lexpage/_layout.scss */
 .btn.btn-circle, .btn-toolbar .btn-group .btn, h2 .btn {
   border-radius: 50%;
 }
@@ -7555,13 +7565,12 @@ input[type="file"] {
 }
 
 /*********** Messaging */
-/*********** Edito */
-/* line 4, lexpage/_misc.scss */
+/* line 1, lexpage/_misc.scss */
 .edito #edito-next {
   float: right;
 }
 
-/* line 8, lexpage/_misc.scss */
+/* line 5, lexpage/_misc.scss */
 .edito #edito-content {
   display: none;
 }

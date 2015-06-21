@@ -41,18 +41,10 @@
         </div>
     </div>
 
-    <div class="row" id="slogan">
+    <div class="row subheader">
         <div class="col-md-12">
             {% block slogan %}
-                {% load slogan %}
-                {% random_slogan as slogan %}
-                <p>
-                    <span class="fa fa-quote-left"></span>
-                    &nbsp; <em>{{ slogan.slogan }}</em> &nbsp;
-                    <span class="fa fa-quote-right"></span>
-                    &nbsp;&mdash;&nbsp;
-                    <a href="{% url 'slogan_list' %}">Slogan</a> par <cite>{{ slogan.author }}</cite>
-                </p>
+                {% include "_slogan.html" %}
             {% endblock slogan %}
         </div> <!-- slogan -->
     </div> <!-- row -->
