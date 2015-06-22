@@ -7279,8 +7279,8 @@ a[name] {
 
 /* line 29, lexpage/_layout.scss */
 .subheader {
-  margin-top: 70px;
-  margin-bottom: 15px;
+  margin-top: 58px;
+  margin-bottom: 8px;
   text-align: center;
 }
 
@@ -7291,54 +7291,53 @@ a[name] {
 }
 
 /* line 40, lexpage/_layout.scss */
-#slogan, #footer {
+#slogan {
+  display: inline-block;
+}
+
+/* line 44, lexpage/_layout.scss */
+#footer {
   display: inline-block;
   padding: 5px 10px !important;
   background-color: #dfe6ed;
   border-radius: 10px;
 }
-/* line 45, lexpage/_layout.scss */
-#slogan a, #footer a {
+/* line 49, lexpage/_layout.scss */
+#footer a {
   color: #2c4250 !important;
 }
 
-/* line 50, lexpage/_layout.scss */
+/* line 54, lexpage/_layout.scss */
 .pagecontent, .sidebar-block {
   background-color: white;
-  padding: 0px 10px 10px 10px;
+  padding: 0px 10px 20px 10px;
   margin-bottom: 30px;
   -webkit-box-shadow: 0 3px 8px 4px rgba(0, 0, 0, 0.2);
   box-shadow: 0 3px 8px 4px rgba(0, 0, 0, 0.2);
   border-top: 4px solid #2c4250;
-  border-radius: 16px 16px 0px 0px;
-  background-image: -webkit-linear-gradient(top, #dfe6ed 4px, white 12px);
-  background-image: -o-linear-gradient(top, #dfe6ed 4px, white 12px);
-  background-image: linear-gradient(to bottom, #dfe6ed 4px, #ffffff 12px);
-  background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFDFE6ED', endColorstr='#FFFFFFFF', GradientType=0);
 }
 
-/* line 62, lexpage/_layout.scss */
+/* line 66, lexpage/_layout.scss */
 .help-block {
   font-size: 12px;
 }
 
-/* line 66, lexpage/_layout.scss */
+/* line 70, lexpage/_layout.scss */
 .table.table-unbordered th, .table.table-unbordered td {
   border-top: none !important;
 }
 
-/* line 70, lexpage/_layout.scss */
+/* line 74, lexpage/_layout.scss */
 .table.table-unbordered {
   border: none;
 }
 
-/* line 74, lexpage/_layout.scss */
+/* line 78, lexpage/_layout.scss */
 .table.table-middle tr td {
   vertical-align: middle;
 }
 
-/* line 78, lexpage/_layout.scss */
+/* line 82, lexpage/_layout.scss */
 h2 {
   font-size: 30px;
   color: #2c4250;
@@ -7346,46 +7345,46 @@ h2 {
   padding-bottom: 6px;
 }
 
-/* line 85, lexpage/_layout.scss */
+/* line 89, lexpage/_layout.scss */
 h3 {
   font-size: 24px;
 }
-/* line 88, lexpage/_layout.scss */
+/* line 92, lexpage/_layout.scss */
 h3 small, h3 small a {
   color: #777777;
   font-size: 12px;
 }
 
-/* line 94, lexpage/_layout.scss */
+/* line 98, lexpage/_layout.scss */
 form.form {
   padding: 10px 16px;
 }
 
-/* line 98, lexpage/_layout.scss */
+/* line 102, lexpage/_layout.scss */
 input[type="file"] {
   padding-bottom: 35px;
 }
 
-/* line 103, lexpage/_layout.scss */
+/* line 107, lexpage/_layout.scss */
 .pagination li a {
   border-radius: 50% !important;
 }
 
-/* line 111, lexpage/_layout.scss */
+/* line 115, lexpage/_layout.scss */
 .btn-toolbar .btn-group .btn {
   min-width: 2.5em;
 }
 
-/* line 116, lexpage/_layout.scss */
+/* line 120, lexpage/_layout.scss */
 .btn.btn-circle, .btn-toolbar .btn-group .btn, h2 .btn {
   border-radius: 50%;
 }
-/* line 119, lexpage/_layout.scss */
+/* line 123, lexpage/_layout.scss */
 .btn.btn-circle.btn-xs, .btn-group-xs > .btn.btn-circle, .btn-toolbar .btn-group .btn-group-xs > .btn, h2 .btn-group-xs > .btn, .btn-toolbar .btn-group .btn.btn-xs, h2 .btn.btn-xs {
   width: 2em;
   height: 2em;
 }
-/* line 124, lexpage/_layout.scss */
+/* line 128, lexpage/_layout.scss */
 .btn.btn-circle.btn-sm, .btn-group-sm > .btn.btn-circle, .btn-toolbar .btn-group .btn-group-sm > .btn, h2 .btn-group-sm > .btn, .btn-toolbar .btn-group .btn.btn-sm, h2 .btn.btn-sm {
   width: 2em;
   height: 2em;

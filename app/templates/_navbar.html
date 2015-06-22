@@ -88,6 +88,7 @@
           </a>
           <ul class="dropdown-menu">
             <li><a href="{% url 'search' %}"><span class="fa fa-fw fa-search"></span> Rechercher sur le site</a></li>
+            <li><a href="{% url 'slogan_list' %}"><span class="fa fa-fw fa-quote-right"></span> Slogans</a></li>
             <li><a href="{% url 'about' %}"><span class="fa fa-fw fa-info"></span> À propos/contact</a></li>
             {% if user.is_staff %}
               <li class="divider"></li>
