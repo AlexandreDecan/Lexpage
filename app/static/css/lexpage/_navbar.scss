@@ -41,6 +41,10 @@
       @include z-depth(3);
     }
 
+    .dropdown:hover .avatar {
+      border-radius: 0px;
+    }
+
     .badge {
       color: $btn-danger-color;
       background-color: $btn-danger-bg;
@@ -48,10 +52,6 @@
       &:hover {
         background-color: lighten($btn-danger-bg, 20%);
       }
-    }
-
-    li.dropdown:hover a {
-      border-color: $navbar-default-bg!important;
     }
   }
 }
@@ -61,8 +61,7 @@
 
 .notification_list {
   width: 350px;
-  padding: $padding-base-vertical $padding-base-horizontal;
-  background-color: $navbar-default-bg!important;
+  @extend .dropdown-menu;
 }
 
 .notification {
