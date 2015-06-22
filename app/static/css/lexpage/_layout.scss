@@ -21,6 +21,8 @@ a[name] {
 }
 
 .tooltip-inner {
+  border-radius: $border-radius-small;
+  padding: $padding-small-vertical $padding-small-horizontal;
   white-space: pre-wrap;
 }
 
@@ -52,9 +54,9 @@ a[name] {
 
   @include z-depth(4);
 
-  border-top: 4px solid $mainColor;
+  border-top: 4px solid $brand-primary;
   border-radius: $border-radius-base $border-radius-base 0px 0px;
-  @include gradient-vertical($well-bg, white, 0, 12px);
+  @include gradient-vertical($well-bg, white, 4px, 12px);
 }
 
 .help-block {
@@ -75,8 +77,8 @@ a[name] {
 
 h2 {
   font-size: $font-size-h2;
-  color: $mainColor;
-  border-bottom: 2px dotted $mainColor;
+  color: $brand-primary;
+  border-bottom: 2px dotted $brand-primary;
   padding-bottom: $padding-base-vertical;
 }
 
@@ -114,11 +116,20 @@ input[type="file"] {
 .btn.btn-circle {
   border-radius: 50%;
 
+  &.btn-xs {
+    width: 2em;
+    height: 2em;
+  }
+
+  &.btn-sm {
+    width: 2em;
+    height: 2em;
+  }
 
 }
 
 h2 .btn {
-  @extend .btn-sm;
+
   @extend .btn-default;
   @extend .btn-circle;
 }

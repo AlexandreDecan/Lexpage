@@ -17,7 +17,7 @@
 }
 
 .markup-toolbar .btn:hover {
-  color: $mainColor;
+  color: $brand-primary;
   background-color: $mutedColor;
 }
 
@@ -44,7 +44,7 @@
   h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
     border: none;
-    color: $mainColor;
+    color: $brand-primary;
   }
 
   h1 { font-size: 2em; }
@@ -61,7 +61,7 @@
   margin: 10px 10px 10px 10px;
   line-height: 12pt;
   font-size: 11pt;
-  border-color: $secondColor;
+  border-color: $brand-info;
 }
 
 .bbcode blockquote {

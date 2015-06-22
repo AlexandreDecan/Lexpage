@@ -6,7 +6,7 @@
 //== Colors
 //
 
-$mainColor:         #041d37;
+$mainColor:         #2c4250; // darker: 25353e
 $secondColor:       #5E7EA2;
 $mutedColor:        lightgray;
 
@@ -18,12 +18,12 @@ $gray-light:             lighten($gray-base, 46.7%) !default; // #777
 $gray-lighter:           lighten($gray-base, 93.5%) !default; // #eee
 
 $brand-primary:         $mainColor;
-$brand-info:            $secondColor;
+$brand-info:            lighten($secondColor, 20%);
 
 //== Scaffolding
 //
 
-$body-bg:               $secondColor;
+$body-bg:               lighten($secondColor, 20%);
 $link-color:            $secondColor;
 $link-hover-color:      $mainColor;
 

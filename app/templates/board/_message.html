@@ -125,7 +125,7 @@
                     title="Ajouter aux messages cités">
                     <span class="fa fa-comments-o"></span></a>
                 {% if message.author = user and not message.moderated %}
-                    <a class="btn btn-xs btn-info btn-circle"
+                    <a class="btn btn-xs btn-default btn-circle"
                         href="{% url 'board_message_edit' message.pk %}"
                         data-toggle="tooltip"
                         title="Éditer le message"><span class="fa fa-edit"></span></a>
