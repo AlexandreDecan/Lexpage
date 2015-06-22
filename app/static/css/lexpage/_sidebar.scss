@@ -31,6 +31,7 @@
     margin-bottom: 18px;
 
     .avatar {
+      margin-top: -4px;
       vertical-align: top;
     }
 
@@ -40,17 +41,19 @@
       }
       .minichat-text {
         margin-right: 40px;
+        border-right: 4px solid $brand-info;
+
         &:after {
           content: "";
           position: absolute;
           border-style: solid;
-          border-width: 5px 0 5px 10px;
-          border-color: transparent lightgray;
+          border-width: 6px 0 6px 12px;
+          border-color: transparent $brand-info;
           display: block;
           width: 0;
           z-index: 1;
-          top: 5px;
-          right: -10px;
+          top: 4px;
+          right: -12px;
         }
       }
     }
@@ -60,18 +63,20 @@
         float: left;
       }
       .minichat-text {
+        border-left: 4px solid $brand-info;
         margin-left: 40px;
+
         &:after {
           content: '';
           position: absolute;
           border-style: solid;
-          border-width: 5px 10px 5px 0;
-          border-color: transparent lightgray;
+          border-width: 6px 12px 6px 0;
+          border-color: transparent $brand-info;
           display: block;
           width: 0;
           z-index: 1;
-          top: 5px;
-          left: -10px;
+          top: 4px;
+          left: -12px;
         }
       }
     }
@@ -97,9 +102,7 @@
     margin-top: 3px;
     margin-bottom: 3px;
     padding: $padding-xs-vertical $padding-xs-horizontal;
-    border: 1px solid $mutedColor;
-    border-radius: $border-radius-small;
-    @include z-depth(2);
+    @include z-depth(1);
   }
 }
 

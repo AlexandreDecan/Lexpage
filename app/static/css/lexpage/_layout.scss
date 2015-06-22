@@ -14,6 +14,10 @@ button:hover,
 
 /*********** General layout */
 
+body {
+
+}
+
 /* Decal anchors because of the fixed navbar */
 a[name] {
   padding-top:70px;
@@ -32,23 +36,8 @@ a[name] {
   text-align: center;
 }
 
-.footer {
-  margin-bottom: 15px;
-  text-align: center;
-}
-
 #slogan {
   display: inline-block;
-}
-
-#footer {
-  display: inline-block;
-  padding: $padding-small-vertical $padding-small-horizontal !important;
-  background-color: $well-bg;
-  border-radius: $border-radius-small;
-  a {
-    color: $brand-primary !important;
-  }
 }
 
 .pagecontent, .sidebar-block {
@@ -59,8 +48,6 @@ a[name] {
   @include z-depth(4);
 
   border-top: 4px solid $brand-primary;
-  //border-radius: $border-radius-base $border-radius-base 0px 0px;
-  //@include gradient-vertical($well-bg, white, 4px, 12px);
 }
 
 .help-block {
@@ -100,40 +87,31 @@ form.form {
 }
 
 input[type="file"] {
-  padding-bottom:35px;
+  padding-top: 0px;
 }
 
-.pagination li {
-  a {
-    border-radius: 50% !important;
-  }
-}
 
 
 // /////// Buttons
-
-.btn-toolbar .btn-group .btn {
-  @extend .btn-circle;
+.btn {
+  text-align: center;
   min-width: 2.5em;
+
+  &:hover {
+    @include z-depth(1);
+    margin-top: -2px;
+    margin-bottom: 2px;
+  }
 }
 
-.btn.btn-circle {
-  border-radius: 50%;
+.btn-toolbar .btn-group .btn {
+  @extend .btn-default;
+}
 
-  &.btn-xs {
-    width: 2em;
-    height: 2em;
-  }
-
-  &.btn-sm {
-    width: 2em;
-    height: 2em;
-  }
+.btn-circle {
 
 }
 
 h2 .btn {
-
   @extend .btn-default;
-  @extend .btn-circle;
 }

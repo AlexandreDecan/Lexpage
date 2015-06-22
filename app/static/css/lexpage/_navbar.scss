@@ -18,6 +18,8 @@
   }
 
   .dropdown-menu {
+    border: none;
+    padding-top: $padding-large-vertical;
     padding-bottom: $padding-large-vertical;
     border-bottom: 4px solid $brand-primary;
     border-radius: 0px;
@@ -26,12 +28,16 @@
 
   .navbar-right {
     .avatar {
+      position: relative;
+      z-index: 1001;
+
       float:right;
       margin-top:-10px;
       margin-left:10px;
       margin-bottom:-40px;
       width: 60px;
       height: 60px;
+
       @include z-depth(3);
     }
 

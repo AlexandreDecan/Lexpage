@@ -13,7 +13,7 @@
   .board-threadlist-flag {
     float: left;
     height: 100%;
-    margin-top: 10px;
+    margin-top: 6px;
     margin-left: 5px;
     margin-right: 15px;
   }
@@ -35,7 +35,7 @@
 
   .board-threadlist-actions {
     float: right;
-    margin-top: 12px;
+    margin-top: 6px;
     margin-left: 10px;
     margin-right: 5px;
     max-width: 40%;
@@ -46,7 +46,7 @@
   clear:both;
 
   &.message-quoted .message-content {
-    border: 2px dashed $mutedColor;
+    @include z-depth(5);
   }
 
   .message-side {
@@ -88,11 +88,10 @@
   .message-content {
     position:relative;
     min-height: 155px;
-    margin-top: 40px;
+    margin-top: 15px;
+    margin-bottom: 25px;
     padding: $padding-base-vertical $padding-base-horizontal;
-    border: 2px solid $mutedColor;
-    border-radius: $border-radius-base;
-    @include z-depth(2);
+    @include z-depth(1);
 
     @media (max-width: $screen-sm) {
       clear: both;
@@ -104,13 +103,14 @@
       .message-content {
         margin-left: 10px;
         margin-right: 105px;
+        border-right: 4px solid $brand-info;
 
         &:after {
           content: "";
           position: absolute;
           border-style: solid;
           border-width: 8px 0 8px 15px;
-          border-color: transparent $mutedColor;
+          border-color: transparent $brand-info;
           display: block;
           width: 0;
           z-index: 1;
@@ -128,13 +128,14 @@
       .message-content {
         margin-left: 105px;
         margin-right: 10px;
+        border-left: 4px solid $brand-info;
 
         &:after {
           content: '';
           position: absolute;
           border-style: solid;
           border-width: 8px 15px 8px 0;
-          border-color: transparent $mutedColor;
+          border-color: transparent $brand-info;
           display: block;
           width: 0;
           z-index: 1;

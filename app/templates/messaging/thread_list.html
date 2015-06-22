@@ -46,17 +46,17 @@
         <div class="msg-msglist-flag">
             {% if not box.is_read %}
                 <a data-toggle="tooltip" title="Aller au premier message non-lu" 
-                    class="btn btn-xs btn-danger btn-circle"
+                    class="btn btn-sm btn-danger btn-circle"
                     href="{% url 'messaging_show' box.thread.pk %}#unread"><span class="fa fa-eye-slash"></span></span></a>
             {% else %}
                 <a data-toggle="tooltip" title="Aller au dernier message" 
-                    class="btn btn-xs btn-info btn-circle"
+                    class="btn btn-sm btn-info btn-circle"
                     href="{% url 'messaging_show' box.thread.pk %}#last"><span class="fa fa-eye"></span></span></a>
             {% endif %}
 
             {% if box.is_starred %}
                 <a data-toggle="tooltip" title="Retirer l'étoile"
-                    class="btn btn-xs btn-warning btn-circle"
+                    class="btn btn-sm btn-warning btn-circle"
                     href="{% url 'messaging_mark_unstarred' box.thread.pk %}"><span class="fa fa-star"></span></a>
             {% endif %}
         </div>
@@ -93,21 +93,21 @@
         <div class="msg-msglist-actions">
             <div class="button-group">
             {% if box.is_starred %}
-                <a class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" title="Retirer l'étoile" href="{% url 'messaging_mark_unstarred' box.thread.pk %}{{ next }}"><span class="fa fa-star-o"></span></a>
+                <a class="btn btn-sm btn-warning btn-circle" data-toggle="tooltip" title="Retirer l'étoile" href="{% url 'messaging_mark_unstarred' box.thread.pk %}{{ next }}"><span class="fa fa-star-o"></span></a>
             {% else %}
-                <a class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" title="Ajouter l'étoile" href="{% url 'messaging_mark_starred' box.thread.pk %}{{ next }}"><span class="fa fa-star"></span></a>
+                <a class="btn btn-sm btn-warning btn-circle" data-toggle="tooltip" title="Ajouter l'étoile" href="{% url 'messaging_mark_starred' box.thread.pk %}{{ next }}"><span class="fa fa-star"></span></a>
             {% endif %}
             {% if box.is_read %}
-                <a class="btn btn-xs btn-info btn-circle" data-toggle="tooltip" title="Marquer non-lue" href="{% url 'messaging_mark_unread' box.thread.pk %}{{ next }}"><span class="fa fa-eye-slash"></span></a>
+                <a class="btn btn-sm btn-info btn-circle" data-toggle="tooltip" title="Marquer non-lue" href="{% url 'messaging_mark_unread' box.thread.pk %}{{ next }}"><span class="fa fa-eye-slash"></span></a>
             {% else %}
-                <a class="btn btn-xs btn-info btn-circle" data-toggle="tooltip" title="Marquer lue" href="{% url 'messaging_mark_read' box.thread.pk %}{{ next }}"><span class="fa fa-eye"></span></a>
+                <a class="btn btn-sm btn-info btn-circle" data-toggle="tooltip" title="Marquer lue" href="{% url 'messaging_mark_read' box.thread.pk %}{{ next }}"><span class="fa fa-eye"></span></a>
             {% endif %}
             {% if box.is_archived %}
-                <a class="btn btn-xs btn-info btn-circle" data-toggle="tooltip" title="Déplacer vers la boîte de réception" href="{% url 'messaging_mark_unarchived' box.thread.pk %}{{ next }}"><span class="fa fa-inbox"></span></a>
+                <a class="btn btn-sm btn-info btn-circle" data-toggle="tooltip" title="Déplacer vers la boîte de réception" href="{% url 'messaging_mark_unarchived' box.thread.pk %}{{ next }}"><span class="fa fa-inbox"></span></a>
             {% else %}
-                <a class="btn btn-xs btn-info btn-circle" data-toggle="tooltip" title="Déplacer vers les archives" href="{% url 'messaging_mark_archived' box.thread.pk %}{{ next }}"><span class="fa fa-folder-open"></span></a>
+                <a class="btn btn-sm btn-info btn-circle" data-toggle="tooltip" title="Déplacer vers les archives" href="{% url 'messaging_mark_archived' box.thread.pk %}{{ next }}"><span class="fa fa-folder-open"></span></a>
             {% endif %}
-            <a class="confirm-action btn btn-xs btn-danger btn-circle" data-toggle="tooltip" title="Supprimer" href="{% url 'messaging_mark_deleted' box.thread.pk %}{{ next }}"><span class="fa fa-trash-o"></span></a>
+            <a class="confirm-action btn btn-sm btn-danger btn-circle" data-toggle="tooltip" title="Supprimer" href="{% url 'messaging_mark_deleted' box.thread.pk %}{{ next }}"><span class="fa fa-trash-o"></span></a>
             </div>
         </div>
         </td>
