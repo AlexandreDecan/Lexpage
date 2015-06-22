@@ -4,12 +4,10 @@
 
 
 /*********** Transitions */
-a:hover,
-.btn:hover,
-button:hover,
-.navbar .badge {
+a, .btn, button, .navbar .badge {
   @include transition(color, 0.3s, ease);
   @include transition(background-color, 0.3s, ease-out);
+  @include transition(border-radius, 0.3s, ease-out);
 }
 
 /*********** General layout */
@@ -95,23 +93,15 @@ input[type="file"] {
 // /////// Buttons
 .btn {
   text-align: center;
-  min-width: 2.5em;
 
   &:hover {
-    @include z-depth(1);
+    @include box-shadow(0 2px 5px 2px rgba(0, 0, 0, 0.3));
     margin-top: -2px;
     margin-bottom: 2px;
   }
 }
 
+h2 .btn,
 .btn-toolbar .btn-group .btn {
-  @extend .btn-default;
-}
-
-.btn-circle {
-
-}
-
-h2 .btn {
   @extend .btn-default;
 }

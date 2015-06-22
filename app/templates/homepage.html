@@ -35,20 +35,20 @@ __base.html, so you HAVE to do the job here... #}
     <a name="blog"></a><h2>Derniers billets
     <div class="pull-right">
     {% if user.is_authenticated %}
-            <a class="btn btn-xs"
+            <a class="btn"
                 href="{% url 'blog_draft_create' %}"
                 data-toggle="tooltip"
                 data-placement="top"
                 title="Nouveau billet">
               <span class="fa fa-pencil"></span></a>
     {% endif %}
-    <a class="btn btn-xs"
+    <a class="btn"
             href="{% url 'blog_archives' %}"
             data-toggle="tooltip"
             data-placement="top"
             title="Liste des billets">
           <span class="fa fa-list"></span></a>
-    <a class="btn btn-xs"
+    <a class="btn"
             href="{% url 'blog_rss' %}"
             data-toggle="tooltip"
             data-placement="top"
@@ -63,20 +63,20 @@ __base.html, so you HAVE to do the job here... #}
     <a name="board"></a><h2>Discussions récentes
     <div class="pull-right">
     {% if user.is_authenticated %}
-            <a class="btn btn-xs"
+            <a class="btn"
                 href="{% url 'board_create' %}"
                 data-toggle="tooltip"
                 data-placement="top"
                 title="Nouvelle discussion">
               <span class="fa fa-pencil"></span></a>
     {% endif %}
-    <a class="btn btn-xs"
+    <a class="btn"
             href="{% url 'board_archives' %}"
             data-toggle="tooltip"
             data-placement="top"
             title="Liste des discussions">
           <span class="fa fa-list"></span></a>
-    <a class="btn btn-xs"
+    <a class="btn"
             href="{% url 'board_rss' %}"
             data-toggle="tooltip"
             data-placement="top"
