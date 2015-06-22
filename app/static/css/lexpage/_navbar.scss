@@ -19,8 +19,8 @@
 
   .dropdown-menu {
     padding-bottom: $padding-large-vertical;
-    border-bottom: 3px solid $mainColor;
-    border-radius: 0px 0px $border-radius-base $border-radius-base;
+    border-bottom: 4px solid $brand-primary;
+    border-radius: 0px;
     @include z-depth(4);
   }
 
