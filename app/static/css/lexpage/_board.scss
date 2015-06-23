@@ -109,7 +109,7 @@
       position: absolute;
       top: 15px;
       z-index: 1;
-      background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAk0lEQVQ4jWNgYGBgqJux1bVu+taGhlWr2BjIAXUzt3jXzdj6v27m1msNM7fbkG8ABP+tm75lWvnM3fzkGgDB07c9rZu+OZB8A+B427qGyRulKDBg6/+6GVs/1M3cltnQ0MBErgFQvOVwzdQtmhQYsPV/3YytP+tmbq1HiXI6GkC+FygJRHKjkYKEREFSJjszUZCdAVSXUIYRblReAAAAAElFTkSuQmCC");
+      background: url($bubble-arrow);
     }
 
     &.self-author {
