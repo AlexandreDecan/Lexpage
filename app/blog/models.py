@@ -58,6 +58,7 @@ POST_ICONS = {
     'monde': 'fa-globe',
     'musique': 'fa-music',
     'nourriture': 'fa-cutlery',
+    'nsfw': 'fa-warning',
     'p2p': 'fa-exchange',
     'pc': 'fa-desktop',
     'people': 'fa-group',
@@ -178,7 +179,7 @@ class BlogPost(models.Model):
         for tag in tags:
             if tag in POST_ICONS:
                 return POST_ICONS[tag]
-        return 'fa-chevron-right'
+        return 'fa-question'
 
     def get_next(self):
         """ Return the next published post."""

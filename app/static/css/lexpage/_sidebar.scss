@@ -44,16 +44,8 @@
         border-right: 4px solid $brand-info;
 
         &:after {
-          content: "";
-          position: absolute;
-          border-style: solid;
-          border-width: 6px 0 6px 12px;
-          border-color: transparent $brand-info;
-          display: block;
-          width: 0;
-          z-index: 1;
-          top: 4px;
-          right: -12px;
+          right: -16px;
+          @include scale(0.6);
         }
       }
     }
@@ -67,16 +59,8 @@
         margin-left: 40px;
 
         &:after {
-          content: '';
-          position: absolute;
-          border-style: solid;
-          border-width: 6px 12px 6px 0;
-          border-color: transparent $brand-info;
-          display: block;
-          width: 0;
-          z-index: 1;
-          top: 4px;
-          left: -12px;
+          left: -16px;
+          @include scale(-0.6, 0.6);
         }
       }
     }
@@ -102,7 +86,19 @@
     margin-top: 3px;
     margin-bottom: 3px;
     padding: $padding-xs-vertical $padding-xs-horizontal;
+    border-radius: $border-radius-small;
+
     @include z-depth(1);
+    &:after {
+      content: "";
+      width: 16px;
+      height: 16px;
+      display: block;
+      position: absolute;
+      top: 2px;
+      z-index: 1;
+      background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAk0lEQVQ4jWNgYGBgqJux1bVu+taGhlWr2BjIAXUzt3jXzdj6v27m1msNM7fbkG8ABP+tm75lWvnM3fzkGgDB07c9rZu+OZB8A+B427qGyRulKDBg6/+6GVs/1M3cltnQ0MBErgFQvOVwzdQtmhQYsPV/3YytP+tmbq1HiXI6GkC+FygJRHKjkYKEREFSJjszUZCdAVSXUIYRblReAAAAAElFTkSuQmCC");
+    }
   }
 }
 

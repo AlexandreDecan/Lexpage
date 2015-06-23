@@ -1,0 +1,47 @@
+{% load markup_markdown %}
+{% load humanize %}
+{% load time_helper %}
+
+<div class="post-list-flat">
+    <div class="post-content">
+        <div class="post-metadata">
+            <div class="post-comment">
+                <a class="fa fa-comments" href="{% url 'blog_post_comments' post.pk %}">
+                    {% with post.blogboardlink.thread.number as count %}
+                        {{ count|default:0 }}
+                    {% endwith %}
+                </a>
+            </div>
+            <div class="post-avatar">
+                <a href="{% url 'profile_show' post.author %}">
+                    <img title="{{ post.author.username }}" src="{{ post.author.profile.avatar }}" class="avatar"/>
+                </a>
+            </div>
+            <div class="post-date">
+                {{ post.date_published|naturalday:'l'|capfirst }}
+            </div>
+        </div>
+        <div class="post-title">
+            <div class="post-icon">
+                <span class="fa fa-2x {{ post.get_icon }}"></span>
+            </div>
+            <a href="{% url 'blog_post_show' post.pk post.slug %}">{{ post.title }}</a>
+        </div>
+        <div class="post-abstract">
+            <div class="markdown">
+                {{ post.abstract|markdown }}
+                {% if post.text %}
+                    <div class="post-next">
+                        <a href="{% url 'blog_post_show' post.pk post.slug %}">lire la suite</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="post-tags">
+            <span class="fa fa-tags"></span>
+            {% for tag in post.tags_list %}
+                <a href="{% url 'blog_tags' tag %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>

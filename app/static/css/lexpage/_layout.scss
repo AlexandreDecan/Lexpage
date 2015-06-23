@@ -45,7 +45,8 @@ a[name] {
 
   @include z-depth(4);
 
-  border-top: 4px solid $brand-primary;
+  border-radius: $border-radius-base;
+  border-top: 4px solid $brand-primary-alt;
 }
 
 .help-block {
@@ -101,7 +102,19 @@ input[type="file"] {
   }
 }
 
-h2 .btn,
+.btn-default {
+  &:hover {
+    background-color: darken($btn-default-bg, 5%);
+  }
+}
+
+h2 .btn {
+  @extend .btn-default;
+  @extend .btn-xs;
+  color: $text-muted;
+}
+
 .btn-toolbar .btn-group .btn {
   @extend .btn-default;
 }
+

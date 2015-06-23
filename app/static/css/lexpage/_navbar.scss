@@ -21,8 +21,8 @@
     border: none;
     padding-top: $padding-large-vertical;
     padding-bottom: $padding-large-vertical;
-    border-bottom: 4px solid $brand-primary;
-    border-radius: 0px;
+    // border-bottom: 4px solid $brand-primary;
+    border-radius: $border-radius-base;
     @include z-depth(4);
   }
 
@@ -39,10 +39,10 @@
       height: 60px;
 
       @include z-depth(3);
-    }
 
-    .dropdown:hover .avatar {
-      border-radius: 0px;
+      &:hover {
+        border-radius: 50%;
+      }
     }
 
     .badge {

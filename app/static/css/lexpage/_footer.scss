@@ -4,9 +4,9 @@
   padding-top: $padding-large-vertical;
   text-align: center;
   width: 100%;
-  background-color: $brand-primary;
+  background-color: $navbar-default-bg;
   &, a {
-    color: $brand-info;
+    color: $navbar-default-color;
   }
 }
 

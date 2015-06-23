@@ -7,31 +7,28 @@
   width:80px;
   height:80px;
   border:1px solid black;
-  @include z-depth(3);
-  @include transition(border-radius, 0.3s, ease-out);
+  @include z-depth(1);
+  @include transition(border-radius, 0.4s, ease-out);
 
   &:hover {
-    border-radius: $border-radius-base;
+    border-radius: 8px;
   }
-}
 
-.smallavatar {
-  width:40px;
-  height:40px;
-  @include z-depth(2);
-
-  &:hover {
-    border-radius: $border-radius-small;
+  &.smallavatar {
+    width:40px;
+    height:40px;
   }
-}
 
-.verysmallavatar {
-  width:30px;
-  height:30px;
-  @include z-depth(2);
+  &.verysmallavatar {
+    width:30px;
+    height:30px;
+  }
 
-  &:hover {
-    border-radius: $border-radius-small;
+  &.smallavatar, &.verysmallavatar {
+    // @include z-depth(2);
+    &:hover {
+      border-radius: 4px;
+    }
   }
 }
 
