@@ -17,14 +17,13 @@ $brand-primary:         #2c4250;
 $brand-info:            #5E7EA2;
 $brand-danger:          #ff5955;
 
-$brand-primary-alt:     $brand-info;
+$brand-primary-alt:     lighten(#2C3E50, 15%);
 $mutedColor:        lightgray;
 
 //== Misc
 
 // http://www.flaticon.com/free-icon/play-arrow_60813
 $bubble-arrow: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAkUlEQVQ4jWNgYGBgiKlb7BpXt7AhtGEVGwM5IL5usXdc3aL/cXWLrsU1LLKhxID/cXWL/sbVLZqWVr6Kn1wDoHjh07i6hYEUGADDi9clNSyXosCARf/j6hZ9iK9bnNnQ0MBErgEwfDi2ZpEmJQb8j6tb9DOubnE9SpTT0wCyvUBJIJIdjeQnJIqSMnmZiZLsDADoXCmiMGduHAAAAABJRU5ErkJggg==";
-
 
 //== Scaffolding
 //
@@ -107,5 +106,5 @@ $pagination-disabled-border:           $mutedColor;
 //
 //##
 
-$well-bg:                     lighten($brand-info, 30%);
+$well-bg:                     lighten($brand-primary-alt, 30%);
 $well-border:                 darken($well-bg, 20%);

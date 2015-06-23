@@ -82,13 +82,13 @@
         <div class="message-text">
             {% if old %}
                 <div class="text-center">
-                <strong class="label label-info">Reprise automatique du message précédent.</strong>
+                <strong class="text-warning">Reprise automatique du message précédent.</strong>
                 </div>
             {% endif %}
 
             {% if message.moderated %}
                 <div class="text-center">
-                <strong class="label label-danger">Ce message a été modéré.</strong>
+                <strong class="text-danger">Ce message a été modéré.</strong>
                 </div>
             {% endif %}
 
@@ -110,7 +110,7 @@
 
         {% if user.is_authenticated %}
             <div class="message-actions">
-                <a class="btn btn-xs btn-primary btn-circle"
+                <a class="btn btn-sm btn-primary btn-circle"
                     href="#reply"
                     data-toggle="tooltip"
                     data-messageid="board-message-{{ message.pk }}"

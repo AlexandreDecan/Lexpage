@@ -46,7 +46,10 @@
   clear:both;
 
   &.message-quoted .message-content {
-    @include z-depth(5);
+    border-color: $brand-primary !important;
+    &:after {
+      background: none;
+    }
   }
 
   .message-side {
@@ -87,15 +90,17 @@
 
   .message-content {
     position:relative;
-    min-height: 155px;
     margin-top: 15px;
     margin-bottom: 25px;
     padding: $padding-base-vertical $padding-base-horizontal;
-    border-radius: $border-radius-base;
     @include z-depth(1);
 
     &:hover {
       @include z-depth(0);
+    }
+
+    .message-text {
+      min-height: 150px;
     }
 
     @media (max-width: $screen-sm) {
@@ -103,8 +108,8 @@
     }
   }
 
+  // On large screen, bubble effect
   @media (min-width: $screen-sm) {
-
     .message-content:after {
       content: "";
       width: 16px;
@@ -121,6 +126,7 @@
         margin-left: 10px;
         margin-right: 105px;
         border-right: 4px solid $brand-info;
+        border-radius: $border-radius-base 0 0 $border-radius-base;
 
         &:after {
           right: -16px;
@@ -137,6 +143,7 @@
         margin-left: 105px;
         margin-right: 10px;
         border-left: 4px solid $brand-info;
+        border-radius: 0 $border-radius-small $border-radius-small 0;
 
         &:after {
           left: -16px;
@@ -144,7 +151,7 @@
         }
       }
     }
-  }
+  } // end of large screen
 
   .message-date {
     float: right;
@@ -163,8 +170,6 @@
   }
 
   .message-actions {
-    position: absolute;
-    right: 0.5em;
-    bottom: 0.5em;
+    text-align: right;
   }
 }
