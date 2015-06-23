@@ -80,11 +80,19 @@
       text-align: center;
     }
   }
+  .post-abstract {
+    padding: $padding-base-vertical $padding-base-horizontal;
+    @extend .lead;
+  }
 }
 
 .post-list-flat {
   .post-content {
     @include z-depth(1);
+
+    &:hover {
+      @include z-depth(0);
+    }
     padding: $padding-base-vertical $padding-base-horizontal;
     margin: $padding-base-vertical 0px $padding-base-vertical 0px;
 

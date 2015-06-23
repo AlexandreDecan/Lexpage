@@ -94,6 +94,10 @@
     border-radius: $border-radius-base;
     @include z-depth(1);
 
+    &:hover {
+      @include z-depth(0);
+    }
+
     @media (max-width: $screen-sm) {
       clear: both;
     }
