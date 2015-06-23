@@ -119,6 +119,12 @@
       }
     }
 
+    .post-medium & {
+      .post-tags, .post-abstract {
+        display: none;
+      }
+    }
+
     .post-long & {
       .post-tags {
         &, a {
@@ -136,6 +142,9 @@
           margin-bottom: $padding-base-vertical;
         }
       }
+    }
+
+    .post-medium &, .post-long & {
       .post-metadata {
         text-align: center;
         border-bottom: 2px dotted $brand-primary;
