@@ -142,20 +142,25 @@
     background-color: $mutedBgColor;
 
     .post-icon-bg {
+      display: block;
       position: absolute;
       top: - $padding-base-vertical;
       right: $padding-base-horizontal * 3;
       font-size: 10em;
       color: rgba(0, 0, 0, 0.1);
+      z-index: 1;
+    }
+
+    .post-wrapper {
+      position: relative;
+      z-index: 2;
     }
 
     .post-title {
       height: 38px;
       padding: 0px;
       display: table;
-      a {
-        color: $brand-primary;
-      }
+
       .post-icon {
         font-size: 2em;
         float: left;
@@ -163,6 +168,7 @@
         padding-left: 0px;
       }
       a {
+        color: $brand-primary;
         font-weight: bold;
         display: table-cell;
         vertical-align: middle;
