@@ -51,7 +51,7 @@
 
     <div class="board-threadlist-metadata">
         <span class="badge" data-toggle="tooltip" title="Nombre de messages">{{ thread.number }}</span> 
-        Dernier message par 
+        <span class="hidden-xs">Dernier message par</span>
         <a href="{% url 'profile_show' thread.last_message.author.username %}">{{ thread.last_message.author.username }}</a>, {{ thread.last_message.date|naturalday }} à {{ thread.last_message.date|time:'H:i' }}
     </div>    
 </div>

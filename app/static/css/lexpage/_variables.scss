@@ -25,7 +25,7 @@ $mutedColor:            lightgray;
 //
 
 $body-bg:               fff; //lighten($brand-info, 35%);
-$link-color:            #2962ff; //$brand-info;
+$link-color:            $brand-primary-alt; //$brand-info;
 $link-hover-color:      $brand-primary;
 
 

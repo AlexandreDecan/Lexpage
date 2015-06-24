@@ -20,10 +20,6 @@
 
   .board-threadlist-metadata {
     color: $text-muted;
-
-    @media (max-width: $screen-sm) {
-      display: none;
-    }
   }
 
   .board-threadlist-avatar {
@@ -101,6 +97,7 @@
     margin-top: 15px;
     margin-bottom: 25px;
     padding: $padding-base-vertical $padding-base-horizontal;
+    background-color: lighten($brand-primary-alt, 55%);
     @include z-depth(1);
 
     &:hover {

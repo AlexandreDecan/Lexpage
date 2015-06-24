@@ -99,6 +99,7 @@
 
 .post-list-flat .post-content {
   @include z-depth(1);
+  background-color: lighten($brand-primary-alt, 55%);
 
   &:hover {
     @include z-depth(0);
@@ -137,7 +138,7 @@
 
   // Behavior for large thumbnails
   &.post-item-large {
-    margin: $padding-base-vertical 0px 3 * $padding-base-vertical 0px;
+    margin: $padding-base-vertical 0px 2 * $padding-base-vertical 0px;
     padding: $padding-base-vertical $padding-base-horizontal;
 
     .post-icon-bg {
