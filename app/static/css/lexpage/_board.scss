@@ -97,7 +97,7 @@
     margin-top: 15px;
     margin-bottom: 25px;
     padding: $padding-base-vertical $padding-base-horizontal;
-    background-color: lighten($brand-primary-alt, 55%);
+
     @include z-depth(1);
 
     &:hover {

@@ -31,7 +31,7 @@
 /* Full minichat, internal div */
 .minichat-content {
   font-size: $font-size-small;
-  padding: $padding-xs-vertical $padding-xs-horizontal $padding-xs-vertical 0;
+  padding: $padding-xs-vertical $padding-xs-horizontal;
 
   /* Full message (time, text, user, ...) */
   .minichat-message {
@@ -50,7 +50,6 @@
         margin-right: 35px;
         border-right: 2px solid $brand-info;
         border-radius: $border-radius-small 0 0 $border-radius-small;
-        background-color: lighten($brand-primary-alt, 55%);
       }
     }
 
