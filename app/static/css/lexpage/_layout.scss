@@ -96,7 +96,8 @@ input[type="file"] {
 
 
 // /////// Buttons
-.btn {
+.btn,
+.pagination li a {
   text-align: center;
 
   &:hover {
@@ -105,6 +106,13 @@ input[type="file"] {
     margin-top: -2px;
     margin-bottom: 2px;
   }
+}
+
+// Disable for pagination
+.pagination li.disabled a:hover {
+  box-shadow: none;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .btn-default {
@@ -122,4 +130,5 @@ h2 .btn {
 .btn-toolbar .btn-group .btn {
   @extend .btn-default;
 }
+
 

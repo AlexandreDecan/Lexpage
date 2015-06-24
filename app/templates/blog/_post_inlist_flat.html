@@ -1,7 +1,11 @@
 {% load markup_markdown %}
 {% load humanize %}
 
+
 <div class="post-content">
+    <div class="post-icon-bg">
+        <span class="fa {{ post.get_icon }}"></span>
+    </div>
     <div class="post-metadata">
         <div class="post-comment">
             <a href="{% url 'blog_post_comments' post.pk %}">

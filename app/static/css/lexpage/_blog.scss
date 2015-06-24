@@ -95,7 +95,6 @@
     color: $text-muted;
   }
 
-
   // Common behavior
   .post-content {
     @include z-depth(1);
@@ -116,12 +115,12 @@
     margin: $padding-small-vertical 0px 2 * $padding-small-vertical 0px;
     padding: $padding-small-vertical $padding-small-horizontal;
 
-    .post-tags, .post-comment, .post-date, .post-abstract {
+    .post-tags, .post-comment, .post-date, .post-abstract, .post-icon-bg {
       display: none;
     }
 
     .post-title {
-      font-size: $font-size-small;
+      //font-size: $font-size-small;
       .post-icon {
         float: left;
         margin-right: $padding-small-horizontal;
@@ -139,6 +138,14 @@
   .post-item-large .post-content {
     margin: $padding-base-vertical 0px 3 * $padding-base-vertical 0px;
     padding: $padding-base-vertical $padding-base-horizontal;
+
+    .post-icon-bg {
+      position: absolute;
+      top: - $padding-base-vertical;
+      right: $padding-base-horizontal * 3;
+      font-size: 10em;
+      color: rgba(0, 0, 0, 0.1);
+    }
 
     .post-title {
       height: 38px;
