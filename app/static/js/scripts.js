@@ -38,7 +38,10 @@ $(document).ready(function() {
     refresh_oembed($("body"));
 
     // Init notifications if any
-    notification_initialize();    
+    notification_initialize();
+
+    // Auto-hide navbar on scroll
+    $(".navbar-fixed-top").autoHidingNavbar({showOnBottom: false});
 });
 
 
