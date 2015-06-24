@@ -40,25 +40,23 @@ class Command(NoArgsCommand):
             posts = BlogPost.approved.all()
             nb_posts = len(posts)
             if nb_posts == 0:
+                # No post? no post!
                 return None
 
+            # nb_per_day contains the number of posts per day wrt the stock
             nb_per_day = 0
             for min_post, nb_post in Command.number_per_day:
                 if nb_posts >= min_post:
                     nb_per_day = nb_post
                     break
-            # nb_per_day contains the number of posts per day wrt the stock. 
-            # Time frame based on nb_per_day
-            time_frame = 24. / nb_per_day
 
-            # Latest delta in hour
-            latest = BlogPost.published.latest()
-            delta = (datetime.datetime.now() - latest.date_published)
+            # Time since last published post, in hours
+            delta = (datetime.datetime.now() - BlogPost.published.latest().date_published)
             delta = (delta.seconds + delta.days * 24 * 3600)/3600.0
             delta += 0.5  # Dismiss OVH delay
 
             # If delta (in hour) > time_frame, publish!
-            if delta >= time_frame:
+            if delta >= (24. / nb_per_day):
                 posts[0].change_status(None, BlogPost.STATUS_PUBLISHED)
                 return 'Task: publish "%s"' % unicode(posts[0].title)
             else:
