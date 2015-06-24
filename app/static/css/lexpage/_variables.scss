@@ -19,7 +19,7 @@ $brand-info:            #5E7EA2;
 $brand-danger:          #ff5955;
 
 $mutedColor:            lightgray;
-$mutedBgColor:          lighten(#1565c0, 55%);
+$mutedBgColor:          lighten($brand-primary-alt, 67.5%);
 
 
 //== Scaffolding
