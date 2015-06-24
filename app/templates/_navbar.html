@@ -11,7 +11,7 @@
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarA-collapse">
         <span class="sr-only">Menu</span>
         {% if user.is_authenticated and notifications_list|length > 0 %}  
-            <span class="badge"><span class="fa fa-bell"> {{ notifications_list|length }}</span></span>
+            <span class="badge"><span class="fa fa-bell"></span> {{ notifications_list|length }}</span>
         {% else %}
             <span class="fa fa-navicon"></span>
         {% endif %}

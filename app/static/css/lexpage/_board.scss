@@ -20,6 +20,10 @@
 
   .board-threadlist-metadata {
     color: $text-muted;
+
+    @media (max-width: $screen-sm) {
+      display: none;
+    }
   }
 
   .board-threadlist-avatar {
@@ -30,6 +34,10 @@
     text-align: right;
     .avatar {
       margin-bottom: 2px;
+    }
+
+    @media (max-width: $screen-sm) {
+      display: none;
     }
   }
 
@@ -72,8 +80,8 @@
         height: 30px;
         box-shadow: none;
       }
-      span {
-        display: inline;
+      .message-number, .message-level {
+        display: none;
       }
     }
 

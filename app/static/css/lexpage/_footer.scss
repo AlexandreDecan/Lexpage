@@ -10,10 +10,15 @@
   }
 }
 
-.footer p {
-  float:left;
-}
+.footer {
+  @media (min-width: $screen-sm) {
+    p {
+      float: left;
+    }
 
-.footer p + p {
-  float:right;
+    p + p {
+      float: right;
+    }
+  }
+
 }

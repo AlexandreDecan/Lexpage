@@ -14,6 +14,10 @@
   max-height:380px;
   overflow:auto;
   margin-bottom: $padding-large-vertical;
+
+  @media (max-width: $screen-sm) {
+    max-height: 200px;
+  }
 }
 
 #minichat_form {

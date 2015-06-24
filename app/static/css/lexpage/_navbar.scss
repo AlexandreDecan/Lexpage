@@ -10,7 +10,9 @@
   }
 
   .navbar-toggle {
-    border: 1px solid $brand-primary!important;
+    padding: $padding-small-vertical $padding-small-horizontal;
+    border: 1px solid $navbar-default-color!important;
+    color: $navbar-default-color;
   }
 
   .badge {
@@ -45,6 +47,11 @@
       &:hover {
         border-radius: 50%;
       }
+
+      @media (max-width: $screen-sm) {
+        width: 40px;
+        height: 40px;
+      }
     }
 
     .badge {
@@ -72,46 +79,47 @@
 .notification_list {
   width: 350px;
   @extend .dropdown-menu;
+  background-color: $dropdown-bg !important;
 }
 
 .notification {
   padding: $padding-base-vertical $padding-base-horizontal;
   border-top: none;
-}
 
-.notification + .notification {
-  border-top: 1px solid $mutedColor;
-}
+  & + .notification {
+    border-top: 1px solid $mutedColor;
+  }
 
-.notification .notification_title {
-  margin-left: 30px;
-}
+  .notification_title {
+    margin-left: 30px;
+  }
 
-.notification .notification_icon {
-  float: left;
-  color: $text-muted !important;
-  text-align: center;
-}
+  .notification_icon {
+    float: left;
+    color: $text-muted !important;
+    text-align: center;
+  }
 
-.notification .notification_descr {
-  margin-left: 30px;
-  font-size: $font-size-small;
-}
+  .notification_descr {
+    margin-left: 30px;
+    font-size: $font-size-small;
+  }
 
-.notification .notification_descr em:before {
-  content:"\00ab";
-}
+  .notification_descr em:before {
+    content:"\00ab";
+  }
 
-.notification .notification_descr em:after {
-  content:"\00bb";
-}
+  .notification_descr em:after {
+    content:"\00bb";
+  }
 
-.notification .notification_date {
-  white-space: nowrap;
-  color: $text-muted;
-}
+  .notification_date {
+    white-space: nowrap;
+    color: $text-muted;
+  }
 
-.notification .notification_dismiss {
-  float: right;
-  font-size: $font-size-small;
+  .notification_dismiss {
+    float: right;
+    font-size: $font-size-small;
+  }
 }
