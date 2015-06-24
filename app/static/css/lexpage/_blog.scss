@@ -144,6 +144,9 @@
       height: 38px;
       padding: 0px;
       display: table;
+      a {
+        color: $brand-primary;
+      }
       .post-icon {
         font-size: 2em;
         float: left;
@@ -184,6 +187,9 @@
 
       .post-comment {
         float: left;
+        a {
+          color: $text-muted;
+        }
       }
       .post-date {
         color: $text-muted;

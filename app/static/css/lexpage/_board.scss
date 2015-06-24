@@ -100,37 +100,25 @@
     }
 
     .message-text {
-      min-height: 150px;
+      min-height: 90px;
     }
 
     @media (max-width: $screen-sm) {
       clear: both;
+      .message-text {
+        min-height: 30px;
+      }
     }
   }
 
   // On large screen, bubble effect
   @media (min-width: $screen-sm) {
-    .message-content:after {
-      content: "";
-      width: 16px;
-      height: 16px;
-      display: block;
-      position: absolute;
-      top: 15px;
-      z-index: 1;
-      background: url($bubble-arrow);
-    }
-
     &.self-author {
       .message-content {
         margin-left: 10px;
-        margin-right: 105px;
+        margin-right: 100px;
         border-right: 4px solid $brand-info;
         border-radius: $border-radius-base 0 0 $border-radius-base;
-
-        &:after {
-          right: -16px;
-        }
       }
 
       .message-side {
@@ -140,15 +128,10 @@
 
     &.other-author {
       .message-content {
-        margin-left: 105px;
+        margin-left: 100px;
         margin-right: 10px;
         border-left: 4px solid $brand-info;
         border-radius: 0 $border-radius-small $border-radius-small 0;
-
-        &:after {
-          left: -16px;
-          @include scaleX(-1);
-        }
       }
     }
   } // end of large screen
@@ -164,9 +147,7 @@
   }
 
   .message-flag {
-    position: absolute;
-    right: 0.5em;
-    top: 0.5em;
+    text-align: right;
   }
 
   .message-actions {

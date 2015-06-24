@@ -14,22 +14,18 @@ $gray-light:             lighten($gray-base, 46.7%) !default; // #777
 $gray-lighter:           lighten($gray-base, 93.5%) !default; // #eee
 
 $brand-primary:         #2c4250;
+$brand-primary-alt:     #1565c0;
 $brand-info:            #5E7EA2;
 $brand-danger:          #ff5955;
 
-$brand-primary-alt:     $brand-info;
-$mutedColor:        lightgray;
+$mutedColor:            lightgray;
 
-//== Misc
-
-// http://www.flaticon.com/free-icon/play-arrow_60813
-$bubble-arrow: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAkUlEQVQ4jWNgYGBgiKlb7BpXt7AhtGEVGwM5IL5usXdc3aL/cXWLrsU1LLKhxID/cXWL/sbVLZqWVr6Kn1wDoHjh07i6hYEUGADDi9clNSyXosCARf/j6hZ9iK9bnNnQ0MBErgEwfDi2ZpEmJQb8j6tb9DOubnE9SpTT0wCyvUBJIJIdjeQnJIqSMnmZiZLsDADoXCmiMGduHAAAAABJRU5ErkJggg==";
 
 //== Scaffolding
 //
 
 $body-bg:               fff; //lighten($brand-info, 35%);
-$link-color:            $brand-info;
+$link-color:            #2962ff; //$brand-info;
 $link-hover-color:      $brand-primary;
 
 
@@ -106,5 +102,5 @@ $pagination-disabled-border:           $mutedColor;
 //
 //##
 
-$well-bg:                     lighten($brand-primary-alt, 30%);
+$well-bg:                     lighten($brand-primary-alt, 50%);
 $well-border:                 darken($well-bg, 20%);

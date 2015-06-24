@@ -40,14 +40,9 @@
         float: right;
       }
       .minichat-text {
-        margin-right: 40px;
+        margin-right: 35px;
         border-right: 2px solid $brand-info;
         border-radius: $border-radius-small 0 0 $border-radius-small;
-
-        &:after {
-          right: -12px;
-          @include scale(0.6);
-        }
       }
     }
 
@@ -57,13 +52,8 @@
       }
       .minichat-text {
         border-left: 2px solid $brand-info;
-        margin-left: 40px;
+        margin-left: 35px;
         border-radius: 0 $border-radius-small $border-radius-small 0;
-
-        &:after {
-          left: -12px;
-          @include scale(-0.6, 0.6);
-        }
       }
     }
   }
@@ -92,16 +82,6 @@
     @include z-depth(1);
     &:hover {
       @include z-depth(0);
-    }
-    &:after {
-      content: "";
-      width: 16px;
-      height: 16px;
-      display: block;
-      position: absolute;
-      top: 2px;
-      z-index: 1;
-      background: url($bubble-arrow);
     }
   }
 }
