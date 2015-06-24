@@ -139,7 +139,7 @@
   &.post-item-large {
     margin: $padding-base-vertical 0px 2 * $padding-base-vertical 0px;
     padding: $padding-base-vertical $padding-base-horizontal;
-    background-color: lighten($brand-primary-alt, 55%);
+    background-color: $mutedBgColor;
 
     .post-icon-bg {
       position: absolute;

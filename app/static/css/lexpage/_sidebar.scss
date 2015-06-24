@@ -43,7 +43,7 @@
     }
 
     .minichat-text {
-      background-color: lighten($brand-primary-alt, 55%);
+      background-color: $mutedBgColor;
     }
 
     &.self-author {
