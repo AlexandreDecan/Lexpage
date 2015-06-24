@@ -7,6 +7,9 @@
   padding: $padding-small-vertical $padding-small-horizontal;
   background-color: $well-bg;
   border-radius: $border-radius-small;
+  .avatar {
+    margin-bottom: 2px;
+  }
 }
 
 /* Full minichat, external div */
