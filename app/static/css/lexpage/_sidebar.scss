@@ -3,7 +3,7 @@
 
 .sidebar-online {
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: $padding-large-vertical;
   padding: $padding-small-vertical $padding-small-horizontal;
   background-color: $well-bg;
   border-radius: $border-radius-small;
@@ -27,12 +27,12 @@
 
 /* Full minichat, internal div */
 .minichat-content {
-  font-size: 10pt;
-  padding: $padding-xs-vertical $padding-xs-horizontal;
+  font-size: $font-size-small;
+  padding: $padding-xs-vertical $padding-xs-horizontal $padding-xs-vertical 0;
 
   /* Full message (time, text, user, ...) */
   .minichat-message {
-    margin-bottom: 18px;
+    margin-bottom: $padding-base-vertical;
 
     .avatar {
       margin-top: -4px;
