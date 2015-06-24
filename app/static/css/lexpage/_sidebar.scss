@@ -32,7 +32,7 @@
 
   /* Full message (time, text, user, ...) */
   .minichat-message {
-    margin-bottom: $padding-base-vertical;
+    margin-bottom: $padding-large-vertical;
 
     .avatar {
       margin-top: -4px;
@@ -65,10 +65,11 @@
 
   /* Time (HH:MM) */
   .minichat-time {
-    float: right;
+    position: absolute;
+    right: 2px;
+    bottom: 0px;
     font-size: 75%;
     color: #9ca3a8;
-    margin-top: -2px;
   }
 
   .minichat-date {
