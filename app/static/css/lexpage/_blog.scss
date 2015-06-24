@@ -94,24 +94,25 @@
     text-align: center;
     color: $text-muted;
   }
+}
 
-  // Common behavior
-  .post-content {
-    @include z-depth(1);
 
-    &:hover {
-      @include z-depth(0);
-    }
+.post-list-flat .post-content {
+  @include z-depth(1);
 
-    .post-title {
-      .post-icon {
-        color: $brand-primary;
-      }
+  &:hover {
+    @include z-depth(0);
+  }
+
+  .post-title {
+    .post-icon {
+      color: $brand-primary;
     }
   }
 
+
   // Behavior for small thumbnails
-  .post-item-small .post-content {
+  &.post-item-small {
     margin: $padding-small-vertical 0px 2 * $padding-small-vertical 0px;
     padding: $padding-small-vertical $padding-small-horizontal;
 
@@ -135,7 +136,7 @@
   }
 
   // Behavior for large thumbnails
-  .post-item-large .post-content {
+  &.post-item-large {
     margin: $padding-base-vertical 0px 3 * $padding-base-vertical 0px;
     padding: $padding-base-vertical $padding-base-horizontal;
 
