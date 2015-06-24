@@ -17,7 +17,7 @@ $brand-primary:         #2c4250;
 $brand-info:            #5E7EA2;
 $brand-danger:          #ff5955;
 
-$brand-primary-alt:     lighten(#2C3E50, 15%);
+$brand-primary-alt:     $brand-info;
 $mutedColor:        lightgray;
 
 //== Misc
@@ -29,7 +29,7 @@ $bubble-arrow: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/
 //
 
 $body-bg:               fff; //lighten($brand-info, 35%);
-$link-color:            darken($brand-info, 10%);
+$link-color:            $brand-info;
 $link-hover-color:      $brand-primary;
 
 
