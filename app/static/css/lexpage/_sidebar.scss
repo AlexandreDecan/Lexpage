@@ -42,6 +42,10 @@
       vertical-align: top;
     }
 
+    .minichat-text {
+      background-color: lighten($brand-primary-alt, 55%);
+    }
+
     &.self-author {
       .avatar {
         float: right;
