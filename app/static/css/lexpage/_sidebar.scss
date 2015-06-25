@@ -24,7 +24,6 @@
 }
 
 #minichat_form {
-  @extend .center-block;
   padding-top: $padding-large-vertical;
   border-top: 2px dotted $brand-primary;
 }
