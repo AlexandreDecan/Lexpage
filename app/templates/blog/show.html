@@ -6,27 +6,18 @@
 {% block content %}
 
 
-{% load markup_markdown %}
-{% load humanize %}
-{% load time_helper %}
+    {% load markup_markdown %}
+    {% load humanize %}
+    {% load time_helper %}
 
-<div class="post-show">
-    <h3>
-        {{ post.title }}
-        {% if perms.blog.can_approve %}
-            <small>(<a href="{% url 'blog_post_edit' post.pk %}">Modifier</a>)</small>
-        {% endif %}
+    <div class="post-show">
+        <div class="post-avatar">
+            <a href="{% url 'profile_show' post.author %}">
+                <img title="{{ post.author.username }}" src="{{ post.author.profile.avatar }}" class="avatar"/>
+                <span>{{ post.author.username }}</span>
+            </a>
+        </div>
 
-    </h3>
-
-    <div class="post-avatar">
-        <a href="{% url 'profile_show' post.author %}">
-            <img title="{{ post.author.username }}" src="{{ post.author.profile.avatar }}" class="avatar"/>
-            <span>{{ post.author.username }}</span>
-        </a>
-    </div>
-
-    <div class="post-content">
         <div class="post-tags">
             <span class="fa fa-tags"></span>
             {% for tag in post.tags_list %}
@@ -48,19 +39,26 @@
 
         <div class="post-share">
             <a class="fa fa-facebook" href="http://www.facebook.com/sharer.php?u=http://{{ site.domain }}{% url 'blog_post_show' post.pk post.slug %}"
-                data-toggle="tooltip" data-placement="top" data-container="body"
-                title="Partager sur Facebook"
-                target="_blank"></a>
+               data-toggle="tooltip" data-placement="top" data-container="body"
+               title="Partager sur Facebook"
+               target="_blank"></a>
             <a class="fa fa-twitter" href="http://twitter.com/share?url=http://{{ site.domain }}{% url 'blog_post_show' post.pk post.slug %}&text={{ post.title|urlencode }}"
-                data-toggle="tooltip" data-placement="top" data-container="body"
-                title="Partager sur Twitter"
-                target="_blank"></a>
+               data-toggle="tooltip" data-placement="top" data-container="body"
+               title="Partager sur Twitter"
+               target="_blank"></a>
             <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://{{ site.domain }}{% url 'blog_post_show' post.pk post.slug %}"
-                data-toggle="tooltip" data-placement="top" data-container="body"
-                title="Partager sur Google+"
-                target="_blank"></a>
+               data-toggle="tooltip" data-placement="top" data-container="body"
+               title="Partager sur Google+"
+               target="_blank"></a>
         </div>
 
+        <h3>
+            {{ post.title }}
+            {% if perms.blog.can_approve %}
+                <small>(<a href="{% url 'blog_post_edit' post.pk %}">Modifier</a>)</small>
+            {% endif %}
+
+        </h3>
         <div class="post-abstract markdown">
             {{ post.abstract|markdown }}
         </div>
@@ -74,43 +72,41 @@
 
     </div>
 
-</div>
 
+    <br/>
 
-<br/>
+    <p class="well">
+        {% if post.blogboardlink.thread %}
+            Ce billet a suscité {{ post.blogboardlink.thread.number }}
+            commentaire{{ post.blogboardlink.thread.number|pluralize }} dans la
+            discussion suivante :<br/>
+            <a href="{% url 'board_thread_show' post.blogboardlink.thread.pk %}">{{ post.blogboardlink.thread.title }}</a>.
+        {% else %}
+            Il n'y a actuellement aucun commentaire pour ce billet, mais vous pouvez
+            <a href="{% url 'board_create_for_post' post.pk %}">débuter une discussion</a> à son sujet.
+        {% endif %}
+    </p>
 
-<p class="well">
-{% if post.blogboardlink.thread %}
-    Ce billet a suscité {{ post.blogboardlink.thread.number }} 
-        commentaire{{ post.blogboardlink.thread.number|pluralize }} dans la 
-        discussion suivante :<br/>
-    <a href="{% url 'board_thread_show' post.blogboardlink.thread.pk %}">{{ post.blogboardlink.thread.title }}</a>.
-{% else %}
-    Il n'y a actuellement aucun commentaire pour ce billet, mais vous pouvez 
-    <a href="{% url 'board_create_for_post' post.pk %}">débuter une discussion</a> à son sujet.
-{% endif %}
-</p>
+    <div class="pull-left">
+        {% with post_previous=post.get_previous %}
+            {% if post_previous %}
+                <a class="btn btn-primary btn-sm" href="{% url 'blog_post_show' post_previous.pk post_previous.slug %}"> <span class="fa fa-arrow-left"></span> {{ post_previous.title }}</a>
+            {% else %}
+                <a class="btn btn-primary btn-sm disabled" href="#"><span class="fa fa-arrow-left"></span> Précédent</a>
+            {% endif %}
+        {% endwith %}
+    </div>
 
-<div class="pull-left">
-    {% with post_previous=post.get_previous %}
-    {% if post_previous %}
-        <a class="btn btn-primary btn-sm" href="{% url 'blog_post_show' post_previous.pk post_previous.slug %}"> <span class="fa fa-arrow-left"></span> {{ post_previous.title }}</a>
-    {% else %}
-        <a class="btn btn-primary btn-sm disabled" href="#"><span class="fa fa-arrow-left"></span> Précédent</a>
-    {% endif %}
-    {% endwith %}
-</div>
+    <div class="pull-right">
+        {% with post_next=post.get_next %}
+            {% if post_next %}
+                <a class="btn btn-primary btn-sm" href="{% url 'blog_post_show' post_next.pk post_next.slug %}">{{ post_next.title }} <span class="fa fa-arrow-right"></span></a>
+            {% else %}
+                <a class="btn btn-primary btn-sm disabled" href="#">Suivant <span class="fa fa-arrow-right"></span></a>
+            {% endif %}
+        {% endwith %}
+    </div>
 
-<div class="pull-right">
-    {% with post_next=post.get_next %}
-    {% if post_next %}
-        <a class="btn btn-primary btn-sm" href="{% url 'blog_post_show' post_next.pk post_next.slug %}">{{ post_next.title }} <span class="fa fa-arrow-right"></span></a>
-    {% else %}
-        <a class="btn btn-primary btn-sm disabled" href="#">Suivant <span class="fa fa-arrow-right"></span></a>
-    {% endif %}
-    {% endwith %}
-</div>
-
-<div style="clear:both;"></div>
+    <div style="clear:both;"></div>
 
 {% endblock content %}

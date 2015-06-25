@@ -116,13 +116,30 @@
     margin: $padding-small-vertical 0px 2 * $padding-small-vertical 0px;
     padding: $padding-small-vertical $padding-small-horizontal;
 
-    .post-tags, .post-comment, .post-date, .post-abstract, .post-icon-bg {
+    .post-tags, .post-comment, .post-next, .post-date, .post-icon-bg {
       display: none;
     }
 
+    .post-title,
+    .post-abstract,
+    .post-abstract .markdown,
+    .post-abstract .markdown p {
+      display: inline;
+      font-size: $font-size-small;
+    }
+
     .post-title {
-      //font-size: $font-size-small;
+      a {
+        color: $brand-primary;
+        font-weight: bold;
+      }
+
+      &:after {
+        content: '\2013';
+      }
+
       .post-icon {
+        font-size: $font-size-base;
         float: left;
         margin-right: $padding-small-horizontal;
       }
@@ -139,7 +156,6 @@
   &.post-item-large {
     margin: $padding-base-vertical 0px 2 * $padding-base-vertical 0px;
     padding: $padding-base-vertical $padding-base-horizontal;
-    background-color: $mutedBgColor;
 
     .post-icon-bg {
       display: block;

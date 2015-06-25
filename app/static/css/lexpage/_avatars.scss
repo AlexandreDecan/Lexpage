@@ -6,8 +6,9 @@
 .avatar {
   width:80px;
   height:80px;
-  border:1px solid black;
-  background-color: white;
+  padding: 1px;
+  border: none;
+  background-color: black;
 
   @include z-depth(1);
   @include transition(border-radius, 0.4s, ease-out);
