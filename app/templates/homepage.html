@@ -60,7 +60,7 @@ __base.html, so you HAVE to do the job here... #}
 
     <div class="container-fluid post-list-flat">
         <div class="row">
-            <div class="col-xs-12 col-sm-8">
+            <div class="col-xs-12 col-sm-9">
                 <div class="row">
                     {% for post in post_list|slice:"0:4" %}
                         <div class="col-sm-12 col-md-6">
@@ -73,7 +73,7 @@ __base.html, so you HAVE to do the job here... #}
                 </div>
             </div>
 
-            <div class="hidden-xs col-xs-12 col-sm-4">
+            <div class="hidden-xs col-xs-12 col-sm-3">
                 {% for post in post_list|slice:"4:9" %}
                     {% ifchanged post.date_published|naturalday:'l' %}
                         <div class="post-date-divider">{{ post.date_published|naturalday:'l'|capfirst }}</div>
