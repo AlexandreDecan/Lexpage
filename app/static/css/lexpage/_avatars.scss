@@ -8,7 +8,7 @@
   height:80px;
   padding: 1px;
   border: none;
-  background-color: black;
+  background-color: #444;
 
   @include z-depth(1);
   @include transition(border-radius, 0.4s, ease-out);
