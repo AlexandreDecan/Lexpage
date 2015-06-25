@@ -125,7 +125,6 @@ input[type="file"] {
 h2 .btn {
   @extend .btn-default;
   @extend .btn-xs;
-  color: $text-muted;
 }
 
 .btn-toolbar .btn-group .btn {

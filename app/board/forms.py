@@ -10,7 +10,7 @@ from models import Message, Thread
 class MessageForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(MessageForm, self).__init__(*args, **kwargs)
-        self.fields['text'].widget.attrs.update({'class': 'markup-bbcode'})
+        self.fields['text'].widget.attrs.update({'class': 'markup-bbcode','rows': 5})
 
     class Meta():
         model = Message
