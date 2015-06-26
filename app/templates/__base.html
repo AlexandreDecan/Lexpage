@@ -10,7 +10,7 @@
 
     {% with static_ext=debug|yesno:",.min" %}
         {% block stylesheets %}
-            <link href="{% static "css/style.css?v=150625-5" %}" rel="stylesheet"/>
+            <link href="{% static "css/style.css?v=150626" %}" rel="stylesheet"/>
             <link href="{% static "libs/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet"/>
             <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -23,9 +23,9 @@
                 var URL_PREFIX = ""; // markup.js, script.js
             </script>
             <script src="{% static "libs/jquery/dist/jquery.min.js" %}"></script>
-            <script src="{% static "js/scripts"|add:static_ext|add:".js" %}"></script>
-            <script src="{% static "js/minichat"|add:static_ext|add:".js" %}"></script>
-            <script src="{% static "js/markup"|add:static_ext|add:".js" %}"></script>
+            <script src="{% static "js/scripts"|add:static_ext|add:".js" %}?v=150626"></script>
+            <script src="{% static "js/minichat"|add:static_ext|add:".js" %}?v=150626"></script>
+            <script src="{% static "js/markup"|add:static_ext|add:".js" %}?v=150626"></script>
         {% endblock javascript %}
         {{ form.media }}
     {% endwith %}

@@ -47,6 +47,19 @@ $(document).ready(function() {
 
 function refresh_oembed(target) {
     target.find('a.oembed').oembed(null, {maxHeight:"400"});
+    target.find('a.embedly').each(function (i, e) {
+        e = $(e);
+        var README = "Please, do NOT use this API key. You can get one too for free on http://embed.ly !";
+        var url = "http://api.embed.ly/1/extract?key=396f02e230724c218db720b2dd2daed0&url="+e.attr('href');
+        $.ajax(url).done(function (r) {
+            if (r['images'] && r['images'][0] && r['images'][0]['url']) {
+                e.append('<img src="'+r['images'][0]['url']+'"/>');
+            } else {
+                e.replaceWith('');
+            }
+        });
+    });
+
 }
 
 function activate_tooltips(target) {

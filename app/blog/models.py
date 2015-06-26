@@ -4,6 +4,7 @@
 from __future__ import unicode_literals
 
 import math
+import re
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -169,6 +170,16 @@ class BlogPost(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog_post_show', kwargs={'pk': self.pk})
+
+    def main_link(self):
+        """
+        Return the first link in the abstract, or a link to the full post.
+        """
+        matches = re.search(r'\[.+?\]\((https?:\/\/.+?)\)', self.abstract)
+        if matches:
+            return matches.group(1)
+        else:
+            return 'http://www.lexpage.net' + self.get_absolute_url()
 
     def get_icon(self):
         """

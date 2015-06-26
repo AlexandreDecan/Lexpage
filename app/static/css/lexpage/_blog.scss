@@ -94,6 +94,9 @@
     text-align: center;
     color: $text-muted;
   }
+  .post-embed {
+    display: none;
+  }
 }
 
 
@@ -157,6 +160,21 @@
     margin: $padding-base-vertical 0px 2 * $padding-base-vertical 0px;
     padding: $padding-base-vertical $padding-base-horizontal;
 
+    .post-embed {
+      @media (max-width: $screen-sm) {
+        display: none;
+      }
+      @media (min-width: $screen-sm) {
+        display: block;
+        float: left;
+        img {
+          margin-right: $padding-base-horizontal;
+          max-width: 220px;
+          max-height: 120px;
+        }
+      }
+    }
+
     .post-icon-bg {
       display: block;
       position: absolute;
@@ -192,6 +210,7 @@
     }
 
     .post-tags {
+      clear: both;
       padding-top: 2 * $padding-base-vertical;
 
       &, a {

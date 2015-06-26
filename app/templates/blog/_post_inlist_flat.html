@@ -25,6 +25,13 @@
                 {{ post.date_published|naturalday:'l'|capfirst }}
             </div>
         </div>
+
+        {% if embed %}
+            <div class="post-embed">
+                <a class="embedly" href="{{ post.main_link }}"></a>
+            </div>
+        {% endif %}
+
         <div class="post-title">
             <div class="post-icon">
                 <span class="fa {{ post.get_icon }}"></span>
