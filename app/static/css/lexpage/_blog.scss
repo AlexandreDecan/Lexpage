@@ -167,10 +167,12 @@
       @media (min-width: $screen-sm) {
         display: block;
         float: left;
-        img {
+        a {
           margin-right: $padding-base-horizontal;
-          max-width: 220px;
-          max-height: 120px;
+          img {
+            max-width: 220px;
+            max-height: 120px;
+          }
         }
       }
     }
