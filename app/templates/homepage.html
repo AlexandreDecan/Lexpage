@@ -78,7 +78,7 @@ __base.html, so you HAVE to do the job here... #}
             </div>
 
             <div class="hidden-xs col-sm-3">
-                {% for post in post_list|slice:"3:8" %}
+                {% for post in post_list|slice:"3:7" %}
                     {% ifchanged post.date_published|naturalday:'l' %}
                         <div class="post-date-divider">{{ post.date_published|naturalday:'l'|capfirst }}</div>
                     {% endifchanged %}

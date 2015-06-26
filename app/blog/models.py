@@ -179,7 +179,7 @@ class BlogPost(models.Model):
         if matches:
             return matches.group(1)
         else:
-            return 'http://www.lexpage.net' + self.get_absolute_url()
+            return None
 
     def get_icon(self):
         """
