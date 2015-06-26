@@ -2,6 +2,7 @@
 {% load humanize %}
 {% load time_helper %}
 
+{% if post %}
 <div class="post-list">
     <div class="post-avatar">
         <a href="{% url 'profile_show' post.author %}">
@@ -66,3 +67,4 @@
     </div>
 
 </div>
+{% endif %}

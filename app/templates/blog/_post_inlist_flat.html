@@ -1,7 +1,7 @@
 {% load markup_markdown %}
 {% load humanize %}
 
-
+{% if post %}
 <div class="post-content {{ style }}">
     <div class="post-icon-bg">
         <span class="fa {{ post.get_icon }}"></span>
@@ -49,3 +49,4 @@
         </div>
     </div>
 </div>
+{% endif %}

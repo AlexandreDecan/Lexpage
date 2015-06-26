@@ -62,18 +62,25 @@ __base.html, so you HAVE to do the job here... #}
         <div class="row">
             <div class="col-xs-12 col-sm-9">
                 <div class="row">
-                    {% for post in post_list|slice:"0:4" %}
-                        <div class="col-sm-12 col-md-6">
-                            {% include 'blog/_post_inlist_flat.html' with post=post style="post-item-large" %}
-                        </div>
-                        {% if forloop.counter == 2 %}
-                            <div class="clearfix visible-block-md"></div>
-                        {% endif %}
-                    {% endfor %}
+
+                    <div class="col-sm-12 col-md-6">
+                        {% include 'blog/_post_inlist_flat.html' with post=post_list.0 style="post-item-large" %}
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        {% include 'blog/_post_inlist_flat.html' with post=post_list.2 style="post-item-large" %}
+                    </div>
+                    <div class="clearfix visible-block-md"></div>
+                    <div class="col-sm-12 col-md-6">
+                        {% include 'blog/_post_inlist_flat.html' with post=post_list.1 style="post-item-large" %}
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        {% include 'blog/_post_inlist_flat.html' with post=post_list.3 style="post-item-large" %}
+                    </div>
+
                 </div>
             </div>
 
-            <div class="hidden-xs col-xs-12 col-sm-3">
+            <div class="hidden-xs col-sm-3">
                 {% for post in post_list|slice:"4:9" %}
                     {% ifchanged post.date_published|naturalday:'l' %}
                         <div class="post-date-divider">{{ post.date_published|naturalday:'l'|capfirst }}</div>
