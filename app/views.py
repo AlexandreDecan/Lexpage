@@ -13,7 +13,7 @@ import datetime
 
 
 HOMEPAGE_POST_NUMBER = 10    # Maximum number of posts to display
-HOMEPAGE_THREAD_DELAY = 4   # Number of days before expiration
+HOMEPAGE_THREAD_DELAY = 3   # Number of days before expiration
 
 
 def homepage(request):
