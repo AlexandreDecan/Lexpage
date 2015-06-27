@@ -1,4 +1,23 @@
+
+// Initialize toolbars
+$(document).ready(function (){
+    var i, target;
+    target = $("textarea.markup-markdown");
+    for (i = 0; i<target.length ; i++) {
+        attach_toolbar($(target[i]), MARKDOWN_name);
+    }
+    target = $("textarea.markup-bbcode");
+    for (i = 0; i<target.length ; i++) {
+        attach_toolbar($(target[i]), BBCODE_name);
+    }
+});
+
+
+
+//////////////////////////////////////////////
+
 function getSelectedTextWithin(el) {
+    // Return the text that is currently selected in given element
     var selectedText = "";
     if (typeof window.getSelection != "undefined") {
         var sel = window.getSelection(), rangeCount;
@@ -33,10 +52,80 @@ function getSelectedTextWithin(el) {
         }
     }
     return selectedText;
-}
+};
+
+
+function get_suitable_quote(pos, text) {
+    /* Given a position and a text, return the position of the most nested quote such that
+     the start of this quote is before given position, and its end is after given position. */
+    var quotes_re = /(\[quote(=.+?)?\])|(\[\/quote\])/g;
+    var quotes = new Array();   // Array of starting positions
+
+    while ((match = quotes_re.exec(text)) != null) {
+        // First quote after our position
+        if (pos <= match.index) {
+            // Are we inside a non-closed [quote]?
+            if (quotes.length > 0) {
+                /* Change to quotes.length == 1 if you don't want to split quotes whose depth is > 1. */
+                return quotes[quotes.length - 1];
+            } else {
+                return -1;
+            }
+        }
+
+        // [/quote] found
+        if (match[0].indexOf("/") > 0) {
+            if (quotes.length > 0) {
+                // Remove the associated starting [quote]
+                quotes.pop();
+            } else {
+                return -1;
+            }
+        } else { // [quote] found
+            quotes.push(match.index);
+        }
+    }
+
+    return -1;
+};
+
+
+function bbcode_quote_handler(target, event, lastKeyWasEnter) {
+    /* Split a [quote] block (if it exists) in two parts on double enter */
+    if (event.keyCode != 13) {
+        return false;
+    } else {
+        target = target.get()[0];
+
+        var pos = target.selectionStart;
+        var text = target.value;
+        var quote_pos = get_suitable_quote(pos, text);
+        if (quote_pos >= 0) {
+            if (!lastKeyWasEnter) {
+                return true;
+            } else {
+                var opening_tag = text.slice(quote_pos, text.indexOf("]", quote_pos) + 1);
+                var closing_tag = "[/quote]";
+                var text_prefix = text.substring(0, pos - 1);
+                var text_suffix = text.substring(pos, text.length);
+
+                target.value = text_prefix + closing_tag + "\n\n\n\n" + opening_tag + text_suffix;
+                target.selectionStart = pos + closing_tag.length + 1;
+                target.selectionEnd = pos + closing_tag.length + 1;
+
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+};
 
 
 function board_add_quote(messageid, url, target) {
+    /* Quote message #messageid in given target.
+    Message retrieval endpoint must be specified using `url`.
+     */
     function prepare_quoted_text(author, text) {
         var message = "[quote="+author+"]\n"+text+"\n[/quote]\n\n\n";
         // Do not copy img and embed objects.
@@ -49,36 +138,22 @@ function board_add_quote(messageid, url, target) {
 
     // Check if there is a selection in current message
     var text = getSelectedTextWithin($("#"+messageid).get()[0]);
-    
+
     $.get(url)
-    .done(function(data) {
-        target = $(target);
-        var message;
+        .done(function(data) {
+            target = $(target);
+            var message;
 
-        // Use the selected text if any, or the whole message otherwhise
-        if (text.length > 0) {
-            message = prepare_quoted_text(data['author'], text);
-        } else {
-            message = prepare_quoted_text(data['author'], data['text']);
-        }
-        target.val(target.val() + message);
-    });
-}
+            // Use the selected text if any, or the whole message otherwhise
+            if (text.length > 0) {
+                message = prepare_quoted_text(data['author'], text);
+            } else {
+                message = prepare_quoted_text(data['author'], data['text']);
+            }
+            target.val(target.val() + message);
+        });
+};
 
-
-// Initialize toolbars
-$(document).ready(function (){
-    var i, target;
-    target = $("textarea.markup-markdown");
-    for (i = 0; i<target.length ; i++) {
-        attach_toolbar($(target[i]), MARKDOWN_name);
-    }
-    target = $("textarea.markup-bbcode");
-    for (i = 0; i<target.length ; i++) {
-        attach_toolbar($(target[i]), BBCODE_name);
-    }
-});
-    
 
 function preview_markup(url, source_text, target_element) {
     var text=source_text;
@@ -86,26 +161,26 @@ function preview_markup(url, source_text, target_element) {
     $(target_element).html("<p class='text-center'><span class='fa fa-spinner fa-spin'/></p>");
 
     $.get(url, {content: text})
-    .done(function(data) {
-        target_element.html(data);
-        refresh_oembed(target_element);
-    })
-    .fail(function(data) {
-        target_element.html("<strong>Erreur lors du chargement de la prévisualisation.</strong>");
-    });
+        .done(function(data) {
+            target_element.html(data);
+            refresh_oembed(target_element);
+        })
+        .fail(function(data) {
+            target_element.html("<strong>Erreur lors du chargement de la prévisualisation.</strong>");
+        });
 
-}
+};
 
 
-function markup_proceed(tag, target) {   
+function markup_proceed(tag, target) {
     // Get DOM element
     target = target.get()[0];
-    
+
     // Get target's selection
     var sel_start = target.selectionStart;
     var sel_end = target.selectionEnd;
     var is_selected = (sel_end - sel_start > 0);
-    
+
     // Get text
     var text = target.value;
     var text_before = text.substring(0, sel_start);
@@ -129,14 +204,13 @@ function markup_proceed(tag, target) {
     }
     target.selectionStart = target.selectionEnd = new_position;
     target.focus();
-}
+};
 
 
 function get_markup_toolbar(markup, target) {
     var html;
     var toolbar;
     var buttons;
-
 
     if (markup == BBCODE_name) {
         toolbar = [
@@ -219,7 +293,7 @@ function get_markup_toolbar(markup, target) {
         var div = $("<div>", {class: "btn-group btn-group-sm"});
         var link = $("<a>", {class:"btn btn-default"});
         add_tooltip(link, "Liste des smileys");
-        
+
         link.click({target:target}, function(e) {
             var smiley = e.data.target.prev(".smiley-popup").get(0);
             if (! smiley) {
@@ -277,68 +351,7 @@ function get_markup_toolbar(markup, target) {
     html.append(div);
 
     return html;
-}
-
-
-function get_suitable_quote(pos, text) {
-  var quote_pos = -1;
-  var quotes_re = /(\[quote(=.+?)?\])|(\[\/quote\])/g;
-  var quotes = new Array();
-  
-  while ((match = quotes_re.exec(text)) != null) {
-    if ((quote_pos == -1) && (pos < match.index)) {
-      if (quotes.length > 0) {
-        /* Change to quotes.length == 1 if you don't want to split quotes whose depth is > 1. */
-        quote_pos = quotes[quotes.length - 1];
-      } else {
-        return -1;
-      }
-    }
-    if (match[0].indexOf("/") > 0) {
-      if (quotes.length > 0) {
-        quotes.pop();
-      } else {
-        return -1;
-      }
-    } else {
-      quotes.push(match.index);
-    }
-  }
-  if (quotes.length > 0) { return -1; }
-  
-  return quote_pos;
-}
-
-
-function bbcode_quote_handler(target, event, lastKeyWasEnter) {
-    if (event.keyCode != 13) {
-        return false;
-    } else {
-        target = target.get()[0];
-
-        var pos = target.selectionStart;
-        var text = target.value;
-        var quote_pos = get_suitable_quote(pos, text);
-        if (quote_pos >= 0) {
-          if (!lastKeyWasEnter) {
-                return true;
-          } else {
-            var opening_tag = text.slice(quote_pos, text.indexOf("]", quote_pos) + 1); 
-            var closing_tag = "[/quote]";
-            var text_prefix = text.substring(0, pos - 1);
-            var text_suffix = text.substring(pos, text.length);
-            
-            target.value = text_prefix + closing_tag + "\n\n\n\n" + opening_tag + text_suffix; 
-            target.selectionStart = pos + closing_tag.length + 1;
-            target.selectionEnd = pos + closing_tag.length + 1;
-            
-            return false;
-          }
-        } else {
-          return false;
-        }
-    }
-}
+};
 
 
 function attach_toolbar(target, markup_name) {
@@ -356,13 +369,14 @@ function attach_toolbar(target, markup_name) {
 
     // Add toolbar
     target.before(get_markup_toolbar(markup_name, target));
-}
+};
+
 
 function get_smiley_tag(smiley) {
     return {'before': '',
-             'after': ":"+smiley+": ", 
-             'cursor': { 'position': 'after', 'offset': 0}};
-}
+        'after': ":"+smiley+": ",
+        'cursor': { 'position': 'after', 'offset': 0}};
+};
 
 
 
@@ -395,7 +409,7 @@ MARKUP =  {
             'syntaxe': '[b]texte[/b]',
             'icon': 'fa-bold',
             'before': '[b]',
-            'after': '[/b]', 
+            'after': '[/b]',
             'cursor': {
                 'position': 'after',
                 'offset': 4
@@ -406,7 +420,7 @@ MARKUP =  {
             'syntaxe': '[u]texte[/u]',
             'icon': 'fa-underline',
             'before': '[u]',
-            'after': '[/u]', 
+            'after': '[/u]',
             'cursor': {
                 'position': 'after',
                 'offset': 4
@@ -417,7 +431,7 @@ MARKUP =  {
             'syntaxe': '[i]texte[/i]',
             'icon': 'fa-italic',
             'before': '[i]',
-            'after': '[/i]', 
+            'after': '[/i]',
             'cursor': {
                 'position': 'after',
                 'offset': 4
@@ -428,7 +442,7 @@ MARKUP =  {
             'syntaxe': '[strike]texte[/strike]',
             'icon': 'fa-strikethrough',
             'before': '[strike]',
-            'after': '[/strike]', 
+            'after': '[/strike]',
             'cursor': {
                 'position': 'after',
                 'offset': 9
@@ -439,7 +453,7 @@ MARKUP =  {
             'syntaxe': '[color=red]texte[/color]',
             'icon': 'fa-flask',
             'before': '[color=]',
-            'after': '[/color]', 
+            'after': '[/color]',
             'cursor': {
                 'position': 'before',
                 'offset': 7
@@ -450,7 +464,7 @@ MARKUP =  {
             'syntaxe': '[font=Helvetica]texte[/font]',
             'icon' : 'fa-font',
             'before': '[font=]',
-            'after': '[/font]', 
+            'after': '[/font]',
             'cursor': {
                 'position': 'before',
                 'offset': 6
@@ -461,7 +475,7 @@ MARKUP =  {
             'syntaxe': '[size=12pt]texte[/size]',
             'icon': 'fa-text-height',
             'before': '[size=]',
-            'after': '[/size]', 
+            'after': '[/size]',
             'cursor': {
                 'position': 'before',
                 'offset': 6
@@ -472,7 +486,7 @@ MARKUP =  {
             'syntaxe': '[align=center]texte[/align]',
             'icon': 'fa-align-center',
             'before': '[align=]',
-            'after': '[/align]', 
+            'after': '[/align]',
             'cursor': {
                 'position': 'before',
                 'offset': 7
@@ -481,9 +495,9 @@ MARKUP =  {
         'url': {
             'desc': 'Lien',
             'syntaxe': '[url]http://[/url] ou [url=http://]texte[/url]',
-            'icon': 'fa-link', 
+            'icon': 'fa-link',
             'before': '[url]',
-            'after': '[/url]', 
+            'after': '[/url]',
             'cursor': {
                 'position': 'after',
                 'offset': 6
@@ -501,7 +515,7 @@ MARKUP =  {
             }
         },
         'embed': {
-            'desc': 'Intégrer un contenu', 
+            'desc': 'Intégrer un contenu',
             'syntaxe': '[embed]http://[/embed]',
             'icon': 'fa-video-camera',
             'before': '[embed]',
@@ -527,7 +541,7 @@ MARKUP =  {
             'syntaxe': '[spoiler]texte[/spoiler]',
             'icon': 'fa-eraser',
             'before': '[spoiler]',
-            'after': '[/spoiler]', 
+            'after': '[/spoiler]',
             'cursor': {
                 'position': 'after',
                 'offset': 10
@@ -538,7 +552,7 @@ MARKUP =  {
             'syntaxe': '[code]texte[/code]',
             'icon': 'fa-code',
             'before': '[code]',
-            'after': '[/code]', 
+            'after': '[/code]',
             'cursor': {
                 'position': 'after',
                 'offset': 7
@@ -549,7 +563,7 @@ MARKUP =  {
             'syntaxe': '[quote]texte[/quote] ou [quote=auteur]texte[/quote]',
             'icon': 'fa-quote-right',
             'before': '[quote]',
-            'after': '[/quote]', 
+            'after': '[/quote]',
             'cursor': {
                 'position': 'after',
                 'offset': 8
@@ -558,7 +572,7 @@ MARKUP =  {
     },
     'markdown': {
         'h1': {
-            'desc': 'Titre 1', 
+            'desc': 'Titre 1',
             'syntaxe': '# Titre',
             'label': 'H1',
             'before': '# ',
@@ -569,7 +583,7 @@ MARKUP =  {
             }
         },
         'h2': {
-            'desc': 'Titre 2', 
+            'desc': 'Titre 2',
             'syntaxe': '## Titre',
             'label': 'H2',
             'before': '## ',
@@ -580,7 +594,7 @@ MARKUP =  {
             }
         },
         'h3': {
-            'desc': 'Titre 3', 
+            'desc': 'Titre 3',
             'syntaxe': '### Titre',
             'label': 'H3',
             'before': '### ',
@@ -593,9 +607,9 @@ MARKUP =  {
         'bold': {
             'desc': 'Mettre en gras',
             'syntaxe': '**texte**',
-            'icon': 'fa-bold', 
+            'icon': 'fa-bold',
             'before': '**',
-            'after': '**', 
+            'after': '**',
             'cursor': {
                 'position': 'after',
                 'offset': 2
@@ -604,9 +618,9 @@ MARKUP =  {
         'italic': {
             'desc': 'Mettre en italique',
             'syntaxe': '*texte*',
-            'icon': 'fa-italic', 
+            'icon': 'fa-italic',
             'before': '*',
-            'after': '*', 
+            'after': '*',
             'cursor': {
                 'position': 'after',
                 'offset': 1
@@ -620,7 +634,7 @@ MARKUP =  {
             'after': ')',
             'cursor': {
                 'position': 'before',
-                'offset': 2 
+                'offset': 2
             }
         },
         'url': {
@@ -635,7 +649,7 @@ MARKUP =  {
             }
         },
         'embed': {
-            'desc': 'Intégrer un contenu', 
+            'desc': 'Intégrer un contenu',
             'syntaxe': '[!embed](http://)',
             'icon': 'fa-video-camera',
             'before': '[!embed](',
@@ -646,9 +660,9 @@ MARKUP =  {
             }
         },
         'quote': {
-            'desc': 'Citation', 
+            'desc': 'Citation',
             'syntaxe': '> ligne',
-            'icon': 'fa-comment', 
+            'icon': 'fa-comment',
             'before': '> ',
             'after': '',
             'cursor': {
@@ -668,13 +682,13 @@ MARKUP =  {
             }
         },
         'list': {
-            'desc': 'Liste', 
-            'syntaxe': 'Préfixer la ligne par -', 
+            'desc': 'Liste',
+            'syntaxe': 'Préfixer la ligne par -',
             'icon': 'fa-list',
-            'before': ' - ', 
-            'after': '', 
+            'before': ' - ',
+            'after': '',
             'cursor': {
-                'position': 'after', 
+                'position': 'after',
                 'offset': 0
             }
         }
