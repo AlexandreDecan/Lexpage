@@ -7,12 +7,12 @@
     <div class="board-threadlist-flag">
         {% if thread.flag %}
             {% if thread.flag.message = thread.last_message %}
-                <a data-toggle="tooltip" data-placement="top" title="Aller au dernier message" 
+                <a data-toggle="tooltip" data-placement="top" title="Dernier message"
                     class="btn btn-info btn-sm btn-circle" href="{% url 'board_thread_show_last' thread.pk thread.slug %}#last">
                     <span class="fa fa-eye"></span>
                 </a>
             {% else %}
-                <a data-toggle="tooltip" data-placement="top" title="Aller au premier message non-lu" 
+                <a data-toggle="tooltip" data-placement="top" title="Nouveau message"
                     class="btn btn-danger btn-sm btn-circle" href="{% url 'board_thread_show_unread' thread.pk thread.slug %}#new">
                     <span class="fa fa-eye-slash"></span>
                 </a>
