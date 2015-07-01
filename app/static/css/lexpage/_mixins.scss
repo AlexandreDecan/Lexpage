@@ -1,4 +1,12 @@
+@mixin lexpage-alert-variant($background, $foreground) {
+  border-top: 6px solid $foreground;
+  color: $foreground;
+  background-color: $background;
 
+  .alert-link {
+    color: darken($foreground, 10%);
+  }
+}
 
 
 @mixin z-depth($depth) {
