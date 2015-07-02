@@ -1,0 +1,13 @@
+//
+// Alerts
+// --------------------------------------------------
+
+.alert {
+  margin-bottom: 30px;
+  border: none;
+  border-top: 6px solid;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+
+  @include z-depth(4);
+}
