@@ -38,7 +38,7 @@ def urlize3(value, autoescape=True):
     else:
         esc = lambda x: x
     value = esc(value)
-    substitute = r'<a href="\1" title="\1" data-toggle="tooltip" data-placement="top" class="fa fa-external-link" rel="nofollow"></a>'
+    substitute = r'<a href="\1" title="\1" data-toggle="tooltip" data-placement="top" data-container="body" class="fa fa-external-link" rel="nofollow"></a>'
     return mark_safe(lazy_simple_url_re().sub(substitute, value))
 
 
