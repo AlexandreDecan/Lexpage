@@ -155,4 +155,4 @@ USER_IS_ONLINE_TIMEOUT = 5
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 SESSION_COOKIE_AGE = 7257600 # 3 months
 
-
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
