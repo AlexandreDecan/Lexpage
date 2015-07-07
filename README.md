@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.org/AlexandreDecan/Lexpage.svg)](https://travis-ci.org/AlexandreDecan/Lexpage)
-
-# Lexpage v4
+# Lexpage v4 [![Build Status](https://travis-ci.org/AlexandreDecan/Lexpage.svg)](https://travis-ci.org/AlexandreDecan/Lexpage)
 
 Bienvenue sur le dépôt *officiel* du Lexpage ! 
 
