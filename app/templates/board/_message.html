@@ -124,7 +124,7 @@
                     data-addquote="{% url 'board_message_raw' message.pk %}"
                     title="Ajouter aux messages cités">
                     <span class="fa fa-comments-o"></span></a>
-                {% if message.author = user and not message.moderated %}
+                {% if message.author == user and not message.moderated %}
                     <a class="btn btn-xs btn-default btn-circle"
                         href="{% url 'board_message_edit' message.pk %}"
                         data-toggle="tooltip"
@@ -135,7 +135,7 @@
                         data-toggle="tooltip"
                         title="Modérer le message"><span class="fa fa-edit"></span></a>
                 {% endif %}
-                {% if perms.board.can_destroy %}
+                {% if perms.board.can_destroy or message.author == user and message.is_time_to_delete %}
                     <a class="confirm-action btn btn-xs btn-danger btn-circle"
                         href="{% url 'board_message_delete' message.pk %}"
                         data-toggle="tooltip"

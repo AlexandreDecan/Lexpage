@@ -2,6 +2,7 @@
 # coding=utf-8
 
 from __future__ import unicode_literals
+import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -113,6 +114,14 @@ class Message(models.Model):
         Return the relative position in the thread, 0-indexed. 
         """
         return Message.objects.all().filter(thread=self.thread, date__lt=self.date).count()
+
+    def is_time_to_delete(self):
+        """
+        Return True iff message can be deleted, this is, if message is at most 5 minutes old and if
+        message is not moderated.
+        :return: Boolean
+        """
+        return not self.moderated and (datetime.datetime.now() - self.date).total_seconds() <= 5 * 60
 
     def delete(self, **kwargs):
         """

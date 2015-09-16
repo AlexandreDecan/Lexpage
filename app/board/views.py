@@ -334,7 +334,9 @@ class MessageDeleteView(RedirectView):
 
     def get_redirect_url(self, **kwargs):
         message = get_object_or_404(Message.objects, pk=kwargs['message'])
-        if self.request.user.has_perm('board.can_destroy'):
+
+        if self.request.user.has_perm('board.can_destroy') or\
+                (self.request.user == message.author and message.is_time_to_delete()):
             anchor = message.delete()
             messages.success(self.request, "Le message a été supprimé.")
             if anchor:
@@ -343,7 +345,13 @@ class MessageDeleteView(RedirectView):
                 messages.success(self.request, 'La discussion étant vide, elle a été supprimée également.')
                 return reverse_lazy('board_latests')
         else:
-            raise Http404
+            if not self.request.user.has_perm('board.can_destroy'):
+                # User is not an admin, display a nicer message than 404.
+                messages.error(self.request, 'Vous ne disposez que de 5 minutes pour supprimer ce message, et elles ' +
+                               'sont malheureusement écoulées.')
+                return reverse_lazy('board_message_show', kwargs={'message': message.pk})
+            else:
+                raise Http404
 
 
 class MessageMarkUnreadView(RedirectView):
