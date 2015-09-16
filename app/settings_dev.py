@@ -11,6 +11,7 @@ from settings_base import *
 SECRET_KEY = 'SecretKeyForDevelopmentEnvironment'
 RECAPTCHA_PUBLIC_KEY = None
 RECAPTCHA_PRIVATE_KEY = None
+RECAPTCHA_TESTING = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_MAIL = 'no-reply@lexpage.net'
