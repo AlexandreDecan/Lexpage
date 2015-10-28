@@ -77,59 +77,30 @@ class MessagePostView(FormView):
         else:
             return response
 
-    def notifications(self, message):
-        """
-        Parse the given message to find @name anchors. For every (unique) 
-        anchor x, check if x is a username. If it is, send a notification 
-        to this user. 
-        """
-
-        candidates = [x[0] for x in re.findall(r'@([\w\-_]+)(\b|\W)', message.text)]
-        targets = set()
-        
-        for candidate in candidates:
-            try: 
-                s = ActiveUser.objects.all().get(username__iexact=candidate)
-                targets.add(s)
-            except ActiveUser.DoesNotExist:
-                # print '%s not found' % candidate
-                pass
-        
-        targets = list(targets)
-        for target in targets:
-            notify.minichat_warn(target, message)
-
-        if len(targets) > 0 :
-            if len(targets) == 1:
-                messages.success(self.request, 'Une notification a été envoyée à %s suite à votre message sur le minichat.' % targets.pop().get_username())
-            else:
-                users_list = ', '.join([x.get_username() for x in targets[:-2]]) + ' et ' + targets[-1].get_username()
-                messages.success(self.request, 'Une notification a été envoyée à %s suite à votre message sur le minichat.' % users_list)
-
-        return targets
-
     def form_valid(self, form):
-        response = super(MessagePostView, self).form_valid(form)
-        user = self.request.user
-        text = form.cleaned_data['text']
-        message = Message(user=user, text=text)
+        message = Message(user=self.request.user, text=form.cleaned_data['text'])
         message.save()
-        
-        # Check for notifications
-        try:
-            self.notifications(message)
-        except Exception as e: 
-            print e, e.message
 
+        # Notify users that are anchored in this message
+        anchors = message.parse_anchors()
+        for anchor in anchors:
+            notify.minichat_warn(anchor, message)
+
+        # Warn the user that we notified the other users
+        if len(anchors) > 0:
+            if len(anchors) > 1:
+                anchors_text = ', '.join([x.get_username() for x in anchors[:-2]]) + ' et ' + anchors[-1].get_username()
+            else:
+                anchors_text = anchors[0].get_username()
+            messages.success(self.request, 'Une notification a été envoyée à %s suite à votre message sur le minichat.' % anchors_text)
 
         if self.request.is_ajax():
             return self.render_to_json_response({'result': 'ok'})
         else:
-            return response
+            return super(MessagePostView, self).form_valid(form)
 
 
-
-# Not used at the moment, but functionnal. 
+# Not used at the moment, but functional.
 """
 class LatestsJSONView(View):
     def get(self, request):
