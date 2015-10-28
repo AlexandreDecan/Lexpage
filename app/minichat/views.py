@@ -79,20 +79,28 @@ class MessagePostView(FormView):
 
     def form_valid(self, form):
         message = Message(user=self.request.user, text=form.cleaned_data['text'])
-        message.save()
 
-        # Notify users that are anchored in this message
-        anchors = message.parse_anchors()
-        for anchor in anchors:
-            notify.minichat_warn(anchor, message)
+        # Does the message concern a valid substitution?
+        substituted = message.substitute()
+        if substituted:
+            # Save modified message, and forget about this one
+            substituted.save()
+        else:
+            # Post message
+            message.save()
 
-        # Warn the user that we notified the other users
-        if len(anchors) > 0:
-            if len(anchors) > 1:
-                anchors_text = ', '.join([x.get_username() for x in anchors[:-2]]) + ' et ' + anchors[-1].get_username()
-            else:
-                anchors_text = anchors[0].get_username()
-            messages.success(self.request, 'Une notification a été envoyée à %s suite à votre message sur le minichat.' % anchors_text)
+            # Notify users that are anchored in this message
+            anchors = message.parse_anchors()
+            for anchor in anchors:
+                notify.minichat_warn(anchor, message)
+
+            # Warn the user that we notified the other users
+            if len(anchors) > 0:
+                if len(anchors) > 1:
+                    anchors_text = ', '.join([x.get_username() for x in anchors[:-2]]) + ' et ' + anchors[-1].get_username()
+                else:
+                    anchors_text = anchors[0].get_username()
+                messages.success(self.request, 'Une notification a été envoyée à %s suite à votre message sur le minichat.' % anchors_text)
 
         if self.request.is_ajax():
             return self.render_to_json_response({'result': 'ok'})
