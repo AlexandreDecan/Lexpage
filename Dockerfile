@@ -1,4 +1,4 @@
-FROM library/python:2.7.9
+FROM library/python:3.4
 
 ENV PYTHONUNBUFFERED 1
 

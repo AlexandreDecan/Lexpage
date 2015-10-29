@@ -32,11 +32,13 @@ La racine du dépôt contient notamment :
  
 ## Comment tester localement ?
 
-Tester localement le site se fait de manière assez simple, pour peu que vous sachiez suivre une documentation :-) 
+Tester localement le site se fait de manière assez simple, pour peu que vous sachiez suivre une documentation :-)
 
 ### Mettre en place un environnement virtuel
 
 La première chose à faire, pour ne pas saloper votre environnement, c'est d'isoler le futur Lexpage. Pour cela, nous vous proposons soit d'utiliser Docker, soit d'utiliser Virtualenv/Pew. Si vous ne vous souciez pas d'installer certaines librairies dans des versions spécifiques sur votre machine de travail, vous pouvez directement passer à l'étape suivante. Bien entendu, n'importe quelle solution de virtualisation devrait vous permettre d'arriver au même résultat, mais nous ne documenterons ici que les solutions basées sur Docker et sur Virtualenv/Pew.
+
+Dans tous les cas, soyez bien attentif au fait que Lexpage est prévu pour >=Python 3.4. Le site est sans doute fonctionnel avec des versions inférieures de Python 3.x, mais plus avec la branche 2.x (sauf si vous travaillez avec une version antérieure à novembre 2015).
 
 ##### Avec Docker
 
@@ -53,8 +55,8 @@ Si vous effectuez des changements dans les dépendances (autrement dit, *require
 ##### Avec Virtualenv, Pew ou... rien !
 
 Si vous utilisez virtualenv ou pew, créez un environnement virtuel à la racine du dépôt :
- - `pew new Lexpage -a .` si vous utilisez `pew`, 
- - `mkvirtualenv Lexpage -a .` si vous utilisez `virtualenv`.
+ - `pew new Lexpage -p python3.4 -a .` si vous utilisez `pew`,
+ - `mkvirtualenv Lexpage -p python 3.4 -a .` si vous utilisez `virtualenv`.
   
 Que vous soyez dans un environnement virtuel ou non, la suite est la même pour tout le monde. Installez les dépendances automatiquement avec `pip` : `pip install -r requirements.txt`
 
@@ -99,13 +101,6 @@ Ce n'est absolument pas un pré-requis pour pouvoir tester localement le site, m
 En environnement de développement, le fichier */static/css/style.css* sera directement utilisé lorsque le site est affiché. En environnement de production (ou de test, en gros, quand vous n'utilisez pas `settings_dev.py` comme fichier de configuration), c'est le fichier */static_pub/css/style.min.css* qui sera utilisé. Notez deux choses : la première est la présence du *.min*, et la seconde est la présence du *_pub* (voir remarque ci-dessus à propos de `python app/manage.py collectstatic`). 
 
 ## Les problèmes fréquents et leurs solutions connues
-
-##### mysql-python refuse de s'installer dans mon environnement virtuel
-
-Essayez d'installer la bibliothèque de développement, par exemple, via `apt-get install libmysqlclient-dev`. Nous conseillons aussi d'avoir les bibliothèques de développement Python installées : `apt-get install python-dev`
-
-Si cela ne convient pas, vous pouvez toujours utiliser le module `PyMySQL` plutôt que `mysql-python` en modifiant le fichier *requirements.txt*.
-
 
 ##### Django retourne une erreur à propos de la base de données
 
