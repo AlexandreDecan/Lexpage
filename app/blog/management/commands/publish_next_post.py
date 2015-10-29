@@ -22,7 +22,7 @@ class Command(NoArgsCommand):
     help = "Publish the first available blog entry. "
 
     # (min available, nb per day)
-    number_per_day = [(6, 2), (1, 1)]
+    number_per_day = [(8, 2), (1, 1)]
     # number_per_day = [(1, 2), ]
 
     def handle_noargs(self, **options):
@@ -34,14 +34,14 @@ class Command(NoArgsCommand):
             # Dismiss in case of public holiday
             day, month = (datetime.date.today().day, datetime.date.today().month)
             if (day, month) in [(1, 1), (1, 5), (14, 7), (21, 7), (15, 8), (1, 11), (11, 11), (25, 12)]:
-                return None
+                return 'Public holiday'
 
             # Get number of available posts
             posts = BlogPost.approved.all()
             nb_posts = len(posts)
             if nb_posts == 0:
                 # No post? no post!
-                return None
+                return 'No available post'
 
             # nb_per_day contains the number of posts per day wrt the stock
             nb_per_day = 0
@@ -60,6 +60,6 @@ class Command(NoArgsCommand):
                 posts[0].change_status(None, BlogPost.STATUS_PUBLISHED)
                 return 'Task: publish "%s"' % unicode(posts[0].title)
             else:
-                return None
+		return None
         except Exception as e: 
             return str(e)
