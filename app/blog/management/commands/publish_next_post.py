@@ -52,11 +52,11 @@ class Command(NoArgsCommand):
 
             # Time since last published post, in hours
             delta = (datetime.datetime.now() - BlogPost.published.latest().date_published)
-            delta = (delta.seconds + delta.days * 24 * 3600)/3600.0
+            delta = (delta.seconds + delta.days * 24 * 3600) // 3600.0
             delta += 0.5  # Dismiss OVH delay
 
             # If delta (in hour) > time_frame, publish!
-            if delta >= (24. / nb_per_day):
+            if delta >= (24 / nb_per_day):
                 posts[0].change_status(None, BlogPost.STATUS_PUBLISHED)
                 return 'Task: publish "%s"' % str(posts[0].title)
             else:

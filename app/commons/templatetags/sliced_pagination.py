@@ -19,7 +19,7 @@ class _SlicedPaginator:
                                                             self.npages)
         assert self.maxpages_items > 0
         assert self.maxpages_items % 2 == 1, "Only uneven maxpages_items supported. Unclear how to be presented otherwise."
-        self.max_prev_items = (self.maxpages_items - 1) / 2
+        self.max_prev_items = (self.maxpages_items - 1) // 2
         self.max_next_items = self.max_prev_items
         
     def __repr__(self):

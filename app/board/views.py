@@ -88,9 +88,9 @@ class ThreadUnreadRedirectView(RedirectView):
             pass
         else:
             # First new message is at position + 1
-            position = position + 1
+            position += 1
 
-        page = (position / MESSAGES_PER_THREAD) + 1
+        page = (position // MESSAGES_PER_THREAD) + 1
         anchor = '#new'
 
         return reverse('board_thread_show',
@@ -251,7 +251,7 @@ class MessageRedirectView(RedirectView):
     def get_redirect_url(self, **kwargs):
         message = get_object_or_404(Message.objects, pk=kwargs['message'])
         position = message.position()
-        page = (position / MESSAGES_PER_THREAD) + 1
+        page = (position // MESSAGES_PER_THREAD) + 1
         return reverse('board_thread_show',
                        kwargs={'thread': message.thread.pk,
                                'slug': message.thread.slug,
@@ -403,13 +403,13 @@ class BoardArchivesView(ListView):
     allow_empty = True
     queryset = Thread.objects.all()
     paginate_by = THREADS_PER_PAGE
-    paginate_orphans = THREADS_PER_PAGE / 5
+    paginate_orphans = THREADS_PER_PAGE // 5
 
     def paginate_queryset(self, queryset, page_size):
         (paginator, page, object_list, is_paginated) = ListView.paginate_queryset(self, queryset, page_size)
         for thread in object_list:
             thread.annotate_flag(self.request.user)
-        return (paginator, page, object_list, is_paginated)
+        return paginator, page, object_list, is_paginated
 
 
 class BoardArchivesMessagesView(ListView):
@@ -421,7 +421,7 @@ class BoardArchivesMessagesView(ListView):
     allow_empty = True
     queryset = Message.objects.all()
     paginate_by = MESSAGES_PER_PAGE
-    paginate_orphans = MESSAGES_PER_PAGE / 5
+    paginate_orphans = MESSAGES_PER_PAGE // 5
 
 
 class FollowedView(ListView):
@@ -434,7 +434,7 @@ class FollowedView(ListView):
     context_object_name = 'thread_list'
     allow_empty = True
     paginate_by = THREADS_PER_PAGE
-    paginate_orphans = THREADS_PER_PAGE / 5
+    paginate_orphans = THREADS_PER_PAGE // 5
 
 
     @method_decorator(login_required)

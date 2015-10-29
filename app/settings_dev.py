@@ -2,7 +2,7 @@
 
 from __future__ import unicode_literals
 
-from .settings_base import *
+from settings_base import *
 
 
 SECRET_KEY = 'SecretKeyForDevelopmentEnvironment'

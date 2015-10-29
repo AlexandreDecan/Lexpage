@@ -199,7 +199,7 @@ class ListIndentProcessor(BlockProcessor):
         # Get indent level
         m = self.INDENT_RE.match(block)
         if m:
-            indent_level = len(m.group(1))/self.tab_length
+            indent_level = len(m.group(1)) // self.tab_length
         else:
             indent_level = 0
         if self.parser.state.isstate('list'):

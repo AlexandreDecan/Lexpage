@@ -15,11 +15,11 @@ def timedelta(value, arg=None):
         if arg == 's':
             return delta_s
         elif arg == 'm':
-            return delta_s/60
+            return delta_s // 60
         elif arg == 'h':
-            return delta_s/3600
+            return delta_s // 3600
         elif arg == 'd':
-            return delta_s/(3600*24)
+            return delta_s // (3600*24)
         else:
             return getattr(delta, arg)
     
