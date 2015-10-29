@@ -2,14 +2,14 @@ from django.conf.urls import patterns
 from django.conf.urls import include
 from django.conf.urls import url 
 
-from views import ThreadView, ThreadUnreadRedirectView, ThreadReplyView, \
+from .views import ThreadView, ThreadUnreadRedirectView, ThreadReplyView, \
                 ThreadMarkUnreadView, ThreadDeleteView, ThreadCreateView, \
                 MessageRedirectView, MessageEditView, \
                 MessageDeleteView, MessageJSONView, MessageMarkUnreadView, \
                 BoardLatestsView, BoardArchivesView, BoardArchivesMessagesView, \
                 ThreadCreateForPostView, FollowedView
 
-from feeds import LatestsFeed
+from .feeds import LatestsFeed
 
 thread_patterns = patterns('', 
                 url(r'^$', 

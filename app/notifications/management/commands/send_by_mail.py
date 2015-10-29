@@ -1,10 +1,7 @@
 from django.core.management.base import NoArgsCommand
 from django.conf import settings
 from django.template.loader import render_to_string
-from django.core.urlresolvers import reverse
-
 from notifications.models import Notification
-
 import datetime
 
 
@@ -20,7 +17,6 @@ class Command(NoArgsCommand):
     # fixed basis. task_hours stores the hours at which a mail could be 
     # sent. 
     task_hours = [12]
-
 
     def send_mail_notification(self, user):
         """
@@ -40,15 +36,14 @@ class Command(NoArgsCommand):
         # print 'user: %s\nsubject: %s\ntext: %s' % (user.username, subject, text)
         if user.email:
           user.email_user(subject, text, settings.DEFAULT_FROM_MAIL)
-          print 'Mail sent to %s (%s)' % (user.username, user.email)
-
+          print('Mail sent to %s (%s)' % (user.username, user.email))
 
     def handle_noargs(self, **options):
         # Check if current hour is in task_hours. If not, stop. 
         if not (datetime.datetime.now().hour in Command.task_hours):
             return
 
-        print 'Task: notifications by mail.'
+        print('Task: notifications by mail.')
         
         min_date = datetime.datetime.now() - datetime.timedelta(seconds = Command.min_delay)
         max_date = datetime.datetime.now() - datetime.timedelta(seconds = Command.max_delay)

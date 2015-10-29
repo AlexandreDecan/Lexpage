@@ -1,8 +1,3 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User, UserManager
@@ -20,6 +15,7 @@ try:
     from django.utils.timezone import now as datetime_now
 except ImportError:
     datetime_now = datetime.datetime.now
+
 
 @receiver(post_save, sender=User)
 def create_profile_for_user(sender, **kwargs):
@@ -41,7 +37,7 @@ class ActiveUserManager(UserManager):
 class ActiveUser(User):
     objects = ActiveUserManager()
 
-    class Meta():
+    class Meta:
         proxy = True
         get_latest_by = 'date_joined'
         ordering = ['date_joined']
@@ -80,7 +76,7 @@ class ActivationKeyManager(models.Manager):
         new_user.save()
 
         salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
-        if isinstance(username, unicode):
+        if isinstance(username, str):
             username = username.encode('utf-8')
         key = hashlib.sha1(salt+username).hexdigest()
 
@@ -108,7 +104,7 @@ class ActivationKey(models.Model):
     
     objects = ActivationKeyManager()
 
-    class Meta():
+    class Meta:
         verbose_name = 'Clé d\'activation'
         verbose_name_plural = 'Clés d\'activation'
 
@@ -117,7 +113,7 @@ class ActivationKey(models.Model):
         Return true if the current activation key has expired. 
         """
         exp_date = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
-        return (self.user.date_joined + exp_date <= datetime_now())
+        return self.user.date_joined + exp_date <= datetime_now()
 
     def send_activation_email(self):
         """
@@ -431,7 +427,7 @@ class Profile(models.Model):
     last_visit = models.DateTimeField(blank=True, null=True,
                                       verbose_name='Dernière visite')
 
-    class Meta():
+    class Meta:
         permissions = (('can_see_details', 'Peut voir les détails des profils'),)
         get_latest_by = 'user__date_joined'
         ordering = ['user__date_joined']

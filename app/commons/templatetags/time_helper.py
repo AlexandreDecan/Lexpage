@@ -4,6 +4,7 @@ from django.utils.timezone import now
 
 register = Library()
 
+
 @register.filter()
 def timedelta(value, arg=None):
     delta = now() - value

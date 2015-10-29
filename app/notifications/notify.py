@@ -1,17 +1,8 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import force_escape
 
-from models import Notification
-from minichat.templatetags.minichat import urlize3
-from commons.templatetags.markup_bbcode import smiley 
-
-import datetime
+from .models import Notification
 
 
 def notify(recipients, title, description, action, app, key):
@@ -25,8 +16,8 @@ def notify(recipients, title, description, action, app, key):
     Return the number of notifications sent. 
     """
 
-    description = '' if description == None else description
-    action = '' if action == None else action
+    description = '' if description is None else description
+    action = '' if action is None else action
     if not hasattr(recipients, '__iter__'):
         recipients = [recipients]
 

@@ -48,10 +48,10 @@ class _SlicedPaginator:
         [1, 2, 3, 4, 5]
         """
         if self.npages <= self.maxpages_items:
-            return range(1, self.npages + 1)
+            return list(range(1, self.npages + 1))
         else:
-            l = range(self.curpage - self.max_prev_items,
-                      self.curpage + self.max_next_items + 1)
+            l = list(range(self.curpage - self.max_prev_items,
+                      self.curpage + self.max_next_items + 1))
             while l and l[0] < 1:
                 l.append(l[-1] + 1)
                 del l[0]
@@ -74,7 +74,7 @@ class _SlicedPaginator:
         >>> map(lambda i: _SlicedPaginator(i, 7, 5).prev_pages(), range(1, 8))
         [[], [1], [1, 2], [2, 3], [3, 4], [3, 4, 5], [3, 4, 5, 6]]
         """
-        return filter(lambda x: x < self.curpage, self._build_full_list())
+        return [x for x in self._build_full_list() if x < self.curpage]
     
     def hidden_prev_pages(self):
         """Check if the previous pages where sliced.
@@ -105,7 +105,7 @@ class _SlicedPaginator:
         >>> map(lambda i: _SlicedPaginator(i, 7, 5).next_pages(), range(1, 8))
         [[2, 3, 4, 5], [3, 4, 5], [4, 5], [5, 6], [6, 7], [7], []]
         """
-        return filter(lambda x: x > self.curpage, self._build_full_list())
+        return [x for x in self._build_full_list() if x > self.curpage]
     
     def hidden_next_pages(self):
         """Check if the next pages where sliced.
@@ -190,7 +190,7 @@ def sliced_pagination(parser, token):
     try:
         fnctn, paginatorname, max_items, trash, context_name = token.split_contents()
     except ValueError:
-        raise TemplateSyntaxError, _get_errstr(fnctn)
+        raise TemplateSyntaxError(_get_errstr(fnctn))
     if not trash == 'as':
-        raise TemplateSyntaxError, _get_errstr(fnctn)
+        raise TemplateSyntaxError(_get_errstr(fnctn))
     return _PaginatorSliceNode(context_name, paginatorname, max_items)

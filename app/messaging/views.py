@@ -1,8 +1,3 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django.core.urlresolvers import reverse_lazy
 
 from django.views.generic import ListView, View
@@ -18,8 +13,8 @@ from django.db.models import F
 from profile.models import ActiveUser
 from notifications import notify
 
-from forms import NewThreadForm, ReplyForm
-from models import Message, Thread, MessageBox
+from .forms import NewThreadForm, ReplyForm
+from .models import Message, Thread, MessageBox
 
 import copy
 

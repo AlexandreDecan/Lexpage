@@ -58,8 +58,8 @@ class Command(NoArgsCommand):
             # If delta (in hour) > time_frame, publish!
             if delta >= (24. / nb_per_day):
                 posts[0].change_status(None, BlogPost.STATUS_PUBLISHED)
-                return 'Task: publish "%s"' % unicode(posts[0].title)
+                return 'Task: publish "%s"' % str(posts[0].title)
             else:
-		return None
+                return None
         except Exception as e: 
             return str(e)

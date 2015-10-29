@@ -1,10 +1,6 @@
 from django.conf.urls import patterns
-from django.conf.urls import include
 from django.conf.urls import url
-
-from django.core.urlresolvers import reverse_lazy
-
-from views import DismissView, ShowView
+from .views import DismissView, ShowView
 
 
 urlpatterns = patterns('', 

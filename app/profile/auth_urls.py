@@ -4,9 +4,9 @@ from django.conf.urls import url
 from django.core.urlresolvers import reverse_lazy
 
 from django.contrib.auth import views as auth_views
-from views import LoginView, AccountListView
+from .views import LoginView, AccountListView
 
-from forms import MyPasswordChangeForm, MyPasswordSetForm
+from .forms import MyPasswordChangeForm, MyPasswordSetForm
 
 # Auth based
 urlpatterns = patterns('', 

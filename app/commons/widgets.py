@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.forms.util import flatatt
 from django.forms.widgets import DateTimeInput
 from django.utils import translation
@@ -101,14 +100,14 @@ class DateTimePicker(DateTimeInput):
         if value != '':
             # Only add the 'value' attribute if a value is non-empty.
             input_attrs['value'] = force_text(self._format_value(value))
-        input_attrs = dict([(key, conditional_escape(val)) for key, val in input_attrs.items()])  # python2.6 compatible
+        input_attrs = dict([(key, conditional_escape(val)) for key, val in list(input_attrs.items())])  # python2.6 compatible
         if not self.picker_id:
             self.picker_id = input_attrs.get('id', '') + '_picker'
         self.div_attrs['id'] = self.picker_id
         picker_id = conditional_escape(self.picker_id)
         div_attrs = dict(
-            [(key, conditional_escape(val)) for key, val in self.div_attrs.items()])  # python2.6 compatible
-        icon_attrs = dict([(key, conditional_escape(val)) for key, val in self.icon_attrs.items()])
+            [(key, conditional_escape(val)) for key, val in list(self.div_attrs.items())])  # python2.6 compatible
+        icon_attrs = dict([(key, conditional_escape(val)) for key, val in list(self.icon_attrs.items())])
         html = self.html_template % dict(div_attrs=flatatt(div_attrs),
                                          input_attrs=flatatt(input_attrs),
                                          icon_attrs=flatatt(icon_attrs))

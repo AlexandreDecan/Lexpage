@@ -1,7 +1,7 @@
 from django.conf.urls import patterns
 from django.conf.urls import url
 
-from views_search import SearchView
+from .views_search import SearchView
 
 urlpatterns = patterns('', 
                 url(r'^$',

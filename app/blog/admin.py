@@ -1,10 +1,5 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django.contrib import admin
-from models import BlogPost
+from .models import BlogPost
 
 
 class PostAdmin(admin.ModelAdmin):

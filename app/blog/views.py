@@ -1,8 +1,3 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django.http import HttpResponse, Http404
 
 from django.core.urlresolvers import reverse_lazy
@@ -20,9 +15,9 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from notifications import notify
 
-from forms import UserCreatePostForm, StaffCreatePostForm, UserEditPostForm, StaffEditPostForm, SearchByTagsForm
+from .forms import UserCreatePostForm, StaffCreatePostForm, UserEditPostForm, StaffEditPostForm, SearchByTagsForm
 
-from models import BlogPost
+from .models import BlogPost
 from datetime import date
 
 import json
@@ -286,7 +281,7 @@ class TagListView(ListView):
         queryset = BlogPost.published.all()
         for tag in self.searched_tags:
             # Will fail with SQLite!!
-            queryset = queryset.filter(tags__iregex=u'[[:<:]]%s[[:>:]]' % tag.lower())
+            queryset = queryset.filter(tags__iregex='[[:<:]]%s[[:>:]]' % tag.lower())
 
         return queryset
 
@@ -345,7 +340,7 @@ class JSONTagListView(View):
                 count[tag] = count.setdefault(tag, 0) + 1
 
         # ... and sort it
-        ordered_count = count.items()
+        ordered_count = list(count.items())
         ordered_count.sort(key=lambda x: x[1], reverse=True)
         for tag, nb in ordered_count:
             suggestion = {'value': tag, 'data': nb}

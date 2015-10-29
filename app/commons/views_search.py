@@ -1,18 +1,12 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django.shortcuts import render
 from django.views.generic import View
 from django.db.models import Q
 
-from forms_search import SearchForm
+from .forms_search import SearchForm
 from blog.models import BlogPost
 from board.models import Message, Thread
 from profile.models import ActiveUser
 
-from operator import ior
 import re
 
 """

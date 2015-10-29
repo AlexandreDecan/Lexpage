@@ -1,11 +1,8 @@
 #!/usr/bin/python
-# coding=utf-8
 
 from __future__ import unicode_literals
 
-import os
-
-from settings_base import *
+from .settings_base import *
 
 
 SECRET_KEY = 'SecretKeyForDevelopmentEnvironment'

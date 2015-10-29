@@ -1,8 +1,7 @@
 from django.conf.urls import patterns
-from django.conf.urls import include
 from django.conf.urls import url
 
-from views import ProfileChangeView, ProfileShowView, ProfileListView
+from .views import ProfileChangeView, ProfileShowView, ProfileListView
 
 urlpatterns = patterns('',
                        url(r'^edit/$',

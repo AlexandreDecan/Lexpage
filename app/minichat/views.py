@@ -1,8 +1,3 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django.http import HttpResponse, Http404
 from django.views.generic import ListView, View
 from django.views.generic.edit import FormView
@@ -14,17 +9,14 @@ from django.utils.decorators import method_decorator
 
 from django.contrib import messages
 
-from models import Message
-from forms import MessageForm
+from .models import Message
+from .forms import MessageForm
 
 from notifications import notify
 from profile.models import ActiveUser
 
 from datetime import date
-# from calendar import timegm
-
 import json
-import re
 
 
 class MessageListView(MonthArchiveView):

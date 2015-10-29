@@ -1,8 +1,3 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 import math
 import re
 
@@ -111,10 +106,10 @@ class PostManager(models.Manager):
                 count[tag] = count.setdefault(tag, 0) + 1
 
         if relative:
-            for k,v in count.items():
+            for k,v in list(count.items()):
                 count[k] = int(100 * math.log10(v))
 
-        ordered_count = count.items()
+        ordered_count = list(count.items())
         ordered_count.sort(key=sort_name)
         return ordered_count
 
@@ -259,12 +254,12 @@ class BlogPost(models.Model):
         :return: list of tags
         """
 
-        return [unicode(x) for x in self.tags.split(' ') if len(x) > 0]
+        return [str(x) for x in self.tags.split(' ') if len(x) > 0]
 
     def __unicode__(self):
-        return unicode(self.title)
+        return str(self.title)
 
-    class Meta():
+    class Meta:
         get_latest_by = 'date_published'
         ordering = ['-date_published']
         verbose_name = 'Billet'

@@ -1,13 +1,9 @@
-#!/usr/bin/python
-# coding=utf-8
-
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, SetPasswordForm
-from django.contrib.auth import authenticate
 
 from commons.widgets import DateTimePicker
 from django import forms
-from models import Profile
+from .models import Profile
 
 from captcha.fields import ReCaptchaField
 
@@ -16,7 +12,6 @@ import datetime
 
 user_fields = ['first_name', 'last_name', 'email']
 profile_fields = ['gender', 'birthdate', 'country', 'city', 'website_name', 'website_url', 'avatar',]
-
 
 
 class ActivationForm(forms.Form):

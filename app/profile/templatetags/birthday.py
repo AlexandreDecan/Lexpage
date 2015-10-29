@@ -8,6 +8,7 @@ import datetime
 
 register = template.Library()
 
+
 def birthday():
     today = datetime.date.today()
     yesterday = today - datetime.timedelta(1)

@@ -1,10 +1,5 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
-from models import Slogan 
-from forms import SloganAddForm
+from .models import Slogan
+from .forms import SloganAddForm
 from django.shortcuts import redirect
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView

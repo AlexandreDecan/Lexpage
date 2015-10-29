@@ -1,8 +1,3 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django import forms
 
 from commons.widgets import DateTimePicker
@@ -16,6 +11,7 @@ SEARCH_CHOICES = (
         (2, 'Messages des discussions'),
         (3, 'Noms des utilisateurs'),
 )
+
 
 class SearchForm(forms.Form):
     query_text = forms.CharField(required=True, label='Texte à rechercher', help_text='Les termes doivent être séparés par un espace, et peuvent être groupés à l\'aide de guillemets.')

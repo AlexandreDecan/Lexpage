@@ -1,11 +1,6 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django import template
 from django.utils.safestring import mark_safe
-from htmlentitydefs import codepoint2name
+from html.entities import codepoint2name
 from django.conf import settings
 
 import re, os

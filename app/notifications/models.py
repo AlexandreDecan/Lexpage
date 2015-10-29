@@ -1,10 +1,6 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django.db import models
 from django.contrib.auth.models import User
+
 
 class Notification(models.Model):
     ICON = {
@@ -42,7 +38,7 @@ class Notification(models.Model):
     def __unicode__(self):
         return '[%s] %s' % (self.recipient.get_username(), self.title)
 
-    class Meta():
+    class Meta:
         get_latest_by = 'date'
         ordering = ['date']
 

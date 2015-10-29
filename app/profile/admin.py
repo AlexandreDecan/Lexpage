@@ -1,18 +1,14 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
-from models import Profile, ActiveUser, ActivationKey
+from .models import Profile, ActiveUser, ActivationKey
 
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'gender', 'country', 'birthdate', 'last_visit',)
     search_fields = ('user', 'country',)
     date_hierarchy = 'last_visit'
+
 
 class InlineProfileAdmin(admin.StackedInline):
     model = Profile
@@ -41,7 +37,6 @@ class ActivationKeyAdmin(admin.ModelAdmin):
         for profile in queryset:
             ActivationKey.objects.activate_user(profile.key)
     activate_users.short_description = 'Activer les comptes'
-
 
     def clean(self, request, queryset):
         """

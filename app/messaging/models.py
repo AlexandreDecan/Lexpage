@@ -1,8 +1,3 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
@@ -54,7 +49,7 @@ class Thread(models.Model):
 
     objects = ThreadManager()
 
-    class Meta():
+    class Meta:
         get_latest_by = 'last_message'
         ordering = ['-last_message__date']
         verbose_name = 'Conversation'
@@ -119,11 +114,10 @@ class Message(models.Model):
     def __unicode__(self):
         return self.text
 
-    class Meta():
+    class Meta:
         get_latest_by = 'date'
         ordering = ['date']
         verbose_name = 'Message'
-
 
 
 class MessageBoxManager(models.Manager):
@@ -158,7 +152,7 @@ class MessageBox(models.Model):
     archived = MessageBoxManager(STATUS_ARCHIVED)
     unarchived = MessageBoxManager(STATUS_NORMAL)
 
-    class Meta():
+    class Meta:
         ordering = ['-thread__last_message__date']
         verbose_name = 'Boîte de réception'
         verbose_name_plural = 'Boîtes de réceptions'

@@ -39,8 +39,8 @@ License: BSD (see ../LICENSE.md for details)
 
 """
 
-from __future__ import absolute_import
-from __future__ import unicode_literals
+
+
 from . import Extension
 from ..preprocessors import Preprocessor
 import re

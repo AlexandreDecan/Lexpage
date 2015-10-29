@@ -1,9 +1,7 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
-from django.contrib.auth.admin import UserAdmin
 from django.forms.widgets import TextInput
 from django.db.models import TextField
-from models import Slogan
+from .models import Slogan
 
 
 class SloganAdmin(admin.ModelAdmin):

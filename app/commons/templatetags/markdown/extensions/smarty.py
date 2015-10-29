@@ -65,7 +65,7 @@
 #   (including negligence or otherwise) arising in any way out of the use
 #   of this software, even if advised of the possibility of such damage.
 
-from __future__ import unicode_literals
+
 from . import Extension
 from ..inlinepatterns import HtmlPattern
 from ..util import parseBoolValue

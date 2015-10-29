@@ -1,8 +1,3 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django.core.urlresolvers import reverse_lazy, reverse
 
 from django.http import HttpResponse, Http404
@@ -18,12 +13,12 @@ from django.utils.decorators import method_decorator
 from django.db.models import F
 from django.contrib import messages
 
-from models import Message, Thread, Flag, MessageHistory, BlogBoardLink
+from .models import Message, Thread, Flag, MessageHistory, BlogBoardLink
 
 from blog.models import BlogPost
 from notifications import notify
 
-from forms import MessageForm, MessageModerateForm, ThreadForm
+from .forms import MessageForm, MessageModerateForm, ThreadForm
 
 import datetime
 import json

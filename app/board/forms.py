@@ -1,10 +1,5 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django import forms
-from models import Message, Thread
+from .models import Message, Thread
 
 
 class MessageForm(forms.ModelForm):
@@ -12,7 +7,7 @@ class MessageForm(forms.ModelForm):
         super(MessageForm, self).__init__(*args, **kwargs)
         self.fields['text'].widget.attrs.update({'class': 'markup-bbcode'})
 
-    class Meta():
+    class Meta:
         model = Message
         fields = ('text',)
 
@@ -35,10 +30,9 @@ class MessageModerateForm(forms.ModelForm):
         else:
             return False
 
-    class Meta():
+    class Meta:
         model = Message
         fields = ('text', 'moderated')
-
 
 
 class ThreadForm(forms.ModelForm):
@@ -48,7 +42,6 @@ class ThreadForm(forms.ModelForm):
         super(ThreadForm, self).__init__(*args, **kwargs)
         self.fields['text'].widget.attrs.update({'class': 'markup-bbcode'})
 
-
-    class Meta():
+    class Meta:
         model = Message
         fields = ('title', 'text',)

@@ -1,7 +1,7 @@
 from django.conf.urls import patterns
 from django.conf.urls import url
 
-from views_markup import MarkupPreviewView
+from .views_markup import MarkupPreviewView
 
 urlpatterns = patterns('', 
                 url(r'^(?P<markup>(bbcode)|(markdown))/preview/$',

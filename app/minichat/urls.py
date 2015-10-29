@@ -1,10 +1,9 @@
 from django.conf.urls import patterns
-from django.conf.urls import include
 from django.conf.urls import url
 
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import RedirectView
-from views import MessageListView, LatestsView, MessagePostView, UsersListView
+from .views import MessageListView, LatestsView, MessagePostView, UsersListView
 
 from datetime import date
 

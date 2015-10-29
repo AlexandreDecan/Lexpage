@@ -1,7 +1,3 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
 import datetime
 
 from django.db import models
@@ -25,7 +21,7 @@ class Thread(models.Model):
     date_created = models.DateTimeField(verbose_name='Date de création', auto_now_add=True)
     last_message = models.ForeignKey('Message', verbose_name='Dernier message', related_name='+', default=-1)
 
-    class Meta():
+    class Meta:
         get_latest_by = 'date_created'
         ordering = ['date_created']
         verbose_name = 'Discussion'
@@ -96,7 +92,7 @@ class Message(models.Model):
                                     help_text='Si le message est modéré, son auteur ne pourra plus le modifier.')
     date = models.DateTimeField(verbose_name='Date', auto_now_add=True)
 
-    class Meta():
+    class Meta:
         get_latest_by = 'date'
         ordering = ['date']
         verbose_name = 'Message'
@@ -140,7 +136,7 @@ class Message(models.Model):
             # If there is no previous, then remove the flags
             if previous is None:
                 Flag.objects.all().filter(thread=self.thread, message=self).delete()
-                anchor = self.next()
+                anchor = next(self)
             else:
                 anchor = previous
                 # Update flags
@@ -166,7 +162,7 @@ class Message(models.Model):
         except Message.DoesNotExist:
             return None
 
-    def next(self):
+    def __next__(self):
         """
         Return the next message, or None.
         """
@@ -186,7 +182,7 @@ class Message(models.Model):
                 tofile='nouveau',
                 n=0,
                 lineterm='')
-            ntext = '\n'.join([unicode(x) for x in diff])
+            ntext = '\n'.join([str(x) for x in diff])
         else:
             ntext = self.text
 
@@ -214,7 +210,7 @@ class MessageHistory(models.Model):
     date = models.DateTimeField(verbose_name='Date', auto_now_add=True)
     text = models.TextField(verbose_name='Historique')
 
-    class Meta():
+    class Meta:
         get_latest_by = 'date'
         ordering = ['date']
         verbose_name = 'Édition de message'
@@ -265,7 +261,7 @@ class Flag(models.Model):
 
     objects = FlagManager()
 
-    class Meta():
+    class Meta:
         verbose_name = 'Suivi'
         unique_together = (('user', 'thread'),)
 

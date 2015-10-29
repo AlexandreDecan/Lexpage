@@ -5,11 +5,11 @@ from django.conf.urls import url
 from django.core.urlresolvers import reverse_lazy
 
 from django.views.generic import RedirectView
-from views import PostListView, PostShowView, PendingPostListView
-from views import DraftPostListView, PostCreateView, PostEditView, DraftPostEditView, PendingPostEditView
-from views import JSONTagListView, TagListView, PostCommentsView
+from .views import PostListView, PostShowView, PendingPostListView
+from .views import DraftPostListView, PostCreateView, PostEditView, DraftPostEditView, PendingPostEditView
+from .views import JSONTagListView, TagListView, PostCommentsView
 
-from feeds import LatestEntriesFeed
+from .feeds import LatestEntriesFeed
 
 from datetime import date
 

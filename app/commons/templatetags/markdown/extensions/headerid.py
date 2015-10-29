@@ -74,8 +74,8 @@ Dependencies:
 
 """
 
-from __future__ import absolute_import
-from __future__ import unicode_literals
+
+
 from . import Extension
 from ..treeprocessors import Treeprocessor
 from ..util import HTML_PLACEHOLDER_RE, parseBoolValue
@@ -193,7 +193,7 @@ class HeaderIdExtension(Extension):
         self.processor = HeaderIdTreeprocessor()
         self.processor.md = md
         self.processor.config = self.getConfigs()
-        if 'attr_list' in md.treeprocessors.keys():
+        if 'attr_list' in list(md.treeprocessors.keys()):
             # insert after attr_list treeprocessor
             md.treeprocessors.add('headerid', self.processor, '>attr_list')
         else:

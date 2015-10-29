@@ -1,8 +1,7 @@
 from django.conf.urls import patterns
-from django.conf.urls import include
 from django.conf.urls import url
 
-from views import SloganListView, SloganAddView
+from .views import SloganListView, SloganAddView
 
 urlpatterns = patterns('',
                        url(r'^add/$', 

@@ -1,11 +1,8 @@
 #!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
 
 from django.conf.urls import patterns, include, url
 
-from views import homepage
+from .views import homepage
 
 from django.contrib import admin
 

@@ -1,10 +1,5 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django import forms
-from models import Message, Thread, MessageBox
+from .models import Message
 from profile.models import ActiveUser
 
 
@@ -14,7 +9,7 @@ class ReplyForm(forms.ModelForm):
         super(ReplyForm, self).__init__(*args, **kwargs)
         self.fields['text'].widget.attrs.update({'rows': 5})
 
-    class Meta():
+    class Meta:
         model = Message
         fields = ('text',)
 

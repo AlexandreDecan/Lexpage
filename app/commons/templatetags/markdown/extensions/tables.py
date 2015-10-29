@@ -14,8 +14,8 @@ A simple example:
 Copyright 2009 - [Waylan Limberg](http://achinghead.com)
 """
 
-from __future__ import absolute_import
-from __future__ import unicode_literals
+
+
 from . import Extension
 from ..blockprocessors import BlockProcessor
 from ..util import etree

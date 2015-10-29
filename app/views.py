@@ -1,13 +1,10 @@
 #!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from blog.models import BlogPost
-from board.models import Thread
+from .blog.models import BlogPost
+from .board.models import Thread
 
 import datetime
 

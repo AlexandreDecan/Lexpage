@@ -1,8 +1,3 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django.db import models
 
 
@@ -30,5 +25,5 @@ class Slogan(models.Model):
     def __unicode__(self):
         return self.slogan
 
-    class Meta():
+    class Meta:
         permissions = (('can_set_visible', 'Peut rendre visible'), )

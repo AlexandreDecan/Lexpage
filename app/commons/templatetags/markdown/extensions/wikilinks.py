@@ -76,8 +76,8 @@ Dependencies:
 * [Markdown 2.0+](http://packages.python.org/Markdown/)
 '''
 
-from __future__ import absolute_import
-from __future__ import unicode_literals
+
+
 from . import Extension
 from ..inlinepatterns import Pattern
 from ..util import etree
@@ -100,7 +100,7 @@ class WikiLinkExtension(Extension):
         }
         configs = dict(configs) or {}
         # Override defaults with user settings
-        for key, value in configs.items():
+        for key, value in list(configs.items()):
             self.setConfig(key, value)
         
     def extendMarkdown(self, md, md_globals):

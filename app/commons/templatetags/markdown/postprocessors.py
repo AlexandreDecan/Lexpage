@@ -8,8 +8,8 @@ processing.
 
 """
 
-from __future__ import absolute_import
-from __future__ import unicode_literals
+
+
 from . import util
 from . import odict
 import re

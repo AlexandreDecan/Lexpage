@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+
 import re
 import sys
 
@@ -15,9 +15,9 @@ if PY3:
     text_type = str
     int2str = chr
 else:
-    string_type = basestring
-    text_type = unicode
-    int2str = unichr
+    string_type = str
+    text_type = str
+    int2str = chr
 
 
 """

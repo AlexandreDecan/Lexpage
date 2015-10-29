@@ -1,8 +1,3 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import View, ListView
@@ -18,8 +13,8 @@ from django.contrib.auth import authenticate, login
 
 from notifications import notify
 
-from forms import RegistrationForm, LoginForm, ChangeProfileForm, user_fields, profile_fields, ActivationForm
-from models import ActivationKey, Profile, ActiveUser
+from .forms import RegistrationForm, LoginForm, ChangeProfileForm, user_fields, profile_fields, ActivationForm
+from .models import ActivationKey, Profile, ActiveUser
 
 
 import json

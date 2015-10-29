@@ -1,12 +1,8 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django import forms
-from models import BlogPost
+from .models import BlogPost
 
 import re
+
 
 def clean_tags(tagstr):
     """
@@ -36,10 +32,9 @@ class SearchByTagsForm(forms.ModelForm):
         tags = clean_tags(self.cleaned_data['tags'])
         return ' '.join(tags)
 
-    class Meta():
+    class Meta:
         model = BlogPost
         fields = ['tags']
-
 
 
 class UserCreatePostForm(forms.ModelForm):
@@ -74,16 +69,15 @@ class UserCreatePostForm(forms.ModelForm):
     def clean_action(self):
         return int(self.cleaned_data['action'])
 
-    class Meta():
+    class Meta:
         model = BlogPost
         fields = ['title', 'tags', 'abstract', 'text', 'priority']
-
 
 
 class StaffCreatePostForm(UserCreatePostForm):
     action = forms.ChoiceField(choices=UserCreatePostForm.ACTION_CHOICES[1:], label='Action', initial=UserCreatePostForm.ACTION_DRAFT, required=True)
 
-    class Meta():
+    class Meta:
         model = BlogPost
         fields = UserCreatePostForm.Meta.fields + ['action']
 
@@ -91,10 +85,9 @@ class StaffCreatePostForm(UserCreatePostForm):
 class UserEditPostForm(UserCreatePostForm):
     action = forms.ChoiceField(choices=UserCreatePostForm.ACTION_CHOICES[:3], label='Action', initial=UserCreatePostForm.ACTION_DRAFT, required=True)    
 
-    class Meta():
+    class Meta:
         model = BlogPost
         fields = UserCreatePostForm.Meta.fields + ['action']
-
 
 
 class StaffEditPostForm(UserEditPostForm):

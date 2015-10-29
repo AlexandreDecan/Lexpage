@@ -1,15 +1,10 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django.contrib.syndication.views import Feed
 from django.core.urlresolvers import reverse_lazy
 
 from django.template.defaultfilters import linebreaksbr
 
 from commons.templatetags.markup_bbcode import stripbbcode
-from models import Thread, Message
+from .models import Thread, Message
 
 import datetime
 

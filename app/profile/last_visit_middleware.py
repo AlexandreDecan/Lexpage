@@ -1,5 +1,6 @@
 from datetime import datetime
-from models import Profile
+from .models import Profile
+
 
 class SetLastVisitMiddleware():
     def process_response(self, request, response):

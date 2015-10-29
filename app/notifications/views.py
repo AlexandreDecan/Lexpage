@@ -1,15 +1,10 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django.http import HttpResponse
 from django.views.generic import View, RedirectView
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
-from models import Notification
+from .models import Notification
 
 
 class DismissView(View):

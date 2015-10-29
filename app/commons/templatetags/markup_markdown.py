@@ -1,19 +1,14 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django import template
 from django.utils.safestring import mark_safe
 from django.utils.encoding import force_text
 
-import markdown
+from . import markdown
 
 
 register = template.Library()
 
 
-from markdown.extensions import def_list, fenced_code, footnotes, tables, \
+from .markdown.extensions import def_list, fenced_code, footnotes, tables, \
                                 nl2br, smart_strong, sane_lists, lexpage_oembed
 
 extensions = [def_list.makeExtension(), 

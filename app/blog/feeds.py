@@ -1,12 +1,7 @@
-#!/usr/bin/python
-# coding=utf-8
-
-from __future__ import unicode_literals
-
 from django.contrib.syndication.views import Feed
 from django.core.urlresolvers import reverse_lazy
 
-from models import BlogPost
+from .models import BlogPost
 
 
 class LatestEntriesFeed(Feed):
