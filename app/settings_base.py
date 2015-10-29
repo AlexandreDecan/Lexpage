@@ -6,7 +6,11 @@ from __future__ import unicode_literals
 import sys
 import os
 
-
+try:
+   import pymysql
+   pymysql.install_as_MySQLdb()
+except ImportError:
+   pass
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
