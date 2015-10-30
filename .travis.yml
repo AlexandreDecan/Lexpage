@@ -8,5 +8,5 @@ install: "pip install -r requirements.txt"
 
 # command to run tests
 script:
-  - "python app/manage.py collectstatic --no-input"
+  - "python app/manage.py collectstatic --noinput"
   - "python app/manage.py test"
