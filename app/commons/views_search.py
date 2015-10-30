@@ -62,26 +62,26 @@ SEARCH = [
 
 
 def normalize_query(query_string, findterms=None, normspace=None):
-    ''' Splits the query string in invidual keywords, getting rid of unecessary spaces
+    """ Splits the query string in invidual keywords, getting rid of unecessary spaces
         and grouping quoted words together.
         Example:
-        
+
         >>> normalize_query('  some random  words "with   quotes  " and   spaces')
         ['some', 'random', 'words', 'with quotes', 'and', 'spaces']
-    
-    '''
-    if findterms == None:
+
+    """
+    if findterms is None:
         findterms = re.compile(r'"([^"]+)"|(\S+)').findall
-    if normspace == None:
+    if normspace is None:
         normspace = re.compile(r'\s{2,}').sub
     return [normspace(' ', (t[0] or t[1]).strip()) for t in findterms(query_string)] 
 
 
 def get_query(query_string, search_fields):
-    ''' Returns a query, that is a combination of Q objects. That combination
+    """ Returns a query, that is a combination of Q objects. That combination
         aims to search keywords within a model by testing the given search fields.
-    
-    '''
+
+    """
     query = None # Query to search for every search term        
     terms = normalize_query(query_string)
     for term in terms:
@@ -110,16 +110,17 @@ def get_query_for_author(search_cfg, query_text):
         return Q()
     return Q(**{'%s__username__icontains' % field: query_text})
 
+
 def get_query_for_date(search_cfg, date_start, date_end):
     field = search_cfg['date_field']
     return Q(**{'%s__gte' % field: date_start, 
             '%s__lte' % field: date_end})
 
 
-
 class SearchView(View):
     def post(self, request, *args, **kwargs):
         self.form = SearchForm(request.POST)
+
         if self.form.is_valid():
             # Compute the query and store it
             query = self.form.cleaned_data['query_text']
@@ -136,15 +137,12 @@ class SearchView(View):
 
         return self.render(request)
 
-
     def get(self, request, *args, **kwargs):
         self.form = SearchForm()
         return self.render(request)
 
-
     def render(self, request):
-        context = {}
-        context['form'] = self.form
+        context = {'form': self.form}
 
         if hasattr(self, 'query'):
             # We have a query, compute the queryset
