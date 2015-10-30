@@ -1,6 +1,45 @@
+from django.core.urlresolvers import reverse
 from django.test import TestCase
 from minichat.models import Message
 from django.contrib.auth.models import User
+
+
+class ViewsTests(TestCase):
+    fixtures = ['devel']
+
+    def setUp(self):
+        pass
+
+    def test_archives(self):
+        response = self.client.get(reverse('minichat_archives'))
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get(reverse('minichat_archives'), follow=True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_latests(self):
+        response = self.client.get(reverse('minichat_latests'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_post_login_required(self):
+        url = reverse('minichat_post')
+        response = self.client.get(url)
+        self.assertRedirects(response, reverse('auth_login') + '?next=' + url, 302, 200)
+
+    def test_post_login(self):
+        self.assertTrue(self.client.login(username='user1', password='user1'), 'I need to login for this test!')
+        self.client.logout()
+
+    def test_userslist_invalid(self):
+        response = self.client.get(reverse('minichat_userslist'))
+        self.assertEqual(response.status_code, 404)
+
+    def test_userslist_smallquery(self):
+        response = self.client.get(reverse('minichat_userslist'), {'query': 'a'})
+        self.assertEqual(response.status_code, 404)
+
+    def test_userslist(self):
+        response = self.client.get(reverse('minichat_userslist'), {'query': 'abc'})
+        self.assertEqual(response.status_code, 200)
 
 
 class AnchorTests(TestCase):

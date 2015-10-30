@@ -10,7 +10,8 @@ from datetime import date
 urlpatterns = patterns('',
                        url(r'^archives/$', 
                             RedirectView.as_view(
-                                url=reverse_lazy('minichat_archives', kwargs={'year': date.today().year, 'month': date.today().month})
+                                url=reverse_lazy('minichat_archives', kwargs={'year': date.today().year, 'month': date.today().month}),
+                                permanent=False
                             ),
                            name='minichat_archives'),
                        url(r'^archives/(?P<year>\d{4})/(?P<month>\d+)/$', 
