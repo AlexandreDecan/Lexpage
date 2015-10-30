@@ -47,7 +47,7 @@ class SearchViewsTests(TestCase):
 
     def test_emptysearch(self):
         fields = {'query_text': '',
-                  'target': 0, #blogpost
+                  'target': 0,  # blogpost
                   'author': '',
                   'date_start': '',
                   'date_end': ''}
@@ -56,7 +56,7 @@ class SearchViewsTests(TestCase):
 
     def test_nonemptysearch(self):
         fields = {'query_text': 'hello',
-                  'target': 1, #threads
+                  'target': 1,  # threads
                   'author': 'world',
                   'date_start': '01/01/14',
                   'date_end': '01/01/15'}
