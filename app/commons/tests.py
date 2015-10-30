@@ -28,12 +28,14 @@ class MarkupViewsTests(TestCase):
         url = reverse('markup_preview', kwargs={'markup': 'bbcode'})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+        self.client.logout()
 
     def test_markuppreview_not_empty(self):
         self.client.login(username='user1', password='user1')
         url = reverse('markup_preview', kwargs={'markup': 'bbcode'})
         response = self.client.get(url, {'content': '[b]Hello World[/b]!'})
         self.assertContains(response, 'Hello World', status_code=200)
+        self.logout()
 
 
 class SearchViewsTests(TestCase):
