@@ -8,6 +8,7 @@ from .models import Thread, Message
 
 import datetime
 
+
 class LatestsFeed(Feed):
     title = 'Discussions récentes'
     link = reverse_lazy('board_latests')
