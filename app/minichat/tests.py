@@ -62,15 +62,14 @@ class AnchorTests(TestCase):
             self.assertListEqual(message.parse_anchors(), [anchored], msg='format: %s' % frmt)
 
     def test_multiple(self):
-        anchored = self.users[:2]
         formats = [
             'Hello @{0} @{1}',
             '@{0}@{1}',
             '@{0}@{0}@{1}',
         ]
         for frmt in formats:
-            message = Message(user=self.users[0], text=frmt.format(anchored[0].get_username(), anchored[1].get_username()))
-            self.assertListEqual(message.parse_anchors(), anchored, msg='format: %s' % frmt)
+            message = Message(user=self.users[0], text=frmt.format(self.users[0].get_username(), self.users[1].get_username()))
+            self.assertListEqual(message.parse_anchors(), [self.users[0], self.users[1]], msg='format: %s' % frmt)
 
     def test_invalid(self):
         anchored = self.users[:2]
