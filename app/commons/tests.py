@@ -6,9 +6,7 @@ class MarkupViewsTests(TestCase):
     fixtures = ['devel']
 
     def setUp(self):
-        # 'user1' can log in
-        self.assertTrue(self.client.login(username='user1', password='user1'), 'I need to log in user1/user1 for the tests!')
-        self.client.logout()
+        pass
 
     def test_markuppage_bbcode(self):
         response = self.client.get(reverse('markup_bbcode'))

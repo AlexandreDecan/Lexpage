@@ -41,8 +41,6 @@ class ThreadManager(models.Manager):
         return userMBox
 
 
-
-
 class Thread(models.Model):
     title = models.CharField(verbose_name='Titre', max_length=60)
     last_message = models.ForeignKey('Message', verbose_name='Dernier message', related_name='+', default=-1)
@@ -102,7 +100,6 @@ class Thread(models.Model):
         message_box.save()
 
         return message_box
-
 
 
 class Message(models.Model):

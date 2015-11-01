@@ -94,7 +94,6 @@ class MarkThreadView(View):
             return redirect(reverse_lazy('messaging_inbox'))
 
 
-
 class NewThreadView(FormView):
     """
     Display and handle the form needed to create a new thread.
@@ -138,7 +137,6 @@ class NewThreadView(FormView):
         return redirect(reverse_lazy('messaging_show', kwargs={'thread': new_box.thread.pk}))
 
 
-
 class MessageListView(ListView):
     """
     Display the content of a given thread.
@@ -166,7 +164,6 @@ class MessageListView(ListView):
     def dispatch(self, request, *args, **kwargs):
         self.box = get_object_or_404(MessageBox.objects, thread=self.kwargs['thread'], user=self.request.user)
         return ListView.dispatch(self, request, *args, **kwargs)
-
 
 
 class ThreadListView(ListView):

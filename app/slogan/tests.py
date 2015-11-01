@@ -6,8 +6,7 @@ class ViewsTests(TestCase):
     fixtures = ['devel']
 
     def setUp(self):
-        self.assertTrue(self.client.login(username='user1', password='user1'), 'I need to login for this test!')
-        self.client.logout()
+        pass
 
     def test_sloganaddpage_login_required(self):
         url = reverse('slogan_add')

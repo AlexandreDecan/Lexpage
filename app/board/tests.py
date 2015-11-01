@@ -9,9 +9,8 @@ class ThreadViewsTests(TestCase):
     fixtures = ['devel']
 
     def setUp(self):
-        self.assertTrue(self.client.login(username='user1', password='user1'), 'I need to login as user1/user1')
+        self.client.login(username='user1', password='user1')
         self.threads = Thread.objects.filter(number__gt=10)
-        self.assertTrue(len(self.threads) > 0, 'No thread with enough messages')
 
     def test_threadlist(self):
         urls = [
@@ -65,9 +64,8 @@ class MesageViewsTests(TestCase):
     fixtures = ['devel']
 
     def setUp(self):
-        self.assertTrue(self.client.login(username='user1', password='user1'), 'I need to login as user1/user1')
+        self.client.login(username='user1', password='user1')
         self.messages = Message.objects.filter(author=ActiveUser.objects.filter(username='user1'))
-        self.assertTrue(len(self.messages) > 0, 'I need at least one message posted by user1/user1.')
 
     def test_messageshow(self):
         url = reverse('board_message_show', kwargs={'message': self.messages[0].pk})

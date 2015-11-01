@@ -1,7 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from blog.models import BlogPost
-from django.contrib.auth.models import User
 from profile.models import ActiveUser
 
 
@@ -9,9 +8,8 @@ class PostsTests(TestCase):
     fixtures = ['devel']
 
     def setUp(self):
-        self.assertTrue(self.client.login(username='user1', password='user1'), 'I need to login as user1/user1')
+        self.client.login(username='user1', password='user1')
         self.posts = BlogPost.published.all()
-        self.assertTrue(len(self.posts) > 0, 'No blog post available')
 
     def test_list(self):
         response = self.client.get(reverse('blog_archives'), follow=True)
@@ -31,10 +29,9 @@ class LoginPostsTests(TestCase):
     fixtures = ['devel']
 
     def setUp(self):
-        self.assertTrue(self.client.login(username='user1', password='user1'), 'I need to login as user1/user1')
+        self.client.login(username='user1', password='user1')
         self.user = ActiveUser.objects.filter(username='user1')[0]
         self.posts = BlogPost.published.all()
-        self.assertTrue(len(self.posts) > 0, 'No blog post available')
 
     def test_comment(self):
         url = reverse('blog_post_comments', kwargs={'pk': self.posts[0].pk})
@@ -72,7 +69,7 @@ class PendingTests(TestCase):
     fixtures = ['devel']
 
     def setUp(self):
-        self.assertTrue(self.client.login(username='admin', password='admin'), 'I need to login as admin/admin')
+        self.client.login(username='admin', password='admin')
         self.user = ActiveUser.objects.filter(username='admin')[0]
         self.post = BlogPost(title='Hello World!',
                         author=self.user,

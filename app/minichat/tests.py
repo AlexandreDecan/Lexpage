@@ -48,9 +48,6 @@ class AnchorTests(TestCase):
     def setUp(self):
         self.users = User.objects.all()
 
-        # We need at least 2 users
-        self.assertGreaterEqual(len(self.users), 2)
-
     def test_single(self):
         anchored = self.users[1]
         formats = [
