@@ -5,5 +5,5 @@ futures==2.2.0
 Pillow==2.7.0
 Pillow-PIL==0.1.dev0
 uWSGI==2.0.9
-whitenoise==1.0.6
+whitenoise==2.0.4
 PyMySQL==0.6.6
