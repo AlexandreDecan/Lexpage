@@ -56,14 +56,15 @@ class ActivationKeyManager(models.Manager):
         False, otherwise return the user.
         """
         try:
-            activationKey = self.get(key=key)
+            activation_key = self.get(key=key)
         except self.model.DoesNotExist:
             return False
-        if not activationKey.has_expired():
-            user = activationKey.user
+
+        if not activation_key.has_expired():
+            user = activation_key.user
             user.is_active = True
             user.save()
-            activationKey.delete()
+            activation_key.delete()
             return user
         return False
 
@@ -75,10 +76,8 @@ class ActivationKeyManager(models.Manager):
         new_user.is_active = False
         new_user.save()
 
-        salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
-        if isinstance(username, str):
-            username = username.encode('utf-8')
-        key = hashlib.sha1(salt+username).hexdigest()
+        salt = hashlib.sha1(str(random.random()).encode('utf-8')).hexdigest()[:5]
+        key = hashlib.sha1((salt+username).encode('utf-8')).hexdigest()
 
         activation_key = self.create(user=new_user, key=key)
         return new_user, activation_key

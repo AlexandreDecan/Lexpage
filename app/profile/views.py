@@ -60,7 +60,6 @@ class ProfileChangeView(FormView):
             new_file.close()            
             profile.avatar = 'http://' + settings.ALLOWED_HOSTS[0] + os.path.join(settings.STATIC_URL, file_relative_path)
 
-
         user.save()
         profile.save()
 
@@ -101,7 +100,6 @@ class LoginView(FormView):
                     self.request.session.set_expiry(0)
                 messages.success(self.request, 'Bienvenue %s !' % user.get_username())
         return view_login(self.request)
-
 
 
 class ProfileListView(ListView):

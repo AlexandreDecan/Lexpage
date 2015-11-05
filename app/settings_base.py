@@ -152,5 +152,5 @@ SESSION_COOKIE_AGE = 7257600 # 3 months
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
-
+RECAPTCHA_PUBLIC_KEY = '6LdAH_ASAAAAACAHEysPBjLekWJX94nYM0hI3hHy'
 NOCAPTCHA = True
