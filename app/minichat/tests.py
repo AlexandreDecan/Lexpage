@@ -26,7 +26,10 @@ class ViewsTests(TestCase):
         self.assertRedirects(response, reverse('auth_login') + '?next=' + url, 302, 200)
 
     def test_post_login(self):
-        self.assertTrue(self.client.login(username='user1', password='user1'), 'I need to login for this test!')
+        self.client.login(username='user1', password='user1')
+        response = self.client.post(reverse('minichat_post'), {'text': 'Hello World!'})
+        self.assertRedirects(response, reverse('minichat_post'), target_status_code=200)
+        self.assertEqual(Message.objects.last().text, 'Hello World!')
         self.client.logout()
 
     def test_userslist_invalid(self):
