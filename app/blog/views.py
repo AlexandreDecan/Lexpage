@@ -113,7 +113,7 @@ def _handle_status(request, post, action):
         messages.success(request, 'Le billet a été sauvegardé dans vos brouillons.')
     elif action == UserCreatePostForm.ACTION_SUBMIT:
         post.change_status(request.user, BlogPost.STATUS_SUBMITTED)
-        notify.blog_draft_new(request.user, post)
+        notify.blog_pending_new(request.user, post)
         messages.success(request, 'Le billet va être soumis aux modérateurs.')
     elif action == UserCreatePostForm.ACTION_APPROVE:
         post.change_status(request.user, BlogPost.STATUS_APPROVED)

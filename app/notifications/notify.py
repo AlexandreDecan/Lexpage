@@ -39,9 +39,9 @@ def escape(string):
     return force_escape(string)
 
 
-def blog_draft_new(user, post):
+def blog_pending_new(user, post):
     """
-    Send a notification to every user in BlogTeam. 
+    Send a notification to every user in BlogTeam.
     """
     recipients = User.objects.filter(groups__name='BlogTeam')
     notify(recipients, 'Un billet est en attente de validation',
