@@ -52,7 +52,7 @@ class Thread(models.Model):
         ordering = ['-last_message__date']
         verbose_name = 'Conversation'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     @property
@@ -108,7 +108,7 @@ class Message(models.Model):
     text = models.TextField(verbose_name='Message')
     date = models.DateTimeField(verbose_name='Date', auto_now_add=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.text
 
     class Meta:
@@ -154,7 +154,7 @@ class MessageBox(models.Model):
         verbose_name = 'Boîte de réception'
         verbose_name_plural = 'Boîtes de réceptions'
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s: %s' % (self.user, self.thread)
 
     @property

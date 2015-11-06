@@ -256,7 +256,7 @@ class BlogPost(models.Model):
 
         return [str(x) for x in self.tags.split(' ') if len(x) > 0]
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.title)
 
     class Meta:

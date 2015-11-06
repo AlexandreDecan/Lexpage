@@ -48,7 +48,7 @@ class Thread(models.Model):
         self.slug = slugify(self.title)
         return super(Thread, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def authors(self, N=None):
@@ -102,7 +102,7 @@ class Message(models.Model):
     def get_absolute_url(self):
         return reverse('board_message_show', kwargs={'message': self.pk})
 
-    def __unicode__(self):
+    def __str__(self):
         return self.text[:50] + "..."
 
     def position(self):

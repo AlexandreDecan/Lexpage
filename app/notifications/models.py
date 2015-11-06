@@ -35,7 +35,7 @@ class Notification(models.Model):
     def get_icon(self):
         return Notification.ICON.get(self.app, 'fa-warning')
 
-    def __unicode__(self):
+    def __str__(self):
         return '[%s] %s' % (self.recipient.get_username(), self.title)
 
     class Meta:

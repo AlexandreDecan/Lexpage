@@ -22,7 +22,7 @@ class Slogan(models.Model):
     objects = models.Manager()
     visible = SloganManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.slogan
 
     class Meta:
