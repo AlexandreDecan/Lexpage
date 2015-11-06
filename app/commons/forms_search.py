@@ -30,7 +30,7 @@ class SearchForm(forms.Form):
 
     def clean_date_start(self):
         if not self.cleaned_data['date_start']:
-            return datetime.date(2014, 1, 1)
+            return datetime.date.min
         return self.cleaned_data['date_start']
 
     def clean_date_end(self):
