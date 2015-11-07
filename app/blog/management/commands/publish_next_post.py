@@ -52,7 +52,7 @@ class Command(NoArgsCommand):
 
             # Time since last published post, in hours
             delta = (datetime.datetime.now() - BlogPost.published.latest().date_published)
-            delta = (delta.seconds + delta.days * 24 * 3600) // 3600.0
+            delta = (delta.seconds + delta.days * 24 * 3600) / 3600
             delta += 0.5  # Dismiss OVH delay
 
             # If delta (in hour) > time_frame, publish!
