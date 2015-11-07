@@ -26,7 +26,7 @@ Le répertoire */app* contient tout ce qui est propre à Django et au Lexpage :
  - Le reste est classique pour du Django. 
   
 La racine du dépôt contient notamment :
- - *gunicor.py* contient la configuration Gunicorn pour exécuter l'application.'
+ - *gunicorn.py* contient la configuration Gunicorn pour exécuter l'application.
  - *requirements.txt* contient la liste des dépendances Python nécessaires (à utiliser avec `pip install -r requirements.txt`).
  
  
@@ -64,19 +64,12 @@ A ce stade, une base va être créée et contiendra les différents modèles. La
 
 Si vous ne souhaitez pas utiliser ces données, mais que vous voulez tester l'authentification et ces machins-là sur le site, il vous faudra au moins un compte administrateur. Utilisez donc Django pour ça :
 `python app/manage.py createsuperuser`
-
 Cette commande va vous permettre de créer un compte administrateur, étape indispensable pour pouvoir vous logguer et, si nécessaire, créer d'autres utilisateurs, et ainsi de suite. 
 
 #### Mettre en place les fichiers statiques
 
-Enfin, afin que le site puisse fournir les fichiers statiques nécessaires à son affichage et à son fonctionnement, il convient d'indiquer à Django de collecter ces fichiers statiques depuis les différentes applications qui sont utilisées, et de les réunir dans un répertoire qui sert à... regrouper les fichiers statiques. Magie ! La commande `python app/manage.py collectstatic` fera cela pour vous. Bien entendu, c'est une commande à répéter à chaque fois que vous faites des modifications dans les fichiers statiques. Si vous utilisez le serveur de développement de Django (le truc que vous avez lancé avec `python app/manage.py runserver`), vous n'aurez à priori pas besoin de faire cela car Django va pouvoir travailler avec les fichiers statiques dans leur emplacement d'origine. 
+Enfin, afin que le site puisse fournir les fichiers statiques nécessaires à son affichage et à son fonctionnement, il convient d'indiquer à Django de collecter ces fichiers statiques depuis les différentes applications qui sont utilisées, et de les réunir dans un répertoire qui sert à... regrouper les fichiers statiques. Magie ! La commande `python app/manage.py collectstatic` fera cela pour vous. Bien entendu, c'est une commande à répéter à chaque fois que vous faites des modifications dans les fichiers statiques. Fastidieux ? Pas tellement : si vous utilisez le serveur de développement de Django (le truc que vous avez lancé avec `python app/manage.py runserver`), vous n'aurez pas à vous en soucier : le serveur de développement de Django est prévu pour aller rechercher les fichiers statiques directement dans leur répertoire d'origine. 
 
-
-#### Modifier le style CSS
-
-Ce n'est absolument pas un pré-requis pour pouvoir tester localement le site, mais si vous êtes intéressé par la modification de la charte graphique du site, le dossier */static/css/* contient ce qu'il vous faut. En particulier, il contient le point d'entrée Sass dans le fichier *style.scss*. Les éléments partiels sont dans le dossier *lexpage* (ceux de Bootstrap sont, naturellement, dans le dossier *bootstrap*). Les éléments partiels sont décomposés en plusieurs fichiers dont la sémantique est assez facile à identifier. En particulier, le fichier *_variables.scss* contient la définition des variables (antérieures à celles de Bootstrap) nécessaire pour le thème. Le fichier *_mixins.scss* contient des mixins nécessaires aux éléments partiels (ou des ré-écriture de certains mixins Bootstrap, dans le cas où des modifications doivent être appliquées directement sur ces derniers). 
-
-En environnement de développement, le fichier */static/css/style.css* sera directement utilisé lorsque le site est affiché. En environnement de production (ou de test, en gros, quand vous n'utilisez pas `settings_dev.py` comme fichier de configuration), c'est le fichier */static_pub/css/style.min.css* qui sera utilisé. Notez deux choses : la première est la présence du *.min*, et la seconde est la présence du *_pub* (voir remarque ci-dessus à propos de `python app/manage.py collectstatic`). 
 
 ## Les problèmes fréquents et leurs solutions connues
 
@@ -107,11 +100,8 @@ L'inscription sur le site nécessite de résoudre un captcha.
 Si vous utilisez les paramètres de développement, il est probable que la variable `NOCAPTCHA` soit à `False`, signifiant que le captcha classique (celui où on entre du texte, par opposition à celui où on ne fait que cocher une case) est actif.
 Dans ce cas, il vous suffit d'écrire *PASSED* pour que le captcha soit validé.
 
-## Comment contribuer ?
+#### Je n'arrive pas à modifier le style CSS
 
-De n'importe quelle manière :
-  - soit en me contacter pour poser vos questions ou indiquer vos remarques, 
-  - soit en créant une issue sur le bugtracker, 
-  - soit en effectuant un pull request, 
-  - ...
+Ce n'est absolument pas un pré-requis pour pouvoir tester localement le site, mais si vous êtes intéressé par la modification de la charte graphique du site, le dossier */static/css/* contient ce qu'il vous faut. En particulier, il contient le point d'entrée Sass dans le fichier *style.scss*. Les éléments partiels sont dans le dossier *lexpage* (ceux de Bootstrap sont, naturellement, dans le dossier *bootstrap*). Les éléments partiels sont décomposés en plusieurs fichiers dont la sémantique est assez facile à identifier. En particulier, le fichier *_variables.scss* contient la définition des variables (antérieures à celles de Bootstrap) nécessaire pour le thème. Le fichier *_mixins.scss* contient des mixins nécessaires aux éléments partiels (ou des ré-écriture de certains mixins Bootstrap, dans le cas où des modifications doivent être appliquées directement sur ces derniers). 
 
+En environnement de développement, le fichier */static/css/style.css* sera directement utilisé lorsque le site est affiché. En environnement de production (ou de test, en gros, quand vous n'utilisez pas `settings_dev.py` comme fichier de configuration), c'est le fichier */static_pub/css/style.min.css* qui sera utilisé. Notez deux choses : la première est la présence du *.min*, et la seconde est la présence du *_pub* (voir remarque ci-dessus à propos de `python app/manage.py collectstatic`). 
