@@ -65,17 +65,20 @@ class ChangeProfileForm(forms.ModelForm):
         else:
             self.cleaned_data['avatar_file_ext'] = extension
 
-        from PIL import Image, ImageFileIO
-        try:
+        # TODO: Look for an alternative for PIL/Pillow that does not require external libs
+        return self.cleaned_data['avatar_file']
 
-            im = Image.open(ImageFileIO.ImageFileIO(in_file))
-            width, height = im.size
-            if (0 < width <= 120) and (0 < height <= 120):
-                return self.cleaned_data['avatar_file']
-            else:
-                raise forms.ValidationError('L\'image doit faire moins de 120x120 pixels.')
-        except Exception:
-            raise forms.ValidationError('Une erreur est survenue lors de l\'analyse de votre image.')
+        # from PIL import Image, ImageFileIO
+        # try:
+        #
+        #     im = Image.open(ImageFileIO.ImageFileIO(in_file))
+        #     width, height = im.size
+        #     if (0 < width <= 120) and (0 < height <= 120):
+        #         return self.cleaned_data['avatar_file']
+        #     else:
+        #         raise forms.ValidationError('L\'image doit faire moins de 120x120 pixels.')
+        # except Exception:
+        #     raise forms.ValidationError('Une erreur est survenue lors de l\'analyse de votre image.')
 
     def clean_birthdate(self):
         if self.cleaned_data['birthdate']:
