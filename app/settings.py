@@ -1,4 +1,2 @@
-#!/usr/bin/python
-
-# Default from dev environment
+# Safe default from settings_dev
 from settings_dev import *

@@ -8,7 +8,6 @@ __pycache__/
 # Lexpage-specific
 app/db
 app/settings_prod.py
-docker-run.sh
 
 # Bower
 bower_components
@@ -21,3 +20,7 @@ bower_components
 
 # Virtualenv
 env_lexpage*
+venv*
+
+# Gunicorn
+gunicorn.pid

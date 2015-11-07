@@ -98,7 +98,7 @@ class ActivationKeyManager(models.Manager):
 
 
 class ActivationKey(models.Model):
-    user = models.ForeignKey(User, unique=True)
+    user = models.OneToOneField(User)
     key = models.CharField('activation_key', max_length=40)
     
     objects = ActivationKeyManager()

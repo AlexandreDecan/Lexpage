@@ -17,6 +17,7 @@ Bonne lecture !
 
 
 ## Que contient le dépôt ?
+
 Le répertoire */app* contient tout ce qui est propre à Django et au Lexpage : 
  - Les répertoires *blog*, *board*, *commons*, *messaging*, *minichat*, *notifications*, *profile* et *slogan* contiennent les applications. 
  - Les répertoires *media*, *media_pub*, *static*, *static_pub* contiennent les fichiers statiques. *media* et *media_pub* ne sont pas utilisés. *static* contient les fichiers statiques du site, qui seront collectés automatiquement dans *static_pub* qui contiendra également les avatars uploadés.
@@ -25,8 +26,7 @@ Le répertoire */app* contient tout ce qui est propre à Django et au Lexpage :
  - Le reste est classique pour du Django. 
   
 La racine du dépôt contient notamment :
- - *Dockerfile* : permet de créer une image pour des containers Docker. L'image va créer un environnement Python à jour (via le fichier *requirements.txt*) et utilise uwsgi comme serveur WSGI.
- - *uwsgi.conf* contient la configuration initiale pour lancer Lexpage en dev.
+ - *gunicor.py* contient la configuration Gunicorn pour exécuter l'application.'
  - *requirements.txt* contient la liste des dépendances Python nécessaires (à utiliser avec `pip install -r requirements.txt`).
  
  
@@ -36,37 +36,15 @@ Tester localement le site se fait de manière assez simple, pour peu que vous sa
 
 ### Mettre en place un environnement virtuel
 
-La première chose à faire, pour ne pas saloper votre environnement, c'est d'isoler le futur Lexpage. Pour cela, nous vous proposons soit d'utiliser Docker, soit d'utiliser Virtualenv/Pew. Si vous ne vous souciez pas d'installer certaines librairies dans des versions spécifiques sur votre machine de travail, vous pouvez directement passer à l'étape suivante. Bien entendu, n'importe quelle solution de virtualisation devrait vous permettre d'arriver au même résultat, mais nous ne documenterons ici que les solutions basées sur Docker et sur Virtualenv/Pew.
+Que vous utilisiez `docker`, `vagrant` ou `virtualenv`, l'important est d'isoler votre environnement.
+Lexpage nécessite Python 3.4 ou supérieur pour fonctionner, ainsi qu'une petite liste de dépendances que vous retrouverez dans le fichier *requirements.txt*.
 
-Dans tous les cas, soyez bien attentif au fait que Lexpage est prévu pour >=Python 3.4. Le site est sans doute fonctionnel avec des versions inférieures de Python 3.x, mais plus avec la branche 2.x (sauf si vous travaillez avec une version antérieure à novembre 2015).
-
-##### Avec Docker
-
-Bien entendu, il est nécessaire que Docker soit installé sur votre machine. Si c'est votre première fois avec Docker, le mieux est de se rapporter à leur documentation et de suivre un bon gros tutoriel avant de vous lancer là-dedans. Enfin, rien n'est impossible, mais ça devrait vous aider.
-
-Une image Docker est disponible via le *Dockerfile* du dépôt :
- - Créez l'image via `docker build -t lexpage/dev .` (n'oubliez pas le "." à la fin de la ligne !)
- - Créez le container via `docker run --rm -it -p 8000:8000 -v PATH:/web/ lexpage/dev` où vous remplacez *PATH* par le chemin courant. 
- - Le site est alors supporté par uWSGI et disponible sur le port 8000 de votre machine.
- 
-Si vous effectuez des changements dans les dépendances (autrement dit, *requirements.txt*), pensez à rebuilder l'image du container. 
-
-
-##### Avec Virtualenv, Pew ou... rien !
-
-Si vous utilisez virtualenv ou pew, créez un environnement virtuel à la racine du dépôt :
- - `pew new Lexpage -p python3.4 -a .` si vous utilisez `pew`,
- - `mkvirtualenv Lexpage -p python 3.4 -a .` si vous utilisez `virtualenv`.
-  
-Que vous soyez dans un environnement virtuel ou non, la suite est la même pour tout le monde. Installez les dépendances automatiquement avec `pip` : `pip install -r requirements.txt`
-
-Si vous n'avez pas `pip`, ce ne sont pas les [moyens qui manquent](https://pip.pypa.io/en/latest/installing.html) tant que vous avez un Python qui tourne. 
-
-Ensuite, par ordre de préférence : 
- - soit vous utilisez uWSGI (déjà installé) via `uwsgi --ini uwsgi.conf` 
- - soit vous utilisez le serveur de développement de Django, via `python app/manage.py runserver`
-
-Si vous préférez *gunicorn*, rien ne vous empêche de l'utiliser également... 
+Si vous avez Python 3.4 (ou supérieur) sur votre système, c'est très simple :
+ - On commence par installer de quoi gérer un environnement virtuel : `pip install virtualenv` (nécessite d'être adminsitrateur)
+ - On crée l'environnement : `virtualenv venv -p python3.4` va créer un environnement avec Python 3.4 dedans, dans le répertoire *venv*.
+ - On saute dedans avec `source venv/bin/activate`
+ - On installe les dépendances avec `pip install -r requirements.txt`
+ - Et on a terminé !
 
 ### Configurer et utiliser Django pour servir Lexpage
 
@@ -105,8 +83,6 @@ En environnement de développement, le fichier */static/css/style.css* sera dire
 ##### Django retourne une erreur à propos de la base de données
 
 Pensez à créer la base de données localement si ce n'est pas encore fait, via `python app/manage.py migrate`
-Si vous travaillez avec Docker, il conviendra de le faire via l'image :
-`docker run --rm -it -v PATH:/web/ lexpage/dev python app/manage.py migrate` 
 
 N'oubliez pas de vous créer un superuser pour accéder au site via `python app/manage.py createsuperuser`
 
@@ -127,8 +103,9 @@ Vous avez créé un compte utilisateur, mais il est possible que ce compte n'ait
 
 #### Il est impossible de s'inscrire sur le site en local
 
-Notez qu'il n'est pas possible de s'inscrire sur le site via la procédure classique, essentiellement parce que les clés du captcha ne sont pas renseignées dans le fichier de configuration présent sur le dépôt. Si vous souhaitez créer d'autres comptes utilisateurs, il va falloir passer par l'administration de Django et faire cela à la main.
-
+L'inscription sur le site nécessite de résoudre un captcha.
+Si vous utilisez les paramètres de développement, il est probable que la variable `NOCAPTCHA` soit à `False`, signifiant que le captcha classique (celui où on entre du texte, par opposition à celui où on ne fait que cocher une case) est actif.
+Dans ce cas, il vous suffit d'écrire *PASSED* pour que le captcha soit validé.
 
 ## Comment contribuer ?
 

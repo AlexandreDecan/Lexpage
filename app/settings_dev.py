@@ -1,47 +1,33 @@
-#!/usr/bin/python
-
-from __future__ import unicode_literals
-
 from settings_base import *
 
 
 SECRET_KEY = 'SecretKeyForDevelopmentEnvironment'
 
 RECAPTCHA_PRIVATE_KEY = None
-# For testing, use old CAPTCHA
+# Set NOCAPTCHA to True to have a checkbox as captcha.
+# Set NOCAPTCHA to False to have an input field.
+# Enter "PASSED" in this field to bypass captcha while testing.
 NOCAPTCHA = False
 os.environ['RECAPTCHA_TESTING'] = 'True'
 
-
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_MAIL = 'no-reply@lexpage.net'
-
-
 
 ADMINS = (
     ('AdminDev', 'admin.dev@fakemail.com'),
 )
 MANAGERS = ADMINS
 
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 INTERNAL_IPS = ('127.0.0.1',)
 ALLOWED_HOSTS = ['127.0.0.1',]
 
-
+LOGGING = None
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.join(BASE_DIR, 'db'),                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',                      # Set to empty string for default.
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db'),
     }
 }
-
-
-LOGGING = None
