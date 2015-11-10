@@ -70,22 +70,21 @@ Cette commande va vous permettre de créer un compte administrateur, étape indi
 
 Enfin, afin que le site puisse fournir les fichiers statiques nécessaires à son affichage et à son fonctionnement, il convient d'indiquer à Django de collecter ces fichiers statiques depuis les différentes applications qui sont utilisées, et de les réunir dans un répertoire qui sert à... regrouper les fichiers statiques. Magie ! La commande `python app/manage.py collectstatic` fera cela pour vous. Bien entendu, c'est une commande à répéter à chaque fois que vous faites des modifications dans les fichiers statiques. Fastidieux ? Pas tellement : si vous utilisez le serveur de développement de Django (le truc que vous avez lancé avec `python app/manage.py runserver`), vous n'aurez pas à vous en soucier : le serveur de développement de Django est prévu pour aller rechercher les fichiers statiques directement dans leur répertoire d'origine. 
 
+### Les problèmes fréquents et leurs solutions connues
 
-## Les problèmes fréquents et leurs solutions connues
-
-##### Django retourne une erreur à propos de la base de données
+#### Django retourne une erreur à propos de la base de données
 
 Pensez à créer la base de données localement si ce n'est pas encore fait, via `python app/manage.py migrate`
 
 N'oubliez pas de vous créer un superuser pour accéder au site via `python app/manage.py createsuperuser`
 
 
-##### Aucune ressource statique ne semble s'afficher correctement
+#### Aucune ressource statique ne semble s'afficher correctement
 
 Les fichiers statiques doivent être collectés et placés dans le répertoire *static_pub/*. Django peut le faire pour vous : `python app/manage.py collectstatic`.
 
 
-##### L'édito ne s'affiche pas, mais il y a une barre bleue à la place
+#### L'édito ne s'affiche pas, mais il y a une barre bleue à la place
 
 Une partie du contenu "pratiquement statique" est géré via les *flatpages* de Django. Il vous faudra créer ces mêmes *flatpages* si vous souhaitez avoir le même rendu (l'édito, la page "à propos", les aides pour le balisage, etc.). 
 
