@@ -10,10 +10,14 @@
     <div class="navbar-header col-sm-2">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarA-collapse">
         <span class="sr-only">Menu</span>
-        {% if user.is_authenticated and notifications_list|length > 0 %}  
-            <span class="badge"><span class="fa fa-bell"></span> {{ notifications_list|length }}</span>
+        {% if user.is_authenticated %}
+            {% if notifications_list|length > 0 %}
+                <span class="badge"><span class="fa fa-bell"></span> {{ notifications_list|length }}</span>
+            {% else %}
+                <span class="fa fa-navicon"></span>
+            {% endif %}
         {% else %}
-            <span class="fa fa-navicon"></span>
+            <span class="fa fa-sign-in"></span>
         {% endif %}
       </button>
       <a href="{% url 'homepage' %}" class="navbar-brand">Lexpage</a>
