@@ -2,7 +2,7 @@
 {% load humanize %}
 {% load time_helper %}
 
-{% if post %}
+{% if post.title %}
 <div class="post-list">
     <div class="post-avatar">
         <a href="{% url 'profile_show' post.author %}">
