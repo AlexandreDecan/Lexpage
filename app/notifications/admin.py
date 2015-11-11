@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Notification
 
 
-class NotificationAdmin(admin.ModelAdmin):
+class NotificationAdmin(admin.ModelAdmin):  # pragma: no cover
     model = Notification
     list_display = ('title', 'app', 'recipient', 'date')
     search_field = ('app', 'key', 'title')

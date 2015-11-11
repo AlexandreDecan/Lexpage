@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import BlogPost
 
 
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(admin.ModelAdmin):  # pragma: no cover
     model = BlogPost
     list_display = ('title', 'tags', 'author', 'date_created', 'date_published', 'status')
     readonly_fields = ('status',)

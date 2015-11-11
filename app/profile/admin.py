@@ -4,18 +4,18 @@ from django.contrib.auth.admin import UserAdmin
 from .models import Profile, ActiveUser, ActivationKey
 
 
-class ProfileAdmin(admin.ModelAdmin):
+class ProfileAdmin(admin.ModelAdmin):  # pragma: no cover
     list_display = ('user', 'gender', 'country', 'birthdate', 'last_visit',)
     search_fields = ('user', 'country',)
     date_hierarchy = 'last_visit'
 
 
-class InlineProfileAdmin(admin.StackedInline):
+class InlineProfileAdmin(admin.StackedInline):  # pragma: no cover
     model = Profile
     can_delete = False
     
 
-class UserAdmin(UserAdmin):
+class UserAdmin(UserAdmin):  # pragma: no cover
     inlines = (InlineProfileAdmin,)
     list_display = ('username', 'email', 'date_joined', 'last_login', 'is_active')
     list_filter = ('is_active', 'is_staff')
@@ -23,7 +23,7 @@ class UserAdmin(UserAdmin):
     date_hierarchy = 'date_joined'
 
 
-class ActivationKeyAdmin(admin.ModelAdmin):
+class ActivationKeyAdmin(admin.ModelAdmin):  # pragma: no cover
     actions = ['activate_users', 'resend_activation_email', 'clean', 'revoke']
     list_display = ('user', 'has_expired')
     raw_id_fields = ['user']

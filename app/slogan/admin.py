@@ -4,7 +4,7 @@ from django.db.models import TextField
 from .models import Slogan
 
 
-class SloganAdmin(admin.ModelAdmin):
+class SloganAdmin(admin.ModelAdmin):  # pragma: no cover
     # actions = ('make_visible', 'make_invisible', )
     model = Slogan
     list_display = ('author', 'slogan', 'date', 'is_visible')
