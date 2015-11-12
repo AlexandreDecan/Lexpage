@@ -48,6 +48,19 @@ class LoginPostsTests(TestCase):
         response = self.client.get(reverse('blog_draft_create'))
         self.assertEqual(response.status_code, 200)
 
+        form = {
+            'title': 'Hello World!',
+            'tags': 'hello world',
+            'abstract': 'Hello World!',
+            'text': 'Hello World!',
+            'priority': BlogPost.PRIORITY_NORMAL,
+            'action': UserCreatePostForm.ACTION_SUBMIT
+        }
+        response = self.client.post(reverse('blog_draft_create'), form, follow=True)
+        self.assertEqual(response.status_code, 200)
+        post = BlogPost.submitted.last()
+        self.assertEqual(post.title, 'Hello World!')
+
     def test_drafedit(self):
         post = BlogPost(title='Hello World!',
                         author=self.user,
@@ -78,7 +91,7 @@ class StatusTests(TestCase):
                         tags='hello world',
                         abstract='Hello World!',
                         text='Hello World!',
-                        priority=BlogPost.STATUS_SUBMITTED)
+                        priority=BlogPost.PRIORITY_NORMAL)
         self.post.save()
 
         self.url = reverse('blog_pending_edit', kwargs={'pk': self.post.pk})
@@ -160,8 +173,7 @@ class TagsTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_search(self):
-        url = reverse('blog_tags', kwargs={'taglist': 'ab+cd'})
-        response = self.client.get(url)
+        response = self.client.post(reverse('blog_tags'), {'tags': 'hello'}, follow=True)
         self.assertEqual(response.status_code, 200)
 
     def test_jsonlist(self):
@@ -171,5 +183,8 @@ class TagsTests(TestCase):
         response = self.client.get(reverse('blog_tags_json'), {'query': 'hello'})
         self.assertEqual(response.status_code, 200)
 
-
+    def test_jsonsearch(self):
+        url = reverse('blog_tags', kwargs={'taglist': 'ab+cd'})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
 
