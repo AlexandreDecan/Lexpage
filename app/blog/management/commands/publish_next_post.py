@@ -2,6 +2,7 @@ from django.core.management.base import NoArgsCommand
 from blog.models import BlogPost
 import datetime
 
+
 class Command(NoArgsCommand):
     help = "Publish the first available blog entry. "
 
@@ -18,7 +19,7 @@ class Command(NoArgsCommand):
         if (today.day, today.month) in [(1, 1), (1, 5), (14, 7), (21, 7), (15, 8), (1, 11), (11, 11), (25, 12)]:
             return 'No post on public holiday'
 
-        # Number of already published for today
+        # Number of already published posts for today
         published = len(BlogPost.published.filter(date_published__gte=today))
 
         # Number of available posts for today
@@ -44,5 +45,5 @@ class Command(NoArgsCommand):
         # Do we publish?
         if latest_delay + 600 >= delay:  # Add 10 minutes to latest_delay as cron job are not very accurate
             post = BlogPost.approved.first()
-            # post.change_status(None, BlogPost.STATUS_PUBLISHED)
+            post.change_status(None, BlogPost.STATUS_PUBLISHED)
             return 'Publish %s' % post.title
