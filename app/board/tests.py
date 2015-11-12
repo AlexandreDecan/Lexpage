@@ -27,12 +27,23 @@ class ThreadViewsTests(TestCase):
     def test_threadcreate(self):
         response = self.client.get(reverse('board_create'))
         self.assertEqual(response.status_code, 200)
+        nb_threads = Thread.objects.count()
+        response = self.client.post(reverse('board_create'), {'title': 'Hello World!',
+                                                              'text': 'Hello World!'}, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Thread.objects.count(), nb_threads + 1)
 
     def test_threadcreateforpost(self):
         post = BlogPost.published.latest()
         url = reverse('board_create_for_post', kwargs={'post': post.pk})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+
+    def test_threadpost(self):
+        old_message = self.threads[0].last_message
+        self.threads[0].post_message(ActiveUser.objects.get(username='user1'), 'Hello World!')
+        self.threads[0].refresh_from_db()
+        self.assertNotEqual(self.threads[0].last_message, old_message)
 
     def test_threadrss(self):
         response = self.client.get(reverse('board_rss'))
@@ -59,8 +70,37 @@ class ThreadViewsTests(TestCase):
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
 
+    def test_deletemessage(self):
+        # Log as admin
+        self.client.login(username='admin', password='admin')
+        user = ActiveUser.objects.get(username='admin')
 
-class MesageViewsTests(TestCase):
+        # Create dummy thread
+        thread = Thread(title='Hello World!')
+        thread.save()
+        msg1 = thread.post_message(user, 'Hello 1')
+        msg2 = thread.post_message(user, 'Hello 2')
+
+        # Remove second message
+        response = self.client.get(reverse('board_message_delete', kwargs={'message': msg2.pk}), follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        thread.refresh_from_db()
+        with self.assertRaises(Message.DoesNotExist):
+            Message.objects.get(pk=msg2.pk)
+        self.assertEqual(thread.last_message, msg1)
+
+        # Remove first (and last) message
+        response = self.client.get(reverse('board_message_delete', kwargs={'message': msg1.pk}))
+        self.assertRedirects(response, reverse('board_latests'))
+
+        with self.assertRaises(Message.DoesNotExist):
+            Message.objects.get(pk=msg1.pk)
+        with self.assertRaises(Thread.DoesNotExist):
+            Thread.objects.get(pk=thread.pk)
+
+
+class MessageViewsTests(TestCase):
     fixtures = ['devel']
 
     def setUp(self):
@@ -73,9 +113,30 @@ class MesageViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_messageedit(self):
-        url = reverse('board_message_edit', kwargs={'message': self.messages[0].pk})
+        message = self.messages[0]
+
+        url = reverse('board_message_edit', kwargs={'message': message.pk})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+
+        response = self.client.post(url, {'text': 'Hello World!'}, follow=True)
+        message.refresh_from_db()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(message.text, 'Hello World!')
+
+    def test_messagemoderate(self):
+        message = self.messages[0]
+        self.client.login(username='admin', password='admin')
+
+        url = reverse('board_message_moderate', kwargs={'message': message.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.post(url, {'text': 'Hello World!', 'moderated': True}, follow=True)
+        message.refresh_from_db()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(message.text, 'Hello World!')
+        self.assertEqual(message.moderated, True)
 
     def test_markunread(self):
         url = reverse('board_message_mark_unread', kwargs={'message': self.messages[0].pk})

@@ -70,18 +70,6 @@ class ChangeProfileForm(forms.ModelForm):
 
         return self.cleaned_data['avatar_file']
 
-        # from PIL import Image, ImageFileIO
-        # try:
-        #
-        #     im = Image.open(ImageFileIO.ImageFileIO(in_file))
-        #     width, height = im.size
-        #     if (0 < width <= 120) and (0 < height <= 120):
-        #         return self.cleaned_data['avatar_file']
-        #     else:
-        #         raise forms.ValidationError('L\'image doit faire moins de 120x120 pixels.')
-        # except Exception:
-        #     raise forms.ValidationError('Une erreur est survenue lors de l\'analyse de votre image.')
-
     def clean_birthdate(self):
         if self.cleaned_data['birthdate']:
             if (self.cleaned_data['birthdate'] > datetime.date.today() - datetime.timedelta(365*5)) \

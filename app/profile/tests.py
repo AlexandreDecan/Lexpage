@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from profile.models import ActivationKey
+from profile.models import ActivationKey, Profile
 
 
 class AuthViewsTests(TestCase):
@@ -93,3 +93,25 @@ class ProfileViewsTests(TestCase):
     def test_edit(self):
         response = self.client.get(reverse('profile_edit'))
         self.assertEqual(response.status_code, 200)
+
+        profile = Profile.objects.get(user__username='user1')
+
+        form = {
+            'first_name': profile.user.first_name,
+            'last_name': profile.user.last_name,
+            'email': 'test@test.test',
+            'gender': Profile.GENDER_CHOICES[0][0],
+            'country': Profile.COUNTRY_CHOICES[0][0],
+            'city': 'hello',
+            'website_name': 'Lexpage',
+            'website_url': 'http://www.lexpage.net',
+            'birthdate': '01/01/1970',
+        }
+        response = self.client.post(reverse('profile_edit'), form)
+        self.assertRedirects(response, reverse('profile_edit'))
+
+        profile.refresh_from_db()
+        # Check only some field.
+        self.assertEqual(profile.city, 'hello')
+        self.assertEqual(profile.website_name, 'Lexpage')
+

@@ -6,6 +6,6 @@ install:
   - pip install coveralls
 script:
   - python app/manage.py collectstatic --noinput
-  - coverage run --source app/ --omit */migrations/* app/manage.py test
+  - coverage run --source app/ --omit */migrations/* --omit */management/* app/manage.py test
 after_success:
   - coveralls
