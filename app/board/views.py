@@ -24,7 +24,7 @@ import datetime
 import json
 
 
-MESSAGES_PER_THREAD = 10
+MESSAGES_PER_THREADPAGE = 10
 LATESTS_IN_DAYS = 6
 THREADS_PER_PAGE = 20
 MESSAGES_PER_PAGE = 50  # archives
@@ -40,7 +40,7 @@ class ThreadView(ListView):
     context_object_name = 'message_list'
     allow_empty = False
     queryset = None
-    paginate_by = MESSAGES_PER_THREAD
+    paginate_by = MESSAGES_PER_THREADPAGE
 
     def get_queryset(self):
         self.thread = get_object_or_404(Thread.objects, pk=self.kwargs['thread'])
@@ -90,7 +90,7 @@ class ThreadUnreadRedirectView(RedirectView):
             # First new message is at position + 1
             position += 1
 
-        page = (position // MESSAGES_PER_THREAD) + 1
+        page = (position // MESSAGES_PER_THREADPAGE) + 1
         anchor = '#new'
 
         return reverse('board_thread_show',
@@ -251,7 +251,7 @@ class MessageRedirectView(RedirectView):
     def get_redirect_url(self, **kwargs):
         message = get_object_or_404(Message.objects, pk=kwargs['message'])
         position = message.position()
-        page = (position // MESSAGES_PER_THREAD) + 1
+        page = (position // MESSAGES_PER_THREADPAGE) + 1
         return reverse('board_thread_show',
                        kwargs={'thread': message.thread.pk,
                                'slug': message.thread.slug,
