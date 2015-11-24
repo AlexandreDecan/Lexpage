@@ -15,6 +15,12 @@
     color: $navbar-default-color;
   }
 
+  @media (max-width: $screen-sm) {
+    .dropdown-header {
+      display: none;
+    }
+  }
+
   .badge {
     color: $btn-danger-color;
     background-color: $btn-danger-bg;

@@ -31,16 +31,16 @@
                 <span class="fa fa-files-o"></span> Billets
             </a>
           <ul class="dropdown-menu">
-            {% if user.is_authenticated %}
-              <li><a href="{% url 'blog_draft_create' %}"><span class="fa fa-fw fa-pencil"></span> Nouveau billet</a></li>
-              <li><a href="{% url 'blog_draft_list' %}"> <span class="fa fa-fw fa-clipboard"></span> Mes brouillons</a></li>
-              <li class="divider"></li>
-            {% endif %}
+            <li class="dropdown-header">Contribuer</li>
+            <li{% if not user.is_authenticated %} class="disabled"{% endif %}><a href="{% url 'blog_draft_create' %}"><span class="fa fa-fw fa-pencil"></span> Nouveau billet</a></li>
+            <li{% if not user.is_authenticated %} class="disabled"{% endif %}><a href="{% url 'blog_draft_list' %}"> <span class="fa fa-fw fa-clipboard"></span> Mes brouillons</a></li>
+
+            <li class="dropdown-header">Archives</li>
             <li><a href="{% url 'blog_archives' %}"><span class="fa fa-fw fa-list"></span> Liste des billets</a></li>
             <li><a href="{% url 'blog_tags' %}"><span class="fa fa-fw fa-tags"></span> Liste des étiquettes</a></li>
             {% if user.is_authenticated %}
               {% if perms.blog.can_approve %}
-                <li class="divider"></li>
+                <li class="dropdown-header">Administrer</li>
                 <li><a href="{% url 'blog_pending_list' %}"> <span class="fa fa-fw fa-clock-o"></span>Billets en attente</a></li>
               {% endif %}
             {% endif %}
@@ -53,16 +53,18 @@
             <span class="fa fa-comments-o"></span> Discussions
           </a>
           <ul class="dropdown-menu">
-            {% if user.is_authenticated %}
-              <li><a href="{% url 'board_create' %}"><span class="fa fa-fw fa-pencil"></span> Nouvelle discussion</a></li>
-              <li class="divider"></li>              
-            {% endif %}          
+            <li class="dropdown-header">Participer</li>
+            <li{% if not user.is_authenticated %} class="disabled"{% endif %}><a href="{% url 'board_create' %}"><span class="fa fa-fw fa-pencil"></span> Nouvelle discussion</a></li>
+
+            <li class="dropdown-header">Discussions</li>
             <li><a href="{% url 'board_latests' %}"><span class="fa fa-fw fa-play"></span> Discussions actives</a></li>
-            {% if user.is_authenticated %}
-              <li><a href="{% url 'board_followed' %}"><span class="fa fa-fw fa-eye"></span> Discussions suivies</a></li>
-            {% endif %}
+            <li{% if not user.is_authenticated %} class="disabled"{% endif %}><a href="{% url 'board_followed' %}"><span class="fa fa-fw fa-eye"></span> Discussions suivies</a></li>
+            <li{% if not user.is_authenticated %} class="disabled"{% endif %}><a href="{% url 'board_followed_unread' %}"><span class="fa fa-fw fa-eye-slash"></span> Nouveaux messages</a></li>
+
+            <li class="dropdown-header">Archives</li>
             <li><a href="{% url 'board_archives' %}"><span class="fa fa-fw fa-comments-o"></span> Liste des discussions</a></li>
             <li><a href="{% url 'board_archives_messages' %}"><span class="fa fa-fw fa-list"></span> Liste des messages</a></li>
+            <li><a href="{% url 'minichat_archives' %}"><span class="fa fa-fw fa-folder-open"></span> Messages du minichat</a></li>
           </ul><!-- menu -->
         </li><!-- discussions -->
 
@@ -74,31 +76,41 @@
             <span class="fa fa-users"></span> Lexpagiens
           </a>
           <ul class="dropdown-menu">
+            <li class="dropdown-header">Profils</li>
             <li><a href="{% url 'profile_list' %}"><span class="fa fa-fw fa-users"></span> Liste des profils</a></li>
+
+            <li class="dropdown-header">Compte</li>
             {% if user.is_authenticated %}
-                <li><a href="{% url 'profile_show' user %}"><span class="fa fa-fw fa-user"></span> Voir mon profil</a></li>
-                <li><a href="{% url 'profile_edit' %}"><span class="fa fa-fw fa-gear"></span> Éditer mon profil</a></li>
+              <li class="disabled"><a href="#"><span class="fa fa-fw fa-sign-in"></span> S'identifier</a></li>
+              <li class="disabled"><a href="#"><span class="fa fa-fw fa-hand-o-right"></span> S'inscrire</a></li>
+              <li><a href="{% url 'auth_logout' %}"><span class="fa fa-fw fa-sign-out"></span> Se déconnecter</a></li>
             {% else %}
-                <li><a href="{% url 'auth_login' %}"><span class="fa fa-fw fa-sign-in"></span> S'identifier</a></li>
-                <li><a href="{% url 'registration_register' %}"><span class="fa fa-fw fa-hand-o-right"></span> S'inscrire</a></li>
+              <li><a href="{% url 'auth_login' %}"><span class="fa fa-fw fa-sign-in"></span> S'identifier</a></li>
+              <li><a href="{% url 'registration_register' %}"><span class="fa fa-fw fa-hand-o-right"></span> S'inscrire</a></li>
+              <li class="disabled"><a href="{% url 'auth_logout' %}"><span class="fa fa-fw fa-sign-out"></span> Se déconnecter</a></li>
             {% endif %}
+
           </ul><!-- menu -->
         </li><!-- compte -->
 
 
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-          <span class="fa fa-search"></span> Autre
+          <span class="fa fa-search"></span> Autres
           </a>
           <ul class="dropdown-menu">
+            <li class="dropdown-header">Recherche</li>
             <li><a href="{% url 'search' %}"><span class="fa fa-fw fa-search"></span> Rechercher sur le site</a></li>
-            <li><a href="{% url 'slogan_list' %}"><span class="fa fa-fw fa-quote-right"></span> Slogans</a></li>
+
+            <li class="dropdown-header">À propos</li>
             <li><a href="{% url 'about' %}"><span class="fa fa-fw fa-info"></span> À propos/contact</a></li>
+            <li><a href="http://www.github.com/AlexandreDecan/Lexpage"><span class="fa fa-fw fa-code"></span> Code source</a></li>
+            <li><a href="{% url 'slogan_list' %}"><span class="fa fa-fw fa-quote-right"></span> Liste des slogans</a></li>
+
             {% if user.is_staff %}
-              <li class="divider"></li>
+              <li class="dropdown-header">Administrer</li>
               <li><a href="{% url 'admin:index' %}"><span class="fa fa-fw fa-gears"></span> Administration</a></li>
               <li><a href="http://analytics.lexpage.net/"><span class="fa fa-fw fa-bar-chart-o"></span> Statistiques</a></li>
-              <li><a href="/pma"><span class="fa fa-fw fa-database"></span> PhpMyAdmin</a></li>
             {% endif %}            
           </ul><!-- menu -->
         </li><!-- site -->
@@ -148,13 +160,14 @@
                     <img src="{{ user.profile.avatar }}" class="avatar"/>
                 </a>
                 <ul class="dropdown-menu">
+                    <li class="dropdown-header">Ma messagerie</li>
                     <li><a href="{% url 'messaging_create' %}"><span class="fa fa-fw fa-quote-right"></span> Nouvelle conversation</a></li>
                     <li><a href="{% url 'messaging_inbox' %}"><span class="fa fa-fw fa-inbox"></span> Boîte de réception</a></li>
-                    <li class="divider"></li>                
+                    <li class="dropdown-header">Mon Lexpage</li>
                     <li><a href="{% url 'profile_show' user %}"><span class="fa fa-fw fa-user"></span> Voir mon profil</a></li>
                     <li><a href="{% url 'profile_edit' %}"><span class="fa fa-fw fa-gear"></span> Éditer mon profil</a></li>
-                    <li class="divider"></li>
-                    <li><a href="{% url 'auth_password_change' %}"><span class="fa fa-fw fa-lock"></span> Changer mon mot de passe</a></li>          
+                    <li class="dropdown-header">Mon compte</li>
+                    <li><a href="{% url 'auth_password_change' %}"><span class="fa fa-fw fa-lock"></span> Changer le mot de passe</a></li>
                     <li><a class="confirm-action" href="{% url 'auth_logout' %}"><span class="fa fa-fw fa-sign-out"></span> Me déconnecter</a></li>
 
                 </ul>            
