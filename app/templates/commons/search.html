@@ -4,7 +4,7 @@
 
 {% block page %}
 
-<h2>Rechercher</h2>
+<h2>Rechercher sur le site</h2>
 
 
 <form method="post" class="form" action="">
@@ -23,14 +23,18 @@
 
     <ul>
     {% for result in result_list %}
-        <li><a href="{{ result.get_absolute_url }}">{{ result.search_title }}</a>
-        {% if result.search_date or result.search_author %}
-            <span class="text-muted small">
-            ({{ result.search_date|date }} {{ result.search_author.username }})
-            </span>
-        {% endif %}<br/>
+        {% if result.get_absolute_url %}
+            <li><a href="{{ result.get_absolute_url }}">{{ result.search_title }}</a>
+        {% else %}
+            <li>{{ result.search_title }}
+        {% endif %}
+
+        <span class="text-muted small">
+        ({{ result.search_date|date }}{% if result.search_author %}, par {{ result.search_author }}{% endif %})
+        </span>
         {% if result.search_summary %}
-            <em>{{ result.search_summary|truncatewords:20 }}</em>
+            <br/>
+            <em>{{ result.search_summary|truncatewords:30 }}</em>
         {% endif %}</li>
     {% empty %}
         <li><em>Aucun résultat trouvé.</em></li>

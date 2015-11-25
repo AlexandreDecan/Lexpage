@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -47,6 +48,9 @@ class Message(models.Model):
             except Message.DoesNotExist:
                 return None
         return None
+
+    def get_absolute_url(self):
+        return reverse('minichat_archives', kwargs={'year': self.date.year, 'month': self.date.month})
 
     class Meta:
         get_latest_by = 'date'

@@ -1,21 +1,12 @@
 from django import forms
-
-from commons.widgets import DateTimePicker
-
+from .widgets import DateTimePicker
+from .search import SEARCH
 import datetime
-
-
-SEARCH_CHOICES = (
-        (0, 'Billets'),
-        (1, 'Titre des discussions'),
-        (2, 'Messages des discussions'),
-        (3, 'Noms des utilisateurs'),
-)
 
 
 class SearchForm(forms.Form):
     query_text = forms.CharField(required=True, label='Texte à rechercher', help_text='Les termes doivent être séparés par un espace, et peuvent être groupés à l\'aide de guillemets.')
-    target = forms.ChoiceField(label='Cible de la recherche', choices=SEARCH_CHOICES)
+    target = forms.ChoiceField(label='Rechercher dans...', choices=[(i, v['title']) for i, v in enumerate(SEARCH)])
     author = forms.CharField(required=False, label='Filtrer par auteur', help_text='Laissez vide si vous ne souhaitez pas ce critère.')
     date_start = forms.DateField(required=False, label='Filtrer par date, début de la période', help_text='Laissez vide si vous ne souhaitez pas ce critère.',
                                  widget=DateTimePicker(options={'format': 'DD/MM/YYYY', 'pickTime': False}))

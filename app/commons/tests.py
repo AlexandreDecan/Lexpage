@@ -45,7 +45,7 @@ class SearchViewsTests(TestCase):
 
     def test_emptysearch(self):
         fields = {'query_text': '',
-                  'target': 0,  # blogpost
+                  'target': 2,  # blogpost
                   'author': '',
                   'date_start': '',
                   'date_end': ''}
