@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
-
+from .search import SEARCH
 
 class MarkupViewsTests(TestCase):
     fixtures = ['devel']
@@ -52,11 +52,13 @@ class SearchViewsTests(TestCase):
         response = self.client.post(reverse('search'), fields)
         self.assertEqual(response.status_code, 200)
 
-    def test_nonemptysearch(self):
-        fields = {'query_text': 'hello',
-                  'target': 1,  # threads
-                  'author': 'world',
-                  'date_start': '01/01/14',
-                  'date_end': '01/01/15'}
-        response = self.client.post(reverse('search'), fields)
-        self.assertEqual(response.status_code, 200)
+    def test_search(self):
+        targets = range(len(SEARCH))
+        for target in targets:
+            fields = {'query_text': 'hello',
+                      'target': target,
+                      'author': 'world',
+                      'date_start': '01/01/14',
+                      'date_end': '01/01/15'}
+            response = self.client.post(reverse('search'), fields)
+            self.assertEqual(response.status_code, 200)

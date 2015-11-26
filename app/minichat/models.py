@@ -50,7 +50,7 @@ class Message(models.Model):
         return None
 
     def get_absolute_url(self):
-        return reverse('minichat_archives', kwargs={'year': self.date.year, 'month': self.date.month})
+        return reverse('minichat_archives', kwargs={'year': self.date.year, 'month': self.date.month}) + '#m{}'.format(self.pk)
 
     class Meta:
         get_latest_by = 'date'

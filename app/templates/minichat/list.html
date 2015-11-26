@@ -44,7 +44,7 @@
                     <a href="{% url 'profile_show' message.user %}">{{ message.user.username }}</a>
                 </td>
                 <td class="col-md-3">
-                    <a name="{{ message.date|date:'dHi' }}"></a>{{ message.date|naturalday:'l d' }} à {{ message.date|time }}
+                    <a name="m{{ message.pk }}"></a>{{ message.date|naturalday:'l d' }} à {{ message.date|time }}
                 </td>
                 <td>
                     {{ message.text|urlize3|smiley }}

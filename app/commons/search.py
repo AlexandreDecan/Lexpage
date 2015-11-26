@@ -26,7 +26,7 @@ SEARCH = [{
     'date_field': 'date_created',
     'display_title': lambda x: x.title,
     'display_author': lambda x: None,
-    'display_date': lambda x: None,
+    'display_date': lambda x: x.date_created,
     'display_summary': lambda x: 'Dernier message : ' + x.last_message.text,
 }, {
     'title': 'Billets',

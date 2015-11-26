@@ -150,6 +150,8 @@ def minichat_warn(user, message):
     # a truncated <a> when displayed.
     # text = smiley(urlize3(message.text))
     text = message.text
-    notify(user, 'Minichat', '%s vous a adressé un message : <br/><em>%s</em>' % (message.user, text),
-           reverse('minichat_archives', kwargs={'year': year, 'month': month})
-           + ('#%s%s%s' % (dayhourminute[0:2], dayhourminute[2:4], dayhourminute[4:6])), 'minichat', message.pk)
+    notify(user,
+           'Minichat', '%s vous a adressé un message : <br/><em>%s</em>' % (message.user, text),
+           message.get_absolute_url(),
+           'minichat',
+           message.pk)
