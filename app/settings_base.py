@@ -1,5 +1,6 @@
 import os
 import pymysql
+from django.core.urlresolvers import reverse_lazy
 
 pymysql.install_as_MySQLdb()
 
@@ -101,7 +102,9 @@ MIDDLEWARE_CLASSES = (
     'profile.last_visit_middleware.SetLastVisitMiddleware',
 )
 
-
+ABSOLUTE_URL_OVERRIDES = {
+    'auth.user': lambda u: reverse_lazy('profile_show', kwargs={'username': u.username}),
+}
 
 ACCOUNT_ACTIVATION_DAYS = 5
 LOGIN_REDIRECT_URL = 'homepage'
