@@ -33,6 +33,14 @@
       border-radius: 4px;
     }
   }
+
+  &.incognito{
+    position:relative;
+    left:-70px;
+    top:-20px;
+    margin-right:-70px;
+    background: none;
+  }
 }
 
 /*********** Autocomplete */

@@ -88,6 +88,7 @@ class LoginView(FormView):
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
         remember_me = form.cleaned_data['remember_me']
+        incognito = form.cleaned_data['incognito']
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
@@ -98,6 +99,7 @@ class LoginView(FormView):
                     user.save()
                 if not remember_me:
                     self.request.session.set_expiry(0)
+                self.request.session['incognito'] = incognito
                 messages.success(self.request, 'Bienvenue %s !' % user.get_username())
         return view_login(self.request)
 
