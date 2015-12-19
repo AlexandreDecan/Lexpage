@@ -160,7 +160,7 @@
                     <span class="fa fa-chevron-down"></span>
                     <img src="{{ user.profile.avatar }}" class="avatar"/>
                     {% if request.session.incognito %}
-                        <img src="{% static 'images/avatars/incognito.svg' %}" class="avatar incognito" title="Mode incognito">
+                        <img src="{% static 'images/avatars/incognito.png' %}" data-toggle="tooltip" data-placement="left" class="avatar incognito" title="Mode incognito">
                     {% endif %}
                 </a>
                 <ul class="dropdown-menu">
