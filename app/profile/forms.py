@@ -80,6 +80,8 @@ class ChangeProfileForm(forms.ModelForm):
 
 class LoginForm(AuthenticationForm):
     remember_me = forms.BooleanField(initial=True, required=False, label='Rester connecté')
+    incognito = forms.BooleanField(initial=False, required=False, label='Mode incognito',
+                                   help_text='Cacher ma présence dans la liste des connectés.')
 
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)

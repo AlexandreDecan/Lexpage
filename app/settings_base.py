@@ -55,14 +55,14 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
 TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth', 
-    'django.core.context_processors.debug', 
-    'django.core.context_processors.i18n', 
-    'django.core.context_processors.media', 
-    'django.core.context_processors.static', 
+    'django.contrib.auth.context_processors.auth',
+    'django.template.context_processors.request',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
-    
     'commons.context_processors.site',
 )
 
@@ -74,7 +74,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'django.contrib.webdesign', 
+    'django.contrib.webdesign',
     'django.contrib.humanize',
     'django.contrib.flatpages',
     'captcha',
@@ -88,7 +88,7 @@ INSTALLED_APPS = (
     'messaging',
     'board',
     'notifications',
-    
+
 )
 
 MIDDLEWARE_CLASSES = (
