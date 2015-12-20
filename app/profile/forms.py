@@ -12,7 +12,7 @@ import struct
 import imghdr
 
 user_fields = ['first_name', 'last_name', 'email']
-profile_fields = ['gender', 'birthdate', 'country', 'city', 'website_name', 'website_url', 'avatar',]
+profile_fields = ['gender', 'birthdate', 'country', 'city', 'website_name', 'website_url', 'theme', 'avatar']
 
 
 class ActivationForm(forms.Form):

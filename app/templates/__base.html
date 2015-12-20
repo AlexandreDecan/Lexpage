@@ -10,7 +10,11 @@
 
     {% with static_ext=debug|yesno:",.min" %}
         {% block stylesheets %}
-            <link href="{% static "css/style.css?v=150702" %}" rel="stylesheet"/>
+            {% if user.is_authenticated %}
+            <link href="{% static "css/"|add:user.profile.get_theme|add:".css?v=150702" %}" rel="stylesheet"/>
+            {% else %}
+            <link href="{% static "css/"|add:DEFAULT_THEME|add:".css?v=150702" %}" rel="stylesheet"/>
+            {% endif %}
             <link href="{% static "libs/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet"/>
             <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
