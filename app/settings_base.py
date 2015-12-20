@@ -122,9 +122,10 @@ SESSION_COOKIE_AGE = 7257600  # 3 months
 RECAPTCHA_PUBLIC_KEY = '6LdAH_ASAAAAACAHEysPBjLekWJX94nYM0hI3hHy'
 NOCAPTCHA = True
 
-LEXPAGE_THEMES = (
-    ('style', 'Lexpage'),
-    ('style_nowel', 'Nowel'),
-)
-
-DEFAULT_THEME = 'style_nowel'
+THEMES = {
+    'ALL': (
+        ('style', 'Lexpage'),
+        ('style_nowel', 'Nowel'),
+    ),
+    'DEFAULT': 'style_nowel'
+}
