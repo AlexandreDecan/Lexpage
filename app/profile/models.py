@@ -430,7 +430,8 @@ class Profile(models.Model):
     theme = models.CharField(max_length=16,
                              choices=THEME_CHOICES,
                              blank=True, null=True,
-                             verbose_name='Thème')
+                             verbose_name='Thème',
+                             help_text='Laissez vide pour adopter automatiquement le thème du moment.')
 
     class Meta:
         permissions = (('can_see_details', 'Peut voir les détails des profils'),)
@@ -454,3 +455,10 @@ class Profile(models.Model):
         """ Return the birthdate BUT at current year. 
         This is mainly useful for 'naturalday' filter. """
         return datetime.date(datetime.date.today().year, self.birthdate.month, self.birthdate.day)
+
+    def get_theme(self):
+        """ Return the theme for the user or fallback to default theme if
+        the theme is unset or has been removed."""
+        if self.theme and self.theme in dict(settings.LEXPAGE_THEMES).keys():
+            return self.theme
+        return settings.DEFAULT_THEME
