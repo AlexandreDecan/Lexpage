@@ -48,7 +48,7 @@
       }
       .minichat-text {
         margin-right: 35px;
-        border-right: 2px solid $brand-info;
+        border-right: 2px solid $brand-primary;
         border-radius: $border-radius-small 0 0 $border-radius-small;
       }
     }
@@ -58,7 +58,7 @@
         float: left;
       }
       .minichat-text {
-        border-left: 2px solid $brand-info;
+        border-left: 2px solid $brand-primary;
         margin-left: 35px;
         border-radius: 0 $border-radius-small $border-radius-small 0;
       }

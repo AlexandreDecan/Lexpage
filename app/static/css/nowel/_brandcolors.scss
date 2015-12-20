@@ -4,5 +4,6 @@
 
 $brand-primary:         lighten(#6d0505, 10%);
 $brand-primary-alt:     darken(#c01515, 10%);
-$brand-info:            $brand-primary;
+$brand-info:            lighten($brand-primary, 40%);
+$brand-danger:          darken(#d9534f, 10%);
 
