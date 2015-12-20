@@ -25,7 +25,7 @@ import json
 
 class PostListView(MonthArchiveView):
     """
-    Provide a monthly-based archive view. 
+    Provide a monthly-based archive view.
     """
     queryset = BlogPost.published.all()
     date_field = 'date_published'
@@ -43,7 +43,7 @@ class PostListView(MonthArchiveView):
 
 class PostShowView(TemplateView):
     """
-    Provide a view for a single object. 
+    Provide a view for a single object.
     """
     template_name = 'blog/show.html'
 
@@ -55,9 +55,9 @@ class PostShowView(TemplateView):
 
 class PostCommentsView(RedirectView):
     """
-    Redirect to the right view: 
+    Redirect to the right view:
      - "Show post" if there's already a comment on it;
-     - "Post comment" otherwise. 
+     - "Post comment" otherwise.
     """
     permanent = False
 
@@ -72,7 +72,7 @@ class PostCommentsView(RedirectView):
 
 class DraftPostListView(ListView):
     """
-    Provide a list of drafts for the current user. 
+    Provide a list of drafts for the current user.
     """
     template_name = 'blog/draft_list.html'
     context_object_name = 'post_list'
@@ -91,16 +91,16 @@ class DraftPostListView(ListView):
 
 def _handle_status(request, post, action):
     """
-    Shortcut function that provide a quick and dirty way to update 
-    the status of a post based on a given action. Notice that most of the 
-    logical behavior is in Post.change_status(). 
+    Shortcut function that provide a quick and dirty way to update
+    the status of a post based on a given action. Notice that most of the
+    logical behavior is in Post.change_status().
 
-    This function also displays a success message to the user AND 
+    This function also displays a success message to the user AND
     send a notification through the system (see Notification.notify).
     """
 
     # Clean the notifications if post.pk exists, ie. if it is already saved
-    # in the database and thus, if it has already generated notifications. 
+    # in the database and thus, if it has already generated notifications.
     if post.pk is not None:
         notify.blog_pending_clean(request.user, post)
 
@@ -130,8 +130,8 @@ def _handle_status(request, post, action):
 
 class PostCreateView(FormView):
     """
-    Provide a form that can be used to create a new post. 
-    Notice that this view can receive a pair title/url by GET. 
+    Provide a form that can be used to create a new post.
+    Notice that this view can receive a pair title/url by GET.
     """
     template_name = 'blog/draft_create.html'
     form_class = UserCreatePostForm
@@ -139,8 +139,8 @@ class PostCreateView(FormView):
 
     dispatch = method_decorator(login_required)(FormView.dispatch)
 
-    def get_form(self, form_class):
-        # Use another form if the user has permission. 
+    def get_form(self, form_class=None):
+        # Use another form if the user has permission.
         if self.request.user.has_perm('blog.can_approve'):
             form_class = StaffCreatePostForm
         return FormView.get_form(self, form_class)
@@ -169,7 +169,7 @@ class PostCreateView(FormView):
 
 class PostEditView(FormView):
     """
-    General view that provide a form to modify a post. 
+    General view that provide a form to modify a post.
     """
     template_name = 'blog/post_edit.html'
     form_class = UserEditPostForm
@@ -178,7 +178,7 @@ class PostEditView(FormView):
     dispatch = method_decorator(login_required)(FormView.dispatch)
 
     def get_success_url(self):
-        # Yeah, I know that blog_post_show will fail if current status is 
+        # Yeah, I know that blog_post_show will fail if current status is
         # not PUBLISHED...
         return reverse_lazy('blog_post_show', kwargs={'pk': self.kwargs['pk']})
 
@@ -203,7 +203,7 @@ class PostEditView(FormView):
         context['post'] = BlogPost.objects.get(pk=self.kwargs['pk'])
         return context
 
-    def get_form(self, form_class):
+    def get_form(self, form_class=None):
         # Change the form if user has permission...
         if self.request.user.has_perm('blog.can_approve'):
             form_class = StaffEditPostForm
@@ -230,7 +230,7 @@ class PostEditView(FormView):
 
 class DraftPostEditView(PostEditView):
     """
-    Provide a form to edit a post, in the case of a draft. 
+    Provide a form to edit a post, in the case of a draft.
     """
     template_name = 'blog/draft_edit.html'
     success_url = None
@@ -256,7 +256,7 @@ class PendingPostListView(TemplateView):
 
 class PendingPostEditView(PostEditView):
     """
-    Provide a form to edit a post, in the case of a pending post. 
+    Provide a form to edit a post, in the case of a pending post.
     """
     template_name = 'blog/pending_edit.html'
     success_url = None
@@ -267,7 +267,7 @@ class PendingPostEditView(PostEditView):
 
 class TagListView(ListView):
     """
-    Provide a list of tags that can be used to filter the list of 
+    Provide a list of tags that can be used to filter the list of
     posts. Notice that this view also provides a list of posts accordingly.
     """
     template_name = 'blog/list_tags.html'

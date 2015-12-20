@@ -9,6 +9,37 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures'),)
 
+# https://docs.djangoproject.com/en/1.9/ref/templates/upgrading/#the-templates-settings
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'context_processors.global_settings',
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.request',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
+# https://docs.djangoproject.com/en/1.9/releases/1.9/#password-validation
+AUTH_PASSWORD_VALIDATORS = [
+    { 'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
+    { 'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', },
+    { 'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
+    { 'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
+]
 
 TIME_ZONE = 'Europe/Brussels'
 LANGUAGE_CODE = 'fr'
@@ -41,27 +72,6 @@ STATICFILES_FINDERS = (
     # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-    # 'django.template.loaders.eggs.Loader',
-)
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
-)
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'context_processors.global_settings',
-    'django.contrib.auth.context_processors.auth',
-    'django.template.context_processors.request',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'django.core.context_processors.tz',
-    'django.contrib.messages.context_processors.messages',
-)
-
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -70,7 +80,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'django.contrib.webdesign',
     'django.contrib.humanize',
     'django.contrib.flatpages',
     'captcha',

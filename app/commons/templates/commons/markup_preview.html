@@ -1,9 +1,9 @@
-{% if markup = "markdown" %}
+{% if markup == "markdown" %}
     {% load markup_markdown %}
     <div class="markdown">
     {{ content|markdown }}
     </div>
-{% elif markup = "bbcode" %}
+{% elif markup == "bbcode" %}
     {% load markup_bbcode %}
     <div class="bbcode">
     {{ content|bbcode }}

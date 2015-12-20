@@ -15,7 +15,7 @@
         {% for year in date_year_list %}
             <li>Année {{ year.grouper }} : 
             {% for month in year.list %}
-                {% if date_current.year = year.grouper and date_current.month = month.month %}
+                {% if date_current.year == year.grouper and date_current.month == month.month %}
                     {{ month|date:"F" }}
                 {% else %}
                     <a href="{% url 'blog_archives' year.grouper month.month %}">
