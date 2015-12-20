@@ -52,7 +52,7 @@ class ActivationKeyManager(models.Manager):
 
     def activate_user(self, key):
         """
-        Activate a user. If the key is not valid or has expired, return 
+        Activate a user. If the key is not valid or has expired, return
         False, otherwise return the user.
         """
         try:
@@ -70,7 +70,7 @@ class ActivationKeyManager(models.Manager):
 
     def create_inactive_user(self, username, email, password):
         """
-        Create a new user and return a pair user, key. 
+        Create a new user and return a pair user, key.
         """
         new_user = User.objects.create_user(username, email, password)
         new_user.is_active = False
@@ -84,7 +84,7 @@ class ActivationKeyManager(models.Manager):
 
     def delete_expired(self):
         """
-        Remove the users and the keys that expired. 
+        Remove the users and the keys that expired.
         """
         for activation_key in self.all():
             try:
@@ -100,7 +100,7 @@ class ActivationKeyManager(models.Manager):
 class ActivationKey(models.Model):
     user = models.OneToOneField(User)
     key = models.CharField('activation_key', max_length=40)
-    
+
     objects = ActivationKeyManager()
 
     class Meta:
@@ -109,18 +109,18 @@ class ActivationKey(models.Model):
 
     def has_expired(self):
         """
-        Return true if the current activation key has expired. 
+        Return true if the current activation key has expired.
         """
         exp_date = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
         return self.user.date_joined + exp_date <= datetime_now()
 
     def send_activation_email(self):
         """
-        Send an email to the user with the activation key. Also returns 
-        the context of this email (for further use). 
+        Send an email to the user with the activation key. Also returns
+        the context of this email (for further use).
         """
-        context = {'user': self.user, 
-                   'activation_key': self.key, 
+        context = {'user': self.user,
+                   'activation_key': self.key,
                    'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS}
         subject = render_to_string('profile/activation_email_subject.txt', context)
         subject = ''.join(subject.splitlines())
@@ -131,11 +131,11 @@ class ActivationKey(models.Model):
 
 
 class Profile(models.Model):
-    THEME_CHOICES = settings.LEXPAGE_THEMES
+    THEME_CHOICES = settings.THEMES['ALL']
 
     GENDER_CHOICES = (
-        ('M', 'Homme'), 
-        ('F', 'Femme'), 
+        ('M', 'Homme'),
+        ('F', 'Femme'),
         # ('?', 'Inconnu')
     )
 
@@ -400,26 +400,26 @@ class Profile(models.Model):
     )
 
     user = models.OneToOneField(User)
-    gender = models.CharField(max_length=1, 
+    gender = models.CharField(max_length=1,
                               choices=GENDER_CHOICES,
                               blank=True,
                               verbose_name='Genre')
     country = models.IntegerField(choices=COUNTRY_CHOICES,
                                   blank=True, null=True,
                                   verbose_name='Pays actuel')
-    city = models.CharField(max_length=100, 
+    city = models.CharField(max_length=100,
                             blank=True,
                             verbose_name='Ville actuelle')
-    website_name = models.CharField(max_length=200, 
+    website_name = models.CharField(max_length=200,
                                     blank=True,
                                     verbose_name='Nom du site web',
                                     help_text='Cela peut être une page Facebook, un compte Twitter ou votre site personnel.')
-    website_url = models.URLField(blank=True, 
+    website_url = models.URLField(blank=True,
                                   verbose_name='Adresse du site web',
                                   help_text='L\'adresse doit débuter par http://')
-    birthdate = models.DateField(blank=True, null=True, 
+    birthdate = models.DateField(blank=True, null=True,
                                  verbose_name='Date de naissance')
-    avatar = models.URLField(blank=True, 
+    avatar = models.URLField(blank=True,
                              verbose_name='Adresse de l\'avatar',
                              help_text='Des exemples d\'avatars sont disponibles sur <a href="http://www.avatarsdb.com">AvatarsDB</a>. '+
                                        'Vous pouvez également utiliser <a href="http://www.gravatar.com">Gravatar</a> pour '+
@@ -452,13 +452,13 @@ class Profile(models.Model):
             return None
 
     def get_birthdate(self):
-        """ Return the birthdate BUT at current year. 
+        """ Return the birthdate BUT at current year.
         This is mainly useful for 'naturalday' filter. """
         return datetime.date(datetime.date.today().year, self.birthdate.month, self.birthdate.day)
 
     def get_theme(self):
         """ Return the theme for the user or fallback to default theme if
         the theme is unset or has been removed."""
-        if self.theme and self.theme in dict(settings.LEXPAGE_THEMES).keys():
+        if self.theme and self.theme in dict(settings.THEMES['ALL']).keys():
             return self.theme
-        return settings.DEFAULT_THEME
+        return settings.THEMES['DEFAULT']
