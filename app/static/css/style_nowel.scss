@@ -3,7 +3,7 @@
 @import "compass/css3/transform";
 
 // overload stock bootstrap variables and set new ones for lexpage
-@import "lexpage/brandcolors";
+@import "nowel/brandcolors";
 @import "lexpage/variables";
 @import "bootstrap/variables";
 @import "bootstrap/mixins";
@@ -63,9 +63,13 @@
 @import "lexpage/board";
 @import "lexpage/footer";
 @import "lexpage/layout";
-@import "lexpage/background";
+@import "nowel/background";
 @import "lexpage/markup";
 @import "lexpage/messaging";
 @import "lexpage/misc";
 @import "lexpage/navbar";
 @import "lexpage/sidebar";
+
+@import "nowel/override";
+
+

@@ -5,9 +5,11 @@ from .models import Profile, ActiveUser, ActivationKey
 
 
 class ProfileAdmin(admin.ModelAdmin):  # pragma: no cover
-    list_display = ('user', 'gender', 'country', 'birthdate', 'last_visit',)
+    list_display = ('user', 'gender', 'country', 'birthdate', 'last_visit', 'theme')
     search_fields = ('user', 'country',)
     date_hierarchy = 'last_visit'
+    list_editable = ('theme',)
+    list_filter = ('theme',)
 
 
 class InlineProfileAdmin(admin.StackedInline):  # pragma: no cover

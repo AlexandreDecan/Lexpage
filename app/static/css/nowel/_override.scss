@@ -1,0 +1,27 @@
+@import url("//fonts.googleapis.com/css?family=Damion");
+h2 {
+  border-bottom: none;
+  font-family: Damion, sans serif;
+  font-size: $font-size-h2 * 1.1;
+}
+
+.navbar {
+  .navbar-brand {
+    &:after {
+      content: " de Nowell";
+      font-weight: normal;
+      font-family: Damion, sans serif;
+    }
+  }
+}
+
+.post-list-flat .post-content {
+  &.post-item-large {
+    .post-metadata {
+      border-bottom: 1px solid $brand-primary;
+    }
+  }
+}
+
+
+
