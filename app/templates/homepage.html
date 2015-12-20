@@ -58,74 +58,65 @@ __base.html, so you HAVE to do the job here... #}
     </div></h2>
 
 
-    <div class="container-fluid post-list-flat">
-        <div class="row">
-            <div class="col-xs-12 col-sm-8">
-                <div class="row">
-
-                    <div class="col-sm-12 col-md-12">
-                        {% include 'blog/_post_inlist_flat.html' with post=post_list.0 style="post-item-large" embed=True %}
-                    </div>
-                    <div class="clearfix visible-block-md"></div>
-                    <div class="col-sm-12 col-md-6">
-                        {% include 'blog/_post_inlist_flat.html' with post=post_list.1 style="post-item-large" %}
-                    </div>
-                    <div class="col-sm-12 col-md-6">
-                        {% include 'blog/_post_inlist_flat.html' with post=post_list.2 style="post-item-large" %}
-                    </div>
-
+    <div class="post-list-flat">
+        <div class="recent-posts">
+            <div class="vertical-flex">
+                {% include 'blog/_post_inlist_flat.html' with post=post_list.0 style="post-item-flex post-item-emphasis post-item-large" embed=True %}
+                <div class="horizontal-flex">
+                    {% include 'blog/_post_inlist_flat.html' with post=post_list.1 style="post-item-flex post-item-large" %}
+                    {% include 'blog/_post_inlist_flat.html' with post=post_list.2 style="post-item-flex post-item-large" %}
                 </div>
             </div>
-
-            <div class="hidden-xs col-sm-4">
+        </div>
+        <div class="old-posts">
+            <div class="vertical-list">
                 {% for post in post_list|slice:"3:6" %}
-                    {% ifchanged post.date_published|naturalday:'l' %}
-                        <div class="post-date-divider">{{ post.date_published|naturalday:'l'|capfirst }}</div>
-                    {% endifchanged %}
-                    {% include 'blog/_post_inlist_flat.html' with post=post style="post-item-small" %}
+                {% ifchanged post.date_published|naturalday:'l' %}
+                <div class="post-date-divider">{{ post.date_published|naturalday:'l'|capfirst }}</div>
+                {% endifchanged %}
+                {% include 'blog/_post_inlist_flat.html' with post=post style="post-item-flex post-item-small" %}
                 {% endfor %}
-
             </div>
         </div>
     </div>
 
 
     <a name="board"></a><h2>Discussions récentes
-    <div class="pull-right">
-    {% if user.is_authenticated %}
+        <div class="pull-right">
+            {% if user.is_authenticated %}
             <a class="btn"
                 href="{% url 'board_create' %}"
                 data-toggle="tooltip"
                 data-placement="top"
                 title="Nouvelle discussion">
-              <span class="fa fa-pencil"></span></a>
-    {% endif %}
-    <a class="btn"
-            href="{% url 'board_archives' %}"
-            data-toggle="tooltip"
-            data-placement="top"
-            title="Liste des discussions">
-          <span class="fa fa-list"></span></a>
-    <a class="btn"
-            href="{% url 'board_rss' %}"
-            data-toggle="tooltip"
-            data-placement="top"
-            title="Flux RSS">
-          <span class="fa fa-rss"></span></a>          
+                <span class="fa fa-pencil"></span></a>
+            {% endif %}
+            <a class="btn"
+                href="{% url 'board_archives' %}"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Liste des discussions">
+                <span class="fa fa-list"></span></a>
+            <a class="btn"
+                href="{% url 'board_rss' %}"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Flux RSS">
+                <span class="fa fa-rss"></span></a>          
     </div></h2>
 
     {% if thread_list %}
-        {% for thread in thread_list %}
-            {% include "board/_thread_inlist.html" with thread=thread action=False %}
-        {% endfor %}
+    {% for thread in thread_list %}
+    {% include "board/_thread_inlist.html" with thread=thread action=False %}
+    {% endfor %}
     {% else %}
-        <em>Aucun discussion récente.</em>
+    <em>Aucun discussion récente.</em>
     {% endif %}
 
-{% endblock page %}
+    {% endblock page %}
 
-{% block sidebar_context %}
-<!--     <div class="panel panel-primary">
+    {% block sidebar_context %}
+    <!--     <div class="panel panel-primary">
         <div class="panel-body">
         Défilement rapide
         <ul>
@@ -134,4 +125,4 @@ __base.html, so you HAVE to do the job here... #}
         </ul>
         </div>
     </div> -->
-{% endblock %}
+    {% endblock %}
