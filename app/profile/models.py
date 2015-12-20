@@ -131,6 +131,8 @@ class ActivationKey(models.Model):
 
 
 class Profile(models.Model):
+    THEME_CHOICES = settings.LEXPAGE_THEMES
+
     GENDER_CHOICES = (
         ('M', 'Homme'), 
         ('F', 'Femme'), 
@@ -425,6 +427,10 @@ class Profile(models.Model):
                                        'depuis votre disque en utilisant le champ ci-dessous.')
     last_visit = models.DateTimeField(blank=True, null=True,
                                       verbose_name='Dernière visite')
+    theme = models.CharField(max_length=16,
+                             choices=THEME_CHOICES,
+                             blank=True, null=True,
+                             verbose_name='Thème')
 
     class Meta:
         permissions = (('can_see_details', 'Peut voir les détails des profils'),)

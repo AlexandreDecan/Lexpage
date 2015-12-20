@@ -55,6 +55,7 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
 TEMPLATE_CONTEXT_PROCESSORS = (
+    'context_processors.global_settings',
     'django.contrib.auth.context_processors.auth',
     'django.template.context_processors.request',
     'django.core.context_processors.debug',
@@ -120,3 +121,10 @@ SESSION_COOKIE_AGE = 7257600 # 3 months
 
 RECAPTCHA_PUBLIC_KEY = '6LdAH_ASAAAAACAHEysPBjLekWJX94nYM0hI3hHy'
 NOCAPTCHA = True
+
+LEXPAGE_THEMES=(
+    ('style', 'Lexpage V4'),
+    ('style_nowel', 'Nowel'),
+)
+
+DEFAULT_THEME='style_nowel'
