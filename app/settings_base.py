@@ -116,15 +116,15 @@ LOGOUT_URL = 'auth_logout'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 USER_IS_ONLINE_TIMEOUT = 5
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
-SESSION_COOKIE_AGE = 7257600 # 3 months
+SESSION_COOKIE_AGE = 7257600  # 3 months
 
 
 RECAPTCHA_PUBLIC_KEY = '6LdAH_ASAAAAACAHEysPBjLekWJX94nYM0hI3hHy'
 NOCAPTCHA = True
 
-LEXPAGE_THEMES=(
-    ('style', 'Lexpage V4'),
+LEXPAGE_THEMES = (
+    ('style', 'Lexpage'),
     ('style_nowel', 'Nowel'),
 )
 
-DEFAULT_THEME='style_nowel'
+DEFAULT_THEME = 'style_nowel'
