@@ -2,7 +2,7 @@
 
 from django.conf.urls import patterns, include, url
 
-from views import homepage, server_error
+from views import homepage
 
 from django.contrib import admin
 
@@ -33,4 +33,3 @@ urlpatterns = patterns('',
     url(r'^pages/', include('django.contrib.flatpages.urls')),
 )
 
-handler500 = server_error

@@ -1,3 +1,26 @@
+ <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Oh, putain, Bob !</title>
+  </head>
+  <body>
+
+  <div style="position: absolute; left: 50%; width:500px; margin-left:-250px; top:100px;">
+      <h1>Oh, putain, Bob !</h1>
+      <h2>T'as encore tout pété avec ce champignon atomique !</h2>
+
+      <p>Une erreur est survenue pendant le chargement de la page !</p>
+
+      <p>Si le problème persiste et vous semble anormal, n'hésitez pas à contacter un administrateur du site,
+      ou à créer un <a href="https://github.com/AlexandreDecan/Lexpage/issues">ticket sur GitHub</a>.</p>
+  </div>
+
+  </body>
+</html>
+
+
+{% comment %}
 {% extends "__base.html" %}
 
 {% block title %}500 | {{ block.super }}{% endblock title %}
@@ -15,3 +38,4 @@
     
     {% endblock content %}
 {% endblock page %}
+{% endcomment %}
