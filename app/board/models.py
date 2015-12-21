@@ -19,7 +19,7 @@ class Thread(models.Model):
     slug = models.SlugField(max_length=90, unique=False)
     number = models.IntegerField(verbose_name='Nombre de messages', default=0)
     date_created = models.DateTimeField(verbose_name='Date de création', auto_now_add=True)
-    last_message = models.ForeignKey('Message', verbose_name='Dernier message', related_name='+', default=-1)
+    last_message = models.ForeignKey('Message', verbose_name='Dernier message', related_name='+', null=True)
 
     class Meta:
         get_latest_by = 'date_created'
