@@ -1,5 +1,4 @@
 import os
-import pymysql
 from django.core.urlresolvers import reverse_lazy
 
 SITE_ID = 1
