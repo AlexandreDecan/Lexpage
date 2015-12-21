@@ -54,7 +54,7 @@ Avant de pouvoir tester le site, il y a quelques opérations à faire :
 
 #### Mettre en place la base de données
 
-Par défaut, la configuration de développement travaille avec SQLite. En production, nous tournons avec MariaDB. Si vous n'aimez pas SQLite ou que vous voulez utiliser autre chose, pensez à adapter le fichier de configuration. Dans tous les cas, si c'est la première fois que vous lancez le site, il faudra créer la base de données :
+Par défaut, la configuration de développement travaille avec SQLite. En production, nous tournons avec Postgresql. Si vous n'aimez pas SQLite ou que vous voulez utiliser autre chose, pensez à adapter le fichier de configuration. Dans tous les cas, si c'est la première fois que vous lancez le site, il faudra créer la base de données :
 `python app/manage.py migrate`
 
 Cette commande va simplement exécuter les requêtes nécessaires à la création des tables. Si vous avez déjà une base de données pré-remplies, elle devrait normalement (et sous réserve de toute bonne volonté de la part de l'ORM) être mise à jour automatiquement. Croisez les doigts pour vos données. 
