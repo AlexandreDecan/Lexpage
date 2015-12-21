@@ -126,7 +126,7 @@ class ActivationKey(models.Model):
         subject = ''.join(subject.splitlines())
         message = render_to_string('profile/activation_email.txt', context)
 
-        self.user.email_user(subject, message, settings.DEFAULT_FROM_MAIL)
+        self.user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
         return context
 
 

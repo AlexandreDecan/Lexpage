@@ -11,7 +11,7 @@ NOCAPTCHA = False
 os.environ['RECAPTCHA_TESTING'] = 'True'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_MAIL = 'no-reply@lexpage.net'
+DEFAULT_FROM_EMAIL = 'no-reply@lexpage.net'
 
 ADMINS = (
     ('AdminDev', 'admin.dev@fakemail.com'),
