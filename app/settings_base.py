@@ -52,6 +52,7 @@ TEMPLATE_DIRS = (
 )
 TEMPLATE_CONTEXT_PROCESSORS = (
     'context_processors.global_settings',
+    'omnibus.context_processors.omnibus',
     'django.contrib.auth.context_processors.auth',
     'django.template.context_processors.request',
     'django.core.context_processors.debug',
@@ -74,6 +75,7 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'django.contrib.flatpages',
     'captcha',
+    'omnibus',
 
     'profile',
     'slogan',

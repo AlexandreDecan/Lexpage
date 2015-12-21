@@ -1,7 +1,7 @@
 from django.conf.urls import patterns
 from django.conf.urls import url
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic import RedirectView
+from django.views.generic import RedirectView, TemplateView
 from .views import MessageListView, LatestsView, MessagePostView, UsersListView
 from datetime import date
 
@@ -22,6 +22,9 @@ urlpatterns = patterns('',
                        url(r'post/$',
                            MessagePostView.as_view(),
                            name='minichat_post'),
+                       url(r'ws.js$',
+                           TemplateView.as_view(template_name='minichat/websockets.js'),
+                           name='minichat_js'),
                        url(r'users.json$',
                            UsersListView.as_view(),
                            name='minichat_userslist'),
