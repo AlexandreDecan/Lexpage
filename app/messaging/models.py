@@ -43,7 +43,7 @@ class ThreadManager(models.Manager):
 
 class Thread(models.Model):
     title = models.CharField(verbose_name='Titre', max_length=60)
-    last_message = models.ForeignKey('Message', verbose_name='Dernier message', related_name='+', null=True)
+    last_message = models.ForeignKey('Message', verbose_name='Dernier message', related_name='+', db_constraint=False, default=-1)
 
     objects = ThreadManager()
 
