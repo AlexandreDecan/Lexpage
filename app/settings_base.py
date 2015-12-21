@@ -2,9 +2,6 @@ import os
 import pymysql
 from django.core.urlresolvers import reverse_lazy
 
-pymysql.install_as_MySQLdb()
-
-
 SITE_ID = 1
 WSGI_APPLICATION = 'wsgi.application'
 ROOT_URLCONF = 'urls'
