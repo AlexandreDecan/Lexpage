@@ -70,6 +70,13 @@ Cette commande va vous permettre de créer un compte administrateur, étape indi
 
 Enfin, afin que le site puisse fournir les fichiers statiques nécessaires à son affichage et à son fonctionnement, il convient d'indiquer à Django de collecter ces fichiers statiques depuis les différentes applications qui sont utilisées, et de les réunir dans un répertoire qui sert à... regrouper les fichiers statiques. Magie ! La commande `python app/manage.py collectstatic` fera cela pour vous. Bien entendu, c'est une commande à répéter à chaque fois que vous faites des modifications dans les fichiers statiques. Fastidieux ? Pas tellement : si vous utilisez le serveur de développement de Django (le truc que vous avez lancé avec `python app/manage.py runserver`), vous n'aurez pas à vous en soucier : le serveur de développement de Django est prévu pour aller rechercher les fichiers statiques directement dans leur répertoire d'origine. 
 
+
+#### Minichat
+
+Le minichat requiert un second daemon: omnibusd, afin de gérer les websockets.
+Pour le lancer, il suffit de faire `python app/manage.py omnibusd &`. Cela permet
+au minichat de ne plus dépendre d'un refresh périodique.
+
 ### Les problèmes fréquents et leurs solutions connues
 
 #### Django retourne une erreur à propos de la base de données
