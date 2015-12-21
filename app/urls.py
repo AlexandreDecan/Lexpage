@@ -2,7 +2,7 @@
 
 from django.conf.urls import patterns, include, url
 
-from views import homepage
+from views import homepage, render_rich_content
 
 from django.contrib import admin
 
@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     # Specific URLs
     url(r'^$', homepage, name='homepage'),
     url(r'^go.php$', homepage),
+    url(r'^render/(?P<url_checksum>[\w-]+)/(?P<url_b64>[\w=]+)$', render_rich_content),
     url(r'^search/', include('commons.urls_search')),
     url(r'^markup/', include('commons.urls_markup')),
     url(r'^about/$', 'django.contrib.flatpages.views.flatpage', {'url': '/about/'}, name='about'),
