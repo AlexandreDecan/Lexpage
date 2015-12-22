@@ -102,6 +102,8 @@ ABSOLUTE_URL_OVERRIDES = {
     'auth.user': lambda u: reverse_lazy('profile_show', kwargs={'username': u.username}),
 }
 
+AUTHENTICATION_BACKENDS = ('profile.backend.CaseInsensitiveModelBackend',)
+
 ACCOUNT_ACTIVATION_DAYS = 5
 LOGIN_REDIRECT_URL = 'homepage'
 LOGIN_URL = 'auth_login'
