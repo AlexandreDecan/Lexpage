@@ -43,7 +43,8 @@ Si vous avez Python 3.4 (ou supérieur) sur votre système, c'est très simple :
  - On commence par installer de quoi gérer un environnement virtuel : `pip install virtualenv` (nécessite d'être adminsitrateur)
  - On crée l'environnement : `virtualenv venv -p python3.4` va créer un environnement avec Python 3.4 dedans, dans le répertoire *venv*.
  - On saute dedans avec `source venv/bin/activate`
- - On installe les dépendances avec `pip install -r requirements.txt`
+ - On installe les dépendances principales avec `pip install -r requirements.txt`
+ - On installe les dépendances de développement avec `pip install -r requirements_dev.txt`
  - Et on a terminé !
 
 Vous pouvez utiliser le serveur de développement de Django pour tester le site:
