@@ -1,11 +1,16 @@
 language: python
 python:
-  - 3.4
-install: 
-  - pip install -r requirements.txt
-  - pip install -r requirements_tests.txt
+- 3.4
+install:
+- pip install -r requirements.txt
+- pip install -r requirements_tests.txt
 script:
-  - python app/manage.py collectstatic --noinput
-  - coverage run --source app/ --omit */migrations/* --omit */management/* app/manage.py test
+- python app/manage.py collectstatic --noinput
+- coverage run --source app/ --omit */migrations/* --omit */management/* app/manage.py
+  test
 after_success:
-  - coveralls
+- coveralls
+addons:
+  sauce_connect:
+    username: AlexandreDecan
+    access_key: Pt5t3rWcyX/3L83thfj680pnRDSoGdPoEaxFTgye87ltvqFpIsoZe2nq3qXjtkkOnA2kqU0tWall7z2jqd65bKNK4QsTQSOKwJFf/op+ntyXlceEQ5WUlmlvBadS0nF93BkEYW1Ik//+41CsGKr+fq6vbKygQ0Y34ZaEWjrm1zd5Hvfg92xlDJRRmeti0wkFAEo5VpnKlcTbng9C9KUre5FKjjYKqVAugikZSgG6oqjTGbIzduVfgEzZ8z9sHznW/AbNd3r1D7ePKuBESapNX/V9ck7z+6oVH+Y+0NbLZla6juuBa6P21uCVFbmNhj+W/q17hNS0nB8Lz0ijnv3OhWkgU/0uEXg2ZmCu18wBOCxcbjVasjJw631IABqwdLreG2rJ8mT/b5+x5f09So8aODp52lnMg/WbHhknMnZ9Ke+BWMw4aoxHnAA7jOXy51+Lsf5x0KM00fIMLh9XnSF9Xe/LKR9gNUfFfelBVz3JG3fCQZeknYTmxnZRd0oV2nNXi8843UnnBZH0CKqJDfvo8977m/6c5PKBd1xmjg++wk0kCkQ+h96XGpNMeIJ8sJ1vSa4ixgv8KFeJ5pM8RdspMrycKSRcjO8ryv3VvRnJKsMLSSZDIr0eqX9nC3i6y/agLIwKydnbb/8OZ8z48ayH29C4zzQvXFi1QqmLMLD2zgo=
