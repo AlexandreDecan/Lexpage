@@ -46,6 +46,9 @@ Si vous avez Python 3.4 (ou supérieur) sur votre système, c'est très simple :
  - On installe les dépendances avec `pip install -r requirements.txt`
  - Et on a terminé !
 
+Vous pouvez utiliser le serveur de développement de Django pour tester le site:
+`python app/manage.py runserver`
+
 ### Configurer et utiliser Django pour servir Lexpage
 
 Des paramètres de base sont proposés sur le dépôt. Les paramètres considérés comme spécifiques à l'environnement sont repris dans le fichier `settings_dev.py` qui s'occupe de charger le reste venant de `settings_base.py`. A priori, vous n'aurez pas à modifier autre chose que les paramètres de développement, mais qui sait ? Quoiqu'il en soit, si vous souhaitez utiliser un autre fichier de configuration que `settings_dev.py`, il conviendra de le signaler à Django lors de chaque appel à `python app/manage.py` (la principale commande que vous allez utiliser ici !). Faites un tour dans la documentation de Django, et vous verrez comment faire (via une variable d'environnement, ou un paramètre long, etc.). 
