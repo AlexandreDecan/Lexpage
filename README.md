@@ -19,15 +19,21 @@ Bonne lecture !
 ## Que contient le dépôt ?
 
 Le répertoire */app* contient tout ce qui est propre à Django et au Lexpage : 
- - Les répertoires *blog*, *board*, *commons*, *messaging*, *minichat*, *notifications*, *profile* et *slogan* contiennent les applications. 
- - Les répertoires *media*, *media_pub*, *static*, *static_pub* contiennent les fichiers statiques. *media* et *media_pub* ne sont pas utilisés. *static* contient les fichiers statiques du site, qui seront collectés automatiquement dans *static_pub* qui contiendra également les avatars uploadés.
- - Le répertoire *templates* et ses sous-répertoires contiennent toutes les templates du site. Idéalement, ces templates devraient être situées dans un sous-répertoire de l'application correspondante. 
- - Les fichiers *settings.py*, *settings_base.py* et *settings_dev.py* contiennent les paramètres de Django. Par défaut, *settings.py* charge *settings_dev.py* qui lui-même charge les paramètres communs de *settings_base.py*. 
+ - Les répertoires *blog*, *board*, *commons*, *messaging*, *minichat*, *notifications*, *profile* et *slogan* contiennent les applications.
+ - Les répertoires *media*, *media_pub*, *static*, *static_pub* contiennent les fichiers statiques. *media* et *media_pub* ne sont pas utilisés.
+   *static* contient les fichiers statiques globaux du site, qui seront collectés automatiquement depuis ce répertoire et les sous-répertoires *static* des différentes
+   applications vers *static_pub*, qui contiendra également les avatars uploadés par les utilisateurs.
+ - Le répertoire *templates* contient les templates globales du site. Les sous-répertoires *templates* des différentes applications contiennent les templates spécifiques
+   à chaque application.
+ - Les fichiers *settings.py*, *settings_base.py* et *settings_dev.py* contiennent les paramètres de Django.
+   Par défaut, *settings.py* charge *settings_dev.py* qui lui-même charge les paramètres communs de *settings_base.py*.
  - Le reste est classique pour du Django. 
   
 La racine du dépôt contient notamment :
  - *gunicorn.py* contient la configuration Gunicorn pour exécuter l'application.
  - *requirements.txt* contient la liste des dépendances Python nécessaires (à utiliser avec `pip install -r requirements.txt`).
+ - *requirements_dev.txt* contient les dépendances supplémentaires pour le développement et les tests.
+ - *requirements_prod.txt* contient les dépendances supplémentaires pour la production.
  
  
 ## Comment tester localement ?
