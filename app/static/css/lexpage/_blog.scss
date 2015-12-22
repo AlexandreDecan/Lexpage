@@ -116,7 +116,6 @@
 
   // Behavior for small thumbnails
   &.post-item-small {
-    margin: $padding-small-vertical 0px 2 * $padding-small-vertical 0px;
     padding: $padding-small-vertical $padding-small-horizontal;
 
     .post-tags, .post-comment, .post-next, .post-date, .post-icon-bg {
@@ -157,7 +156,6 @@
 
   // Behavior for large thumbnails
   &.post-item-large {
-    margin: $padding-base-vertical 0px 2 * $padding-base-vertical 0px;
     padding: $padding-base-vertical $padding-base-horizontal;
 
     .post-embed {
@@ -179,9 +177,13 @@
 
     .post-icon-bg {
       display: block;
-      position: absolute;
-      top: - $padding-base-vertical;
-      right: $padding-base-horizontal * 3;
+      position: relative;
+      span {
+        overflow: hidden;
+      }
+      top: 0;
+      left: $padding-base-horizontal * 2;
+      margin-bottom: -1.45em;
       font-size: 10em;
       color: rgba(0, 0, 0, 0.1);
       z-index: 1;
@@ -258,3 +260,35 @@
 
   }
 }
+
+.post-list-flat {
+    display: flex;
+    flex-wrap: wrap;
+
+    .recent-posts {
+        flex: 2 0 59%;
+    }
+    .vertical-flex {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+
+        .horizontal-flex {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+
+            div {
+                flex: 1 0 40%;
+            }
+        }
+    }
+    .old-posts {
+        flex: 1 0 30%;
+    }
+    .post-item-flex{
+        margin: $padding-base-horizontal;
+    }
+}
+
