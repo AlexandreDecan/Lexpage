@@ -23,7 +23,7 @@
     <div class="board-messagelist">
     {% if previous %}
         {% include "board/_message.html" with message=previous old=True %}
-        {% if thread.flag.message = previous %}
+        {% if thread.flag.message == previous %}
             <a name="new"></a>
         {% endif %}
     {% endif %}

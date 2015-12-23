@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 
 from blog.models import BlogPost
 from board.models import Thread
@@ -14,9 +13,9 @@ HOMEPAGE_THREAD_DELAY = 3   # Number of days before expiration
 
 
 def homepage(request):
-    """ 
-    Simple view corresponding to the homepage. It provides some blog posts 
-    and some board posts, including annotated threads). 
+    """
+    Simple view corresponding to the homepage. It provides some blog posts
+    and some board posts, including annotated threads).
     """
     context = {}
 
@@ -33,6 +32,5 @@ def homepage(request):
         thread.annotate_flag(request.user)
     context['thread_list'] = threads
 
-    return render_to_response('homepage.html', 
-                              context, 
-                              context_instance=RequestContext(request))
+    return render(request, 'homepage.html',
+                              context)

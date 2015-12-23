@@ -280,7 +280,7 @@ class MessageEditView(FormView):
             raise Http404
         return FormView.dispatch(self, request, *args, **kwargs)
 
-    def get_form(self, form_class):
+    def get_form(self, form_class=None):
         if self.request.user.has_perm('board.can_moderate'):
             form_class = MessageModerateForm
         else:

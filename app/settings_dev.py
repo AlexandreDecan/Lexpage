@@ -3,7 +3,6 @@ from settings_common import *
 
 # General
 DEBUG = True
-TEMPLATE_DEBUG = True
 SECRET_KEY = 'SecretKeyForDevelopmentEnvironment'
 
 

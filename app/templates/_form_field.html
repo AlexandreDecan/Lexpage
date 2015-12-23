@@ -5,7 +5,7 @@
 {% else %}
 
     <div class="form-group {{ field.css_classes }}{% if field.errors %} has-error{% endif %}">
-        {% if field|widget_type = 'checkboxinput' %}
+        {% if field|widget_type == 'checkboxinput' %}
             <div class="checkbox {{ field.css_classes }}">
                 <label class="control-label {% if field.field.required %}required-field{% endif %}" 
                     for="{{ field.id_for_label }}">

@@ -43,7 +43,7 @@
             <dd>{{ profile.profile.website_url|urlize|default:'-' }}</dd>
         </dl>
 
-    {% if perms.profile.can_see_details or user.username = profile.username %}
+    {% if perms.profile.can_see_details or user.username == profile.username %}
         <hr/>
         <p class="text-muted">Les informations suivantes ne sont pas rendues publiques.</p> 
 

@@ -26,7 +26,7 @@ class DateTimePicker(DateTimeInput):
 
         js = JsFiles()
         css = {'all': ('libs/datetimewidget/css/bootstrap-datetimepicker.min.css',), }
-    
+
     # http://momentjs.com/docs/#/parsing/string-format/
     # http://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
     format_map = (('DDD', r'%j'),
@@ -55,7 +55,7 @@ class DateTimePicker(DateTimeInput):
         for js, py in cls.format_map:
             format = format.replace(js, py)
         return format
-    
+
     html_template = '''
         <div%(div_attrs)s>
             <input%(input_attrs)s/>
@@ -63,7 +63,7 @@ class DateTimePicker(DateTimeInput):
                 <span%(icon_attrs)s></span>
             </span>
         </div>'''
-    
+
     js_template = '''
         <script>
             $(function() {
