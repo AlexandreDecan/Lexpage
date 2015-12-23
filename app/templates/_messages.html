@@ -13,13 +13,13 @@
 {% if messages %}
     <div class="messages">
     {% for message in messages %}
-        {% if message.tags = "info" %}
+        {% if message.tags == "info" %}
             <p class="alert alert-info">
-        {% elif message.tags = "success" %}
+        {% elif message.tags == "success" %}
             <p class="alert alert-success">
-        {% elif message.tags = "warning" %}
+        {% elif message.tags == "warning" %}
             <p class="alert alert-warning">
-        {% elif message.tags = "error" %}
+        {% elif message.tags == "error" %}
             <p class="alert alert-danger">
         {% else %}
             <p>

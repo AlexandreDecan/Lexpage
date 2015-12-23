@@ -1,11 +1,10 @@
-from django.conf.urls import patterns
 from django.conf.urls import url
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import RedirectView
 from .views import MessageListView, LatestsView, MessagePostView, UsersListView
 from datetime import date
 
-urlpatterns = patterns('',
+urlpatterns = [
                        url(r'^archives/$',
                            RedirectView.as_view(
                                url=reverse_lazy('minichat_archives',
@@ -25,4 +24,4 @@ urlpatterns = patterns('',
                        url(r'users.json$',
                            UsersListView.as_view(),
                            name='minichat_userslist'),
-                       )
+]

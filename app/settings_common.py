@@ -6,7 +6,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # General
 SITE_ID = 1
-DEBUG = True
 INTERNAL_IPS = ('127.0.0.1',)
 ALLOWED_HOSTS = ['www.lexpage.net', '127.0.0.1']
 
@@ -25,7 +24,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'django.contrib.webdesign',
     'django.contrib.humanize',
     'django.contrib.flatpages',
     'captcha',
@@ -69,25 +67,28 @@ STATICFILES_FINDERS = (
 
 
 # Templates
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
-)
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-    # 'django.template.loaders.eggs.Loader',
-)
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'context_processors.global_settings',
-    'django.contrib.auth.context_processors.auth',
-    'django.template.context_processors.request',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'django.core.context_processors.tz',
-    'django.contrib.messages.context_processors.messages',
-)
+TEMPLATES = [  # https://docs.djangoproject.com/en/1.9/ref/templates/upgrading/#the-templates-settings
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'context_processors.global_settings',
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.request',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 
 
 # Date & time

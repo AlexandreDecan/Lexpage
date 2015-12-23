@@ -1,4 +1,4 @@
-from django.template.base import Library
+from django.template import Library
 
 from django.utils.timezone import now
 
@@ -22,4 +22,4 @@ def timedelta(value, arg=None):
             return delta_s // (3600*24)
         else:
             return getattr(delta, arg)
-    
+

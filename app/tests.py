@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 
 from blog.models import BlogPost
 from board.models import Thread
@@ -34,3 +35,15 @@ class ViewsTests(TestCase):
         response = self.client.get(reverse('homepage'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context['thread_list']), 0)
+
+    def test_recent_thread(self):
+        # Remove existing threads
+        Thread.objects.all().delete()
+        thread = Thread(title='Test thread', slug='test-thread')
+        thread.save()
+        message = thread.post_message(User.objects.get(username='user1'), 'foo')
+        message.save()
+
+        response = self.client.get(reverse('homepage'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context['thread_list']), 1)
