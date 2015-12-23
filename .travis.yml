@@ -2,16 +2,9 @@ language: python
 python:
 - 3.4
 install:
-- pip install -r requirements.txt
 - pip install -r requirements_dev.txt
 script:
-- python app/manage.py collectstatic --noinput
-- coverage run --source app/ --omit */migrations/* --omit */management/* app/manage.py
-  test
+- python app/manage.py collectstatic --noinput --settings=settings_dev
+- coverage run --source app/ --omit */migrations/* --omit */management/* app/manage.py test --settings=settings_dev
 after_success:
 - coveralls
-addons:
-  sauce_connect:
-    username: Lexpage
-    access_key:
-      secure: nK9lqOj2vwtQvFa4fmx0rqngY8PuGEkvsq3sqsOi/7MWGdWq7P2Gz5mURjDG/uhzqCOwSZGWO4IsQVAuVISKFE7aUB07iJt5jDNfH0+21EJpShfDHc+U+t0Zo51ub5Qh3fQPWo5lrCmrcdeGC0HlqGs4flwI5AB4JinW0prcsUbKdpvVA55spYTA5Om8kzndOVhKmrIIbENFfLcXpeju3iEOygYjKWughmWW8EHf4a4kLyuhFZ2msI+Aiz4Efiby/kYUS3QLnMDjGqpimM7PcSC+RIXboeCKLJzJes4FUvLS30Y8xqrYrJ4cG5J8+Ot361dVwOYA7YByxHCp8W9TAIMZ69+aeG27gPETPVBN6TmtZmhFDZCqkFCBdsGA0L2Ct/kCAATME/uimrLxVmoA0iHCA/rIvS7JQiybuH5w+zQB6TkDu3DCD9E59ybaBS+A6YkCVnKbIe66QQAKGGIxmxFPtQcHf9l1JVlDHoQWMRLlKLNqOAVbsFZiL82A85+M0aaGoeKe9E87ZfUBHPLSFwt6CWu/Xjuae1i2+EmVblDo9Qf+RkjhGv0yy2Ya8wN1NcUI0FDB3Ao/QZMXBTpy/Hlm86lea+6oEMSP03Mnv9NJURFgHbxSJ2to0/a4F3jSrlmjI2GhcBfVbtj35Jw/uyR36Bl3zwa4ci8J+ogHxf4=
