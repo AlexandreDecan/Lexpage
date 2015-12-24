@@ -30,7 +30,7 @@ class MessageListView(MonthArchiveView):
     allow_empty = True
     template_name = 'minichat/list.html'
     context_object_name = 'message_list'
-    
+
     def get_context_data(self, **kwargs):
         context = super(MessageListView, self).get_context_data(**kwargs)
         context['date_list'] = Message.objects.dates('date', 'month')
@@ -108,9 +108,9 @@ class LatestsJSONView(View):
         output = []
         for message in messages:
             output.append({
-                'username': message.user.get_username(), 
+                'username': message.user.get_username(),
                 'avatar': message.user.profile.avatar,
-                'text': message.text, 
+                'text': message.text,
                 'timestamp': timegm(message.date.utctimetuple())
             })
 

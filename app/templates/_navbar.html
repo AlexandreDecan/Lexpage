@@ -5,21 +5,11 @@
     {% load notifications %}
     {% notifications as notifications_list %}
 {% endif %}
-
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header col-sm-2">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarA-collapse">
-        <span class="sr-only">Menu</span>
-        {% if user.is_authenticated %}
-            {% if notifications_list|length > 0 %}
-                <span class="badge"><span class="fa fa-bell"></span> {{ notifications_list|length }}</span>
-            {% else %}
-                <span class="fa fa-navicon"></span>
-            {% endif %}
-        {% else %}
-            <span class="fa fa-sign-in"></span>
-        {% endif %}
+      <button type="button" id="menu_button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarA-collapse">
+      {% include "notifications/navbar_button.html" %}
       </button>
       <a href="{% url 'homepage' %}" class="navbar-brand">Lexpage</a>
     </div><!-- header -->
@@ -120,40 +110,15 @@
 
 
     {% if user.is_authenticated %}
-        <ul class="nav navbar-nav navbar-right">
-            {% if notifications_list|length > 0 %}  
-            <li class="dropdown">
-              <a href="#" class="dropdown-notifications dropdown-toggle" data-toggle="dropdown">
-                  <span class="badge"><span class="fa fa-bell"> {{ notifications_list|length }}</span></span>
-              </a>
-              <div class="dropdown-menu notification_list">
-                  {% for notification in notifications_list %}
-                      <div id="notification_{{notification.pk}}" class="notification">
-                        <div class="notification_icon"> 
-                          <span class="fa fa-lg {{ notification.get_icon }}"></span> 
-                        </div>
-                        <div class="notification_dismiss">
-                          <a class="fa fa-times close" href="javascript:notification_dismiss('{% url 'notification_dismiss' notification.pk %}', 'notification_{{notification.pk}}');"></a>
-                        </div>
-                        <div class="notification_title"><strong>
-                            {% if notification.action %}
-                                <a href="{% url 'notification_show' notification.pk %}">{{ notification.title }}</a>
-                            {% else %}
-                                {{ notification.title }}
-                            {% endif %}
-                            </strong>
-                        </div>
-                        <div class="notification_descr">
-                          {{ notification.description|safe }}
-                          <span class="notification_date">
-                            &mdash; {{ notification.date|date:'d/m' }}
-                          </span>
-                        </div>
-                      </div>
-                  {% endfor %}
-              </div>
-            </li>
-            {% endif %}
+        <ul id="navbar_user" class="nav navbar-nav navbar-right">
+<li class="dropdown" id="notifications"{% if notifications_list|length == 0 %} style="display:none;"{% endif %}>
+<a href="#" class="dropdown-notifications dropdown-toggle" data-toggle="dropdown">
+    <span id="notification_count" class="badge"><span class="fa fa-bell"> {{ notifications_list|length }}</span></span>
+</a>
+<div class="dropdown-menu notification_list">
+            {% include "notifications/navbar.html" %}
+</div>
+</li>
 
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -184,6 +149,14 @@
             </li>
         </ul>
     {% endif %}
+    <script>
+    {% if user.is_authenticated %}
+        $(document).ready(function() {
+            notifications_init_display("#notifications", "#notification_count", ".notification_list", "{% url 'notifications_dropdown' %}");
+            notifications_button_init_display($("#menu_button"), "{% url 'notifications_button' %}");
+        });
+    {% endif %}
+    </script>
     </div><!-- navbar collapse -->
   </div><!-- container -->
 </nav>

@@ -23,7 +23,7 @@ def create_profile_for_user(sender, **kwargs):
     Post save signal handler for User model. Add a Profile instance to any newly created
     User instance.
     """
-    if kwargs['created']:
+    if (kwargs.get('created', True) and not kwargs.get('raw', False)):
         profile, is_new = Profile.objects.get_or_create(user=kwargs['instance'])
         if is_new:
             profile.save()

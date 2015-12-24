@@ -12,11 +12,6 @@ var minichat_chars_output = "#minichat_form .minichat-remainingChars";
 function minichat_init_display(content, get_url) {
     minichat_content = content
     minichat_content_url = get_url;
-    
-    if (minichat_content) {
-        setInterval(minichat_refresh, minichat_timer_delay);
-        minichat_refresh();
-    }
 }
 
 function minichat_refresh() {
@@ -45,11 +40,9 @@ function minichat_post_message() {
             $(minichat_button).find('span').removeClass('fa-spinner fa-spin fa-warning btn-warning');
             $(minichat_input_text).val("");
             minichat_update_chars_count();
-            minichat_refresh();
         })
         .fail(function(data) {
             $(minichat_button).find('span').removeClass('fa-spinner fa-spin').addClass('fa-warning');
-            minichat_refresh();
         });
 }
 

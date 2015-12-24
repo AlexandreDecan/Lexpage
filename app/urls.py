@@ -7,7 +7,6 @@ from views import homepage
 
 from django.contrib import admin
 
-
 urlpatterns = [
     # Applications URLs
     url(r'^accounts/', include('profile.auth_urls')),

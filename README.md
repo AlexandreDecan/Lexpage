@@ -104,6 +104,11 @@ avec `python app/manage.py runserver`), vous n'aurez pas à vous en soucier : le
 est prévu pour aller rechercher les fichiers statiques directement dans leur répertoire d'origine.
 
 
+
+#### Websockets
+
+Voir la [documentation détaillée](doc/websockets.md).
+
 ### Les problèmes fréquents et leurs solutions connues
 
 #### Django retourne une erreur à propos de la base de données

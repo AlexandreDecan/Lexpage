@@ -1,10 +1,23 @@
 language: python
 python:
 - 3.4
+addons:
+    postgresql: "9.4"
+sudo: true
+services:
+- redis-server
+- postgresql
 install:
-- pip install -r requirements_dev.txt
+- pip install -r requirements_travis.txt
+before_script:
+- "export DISPLAY=:99.0"
+- "sh -e /etc/init.d/xvfb start"
+- sleep 3 # give xvfb some time to start
+- sudo apt-get update -qq
+- sudo apt-get install -qq firefox
+- psql -c 'create database appdb;' -U postgres
 script:
 - python app/manage.py collectstatic --noinput --settings=settings_dev
-- coverage run --source app/ --omit */migrations/* --omit */management/* app/manage.py test --settings=settings_dev
+- coverage run --source app/ --omit */migrations/* --omit */management/* app/manage.py test --settings=settings_travis -v 3
 after_success:
 - coveralls

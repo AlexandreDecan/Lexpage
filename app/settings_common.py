@@ -27,6 +27,7 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'django.contrib.flatpages',
     'captcha',
+    'ws4redis',
 
     'profile',
     'slogan',
@@ -77,6 +78,7 @@ TEMPLATES = [  # https://docs.djangoproject.com/en/1.9/ref/templates/upgrading/#
         'OPTIONS': {
             'context_processors': [
                 'context_processors.global_settings',
+                'ws4redis.context_processors.default',
                 'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.request',
                 'django.template.context_processors.debug',
@@ -104,7 +106,6 @@ TIME_FORMAT = 'H\\hi'
 DATETIME_FORMAT = DATE_FORMAT + ' ' + TIME_FORMAT
 SHORT_DATETIME_FORMAT = SHORT_DATE_FORMAT + ' ' + TIME_FORMAT
 
-
 # Authentification & session
 AUTHENTICATION_BACKENDS = ('profile.backend.CaseInsensitiveModelBackend',)
 
@@ -122,6 +123,11 @@ ABSOLUTE_URL_OVERRIDES = {
     'auth.user': lambda u: reverse_lazy('profile_show', kwargs={'username': u.username}),
 }
 
+# Websockets
+WEBSOCKET_URL = '/ws/'
+WS4REDIS_HEARTBEAT = '--w4s--'
+from websockets_helpers import get_allowed_channels
+WS4REDIS_ALLOWED_CHANNELS = get_allowed_channels
 
 # Recaptcha
 RECAPTCHA_PUBLIC_KEY = '6LdAH_ASAAAAACAHEysPBjLekWJX94nYM0hI3hHy'

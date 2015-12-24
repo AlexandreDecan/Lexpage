@@ -4,15 +4,15 @@ from django.contrib.auth.models import User
 
 class Notification(models.Model):
     ICON = {
-        'blog': 'fa-clipboard', 
+        'blog': 'fa-clipboard',
         'messaging': 'fa-inbox',
-        'board': 'fa-comments-o', 
-        'profile': 'fa-user', 
+        'board': 'fa-comments-o',
+        'profile': 'fa-user',
         'slogan': 'fa-quote-right',
         'minichat': 'fa-at',
 
         'game': 'fa-gamepad',
-        
+
         'info': 'fa-info',
         'warning': 'fa-warning',
         'danger': 'fa-minus-circle',

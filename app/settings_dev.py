@@ -4,6 +4,12 @@ from settings_common import *
 # General
 DEBUG = True
 SECRET_KEY = 'SecretKeyForDevelopmentEnvironment'
+WSGI_APPLICATION = 'ws4redis.django_runserver.application'
+
+
+# Websockets
+REDIS_PUBLISHER = 'redis_helpers.FakeRedisPublisher'
+WS4REDIS_SUBSCRIBER = 'redis_helpers.FakeRedisSubscriber'
 
 
 # Database
@@ -29,7 +35,6 @@ RECAPTCHA_PRIVATE_KEY = None
 NOCAPTCHA = False  # Input field, enter "PASSED" in the captcha field to bypass captcha while testing.
 os.environ['RECAPTCHA_TESTING'] = 'True'
 
-
 # Logging
 LOGGING = {
     'version': 1,
@@ -46,3 +51,5 @@ LOGGING = {
         },
     },
 }
+
+
