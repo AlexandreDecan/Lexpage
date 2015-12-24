@@ -1,16 +1,30 @@
+import os
+
 from django.core.servers.basehttp import WSGIServer
 from django.test.testcases import LiveServerThread, QuietWSGIRequestHandler
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core.urlresolvers import reverse
+from django.conf import settings
+from django.utils.module_loading import import_string
 
 from socketserver import ThreadingMixIn
 from ws4redis.django_runserver import _websocket_url, _websocket_app, _django_app
 from whitenoise.django import DjangoWhiteNoise
 
-from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
+
+WebDriver = import_string(settings.SELENIUM_WEBDRIVER)
+
+def GhostDriverBug358(function):
+    def wrapper(_self, *args, **kwargs):
+        skip_text = 'This test is broken with PhantomJS/GhostDriver. See https://github.com/detro/ghostdriver/issues/358'
+        if _self.selenium.capabilities['browserName'] == 'phantomjs':
+            _self.skipTest(skip_text)
+        return function(_self, *args, **kwargs)
+    return wrapper
+
 
 def application(environ, start_response):
     if _websocket_url and environ.get('PATH_INFO').startswith(_websocket_url):
@@ -61,6 +75,13 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
         cls.selenium = WebDriver()
         cls.selenium.implicitly_wait(5)
         cls.selenium.set_window_size(1280, 1024)
+
+        print('-- Capabilities for %s --' % settings.SELENIUM_WEBDRIVER)
+        capabilities = cls.selenium.capabilities
+        for key, value in capabilities.items():
+            print(key, ':', value)
+        print('-- End of capabilities --')
+
         super(LexpageTestCase, cls).setUpClass()
         cls.server_thread.httpd.set_app(application)
 
@@ -68,6 +89,18 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
     def tearDownClass(cls):
         cls.selenium.quit()
         super(LexpageTestCase, cls).tearDownClass()
+
+    def tearDown(self):
+        directory = settings.SCREENSHOTS_DIRECTORY
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        filename = "%s.%s.png" % (settings.SELENIUM_WEBDRIVER, self.id())
+        path_to_filename = os.path.join(directory, filename)
+        try:
+            self.selenium.save_screenshot(path_to_filename)
+        except:
+            pass
+        super(LexpageTestCase, self).tearDown()
 
     def go_to_login_form(self):
         self.selenium.get('%s%s' % (self.live_server_url, reverse('auth_login')))

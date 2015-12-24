@@ -9,7 +9,7 @@ from notifications.models import Notification
 
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
-from tests_helpers import LexpageTestCase, login_required
+from tests_helpers import LexpageTestCase, login_required, GhostDriverBug358
 
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
@@ -132,6 +132,7 @@ class WebsocketsTests(LexpageTestCase):
             lambda driver: driver.find_element_by_xpath(text_message_xpath))
         self.check_notification_count(2)
 
+    @GhostDriverBug358
     @login_required()
     def testDismissNotifications(self):
         self.wait_for_minichat_ready()

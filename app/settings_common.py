@@ -106,6 +106,7 @@ TIME_FORMAT = 'H\\hi'
 DATETIME_FORMAT = DATE_FORMAT + ' ' + TIME_FORMAT
 SHORT_DATETIME_FORMAT = SHORT_DATE_FORMAT + ' ' + TIME_FORMAT
 
+
 # Authentification & session
 AUTHENTICATION_BACKENDS = ('profile.backend.CaseInsensitiveModelBackend',)
 
@@ -123,14 +124,21 @@ ABSOLUTE_URL_OVERRIDES = {
     'auth.user': lambda u: reverse_lazy('profile_show', kwargs={'username': u.username}),
 }
 
+
 # Websockets
 WEBSOCKET_URL = '/ws/'
 WS4REDIS_HEARTBEAT = '--w4s--'
 from websockets_helpers import get_allowed_channels
 WS4REDIS_ALLOWED_CHANNELS = get_allowed_channels
 
+
 # Recaptcha
 RECAPTCHA_PUBLIC_KEY = '6LdAH_ASAAAAACAHEysPBjLekWJX94nYM0hI3hHy'
+
+
+# Selenium
+SELENIUM_WEBDRIVER = 'selenium.webdriver.firefox.webdriver.WebDriver'
+SCREENSHOTS_DIRECTORY = 'screenshots'
 
 
 # Themes
@@ -141,3 +149,4 @@ THEMES = {
     ),
     'DEFAULT': 'style_nowel'
 }
+
