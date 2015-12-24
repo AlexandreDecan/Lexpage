@@ -158,3 +158,36 @@ class WebsocketsTests(LexpageTestCase):
         time.sleep(5)
         with self.assertRaises(NoSuchElementException):
             self.selenium.find_element_by_xpath(dismiss_xpath)
+
+class LoginTests(LexpageTestCase):
+    """Simple login tests"""
+    fixtures = ['devel']
+
+    def testLoginAsRegularUser(self):
+        """Test login as a regular user"""
+        self.login('user1', 'user1')
+
+    def testLoginAsRegularUserIsCaseInsensitive(self):
+        """Test login as a regular user with a capitalized login"""
+        self.login('user1', 'user1')
+
+    def testLoginAsRegularUserWithWrongPassword(self):
+        """Test login as a regular user but with a wrong password"""
+        self.login_failure('user1', 'User1')
+
+    def testLoginAsAdminUser(self):
+        """Test login as an admin user"""
+        self.login('admin', 'admin')
+
+    def testLoginAsAdminUserIsCaseInsensitive(self):
+        """Test login as an admin user with a capitalized login"""
+        self.login('ADMIN', 'admin', 'admin')
+
+    def testLoginAsAdminUserCaseInsensitiveWithWrongPassword(self):
+        """Test login as an admin user with a capitalized username but with a wrong password"""
+        self.fill_in_login_form('Admin', 'Admin')
+
+    def testLoginAsNonExistingUser(self):
+        """Test login as a non-existing users"""
+        self.login_failure('bob', 'champignon')
+

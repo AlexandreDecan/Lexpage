@@ -10,6 +10,7 @@ from whitenoise.django import DjangoWhiteNoise
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.common.exceptions import NoSuchElementException
 
 def application(environ, start_response):
     if _websocket_url and environ.get('PATH_INFO').startswith(_websocket_url):
@@ -68,13 +69,22 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
         cls.selenium.quit()
         super(LexpageTestCase, cls).tearDownClass()
 
-    def login(self, username, password, displayed_username):
+    def go_to_login_form(self):
+        self.selenium.get('%s%s' % (self.live_server_url, reverse('auth_login')))
+
+    def fill_in_login_form(self, username, password):
         self.selenium.get('%s%s' % (self.live_server_url, reverse('auth_login')))
         username_input = self.selenium.find_element_by_name("username")
         username_input.send_keys(username)
         password_input = self.selenium.find_element_by_name("password")
         password_input.send_keys(password)
         self.selenium.find_element_by_xpath('//button[text()="S\'identifier"]').click()
+
+    def login(self, username, password, displayed_username=None):
+        if displayed_username is None:
+            displayed_username = username
+        self.go_to_login_form()
+        self.fill_in_login_form(username, password)
         WebDriverWait(self.selenium, 20).until(
             lambda driver: driver.find_element_by_xpath('//p[contains(text(),"Bienvenue %s")]' % displayed_username))
 
@@ -86,6 +96,14 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
         WebDriverWait(self.selenium, 2).until(
             lambda driver: driver.find_element_by_xpath('//p[text()=\'Vous êtes maintenant déconnecté de votre compte. \']'))
 
+    def login_failure(self, username, password):
+        self.go_to_login_form()
+        error_message = 'Erreur lors de la validation'
+        error_message_xpath = '//strong[text()="%s"]' % error_message
+        with self.assertRaises(NoSuchElementException):
+            self.selenium.find_element_by_xpath(error_message_xpath)
+        self.fill_in_login_form(username, password)
+        self.selenium.find_element_by_xpath(error_message_xpath)
 
     def wait_for_minichat_ready(self):
         disabled_input = '//p[text()[contains(.,"Connexion...")]]'
