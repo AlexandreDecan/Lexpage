@@ -61,9 +61,15 @@ class WebsocketsTests(LexpageTestCase):
     """ Those tests use a Firefox browser to test the websockets."""
     fixtures = ['devel']
 
-    def find_link_with_icon(self, text):
-        xpath = '//a[text()[contains(.,"%s")]]' % (text)
-        return self.selenium.find_element_by_xpath(xpath)
+    @classmethod
+    def setUpClass(cls):
+        cls.second_selenium = cls.newWebDriver()
+        super(WebsocketsTests, cls).setUpClass()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.second_selenium.quit()
+        super(WebsocketsTests, cls).tearDownClass()
 
 
     @login_required()
@@ -131,6 +137,54 @@ class WebsocketsTests(LexpageTestCase):
         WebDriverWait(self.selenium, 4).until(
             lambda driver: driver.find_element_by_xpath(text_message_xpath))
         self.check_notification_count(2)
+
+
+    @login_required()
+    @login_required('admin', 'admin', webdriver='second_selenium')
+    def testConversationNotificationCount(self):
+        """Take two users and make them discuss in the minichat."""
+        messages = [
+            {'text': '@admin Bonjour',
+             'user': 'user1',
+             'notifications': {'user1': 1, 'admin': 1}},
+            {'text': '@user1 Hello',
+             'user': 'user1',
+             'notifications': {'user1': 2, 'admin': 1}},
+            {'text': 'R U fine',
+             'user': 'user1',
+             'notifications': {'user1': 2, 'admin': 1}},
+            {'text': 'yes',
+             'user': 'admin',
+             'notifications': {'user1': 2, 'admin': 1}},
+            {'text': 'what about you',
+             'user': 'admin',
+             'notifications': {'user1': 2, 'admin': 1}},
+            {'text': '@admin yes, thx',
+             'user': 'user1',
+             'notifications': {'user1': 2, 'admin': 2}},
+        ]
+        webdrivers = {'user1': 'selenium', 'admin': 'second_selenium'}
+        for message in messages:
+            user = message['user']
+            wd_name = webdrivers[user]
+            text_message = message['text']
+            text_message_xpath = '//div[@class="minichat-text" and text()[contains(.,"%s")]]' % text_message
+            for i in webdrivers.values():
+                self.wait_for_minichat_ready(webdriver=i)
+                wd = self.get_webdriver(i)
+                with self.assertRaises(NoSuchElementException):
+                    wd.find_element_by_xpath(text_message_xpath)
+            user_wd = self.get_webdriver(wd_name)
+            text_input = user_wd.find_element_by_name("text")
+            text_input.send_keys(text_message)
+            text_input.send_keys(Keys.RETURN)
+            for i in webdrivers.values():
+                wd = self.get_webdriver(i)
+                WebDriverWait(wd, 4).until(
+                    lambda driver: driver.find_element_by_xpath(text_message_xpath))
+            for user, notifications in message['notifications'].items():
+                self.check_notification_count(notifications, webdriver=webdrivers[user])
+        import time; time.sleep(10)
 
     @GhostDriverBug358
     @login_required()
