@@ -134,9 +134,9 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
 
     def logout(self, webdriver=None):
         wd = self.get_webdriver(webdriver)
-        lexpagiens_link = self.find_link_with_icon('Lexpagiens', webdriver=webdriver)
+        lexpagiens_link = wd.find_element_by_link_text('Lexpagiens')
         ActionChains(wd).move_to_element(lexpagiens_link).perform()
-        disconnect_link = self.find_link_with_icon('Se déconnecter', webdriver=webdriver)
+        disconnect_link = wd.find_element_by_link_text('Se déconnecter')
         disconnect_link.click()
         WebDriverWait(wd, 2).until(
             lambda driver: driver.find_element_by_xpath('//p[text()=\'Vous êtes maintenant déconnecté de votre compte. \']'))
@@ -162,9 +162,4 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
         notif_xpath = '//span[@class="fa fa-bell" and contains(text(),"%s")]' % count
         WebDriverWait(wd, 5).until(
             lambda driver: driver.find_element_by_xpath(notif_xpath))
-
-    def find_link_with_icon(self, text, webdriver=None):
-        wd = self.get_webdriver(webdriver)
-        xpath = '//a[text()[contains(.,"%s")]]' % (text)
-        return wd.find_element_by_xpath(xpath)
 
