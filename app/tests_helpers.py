@@ -1,4 +1,5 @@
 import os
+import time
 
 from django.core.servers.basehttp import WSGIServer
 from django.test.testcases import LiveServerThread, QuietWSGIRequestHandler
@@ -14,6 +15,8 @@ from whitenoise.django import DjangoWhiteNoise
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
+
+from django.db import connection
 
 WebDriver = import_string(settings.SELENIUM_WEBDRIVER)
 
@@ -56,6 +59,7 @@ class MultiThreadLiveServerTestCase(StaticLiveServerTestCase):
     """ This class extends the StaticLiveServerTestCase with a webserver that supports
     multithreading."""
 
+
     @classmethod
     def _create_server_thread(cls, host, possible_ports, connections_override):
         return MultiThreadLiveServerThread(
@@ -71,7 +75,7 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
     @classmethod
     def newWebDriver(cls):
         selenium = WebDriver()
-        selenium.implicitly_wait(5)
+        selenium.implicitly_wait(1)
         selenium.set_window_size(1280, 1024)
 
         print('-- Capabilities for %s --' % settings.SELENIUM_WEBDRIVER)
@@ -108,28 +112,34 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
             self.selenium.save_screenshot(path_to_filename)
         except:
             pass
+        if connection.vendor == 'sqlite':
+            time.sleep(1)
         super(LexpageTestCase, self).tearDown()
 
     def go_to_login_form(self, webdriver=None):
         wd = self.get_webdriver(webdriver)
         wd.get('%s%s' % (self.live_server_url, reverse('auth_login')))
 
-    def fill_in_login_form(self, username, password, webdriver=None):
+    def fill_in_login_form(self, username, password, incognito=None, webdriver=None):
+        if incognito is None:
+            incognito = connection.vendor == 'sqlite'
         wd = self.get_webdriver(webdriver)
         wd.get('%s%s' % (self.live_server_url, reverse('auth_login')))
         username_input = wd.find_element_by_name("username")
         username_input.send_keys(username)
         password_input = wd.find_element_by_name("password")
         password_input.send_keys(password)
+        if incognito:
+            wd.find_element_by_name('incognito').click()
         wd.find_element_by_xpath('//button[text()="S\'identifier"]').click()
 
-    def login(self, username, password, displayed_username=None, webdriver=None):
+    def login(self, username, password, displayed_username=None, incognito=None, webdriver=None):
         wd = self.get_webdriver(webdriver)
         if displayed_username is None:
             displayed_username = username
         self.go_to_login_form(webdriver=webdriver)
         self.fill_in_login_form(username, password, webdriver=webdriver)
-        WebDriverWait(wd, 10).until(
+        WebDriverWait(wd, 1).until(
             lambda driver: driver.find_element_by_xpath('//p[contains(text(),"Bienvenue %s")]' % displayed_username))
 
     def logout(self, webdriver=None):
@@ -138,7 +148,7 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
         ActionChains(wd).move_to_element(lexpagiens_link).perform()
         disconnect_link = wd.find_element_by_link_text('Se déconnecter')
         disconnect_link.click()
-        WebDriverWait(wd, 2).until(
+        WebDriverWait(wd, 1).until(
             lambda driver: driver.find_element_by_xpath('//p[text()=\'Vous êtes maintenant déconnecté de votre compte. \']'))
 
     def login_failure(self, username, password, webdriver=None):
@@ -154,12 +164,12 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
     def wait_for_minichat_ready(self, webdriver=None):
         wd = self.get_webdriver(webdriver)
         disabled_input = '//p[text()[contains(.,"Connexion...")]]'
-        WebDriverWait(wd, 10).until_not(
+        WebDriverWait(wd, 1).until_not(
             lambda driver: driver.find_element_by_xpath(disabled_input))
 
     def check_notification_count(self, count, webdriver=None):
         wd = self.get_webdriver(webdriver)
         notif_xpath = '//span[@class="fa fa-bell" and contains(text(),"%s")]' % count
-        WebDriverWait(wd, 5).until(
+        WebDriverWait(wd, 1).until(
             lambda driver: driver.find_element_by_xpath(notif_xpath))
 

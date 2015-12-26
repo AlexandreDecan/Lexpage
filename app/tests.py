@@ -82,7 +82,7 @@ class WebsocketsTests(LexpageTestCase):
         text_input = self.selenium.find_element_by_name("text")
         text_input.send_keys(text_message)
         text_input.send_keys(Keys.RETURN)
-        WebDriverWait(self.selenium, 60).until(
+        WebDriverWait(self.selenium, 1).until(
             lambda driver: driver.find_element_by_xpath(text_message_xpath))
 
     @login_required()
@@ -100,11 +100,11 @@ class WebsocketsTests(LexpageTestCase):
         text_input = self.selenium.find_element_by_name("text")
         text_input.send_keys(text_message)
         text_input.send_keys(Keys.RETURN)
-        WebDriverWait(self.selenium, 3).until(
+        WebDriverWait(self.selenium, 1).until(
             lambda driver: driver.find_element_by_xpath(text_message_xpath))
         text_input.send_keys(fix_text_message)
         text_input.send_keys(Keys.RETURN)
-        WebDriverWait(self.selenium, 3).until(
+        WebDriverWait(self.selenium, 1).until(
             lambda driver: driver.find_element_by_xpath(fixed_text_message_xpath))
         with self.assertRaises(NoSuchElementException):
             self.selenium.find_element_by_xpath(text_message_xpath)
@@ -118,7 +118,7 @@ class WebsocketsTests(LexpageTestCase):
         with self.assertRaises(NoSuchElementException):
             self.selenium.find_element_by_xpath(text_message_xpath)
         Message(user=User.objects.get(username='admin'), text=text_message).save()
-        WebDriverWait(self.selenium, 3).until(
+        WebDriverWait(self.selenium, 1).until(
             lambda driver: driver.find_element_by_xpath(text_message_xpath))
 
     @login_required()
@@ -134,7 +134,7 @@ class WebsocketsTests(LexpageTestCase):
         text_input = self.selenium.find_element_by_name("text")
         text_input.send_keys(text_message)
         text_input.send_keys(Keys.RETURN)
-        WebDriverWait(self.selenium, 4).until(
+        WebDriverWait(self.selenium, 3).until(
             lambda driver: driver.find_element_by_xpath(text_message_xpath))
         self.check_notification_count(2)
 
@@ -180,11 +180,10 @@ class WebsocketsTests(LexpageTestCase):
             text_input.send_keys(Keys.RETURN)
             for i in webdrivers.values():
                 wd = self.get_webdriver(i)
-                WebDriverWait(wd, 4).until(
+                WebDriverWait(wd, 3).until(
                     lambda driver: driver.find_element_by_xpath(text_message_xpath))
             for user, notifications in message['notifications'].items():
                 self.check_notification_count(notifications, webdriver=webdrivers[user])
-        import time; time.sleep(10)
 
     @GhostDriverBug358
     @login_required()
