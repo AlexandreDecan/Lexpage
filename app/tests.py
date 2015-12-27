@@ -1,3 +1,6 @@
+import time
+from datetime import date
+
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -6,6 +9,7 @@ from blog.models import BlogPost
 from board.models import Thread
 from minichat.models import Message
 from notifications.models import Notification
+from slogan.models import Slogan
 
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
@@ -13,7 +17,7 @@ from tests_helpers import LexpageTestCase, login_required, GhostDriverBug358
 
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
-import time
+
 
 class ViewsTests(TestCase):
     fixtures = ['devel']
@@ -244,4 +248,39 @@ class LoginTests(LexpageTestCase):
     def testLoginAsNonExistingUser(self):
         """Test login as a non-existing users"""
         self.login_failure('bob', 'champignon')
+
+
+class HomepageTests(LexpageTestCase):
+    """Browser tests for the homepage"""
+    fixtures = ['devel']
+
+    def setUp(self):
+        super(LexpageTestCase, self).setUp()
+        self.selenium.get('%s' % (self.live_server_url))
+
+    def testNoThreadsAreDisplayedOnTheHomepage(self):
+        """On the homepage there are no open discussions that should be displayed by default with
+        the devel fixtures."""
+        emtext = self.selenium.find_element_by_css_selector('.pagecontent > em')
+        self.assertEqual(emtext.text, 'Aucun discussion récente.')
+
+    def testSloganInSlogans(self):
+        all_text = []
+        for slogan in Slogan.visible.all():
+            all_text.append(slogan.slogan)
+        current_text = self.selenium.find_element_by_css_selector('#slogan > em').text
+        self.assertIn('   %s   ' % current_text, all_text)
+
+    def testYearInFooter(self):
+        footer_text = self.selenium.find_element_by_css_selector('.footer > .container > p').text
+        self.assertIn('1996-%s' % date.today().year, footer_text)
+
+    def testNewThread(self):
+        Thread.objects.all().delete()
+        thread = Thread(title='Test thread', slug='test-thread')
+        thread.save()
+        message = thread.post_message(User.objects.get(username='user1'), 'foo')
+        message.save()
+        self.selenium.refresh()
+        self.assertIsNotNone(self.selenium.find_element_by_link_text('Test thread'))
 
