@@ -30,10 +30,8 @@ env:
 - BROWSER=phantomjs              SELENIUM_WEBDRIVER=selenium.webdriver.phantomjs.webdriver.WebDriver
 matrix:
   allow_failures:
-  - env: BROWSER=google-chrome-beta     SELENIUM_WEBDRIVER=selenium.webdriver.chrome.webdriver.WebDriver
   - env: BROWSER=google-chrome-unstable SELENIUM_WEBDRIVER=selenium.webdriver.chrome.webdriver.WebDriver
   - env: BROWSER=firefox-aurora         SELENIUM_WEBDRIVER=selenium.webdriver.firefox.webdriver.WebDriver
-  - env: BROWSER=firefox-beta           SELENIUM_WEBDRIVER=selenium.webdriver.firefox.webdriver.WebDriver
 script:
 - python app/manage.py collectstatic --noinput --settings=settings_dev
 - coverage run --source app/ --omit */migrations/* --omit */management/* app/manage.py test --settings=settings_travis -v 3
