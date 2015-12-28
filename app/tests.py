@@ -61,6 +61,7 @@ class ViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.context['thread_list']), 1)
 
+
 class WebsocketsTests(LexpageTestCase):
     """ Those tests use a Firefox browser to test the websockets."""
     fixtures = ['devel']
@@ -216,6 +217,53 @@ class WebsocketsTests(LexpageTestCase):
         time.sleep(5)
         with self.assertRaises(NoSuchElementException):
             self.selenium.find_element_by_xpath(dismiss_xpath)
+
+    @login_required()
+    def testNavbarIsShownOnNewNotification(self):
+        # Add new threads so we can scroll
+
+        for i in range(0,10):
+            thread = Thread(title='Foobar Number %s' % i, slug='foobar-number-%s' % i)
+            thread.save()
+            message = thread.post_message(User.objects.get(username='user1'), 'foo')
+            message.save()
+        self.selenium.refresh()
+
+        scroll = lambda x: self.selenium.execute_script("window.scrollTo(0, %s);" % x)
+        top_value = lambda: self.selenium.find_element_by_tag_name('nav').value_of_css_property('top')
+        self.wait_for_minichat_ready()
+        self.check_notification_count(1)
+        self.assertEqual(top_value(), '0px')
+
+        # Scroll to hide navbar
+        scroll(55)
+        time.sleep(4)
+        self.check_notification_count(1)
+        self.assertEqual(top_value(), '-50px')
+
+        # Create a notification to show the navbar
+        notification = {
+            'title': 'Foobar',
+            'description': 'this is a test',
+            'recipient': User.objects.get(username='user1'),
+            'app': 'game',
+            'key': 'bar',
+        }
+        Notification(**notification).save()
+        time.sleep(4)
+
+        self.check_notification_count(2)
+        self.assertEqual(top_value(), '0px')
+
+        # Scroll again to check that the navbar is hidden again
+        scroll(85)
+        time.sleep(4)
+        self.assertEqual(top_value(), '-50px')
+
+        # Scroll to top to be able to logout
+        scroll(0)
+        time.sleep(2)
+
 
 class LoginTests(LexpageTestCase):
     """Simple login tests"""

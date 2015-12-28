@@ -24,6 +24,7 @@ function notifications_refresh(count) {
     } else {
         $(notifications_content).show();
         $(notifications_counter).html("<span class=\"fa fa-bell\"> "+count);
+        $(".navbar-fixed-top").autoHidingNavbar('show');
     }
     $.get(notifications_content_url, function(data) {
         $(notifications_dropdown).html(data);

@@ -28,6 +28,14 @@ def GhostDriverBug358(function):
         return function(_self, *args, **kwargs)
     return wrapper
 
+def AdvancedScreenshotTest(function):
+    def wrapper(_self, *args, **kwargs):
+        skip_text = 'This test only works with Chrome. See http://stackoverflow.com/questions/31833922/selenium-webdriver-take-screenshot-of-viewport-only'
+        if _self.selenium.capabilities['browserName'] != 'chrome':
+            _self.skipTest(skip_text)
+        return function(_self, *args, **kwargs)
+    return wrapper
+
 def application(environ, start_response):
     if _websocket_url and environ.get('PATH_INFO').startswith(_websocket_url):
         return _websocket_app(environ, start_response)
@@ -172,4 +180,5 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
         notif_xpath = '//span[@class="fa fa-bell" and contains(text(),"%s")]' % count
         WebDriverWait(wd, 1).until(
             lambda driver: driver.find_element_by_xpath(notif_xpath))
+
 
