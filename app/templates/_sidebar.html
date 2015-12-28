@@ -16,6 +16,13 @@
                    title="Archives">
                     <span class="fa fa-folder-open"></span>
                 </a>
+                <a class="btn"
+                   id="minichat_status"
+                   data-toggle="tooltip"
+                   data-placement="top"
+                   title="Connexion...">
+                    <span class="fa fa-spin fa-spinner"></span>
+                </a>
             </div>
         </h2>
 
@@ -35,14 +42,14 @@
 
             <div id="minichat_content">
                 <p class="text-muted text-center">
-                    <span class="fa fa-spinner fa-spin"></span> Connexion...</p>
+                    <span class="fa fa-spinner fa-spin"></span> Chargement...</p>
             </div>
             {% if user.is_authenticated %}
 
                 <form action="{% url 'minichat_post' %}" class="form-inline" method="post" id="minichat_form">
                     {% csrf_token %}
                     <div class="input-group">
-                        <input disabled="disabled" name="text" maxlength="150" type="text" class="form-control" placeholder="Nouveau message"/>
+                        <input name="text" maxlength="150" type="text" class="form-control" placeholder="Nouveau message"/>
 
                         <span class="input-group-btn">
 

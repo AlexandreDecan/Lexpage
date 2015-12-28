@@ -171,9 +171,9 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
 
     def wait_for_minichat_ready(self, webdriver=None):
         wd = self.get_webdriver(webdriver)
-        disabled_input = '//p[text()[contains(.,"Connexion...")]]'
-        WebDriverWait(wd, 1).until_not(
-            lambda driver: driver.find_element_by_xpath(disabled_input))
+        connected_notification = '.text-success.fa.fa-exchange'
+        WebDriverWait(wd, 1).until(
+            lambda driver: driver.find_element_by_css_selector(connected_notification))
 
     def check_notification_count(self, count, webdriver=None):
         wd = self.get_webdriver(webdriver)
