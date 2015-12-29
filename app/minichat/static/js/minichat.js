@@ -3,7 +3,7 @@ var minichat_content;
 var minichat_content_url;
 var minichat_post_url;
 var minichat_timer;
-var minichat_timer_enabled;
+var minichat_timer_enabled = false;
 
 var minichat_form = "#minichat_form";
 var minichat_status = "#minichat_status";
@@ -12,10 +12,7 @@ var minichat_button = "#minichat_form button[type='submit']";
 var minichat_input_text = "#minichat_form input[type='text']";
 var minichat_chars_output = "#minichat_form .minichat-remainingChars";
 
-var minichat_connected_text = 'Connecté';
-var minichat_disconnected_text = 'Déconnecté';
-var minichat_connected_classes = 'text-success fa fa-exchange';
-var minichat_disconnected_classes = 'text-danger fa fa-circle';
+var minichat_disconnected = '#degraded_connection';
 
 function minichat_interval_helper(flag) {
    minichat_timer_enabled = flag;
@@ -28,17 +25,9 @@ function minichat_interval_helper(flag) {
 
 function minichat_toggle_notification(flag) {
     if (flag){
-        var text = minichat_connected_text;
-        var classes = minichat_connected_classes;
+        $(minichat_disconnected).hide();
     } else {
-        var text = minichat_disconnected_text;
-        var classes = minichat_disconnected_classes;
-    }
-    if ($(minichat_status).attr('data-original-title') != text) {
-        $(minichat_status).attr('data-original-title', text);
-    }
-    if ($(minichat_status_icon).attr('class') != classes) {
-        $(minichat_status_icon).attr('class', classes);
+        $(minichat_disconnected).show();
     }
     minichat_interval_helper(!flag);
 }
@@ -48,15 +37,15 @@ function minichat_init_display(content, get_url) {
     minichat_content_url = get_url;
     minichat_interval_helper(true);
     minichat_refresh();
-    $(minichat_status).click(function(){
-        websocket_minichat.reconnect();
-    });
 }
 
 function minichat_init_ws() {
-    $(minichat_status).click(function(){
-        websocket_minichat.reconnect();
-    });
+    setTimeout(function(){
+        if (minichat_timer_enabled) {
+            minichat_toggle_notification(false);
+        }
+    }, 5000);
+    $(minichat_disconnected).hide();
 }
 
 function minichat_refresh() {
@@ -85,7 +74,8 @@ function minichat_post_message() {
             $(minichat_button).find('span').removeClass('fa-spinner fa-spin fa-warning btn-warning');
             $(minichat_input_text).val("");
             minichat_update_chars_count();
-            if (minichat_timer_enabled) {
+            if (minichat_timer_enabled == true) {
+                console.log('Legacy mode enabled, refreshing')
                 minichat_refresh();
             }
         })

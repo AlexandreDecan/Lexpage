@@ -15,6 +15,8 @@ from whitenoise.django import DjangoWhiteNoise
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 from django.db import connection
 
@@ -171,14 +173,15 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
 
     def wait_for_minichat_ready(self, webdriver=None):
         wd = self.get_webdriver(webdriver)
-        connected_notification = '.text-success.fa.fa-exchange'
-        WebDriverWait(wd, 1).until(
-            lambda driver: driver.find_element_by_css_selector(connected_notification))
+        time.sleep(4)
+        WebDriverWait(wd, 1).until_not(
+            EC.visibility_of_element_located((By.ID, 'degraded_connection')))
 
     def check_notification_count(self, count, webdriver=None):
         wd = self.get_webdriver(webdriver)
         notif_xpath = '//span[@class="fa fa-bell" and contains(text(),"%s")]' % count
         WebDriverWait(wd, 1).until(
             lambda driver: driver.find_element_by_xpath(notif_xpath))
+
 
 

@@ -16,15 +16,6 @@
                    title="Archives">
                     <span class="fa fa-folder-open"></span>
                 </a>
-                {% if user.is_authenticated %}
-                <a class="btn"
-                   id="minichat_status"
-                   data-toggle="tooltip"
-                   data-placement="top"
-                   title="Connexion...">
-                   <span class="fa fa-spin fa-spinner"></span>
-                </a>
-                {% endif %}
             </div>
         </h2>
 
@@ -65,6 +56,10 @@
                     </div>
 
                 </form>
+
+                <div class="bg-warning text-muted text-center" id="degraded_connection">
+                Connexion perdue, le minichat sera rafraîchi automatiquement toutes les 30 secondes.
+                </div>
 
                 <script>
                     $(document).ready(function () {
