@@ -1,5 +1,5 @@
 jQuery(document).ready(function($) {
-    var ws4redis = WS4RedisImproved({
+    websocket_minichat = WS4RedisImproved({
         uri: '{{ WEBSOCKET_URI }}minichat?subscribe-broadcast&echo',
         receive_message: receiveMessage,
         on_open: onOpen,

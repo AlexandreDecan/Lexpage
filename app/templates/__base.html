@@ -31,9 +31,11 @@
             <script src="{% static "js/minichat"|add:static_ext|add:".js" %}?v=151221-1"></script>
             <script src="{% static "js/notifications"|add:static_ext|add:".js" %}?v=151221-2"></script>
             <script src="{% static "js/markup"|add:static_ext|add:".js" %}?v=150627"></script>
-            <script src="{% static "js/ws4redis_improved.js" %}"></script>
+            <script src="{% static "js/ws4redis_improved"|add:static_ext|add:".js" %}"></script>
+            {% if user.is_authenticated %}
             <script src="{% url "minichat_js" %}"></script>
             <script src="{% url "notifications_js" %}"></script>
+            {% endif %}
         {% endblock javascript %}
         {{ form.media }}
     {% endwith %}

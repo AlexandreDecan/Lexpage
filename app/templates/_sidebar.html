@@ -16,13 +16,15 @@
                    title="Archives">
                     <span class="fa fa-folder-open"></span>
                 </a>
+                {% if user.is_authenticated %}
                 <a class="btn"
                    id="minichat_status"
                    data-toggle="tooltip"
                    data-placement="top"
                    title="Connexion...">
-                    <span class="fa fa-spin fa-spinner"></span>
+                   <span class="fa fa-spin fa-spinner"></span>
                 </a>
+                {% endif %}
             </div>
         </h2>
 
@@ -89,6 +91,7 @@
             $(document).ready(function() {
                 minichat_init_display($("#minichat_content"), "{% url 'minichat_latests' %}");
                 {% if user.is_authenticated %}
+                    minichat_init_ws();
                     minichat_init_post();
                     minichat_init_remaining_chars();
                 {% endif %}

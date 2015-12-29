@@ -57,6 +57,13 @@ function WS4RedisImproved(options, $) {
 		}
 	}
 
+	this.reconnect = function() {
+        if (ws.readyState == 1) {
+            ws.close();
+        }
+        connect(ws.url);
+	}
+
 	function on_close(evt) {
 		console.log("Connection closed!");
 		if (typeof opts.on_close === 'function') {

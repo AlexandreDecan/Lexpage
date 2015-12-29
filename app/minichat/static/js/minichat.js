@@ -34,8 +34,7 @@ function minichat_toggle_notification(flag) {
         var text = minichat_disconnected_text;
         var classes = minichat_disconnected_classes;
     }
-    if ($(minichat_status).attr('title') != text) {
-        $(minichat_status).attr('title', text);
+    if ($(minichat_status).attr('data-original-title') != text) {
         $(minichat_status).attr('data-original-title', text);
     }
     if ($(minichat_status_icon).attr('class') != classes) {
@@ -43,11 +42,21 @@ function minichat_toggle_notification(flag) {
     }
     minichat_interval_helper(!flag);
 }
+
 function minichat_init_display(content, get_url) {
     minichat_content = content
     minichat_content_url = get_url;
     minichat_interval_helper(true);
     minichat_refresh();
+    $(minichat_status).click(function(){
+        websocket_minichat.reconnect();
+    });
+}
+
+function minichat_init_ws() {
+    $(minichat_status).click(function(){
+        websocket_minichat.reconnect();
+    });
 }
 
 function minichat_refresh() {

@@ -265,6 +265,12 @@ class WebsocketsTests(LexpageTestCase):
         time.sleep(2)
 
 
+    def testUnauthenticatedUsersHaveNoAccessToWebsockets(self):
+        self.go_to_login_form()
+        time.sleep(5)
+        with self.assertRaises(NoSuchElementException):
+            self.selenium.find_element_by_id('minichat_status')
+
 class LoginTests(LexpageTestCase):
     """Simple login tests"""
     fixtures = ['devel']
