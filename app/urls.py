@@ -2,6 +2,7 @@
 
 from django.conf.urls import include, url
 from django.contrib.flatpages.views import flatpage
+from django.views.generic import TemplateView
 
 from views import homepage
 
@@ -31,5 +32,10 @@ urlpatterns = [
 
     # Flatpages URLs
     url(r'^pages/', include('django.contrib.flatpages.urls')),
+
+    # Websockets URLS
+    url(r'ws.js$',
+        TemplateView.as_view(template_name='websockets.js'),
+        name='websockets_js'),
 ]
 

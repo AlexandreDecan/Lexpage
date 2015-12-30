@@ -34,3 +34,14 @@ function notifications_refresh(count) {
         $(notifications_button_content).html(data);
     });
 }
+
+// Websockets
+function notifications_websocket_receiveMessage(msg) {
+    if ('data' in msg) {
+        websocket_receiveNotification(msg['data']);
+    }
+}
+
+function websocket_receiveNotification(count) {
+    notifications_refresh(count);
+}

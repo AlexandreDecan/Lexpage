@@ -29,7 +29,7 @@ On the server side, we use the Django Signals mechanism to send the
 messages. It means that it does not matter the place in the code where
 we actually change a model, each change will create a websocket event.
 
-We currently use 2 different websockets:
+We currently use one websocket for 2 purposes:
 
 Minichat
 --------

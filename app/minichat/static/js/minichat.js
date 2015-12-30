@@ -97,3 +97,23 @@ function minichat_init_remaining_chars() {
     $(minichat_input_text).change(minichat_update_chars_count);
     $(minichat_input_text).keyup(minichat_update_chars_count);
 }
+
+// Websockets handling
+
+function minichat_websocket_onOpen() {
+    minichat_refresh();
+    minichat_toggle_notification(true);
+}
+
+function minichat_websocket_onClose() {
+    // timeout to prevent this to be shown on page refresh
+    setTimeout(function(){
+        if (minichat_timer_enabled) {
+            minichat_toggle_notification(false);
+        }
+    }, 1000);
+}
+
+function minichat_websocket_receiveMessage(msg) {
+    minichat_refresh();
+}
