@@ -19,6 +19,10 @@ then
     : PhantomJS is already installed
 elif [[ "$BROWSER" == "firefox-aurora" ]]
 then
+    pip uninstall -y selenium
+    pip install http://ethylix.be/~roidelapluie/selenium-2.48.0-py3-none-any.whl
+    wget https://github.com/jgraham/wires/releases/download/v0.5.0/wires-0.5.0-linux64.gz -O - | zcat | sudo tee /usr/bin/wires > /dev/null
+    sudo chmod +x /usr/bin/wires
     yes|sudo add-apt-repository ppa:ubuntu-mozilla-daily/firefox-aurora
     sudo apt-get -qq update
     sudo apt-get -qq install firefox

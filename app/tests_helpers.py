@@ -17,10 +17,19 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 from django.db import connection
 
 WebDriver = import_string(settings.SELENIUM_WEBDRIVER)
+
+if os.environ.get('BROWSER', None) == 'firefox-aurora':
+    extra_capabilities = DesiredCapabilities.FIREFOX
+    extra_capabilities['marionette'] = True
+    extra_capabilities['binary'] = os.environ.get('FIREFOX_AURORA_PATH', '/usr/bin/firefox')
+    webdriver_kwargs = {'capabilities': extra_capabilities}
+else:
+    webdriver_kwargs = {}
 
 def GhostDriverBug358(function):
     def wrapper(_self, *args, **kwargs):
@@ -84,7 +93,7 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
 
     @classmethod
     def newWebDriver(cls):
-        selenium = WebDriver()
+        selenium = WebDriver(**webdriver_kwargs)
         selenium.implicitly_wait(1)
         selenium.set_window_size(1280, 1024)
 
