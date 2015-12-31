@@ -1,5 +1,5 @@
 jQuery(document).ready(function($) {
-    lexpage_websocket = WS4RedisImproved({
+    lexpage_websocket = WebsocketClient({
         uri: '{{ WEBSOCKET_URI }}lexpage?subscribe-user&subscribe-broadcast&echo{% if debug %}&ts={% now "U" %}{% endif %}',
         receive_message: receiveMessage,
         on_open: onOpen,

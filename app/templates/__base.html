@@ -31,8 +31,8 @@
             <script src="{% static "js/minichat"|add:static_ext|add:".js" %}?v=151221-1"></script>
             <script src="{% static "js/notifications"|add:static_ext|add:".js" %}?v=151221-2"></script>
             <script src="{% static "js/markup"|add:static_ext|add:".js" %}?v=150627"></script>
-            <script src="{% static "js/ws4redis_improved"|add:static_ext|add:".js" %}"></script>
             {% if user.is_authenticated %}
+            <script src="{% static "js/websocket_client"|add:static_ext|add:".js" %}"></script>
             <script src="{% url "websockets_js" %}"></script>
             {% endif %}
         {% endblock javascript %}

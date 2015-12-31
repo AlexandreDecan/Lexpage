@@ -1,12 +1,12 @@
 // Taken from django-websocket-redis/ws4redis/static/js/ws4redis.js
 // License: MIT
-function WS4RedisImproved(options, $) {
+function WebsocketClient(options, $) {
     'use strict';
     var opts, ws, deferred, timer, attempts = 1;
     var heartbeat_interval = null, missed_heartbeats = 0;
 
     if (this === undefined)
-        return new WS4RedisImproved(options, $);
+        return new WebsocketClient(options, $);
     if (options.uri === undefined)
         throw new Error('No Websocket URI in options');
     if ($ === undefined)
