@@ -29,7 +29,6 @@ function minichat_toggle_notification(flag) {
     } else {
         $(minichat_disconnected).show();
     }
-    minichat_interval_helper(!flag);
 }
 
 function minichat_init_display(content, get_url) {
@@ -102,10 +101,16 @@ function minichat_init_remaining_chars() {
 
 function minichat_websocket_onOpen() {
     minichat_refresh();
-    minichat_toggle_notification(true);
+    minichat_interval_helper(false);
+    setTimeout(function(){
+        if (!minichat_timer_enabled) {
+            minichat_toggle_notification(true);
+        }
+    }, 1000);
 }
 
 function minichat_websocket_onClose() {
+    minichat_interval_helper(true);
     // timeout to prevent this to be shown on page refresh
     setTimeout(function(){
         if (minichat_timer_enabled) {
