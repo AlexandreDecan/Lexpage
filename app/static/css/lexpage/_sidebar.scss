@@ -28,13 +28,19 @@
   border-top: 2px dotted $brand-primary;
 }
 
-#degraded_connection {
-  margin-top: $padding-large-vertical;
-  padding-top: $padding-large-vertical;
-  padding-bottom: $padding-large-vertical;
-  padding-right: $padding-small-horizontal;
-  padding-left: $padding-small-horizontal;
-  border-radius: 3px;
+.sidebar {
+  .alert {
+    margin-top: $padding-large-vertical;
+    margin-bottom: $padding-large-vertical;
+    padding-top: $padding-large-vertical;
+    padding-bottom: $padding-large-vertical;
+    padding-right: $padding-small-horizontal;
+    padding-left: $padding-small-horizontal;
+    border-style: none;
+    font-size: $font-size-small;
+    border-radius: 3px;
+    box-shadow: none;
+  }
 }
 
 
