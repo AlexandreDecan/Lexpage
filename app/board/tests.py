@@ -4,6 +4,12 @@ from board.models import Thread, Message
 from blog.models import BlogPost
 from profile.models import ActiveUser
 
+from tests_helpers import LexpageTestCase, login_required
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.keys import Keys
+from board.tests_data import fable, formatted_message
+
 
 class ThreadViewsTests(TestCase):
     fixtures = ['devel']
@@ -147,3 +153,37 @@ class MessageViewsTests(TestCase):
         url = reverse('board_message_raw', kwargs={'message': self.messages[0].pk})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+
+class BoardsBrowserTests(LexpageTestCase):
+    fixtures = ['devel']
+
+    @login_required()
+    def test_can_post_a_message(self):
+        lexpagiens_link = self.selenium.find_element_by_link_text('Discussions')
+        ActionChains(self.selenium).move_to_element(lexpagiens_link).perform()
+        disconnect_link = self.selenium.find_element_by_link_text('Nouvelle discussion')
+        disconnect_link.click()
+        WebDriverWait(self.selenium, 1).until(
+            lambda driver: driver.find_element_by_id('id_title'))
+        # le Corbeau et le Renard, Jean de la Fontaine
+        title = 'Le corbeau et le renard'
+        title_input = self.selenium.find_element_by_name('title')
+        title_input.send_keys(title)
+        text_input = self.selenium.find_element_by_name('text')
+        text_input.send_keys(fable)
+        self.selenium.find_element_by_css_selector('.fa.fa-bold').click()
+        text_input.send_keys('Et du GRAS!')
+        for i in range(len('[/b]')):
+            text_input.send_keys(Keys.RIGHT)
+        self.selenium.find_element_by_css_selector('.fa.fa-italic').click()
+        text_input.send_keys('Et de l\'italique!')
+        for i in range(len('[/i]')):
+            text_input.send_keys(Keys.LEFT)
+
+        self.selenium.find_element_by_xpath('//button[text()="Poster"]').click()
+        WebDriverWait(self.selenium, 1).until(
+            lambda driver: driver.find_element_by_xpath('//h3[text()="%s"]' % title))
+
+        text_block = self.selenium.find_element_by_css_selector('.board-messagelist .message-text .bbcode')
+        self.maxDiff = 4096
+        self.assertEqual(text_block.get_attribute('innerHTML').strip(), formatted_message)
