@@ -15,8 +15,9 @@ var minichat_chars_output = "#minichat_form .minichat-remainingChars";
 var minichat_disconnected = '#degraded_connection';
 
 function minichat_interval_helper(flag) {
-   minichat_timer_enabled = flag;
-   if(flag) {
+    console.log('minichat_interval_helper: '+flag);
+    minichat_timer_enabled = flag;
+    if(flag) {
         minichat_timer = setInterval(minichat_refresh, minichat_timer_delay);
     } else {
         clearInterval(minichat_timer);
@@ -32,7 +33,7 @@ function minichat_toggle_notification(flag) {
 }
 
 function minichat_init_display(content, get_url) {
-    minichat_content = content
+    minichat_content = content;
     minichat_content_url = get_url;
     minichat_interval_helper(true);
     minichat_refresh();
@@ -59,12 +60,12 @@ function minichat_init_post() {
     minichat_post_url = $(minichat_form).attr("action");
 
     $(minichat_button).click(
-        function(e) {
-            e.preventDefault();
-            $(minichat_button).find('span').addClass('fa-spinner fa-spin');
-            minichat_post_message();
-        }
-    );
+            function(e) {
+                e.preventDefault();
+                $(minichat_button).find('span').addClass('fa-spinner fa-spin');
+                minichat_post_message();
+            }
+            );
 }
 
 function minichat_post_message() {
@@ -74,13 +75,13 @@ function minichat_post_message() {
             $(minichat_input_text).val("");
             minichat_update_chars_count();
             if (minichat_timer_enabled == true) {
-                console.log('Legacy mode enabled, refreshing')
+                console.log('Legacy mode enabled, refreshing');
                 minichat_refresh();
             }
         })
-        .fail(function(data) {
-            $(minichat_button).find('span').removeClass('fa-spinner fa-spin').addClass('fa-warning');
-        });
+    .fail(function(data) {
+        $(minichat_button).find('span').removeClass('fa-spinner fa-spin').addClass('fa-warning');
+    });
 }
 
 function minichat_update_chars_count() {

@@ -37,5 +37,3 @@ class FakeRedisPublisher(RedisPublisher):
         for key in self._get_message_channels(**kwargs):
             self._publishers.add(key)
 
-
-

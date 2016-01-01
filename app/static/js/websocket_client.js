@@ -15,6 +15,7 @@ function WebsocketClient(options, $) {
     connect(opts.uri);
 
     function connect(uri) {
+        console.log('connecting to '+uri)
         try {
             deferred = $.Deferred();
             ws = new WebSocket(uri);
@@ -31,8 +32,11 @@ function WebsocketClient(options, $) {
     function send_heartbeat() {
         try {
             missed_heartbeats++;
-            if (missed_heartbeats > 3)
+            if (missed_heartbeats > 3) {
+                on_missed_heartbeat();
                 throw new Error("Too many missed heartbeats.");
+            }
+            console.log('sending heartbeat')
             ws.send(opts.heartbeat_msg);
         } catch(e) {
             clearInterval(heartbeat_interval);
@@ -42,7 +46,20 @@ function WebsocketClient(options, $) {
         }
     }
 
+    function on_heartbeat() {
+        if (typeof opts.on_heartbeat === 'function') {
+            opts.on_heartbeat();
+        }
+    }
+
+    function on_missed_heartbeat() {
+        if (typeof opts.on_missed_heartbeat === 'function') {
+            opts.on_missed_heartbeat();
+        }
+    }
+
     function on_open() {
+        console.log('connected')
         if (typeof opts.on_open === 'function') {
             opts.on_open();
         }
@@ -68,6 +85,7 @@ function WebsocketClient(options, $) {
     }
 
     function on_close(evt) {
+        console.log('connection closed')
         if (typeof opts.on_close === 'function') {
             opts.on_close(evt.data);
         }
@@ -93,6 +111,7 @@ function WebsocketClient(options, $) {
         if (opts.heartbeat_msg && evt.data === opts.heartbeat_msg) {
             // reset the counter for missed heartbeats
             missed_heartbeats = 0;
+            on_heartbeat();
         } else if (typeof opts.receive_message === 'function') {
             return opts.receive_message(evt.data);
         }

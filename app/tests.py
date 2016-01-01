@@ -17,6 +17,8 @@ from tests_helpers import LexpageTestCase, login_required, GhostDriverBug358
 
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 
 class ViewsTests(TestCase):
@@ -75,7 +77,6 @@ class WebsocketsTests(LexpageTestCase):
     def tearDownClass(cls):
         cls.second_selenium.quit()
         super(WebsocketsTests, cls).tearDownClass()
-
 
     @login_required()
     def testSameUserMessageMinichat(self):
@@ -142,7 +143,6 @@ class WebsocketsTests(LexpageTestCase):
         WebDriverWait(self.selenium, 3).until(
             lambda driver: driver.find_element_by_xpath(text_message_xpath))
         self.check_notification_count(2)
-
 
     @login_required()
     @login_required('admin', 'admin', webdriver='second_selenium')
@@ -264,12 +264,25 @@ class WebsocketsTests(LexpageTestCase):
         scroll(0)
         time.sleep(2)
 
-
     def testUnauthenticatedUsersHaveNoAccessToWebsockets(self):
         self.go_to_login_form()
         time.sleep(5)
         with self.assertRaises(NoSuchElementException):
             self.selenium.find_element_by_id('minichat_status')
+
+
+    @login_required()
+    def testRedisShutdownNotificationIsShow(self):
+        time.sleep(5)
+        degraded = self.selenium.find_element_by_id('degraded_connection')
+        self.assertFalse(degraded.is_displayed())
+        self.stop_redis()
+        WebDriverWait(self.selenium, 30).until(
+            EC.visibility_of_element_located((By.ID, 'degraded_connection')))
+        self.start_redis()
+        WebDriverWait(self.selenium, 30).until_not(
+            EC.visibility_of_element_located((By.ID, 'degraded_connection')))
+
 
 class LoginTests(LexpageTestCase):
     """Simple login tests"""

@@ -139,6 +139,8 @@ RECAPTCHA_PUBLIC_KEY = '6LdAH_ASAAAAACAHEysPBjLekWJX94nYM0hI3hHy'
 # Selenium
 SELENIUM_WEBDRIVER = 'selenium.webdriver.firefox.webdriver.WebDriver'
 SCREENSHOTS_DIRECTORY = 'screenshots'
+START_REDIS_COMMAND = 'sudo service redis-server start'
+STOP_REDIS_COMMAND = 'sudo service redis-server stop'
 
 
 # Themes

@@ -21,6 +21,9 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 from django.db import connection
 
+from redis_helpers import get_redis_publisher
+redis_publisher = get_redis_publisher()
+
 WebDriver = import_string(settings.SELENIUM_WEBDRIVER)
 
 if os.environ.get('BROWSER', None) == 'firefox-aurora':
@@ -192,5 +195,17 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
         WebDriverWait(wd, 1).until(
             lambda driver: driver.find_element_by_xpath(notif_xpath))
 
+    def stop_redis(self):
+        redis_connection = redis_publisher()._connection
+        if hasattr(redis_connection, '_start_redis'):
+            redis_connection.shutdown()
+        else:
+            os.system(settings.STOP_REDIS_COMMAND)
 
+    def start_redis(self):
+        redis_connection = redis_publisher()._connection
+        if hasattr(redis_connection, '_start_redis'):
+            redis_connection._start_redis()
+        else:
+            os.system(settings.START_REDIS_COMMAND)
 
