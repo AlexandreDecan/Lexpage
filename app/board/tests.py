@@ -1,5 +1,7 @@
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 from django.test import TestCase
+
 from board.models import Thread, Message
 from blog.models import BlogPost
 from profile.models import ActiveUser
@@ -9,6 +11,9 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from board.tests_data import fable, formatted_message
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 
 class ThreadViewsTests(TestCase):
@@ -187,3 +192,26 @@ class BoardsBrowserTests(LexpageTestCase):
         text_block = self.selenium.find_element_by_css_selector('.board-messagelist .message-text .bbcode')
         self.maxDiff = 4096
         self.assertEqual(text_block.get_attribute('innerHTML').strip(), formatted_message)
+
+
+    @login_required()
+    def test_can_delete_a_thread(self):
+        Thread.objects.all().delete()
+        thread = Thread(title='Test thread', slug='test-thread')
+        thread.save()
+        message = thread.post_message(User.objects.get(username='user1'), 'foo')
+        message.save()
+        self.selenium.refresh()
+        self.selenium.find_element_by_link_text('Test thread').click()
+        self.selenium.find_element_by_css_selector('span.fa.fa-trash-o').click()
+        WebDriverWait(self.selenium, 1).until(
+            EC.visibility_of_element_located((By.ID, 'confirm-action-yes')))
+        self.selenium.find_element_by_id('confirm-action-yes').click()
+        alert_texts = []
+        for alert in self.selenium.find_elements_by_css_selector('.messages .alert'):
+            alert_texts.append(alert.text.strip())
+        wanted_text = ['Le message a été supprimé.', 'La discussion étant vide, elle a été supprimée également.']
+        self.assertEqual(alert_texts, wanted_text)
+        with self.assertRaises(NoSuchElementException):
+            self.selenium.find_element_by_link_text('Test thread')
+
