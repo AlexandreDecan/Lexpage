@@ -86,9 +86,9 @@
             $(document).ready(function() {
                 minichat_init_display($("#minichat_content"), "{% url 'minichat_latests' %}");
                 {% if user.is_authenticated %}
-                    minichat_init_ws();
-                    minichat_init_post();
-                    minichat_init_remaining_chars();
+                minichat_init_ws();
+                minichat_init_post();
+                minichat_init_remaining_chars();
                 {% endif %}
             });
         </script>

@@ -30,14 +30,13 @@
 
 .sidebar {
   .alert {
-    margin-top: $padding-large-vertical;
-    margin-bottom: $padding-large-vertical;
-    padding-top: $padding-large-vertical;
-    padding-bottom: $padding-large-vertical;
+    margin-top: $padding-small-vertical;
+    margin-bottom: 0px;
+    padding-top: $padding-small-vertical;
+    padding-bottom: $padding-small-vertical;
     padding-right: $padding-small-horizontal;
     padding-left: $padding-small-horizontal;
-    border-style: none;
-    font-size: $font-size-small;
+    border-width: 0px;
     border-radius: 3px;
     box-shadow: none;
   }
