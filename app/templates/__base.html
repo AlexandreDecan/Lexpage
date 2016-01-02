@@ -25,6 +25,10 @@
         {% block javascript %}
             <script>
                 var URL_PREFIX = ""; // markup.js, script.js
+            {% if user.is_authenticated %}
+                var WEBSOCKET_URI = "{{ WEBSOCKET_URI }}lexpage?subscribe-user&subscribe-broadcast&echo{% if debug %}&ts={% now "U" %}{% endif %}";
+                var WS4REDIS_HEARTBEAT = {{ WS4REDIS_HEARTBEAT }};
+            {% endif %}
             </script>
             <script src="{% static "libs/jquery/dist/jquery.min.js" %}"></script>
             <script src="{% static "js/scripts"|add:static_ext|add:".js" %}?v=150626-2"></script>
@@ -33,7 +37,6 @@
             <script src="{% static "js/markup"|add:static_ext|add:".js" %}?v=150627"></script>
             {% if user.is_authenticated %}
             <script src="{% static "js/websocket_client"|add:static_ext|add:".js" %}"></script>
-            <script src="{% url "websockets_js" %}"></script>
             {% endif %}
         {% endblock javascript %}
         {{ form.media }}

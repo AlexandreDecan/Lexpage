@@ -1,5 +1,7 @@
 // Taken from django-websocket-redis/ws4redis/static/js/ws4redis.js
 // License: MIT
+var websocket_status = false;
+
 function WebsocketClient(options, $) {
     'use strict';
     var opts, ws, deferred, timer, attempts = 1;
@@ -138,3 +140,40 @@ function WebsocketClient(options, $) {
         ws.send(message);
     };
 }
+
+jQuery(document).ready(function($) {
+    lexpage_websocket = WebsocketClient({
+        uri: WEBSOCKET_URI,
+        receive_message: receiveMessage,
+        on_heartbeat: onOpen,
+        on_missed_heartbeat: onClose,
+        on_close: onClose,
+        heartbeat_msg: WS4REDIS_HEARTBEAT
+    });
+
+    function onOpen() {
+        if(!websocket_status) {
+            websocket_status = true;
+            minichat_websocket_onOpen();
+        }
+    }
+
+    function onClose() {
+        if(websocket_status) {
+            websocket_status = false;
+            minichat_websocket_onClose();
+        }
+    }
+
+    function receiveMessage(raw_msg) {
+        msg = JSON.parse(raw_msg);
+        if ('app' in msg) {
+            if (msg['app'] == 'minichat'){
+                minichat_websocket_receiveMessage(msg);
+            }
+            else if (msg['app'] == 'notifications'){
+                notifications_websocket_receiveMessage(msg);
+            }
+        }
+    }
+});
