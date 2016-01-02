@@ -35,6 +35,12 @@ RECAPTCHA_PRIVATE_KEY = None
 NOCAPTCHA = False  # Input field, enter "PASSED" in the captcha field to bypass captcha while testing.
 os.environ['RECAPTCHA_TESTING'] = 'True'
 
+
+# Selenium
+SELENIUM_WEBDRIVER = 'selenium.webdriver.firefox.webdriver.WebDriver'
+SCREENSHOTS_DIRECTORY = 'screenshots'
+
+
 # Logging
 LOGGING = {
     'version': 1,

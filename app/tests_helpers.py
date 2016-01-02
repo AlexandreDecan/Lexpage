@@ -195,11 +195,18 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
         WebDriverWait(wd, 1).until(
             lambda driver: driver.find_element_by_xpath(notif_xpath))
 
+
+    def check_redis_start_stop_commands(self):
+        for attr in ('START', 'STOP'):
+            if not hasattr(settings, '%s_REDIS_COMMAND' % attr):
+                self.skipTest('%s_REDIS_COMMAND should be defined in settings.' % attr)
+
     def stop_redis(self):
         redis_connection = redis_publisher()._connection
         if hasattr(redis_connection, '_start_redis'):
             redis_connection.shutdown()
         else:
+            self.check_redis_start_stop_commands()
             os.system(settings.STOP_REDIS_COMMAND)
 
     def start_redis(self):
@@ -207,5 +214,6 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
         if hasattr(redis_connection, '_start_redis'):
             redis_connection._start_redis()
         else:
+            self.check_redis_start_stop_commands()
             os.system(settings.START_REDIS_COMMAND)
 

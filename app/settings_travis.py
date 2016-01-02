@@ -14,6 +14,10 @@ WS4REDIS_SUBSCRIBER = 'ws4redis.subscriber.RedisSubscriber'
 # Travis SHOULD add this environment variable
 SELENIUM_WEBDRIVER = os.environ['SELENIUM_WEBDRIVER']
 
+# Redis
+START_REDIS_COMMAND = 'sudo service redis-server start'
+STOP_REDIS_COMMAND = 'sudo service redis-server stop'
+
 
 # Database
 DATABASES = {
