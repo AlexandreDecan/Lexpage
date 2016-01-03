@@ -1,0 +1,16 @@
+<div class="minichat-content">
+{% for message in results %}
+    <div class="minichat-date">
+        {{ message.date }}
+    </div>
+
+    <div class="minichat-message {% if message.user == user %}self-author{% else %}other-author{% endif %}">
+        <a class="minichat-user" href="{{ message.user }}">
+            <img src="{{ message.user.profile.avatar }}" title="{{ message.user.username }}" class="avatar verysmallavatar"/></a>
+        <div class="minichat-text">
+            <span class="minichat-time">{{ message.date }}</span>
+            {{ message.text }}
+        </div>
+    </div>
+{% endfor %}
+</div>

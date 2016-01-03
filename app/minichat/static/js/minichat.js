@@ -8,11 +8,15 @@ var minichat_button = "#minichat_form button[type='submit']";
 var minichat_input_text = "#minichat_form input[type='text']";
 var minichat_chars_output = "#minichat_form .minichat-remainingChars";
 
+var minichat_template;
 
-function minichat_init_display(content, get_url) {
+function minichat_init_display(content, get_url, template_url) {
     minichat_content = content
     minichat_content_url = get_url;
-    
+    $.get(template_url, function(data){
+        minichat_template = data;
+    });
+
     if (minichat_content) {
         setInterval(minichat_refresh, minichat_timer_delay);
         minichat_refresh();
@@ -21,7 +25,7 @@ function minichat_init_display(content, get_url) {
 
 function minichat_refresh() {
     $.get(minichat_content_url, function(data) {
-        $(minichat_content).html(data);
+        $(minichat_content).html(nunjucks.renderString(minichat_template, data));
         replace_invalid_avatar($(minichat_content));
         activate_tooltips($(minichat_content));
     });
