@@ -141,6 +141,6 @@ THEMES = {
         ('style', 'Lexpage'),
         ('style_nowel', 'Nowel'),
     ),
-    'DEFAULT': 'style_nowel'
+    'DEFAULT': 'style'
 }
 

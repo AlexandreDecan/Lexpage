@@ -1,4 +1,4 @@
-Django==1.9.1
+django==1.9.1
 django-recaptcha==1.0.4
 -e git+https://github.com/jrief/django-websocket-redis@ea3264bdbeedd6a86fd0f441349238d116743a40#egg=django_websocket_redis-master
 django-widget-tweaks==1.4.1
