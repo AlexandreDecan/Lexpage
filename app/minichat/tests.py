@@ -148,7 +148,7 @@ class ApiTests(APITestCase):
             Message(user=self.author, text=words(5, False)).save()
         Message(user=self.author, text='Last message').save()
 
-        response = self.client.get('/minichat/api/latest/', format='json')
+        response = self.client.get(reverse('minichat-api-latest-list'), format='json')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['count'], 58)

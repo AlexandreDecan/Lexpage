@@ -7,7 +7,8 @@ from datetime import date
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register(r'latest', LatestMessagesViewSet)
+# We use dashes and not underscore because Django Rest Framework appends dashed arguments anyway.
+router.register(r'latest', LatestMessagesViewSet, 'minichat-api-latest')
 
 urlpatterns = [
                        url(r'^archives/$',
