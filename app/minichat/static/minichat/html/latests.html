@@ -1,14 +1,18 @@
 <div class="minichat-content">
+{% set previousDate = "none" %}
 {% for message in results %}
+    {% if message.date[0] != previousDate %}
     <div class="minichat-date">
-        {{ message.date }}
+        {{ message.date[0] }}
     </div>
+    {% set previousDate = message.date[0] %}
+    {% endif %}
 
-    <div class="minichat-message {% if message.user == user %}self-author{% else %}other-author{% endif %}">
-        <a class="minichat-user" href="{{ message.user }}">
+    <div class="minichat-message {% if message.user.username == user %}self-author{% else %}other-author{% endif %}">
+        <a class="minichat-user" href="{{ message.user.get_absolute_url }}">
             <img src="{{ message.user.profile.avatar }}" title="{{ message.user.username }}" class="avatar verysmallavatar"/></a>
         <div class="minichat-text">
-            <span class="minichat-time">{{ message.date }}</span>
+            <span class="minichat-time">{{ message.date[1] }}</span>
             {{ message.text }}
         </div>
     </div>

@@ -10,22 +10,24 @@ var minichat_chars_output = "#minichat_form .minichat-remainingChars";
 
 var minichat_template;
 
+nunjucks.configure({ autoescape: false });
+
 function minichat_init_display(content, get_url, template_url) {
     minichat_content = content
     minichat_content_url = get_url;
     $.get(template_url, function(data){
         minichat_template = data;
+        if (minichat_content) {
+            setInterval(minichat_refresh, minichat_timer_delay);
+            minichat_refresh();
+        };
     });
-
-    if (minichat_content) {
-        setInterval(minichat_refresh, minichat_timer_delay);
-        minichat_refresh();
-    }
 }
 
 function minichat_refresh() {
     $.get(minichat_content_url, function(data) {
-        $(minichat_content).html(nunjucks.renderString(minichat_template, data));
+        data_with_username = $.extend({ user: USERNAME }, data);
+        $(minichat_content).html(nunjucks.renderString(minichat_template, data_with_username));
         replace_invalid_avatar($(minichat_content));
         activate_tooltips($(minichat_content));
     });

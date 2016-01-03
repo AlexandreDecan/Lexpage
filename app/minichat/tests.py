@@ -160,7 +160,7 @@ class ApiTests(APITestCase):
 
         # Striclty check the fields to avoir extra disclosure (we should only send username
         # and profile, not password, email, ...)
-        self.assertEqual(list(first_message['user'].keys()), ['username', 'profile'])
+        self.assertEqual(list(first_message['user'].keys()), ['username', 'profile', 'get_absolute_url'])
 
 
         # Striclty check the fields to avoir extra disclosure (we should only send avatar,

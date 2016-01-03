@@ -25,6 +25,7 @@
         {% block javascript %}
             <script>
                 var URL_PREFIX = ""; // markup.js, script.js
+                var USERNAME = "{{ user.username }}";
             </script>
             <script src="{% static "libs/jquery/dist/jquery.min.js" %}"></script>
             <script src="{% static "libs/nunjucks/nunjucks"|add:static_ext|add:".js" %}"></script>
