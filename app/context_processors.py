@@ -8,4 +8,5 @@ def global_settings(request):
     return {
         'site': Site.objects.get_current(),
         'THEMES': settings.THEMES,
+        'ANALYTICS': settings.ANALYTICS,
     }
