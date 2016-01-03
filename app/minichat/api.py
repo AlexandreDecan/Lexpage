@@ -3,6 +3,13 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from profile.api import UserSerializer
 from rest_framework.pagination import PageNumberPagination
+from minichat.templatetags.minichat import urlize3
+from commons.templatetags.markup_bbcode import smiley
+from rest_framework.fields import CharField
+
+class MinichatTextField(CharField):
+    def to_representation(self, value):
+        return super(MinichatTextField, self).to_representation(smiley(urlize3(value)))
 
 class LatestMessagesPagination(PageNumberPagination):
     """Custom pagination for the minichat.
@@ -20,6 +27,14 @@ class MessageSerializer(ModelSerializer):
     class Meta:
         model = Message
         fields = ('user', 'text', 'date',)
+
+    def build_standard_field(self, field_name, model_field):
+        field_class, field_kwargs = super(MessageSerializer, self).build_standard_field(field_name, model_field)
+        if field_name == 'text':
+            return MinichatTextField, field_kwargs
+        else:
+            return field_class, field_kwargs
+
 
 class LatestMessagesViewSet(ReadOnlyModelViewSet):
     """A viewset that returns the latest messages, 10 by 10."""

@@ -169,4 +169,25 @@ class ApiTests(APITestCase):
 
         self.assertEqual(first_message['text'], 'Last message')
 
+    def test_smiley(self):
+        Message(user=self.author, text='je suis content :-)').save()
+
+        response = self.client.get(reverse('minichat-api-latest-list'), format='json')
+
+        self.assertEqual(response.status_code, 200)
+
+        first_message = response.data['results'][0]
+        self.assertEqual(first_message['text'], 'je suis content <img src="/static/images/smiley/smile.gif"/>')
+
+    def test_url(self):
+        Message(user=self.author, text='trop fort http://lexpage.net').save()
+
+        response = self.client.get(reverse('minichat-api-latest-list'), format='json')
+        formatted_url = '<a href="http://lexpage.net" title="http://lexpage.net" data-toggle="tooltip" data-placement="top" data-container="body" class="fa fa-external-link" rel="nofollow"></a>'
+
+        self.assertEqual(response.status_code, 200)
+
+        first_message = response.data['results'][0]
+        self.assertEqual(first_message['text'], 'trop fort %s' % formatted_url)
+
 
