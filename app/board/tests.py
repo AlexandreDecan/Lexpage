@@ -1,6 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.test import TestCase
+from django.utils.lorem_ipsum import paragraphs, words
 
 from board.models import Thread, Message
 from blog.models import BlogPost
@@ -10,7 +11,6 @@ from tests_helpers import LexpageTestCase, login_required
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
-from board.tests_data import fable, formatted_message
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -171,11 +171,12 @@ class BoardsBrowserTests(LexpageTestCase):
         WebDriverWait(self.selenium, 1).until(
             lambda driver: driver.find_element_by_id('id_title'))
         # le Corbeau et le Renard, Jean de la Fontaine
-        title = 'Le corbeau et le renard'
+        title = words(6, False)
+        text = '\n'.join(paragraphs(5))
         title_input = self.selenium.find_element_by_name('title')
         title_input.send_keys(title)
         text_input = self.selenium.find_element_by_name('text')
-        text_input.send_keys(fable)
+        text_input.send_keys(text)
         self.selenium.find_element_by_css_selector('.fa.fa-bold').click()
         text_input.send_keys('Et du GRAS!')
         for i in range(len('[/b]')):
@@ -190,7 +191,8 @@ class BoardsBrowserTests(LexpageTestCase):
             lambda driver: driver.find_element_by_xpath('//h3[text()="%s"]' % title))
 
         text_block = self.selenium.find_element_by_css_selector('.board-messagelist .message-text .bbcode')
-        self.maxDiff = 4096
+        bbcode = '<b>Et du GRAS!</b><em>Et de l\'italique!</em>'
+        formatted_message = '%s%s' % ('<br>'.join(text.split('\n')), bbcode)
         self.assertEqual(text_block.get_attribute('innerHTML').strip(), formatted_message)
 
 
