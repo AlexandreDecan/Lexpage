@@ -2,6 +2,8 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from minichat.models import Message
 from django.contrib.auth.models import User
+from rest_framework.test import APITestCase
+from django.utils.lorem_ipsum import words
 
 
 class ViewsTests(TestCase):
@@ -131,3 +133,40 @@ class SubstituteTests(TestCase):
     def test_no_match(self):
         message = Message(user=self.author, text='s/bye/nothing')
         self.assertEqual(message.substitute().text, 'Hello World!')
+
+
+class ApiTests(APITestCase):
+    fixtures = ['devel']
+
+    def setUp(self):
+        self.users = User.objects.all()
+        self.author = self.users[0]
+
+    def test_latest_minichat(self):
+        Message.objects.all().delete()
+        for i in range(0,57):
+            Message(user=self.author, text=words(5, False)).save()
+        Message(user=self.author, text='Last message').save()
+
+        response = self.client.get('/minichat/api/latest/', format='json')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['count'], 58)
+        self.assertEqual(len(response.data['results']), 10)
+
+        first_message = response.data['results'][0]
+        # Striclty check the fields to avoir extra disclosure (field id is not sent)
+        self.assertEqual(list(first_message.keys()), ['user', 'text', 'date'])
+
+        # Striclty check the fields to avoir extra disclosure (we should only send username
+        # and profile, not password, email, ...)
+        self.assertEqual(list(first_message['user'].keys()), ['username', 'profile'])
+
+
+        # Striclty check the fields to avoir extra disclosure (we should only send avatar,
+        # not last_visit, ...)
+        self.assertEqual(list(first_message['user']['profile'].keys()), ['avatar'])
+
+        self.assertEqual(first_message['text'], 'Last message')
+
+
