@@ -1,3 +1,10 @@
+{# This is a nunjucks template.
+To compile it, install nunjucks and run the following command:
+
+precompile --name "/minichat/latests.html" app/minichat/js_templates/latests.html > app/minichat/static/js/minichat.templates.js
+
+Do not forget to minify the JS you have made.
+#}
 <div class="minichat-content">
 {% set previousDate = "none" %}
 {% for message in results %}
