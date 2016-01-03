@@ -1,8 +1,14 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import RedirectView
 from .views import MessageListView, LatestsView, MessagePostView, UsersListView
+from .api import LatestMessagesViewSet
 from datetime import date
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+# We use dashes and not underscore because Django Rest Framework appends dashed arguments anyway.
+router.register(r'latest', LatestMessagesViewSet, 'minichat-api-latest')
 
 urlpatterns = [
                        url(r'^archives/$',
@@ -24,4 +30,6 @@ urlpatterns = [
                        url(r'users.json$',
                            UsersListView.as_view(),
                            name='minichat_userslist'),
+                       url(r'api/',
+                           include(router.urls)),
 ]
