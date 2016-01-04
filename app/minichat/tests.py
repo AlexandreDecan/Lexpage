@@ -34,18 +34,6 @@ class ViewsTests(TestCase):
         self.assertEqual(Message.objects.last().text, 'Hello World!')
         self.client.logout()
 
-    def test_userslist_invalid(self):
-        response = self.client.get(reverse('minichat_userslist'))
-        self.assertEqual(response.status_code, 404)
-
-    def test_userslist_smallquery(self):
-        response = self.client.get(reverse('minichat_userslist'), {'query': 'a'})
-        self.assertEqual(response.status_code, 404)
-
-    def test_userslist(self):
-        response = self.client.get(reverse('minichat_userslist'), {'query': 'abc'})
-        self.assertEqual(response.status_code, 200)
-
 
 class AnchorTests(TestCase):
     fixtures = ['devel']
@@ -189,5 +177,30 @@ class ApiTests(APITestCase):
 
         first_message = response.data['results'][0]
         self.assertEqual(first_message['text'], 'trop fort %s' % formatted_url)
+
+    def test_partial_anchor(self):
+        response = self.client.get(reverse('minichat_userslist'), {'query': '@adm'}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'query': '@adm', 'suggestions': ['admin']}, response.data)
+
+    def test_full_anchor(self):
+        response = self.client.get(reverse('minichat_userslist'), {'query': '@user1'}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'query': '@user1', 'suggestions': ['user1']}, response.data)
+
+    def test_small_anchor(self):
+        response = self.client.get(reverse('minichat_userslist'), {'query': '@u'}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'query': '@u', 'suggestions': []}, response.data)
+
+    def test_no_user_anchor(self):
+        response = self.client.get(reverse('minichat_userslist'), {'query': '@youpla'}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'query': '@youpla', 'suggestions': []}, response.data)
+
+    def test_no_query(self):
+        response = self.client.get(reverse('minichat_userslist'), format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'query': None, 'suggestions': []}, response.data)
 
 

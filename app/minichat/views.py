@@ -1,5 +1,5 @@
-from django.http import HttpResponse, Http404
-from django.views.generic import ListView, View
+from django.http import HttpResponse
+from django.views.generic import ListView
 from django.views.generic.edit import FormView
 from django.views.generic.dates import MonthArchiveView
 
@@ -14,6 +14,9 @@ from .forms import MessageForm
 
 from notifications import notify
 from profile.models import ActiveUser
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from datetime import date
 import json
@@ -30,7 +33,7 @@ class MessageListView(MonthArchiveView):
     allow_empty = True
     template_name = 'minichat/list.html'
     context_object_name = 'message_list'
-    
+
     def get_context_data(self, **kwargs):
         context = super(MessageListView, self).get_context_data(**kwargs)
         context['date_list'] = Message.objects.dates('date', 'month')
@@ -108,9 +111,9 @@ class LatestsJSONView(View):
         output = []
         for message in messages:
             output.append({
-                'username': message.user.get_username(), 
+                'username': message.user.get_username(),
                 'avatar': message.user.profile.avatar,
-                'text': message.text, 
+                'text': message.text,
                 'timestamp': timegm(message.date.utctimetuple())
             })
 
@@ -118,19 +121,24 @@ class LatestsJSONView(View):
 """
 
 
-class UsersListView(View):
+class UsersListView(APIView):
     """
     Return a list of available users whose username starts with the value in `query`.
     """
-    def get(self, request):
-        query = request.GET.get('query', None)
-        if not query or len(query) < 3:
-            raise Http404
 
-        users = ActiveUser.objects.filter(username__istartswith=query[1:])
-        output = {'query': query, 'suggestions': []}
-        for user in users:
-            suggestion = {'value': '@%s' % user.get_username()}
-            output['suggestions'].append(suggestion)
+    def get_queryset(self):
+        username = self.request.query_params.get('query', None)
+        if username and len(username) > 2:
+            qs = ActiveUser.objects.filter(username__istartswith=username[1:])
+        else:
+            qs = ActiveUser.objects.none()
+        return qs
 
-        return HttpResponse(json.dumps(output), content_type='application/json')
+    def get(self, request, format=None):
+        qs = self.get_queryset()
+        usernames = [user.username for user in qs]
+        return Response({
+            'query': request.query_params.get('query', None),
+            'suggestions': usernames
+        })
+
