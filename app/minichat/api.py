@@ -11,7 +11,7 @@ from django.template.defaultfilters import time
 
 class MinichatTextField(CharField):
     def to_representation(self, value):
-        return super(MinichatTextField, self).to_representation(smiley(urlize3(value)))
+        return super().to_representation(smiley(urlize3(value)))
 
 class MinichatDateField(CharField):
     def to_representation(self, value):
@@ -40,11 +40,10 @@ class MessageSerializer(ModelSerializer):
         field_class, field_kwargs = super(MessageSerializer, self).build_standard_field(field_name, model_field)
         if field_name == 'text':
             return MinichatTextField, field_kwargs
-        if field_name == 'date':
+        elif field_name == 'date':
             return MinichatDateField, field_kwargs
         else:
             return field_class, field_kwargs
-
 
 class LatestMessagesViewSet(ReadOnlyModelViewSet):
     """A viewset that returns the latest messages, 10 by 10."""
