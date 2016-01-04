@@ -47,7 +47,7 @@ class MessageSerializer(ModelSerializer):
 
 class LatestMessagesViewSet(ReadOnlyModelViewSet):
     """A viewset that returns the latest messages, 10 by 10."""
-    queryset = Message.objects.all().order_by('-date')
+    queryset = Message.objects.order_by('-date')
     serializer_class = MessageSerializer
     pagination_class = LatestMessagesPagination
 
