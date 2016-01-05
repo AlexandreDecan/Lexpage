@@ -47,17 +47,17 @@ class ProfileChangeView(FormView):
             setattr(user, field, form.cleaned_data[field])
         for field in profile_fields:
             setattr(profile, field, form.cleaned_data[field])
-        
+
         # Uploaded avatar handling
         if form.cleaned_data['avatar_file']:
             image_file = form.cleaned_data['avatar_file']
             file_relative_path = os.path.join('images', 'avatars', self.request.user.get_username()+'.upload')
             file_local_path = os.path.join(settings.STATIC_ROOT, file_relative_path)
-            
+
             new_file = open(file_local_path, 'wb')
             for chunk in image_file.chunks():
                 new_file.write(chunk)
-            new_file.close()            
+            new_file.close()
             profile.avatar = 'http://' + settings.ALLOWED_HOSTS[0] + os.path.join(settings.STATIC_URL, file_relative_path)
 
         user.save()
@@ -146,7 +146,7 @@ class ActivationView(FormView):
             return redirect('registration_activation_complete')
         else:
             return redirect('registration_activation_failed')
-                    
+
 
 class AccountListView(View):
     def get(self, request):
@@ -157,7 +157,7 @@ class AccountListView(View):
         users = ActiveUser.objects.filter(username__istartswith=query)
         output = {'query': query, 'suggestions': []}
         for user in users:
-            suggestion = {'value': user.get_username()}
+            suggestion = user.get_username()
             output['suggestions'].append(suggestion)
 
         return HttpResponse(json.dumps(output), content_type='application/json')

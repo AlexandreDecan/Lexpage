@@ -1,4 +1,3 @@
-from django.conf.urls import patterns
 from django.conf.urls import url
 
 from django.core.urlresolvers import reverse_lazy
@@ -30,7 +29,6 @@ urlpatterns = [
                     auth_views.password_change_done,
                     {'template_name': 'profile/password_change_done.html'},
                     name='auth_password_change_done'),
-
                 url(r'^password/reset/$',
                     auth_views.password_reset,
                     {'template_name': 'profile/password_reset.html',
