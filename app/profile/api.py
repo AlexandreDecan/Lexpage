@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import User, Profile, ActiveUser
 
 
-class BadQueryPrefix(APIException):
+class BadQueryPrefixException(APIException):
     status_code = 400
     default_detail = 'Malformed query: the query should start with the prefix.'
 
@@ -42,6 +42,10 @@ class UsernamesListView(APIView):
         prefix = request.query_params.get('prefix', '')
         prefix_length = len(prefix)
         query = request.query_params.get('query', None)
+
+        if query and not query.startswith(prefix):
+            raise BadQueryPrefixException()
+
         return (prefix, prefix_length, query)
 
     def get_queryset(self):
@@ -58,8 +62,6 @@ class UsernamesListView(APIView):
 
     def get(self, request, format=None):
         prefix, _, query = self.get_request_parameters(request)
-        if query and not query.startswith(prefix):
-            raise BadQueryPrefix()
 
         qs = self.get_queryset()
         usernames = ['%s%s' % (prefix, user.username) for user in qs]
