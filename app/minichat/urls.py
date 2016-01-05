@@ -1,8 +1,8 @@
 from django.conf.urls import url, include
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import RedirectView
-from .views import MessageListView, LatestsView, MessagePostView, UsersListView
-from .api import LatestMessagesViewSet
+from .views import MessageListView, LatestsView, MessagePostView
+from .api import LatestMessagesViewSet, UsersListView
 from datetime import date
 from rest_framework import routers
 
@@ -27,7 +27,7 @@ urlpatterns = [
                        url(r'post/$',
                            MessagePostView.as_view(),
                            name='minichat_post'),
-                       url(r'users.json$',
+                       url(r'api/users$',
                            UsersListView.as_view(),
                            name='minichat_userslist'),
                        url(r'api/',

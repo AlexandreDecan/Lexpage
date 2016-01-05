@@ -13,10 +13,6 @@ from .models import Message
 from .forms import MessageForm
 
 from notifications import notify
-from profile.models import ActiveUser
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
 
 from datetime import date
 import json
@@ -120,25 +116,4 @@ class LatestsJSONView(View):
         return HttpResponse(simplejson.dumps(output), content_type='application/json')
 """
 
-
-class UsersListView(APIView):
-    """
-    Return a list of available users whose username starts with the value in `query`.
-    """
-
-    def get_queryset(self):
-        username = self.request.query_params.get('query', None)
-        if username and len(username) > 2:
-            qs = ActiveUser.objects.filter(username__istartswith=username[1:])
-        else:
-            qs = ActiveUser.objects.none()
-        return qs
-
-    def get(self, request, format=None):
-        qs = self.get_queryset()
-        usernames = ['@%s' % user.username for user in qs]
-        return Response({
-            'query': request.query_params.get('query', None),
-            'suggestions': usernames
-        })
 
