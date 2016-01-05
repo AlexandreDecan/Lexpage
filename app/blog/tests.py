@@ -158,7 +158,7 @@ class PendingTests(TestCase):
 
     def test_edit(self):
         url = reverse('blog_pending_edit', kwargs={'pk': self.post.pk})
-        response = self.client.get(reverse('blog_pending_list'))
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
 
