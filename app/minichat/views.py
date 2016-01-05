@@ -99,21 +99,3 @@ class MessagePostView(FormView):
             return super(MessagePostView, self).form_valid(form)
 
 
-# Not used at the moment, but functional.
-"""
-class LatestsJSONView(View):
-    def get(self, request):
-        messages = Message.objects.order_by('-date')[:20]
-        output = []
-        for message in messages:
-            output.append({
-                'username': message.user.get_username(),
-                'avatar': message.user.profile.avatar,
-                'text': message.text,
-                'timestamp': timegm(message.date.utctimetuple())
-            })
-
-        return HttpResponse(simplejson.dumps(output), content_type='application/json')
-"""
-
-
