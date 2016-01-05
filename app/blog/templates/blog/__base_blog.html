@@ -19,7 +19,7 @@
     <script>
     $(document).ready(function () {
         $(".tags_complete").autocomplete({
-            serviceUrl: "{% url 'blog_tags_json' %}",
+            serviceUrl: "{% url 'blog_tags_list' %}",
             minChars: 2, 
             autoSelectFirst: true,
             delimiter: " ",
