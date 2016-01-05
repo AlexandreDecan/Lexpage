@@ -1,0 +1,28 @@
+{% if user.is_authenticated %}
+    {% load notifications %}
+    {% notifications as notifications_list %}
+{% endif %}
+{% for notification in notifications_list %}
+<div id="notification_{{notification.pk}}" class="notification">
+    <div class="notification_icon"> 
+        <span class="fa fa-lg {{ notification.get_icon }}"></span> 
+    </div>
+    <div class="notification_dismiss">
+        <a class="fa fa-times close" href="javascript:notification_dismiss('{% url 'notification_dismiss' notification.pk %}', 'notification_{{notification.pk}}');"></a>
+    </div>
+    <div class="notification_title"><strong>
+            {% if notification.action %}
+            <a href="{% url 'notification_show' notification.pk %}">{{ notification.title }}</a>
+            {% else %}
+            {{ notification.title }}
+            {% endif %}
+        </strong>
+    </div>
+    <div class="notification_descr">
+        {{ notification.description|safe }}
+        <span class="notification_date">
+            &mdash; {{ notification.date|date:'d/m' }}
+        </span>
+    </div>
+</div>
+{% endfor %}

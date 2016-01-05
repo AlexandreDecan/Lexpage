@@ -1,10 +1,42 @@
 language: python
 python:
 - 3.4
+addons:
+    postgresql: "9.4"
+sudo: true
+dist: trusty
+services:
+- redis-server
+- postgresql
 install:
-- pip install -r requirements_dev.txt
+- pip install -r requirements_travis.txt
+- ./install_browser.sh
+before_script:
+- "export DISPLAY=:99.0"
+- "sh -e /etc/init.d/xvfb start"
+- sleep 3 # give xvfb some time to start
+- psql -c 'create database appdb;' -U postgres
+before_install:
+- sudo apt-get update -qq
+env:
+- BROWSER=chromium-browser       SELENIUM_WEBDRIVER=selenium.webdriver.chrome.webdriver.WebDriver
+- BROWSER=google-chrome-beta     SELENIUM_WEBDRIVER=selenium.webdriver.chrome.webdriver.WebDriver
+- BROWSER=google-chrome-stable   SELENIUM_WEBDRIVER=selenium.webdriver.chrome.webdriver.WebDriver
+- BROWSER=google-chrome-unstable SELENIUM_WEBDRIVER=selenium.webdriver.chrome.webdriver.WebDriver
+- BROWSER=firefox                SELENIUM_WEBDRIVER=selenium.webdriver.firefox.webdriver.WebDriver
+- BROWSER=firefox-aurora         SELENIUM_WEBDRIVER=selenium.webdriver.firefox.webdriver.WebDriver
+- BROWSER=firefox-beta           SELENIUM_WEBDRIVER=selenium.webdriver.firefox.webdriver.WebDriver
+- BROWSER=firefox-esr            SELENIUM_WEBDRIVER=selenium.webdriver.firefox.webdriver.WebDriver
+- BROWSER=phantomjs              SELENIUM_WEBDRIVER=selenium.webdriver.phantomjs.webdriver.WebDriver
+matrix:
+  allow_failures:
+  - env: BROWSER=google-chrome-unstable SELENIUM_WEBDRIVER=selenium.webdriver.chrome.webdriver.WebDriver
+  exclude:
+  - env: BROWSER=firefox-aurora         SELENIUM_WEBDRIVER=selenium.webdriver.firefox.webdriver.WebDriver
 script:
 - python app/manage.py collectstatic --noinput --settings=settings_dev
-- coverage run --source app/ --omit */migrations/* --omit */management/* app/manage.py test --settings=settings_dev
+- coverage run --source app/ --omit */migrations/* --omit */management/* app/manage.py test --settings=settings_travis -v 3
 after_success:
 - coveralls
+after_script:
+- ./upload-screenshots.sh

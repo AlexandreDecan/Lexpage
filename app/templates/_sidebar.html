@@ -57,6 +57,10 @@
 
                 </form>
 
+                <div class="alert alert-warning" id="degraded_connection">
+                Connexion perdue, le minichat sera rafraîchi automatiquement toutes les 30 secondes.
+                </div>
+
                 <script>
                     $(document).ready(function () {
                         $("#minichat_form input.form-control").autocomplete({
@@ -82,8 +86,9 @@
             $(document).ready(function() {
                 minichat_init_display($("#minichat_content"), "{% url 'minichat_latests' %}");
                 {% if user.is_authenticated %}
-                    minichat_init_post();
-                    minichat_init_remaining_chars();
+                minichat_init_ws();
+                minichat_init_post();
+                minichat_init_remaining_chars();
                 {% endif %}
             });
         </script>

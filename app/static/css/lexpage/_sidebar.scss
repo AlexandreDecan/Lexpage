@@ -28,6 +28,21 @@
   border-top: 2px dotted $brand-primary;
 }
 
+.sidebar {
+  .alert {
+    margin-top: $padding-small-vertical;
+    margin-bottom: 0px;
+    padding-top: $padding-small-vertical;
+    padding-bottom: $padding-small-vertical;
+    padding-right: $padding-small-horizontal;
+    padding-left: $padding-small-horizontal;
+    border-width: 0px;
+    border-radius: 3px;
+    box-shadow: none;
+  }
+}
+
+
 /* Full minichat, internal div */
 .minichat-content {
   font-size: $font-size-small;
@@ -99,10 +114,6 @@
   font-size: $font-size-small;
   color: $text-muted;
 }
-
-
-
-
 
 /*********** Birthday */
 .birthday .birthday_avatar {

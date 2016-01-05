@@ -1,0 +1,14 @@
+{% if user.is_authenticated %}
+    {% load notifications %}
+    {% notifications as notifications_list %}
+{% endif %}
+<span class="sr-only">Menu</span>
+{% if user.is_authenticated %}
+{% if notifications_list|length > 0 %}
+<span class="badge"><span class="fa fa-bell"></span> {{ notifications_list|length }}</span>
+{% else %}
+<span class="fa fa-navicon"></span>
+{% endif %}
+{% else %}
+<span class="fa fa-sign-in"></span>
+{% endif %}
