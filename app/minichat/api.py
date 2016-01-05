@@ -1,14 +1,11 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.fields import CharField
 
 from .models import Message
 
 from profile.api import UserSerializer
-from profile.models import ActiveUser
 
 from minichat.templatetags.minichat import urlize3
 from commons.templatetags.markup_bbcode import smiley
@@ -57,25 +54,4 @@ class LatestMessagesViewSet(ReadOnlyModelViewSet):
     queryset = Message.objects.order_by('-date')
     serializer_class = MessageSerializer
     pagination_class = LatestMessagesPagination
-
-class UsersListView(APIView):
-    """
-    Return a list of available users whose username starts with the value in `query`.
-    """
-
-    def get_queryset(self):
-        username = self.request.query_params.get('query', None)
-        if username and len(username) > 2:
-            qs = ActiveUser.objects.filter(username__istartswith=username[1:])
-        else:
-            qs = ActiveUser.objects.none()
-        return qs
-
-    def get(self, request, format=None):
-        qs = self.get_queryset()
-        usernames = ['@%s' % user.username for user in qs]
-        return Response({
-            'query': request.query_params.get('query', None),
-            'suggestions': usernames
-        })
 

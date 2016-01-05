@@ -16,15 +16,6 @@ class AuthViewsTests(TestCase):
     def logout(self):
         self.logout()
 
-    def test_autocomplete_accounts(self):
-        url = reverse('auth_list')
-        response = self.client.get(url, {'query': 'u'})
-        self.assertEqual(response.status_code, 404)
-
-        response = self.client.get(url, {'query': 'user'})
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'user1')
-
     def test_login(self):
         response = self.client.get(reverse('auth_login'))
         self.assertEqual(response.status_code, 200)
@@ -140,4 +131,62 @@ class ProfileViewsTests(TestCase):
         # Check only some field.
         self.assertEqual(profile.city, 'hello')
         self.assertEqual(profile.website_name, 'Lexpage')
+
+class AutocompleteTests(TestCase):
+    fixtures = ['devel']
+
+    def test_partial_anchor(self):
+        response = self.client.get(reverse('profile_usernames_list'), {'query': 'adm'}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'query': 'adm', 'suggestions': ['admin']}, response.data)
+
+    def test_full_anchor(self):
+        response = self.client.get(reverse('profile_usernames_list'), {'query': 'user1'}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'query': 'user1', 'suggestions': ['user1']}, response.data)
+
+    def test_small_anchor(self):
+        response = self.client.get(reverse('profile_usernames_list'), {'query': 'u'}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'query': 'u', 'suggestions': []}, response.data)
+
+    def test_no_user_anchor(self):
+        response = self.client.get(reverse('profile_usernames_list'), {'query': 'youpla'}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'query': 'youpla', 'suggestions': []}, response.data)
+
+    def test_no_query(self):
+        response = self.client.get(reverse('profile_usernames_list'), format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'query': None, 'suggestions': []}, response.data)
+
+    def test_partial_anchor_with_at(self):
+        response = self.client.get(reverse('profile_usernames_list'), {'query': '@adm', 'prefix': '@'}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'query': '@adm', 'suggestions': ['@admin']}, response.data)
+
+    def test_full_anchor_with_at(self):
+        response = self.client.get(reverse('profile_usernames_list'), {'query': '@user1', 'prefix': '@'}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'query': '@user1', 'suggestions': ['@user1']}, response.data)
+
+    def test_small_anchor_with_at(self):
+        response = self.client.get(reverse('profile_usernames_list'), {'query': '@u', 'prefix': '@'}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'query': '@u', 'suggestions': []}, response.data)
+
+    def test_no_user_anchor_with_at(self):
+        response = self.client.get(reverse('profile_usernames_list'), {'query': '@youpla', 'prefix': '@'}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'query': '@youpla', 'suggestions': []}, response.data)
+
+    def test_no_query_with_at(self):
+        response = self.client.get(reverse('profile_usernames_list'), {'prefix': '@'}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'query': None, 'suggestions': []}, response.data)
+
+    def test_query_not_starting_with_prefix(self):
+        """If a query does not start with the prefix, we should return 400 (bad request)"""
+        response = self.client.get(reverse('profile_usernames_list'), {'query': 'user1', 'prefix': '@'}, format='json')
+        self.assertEqual(response.status_code, 400)
 

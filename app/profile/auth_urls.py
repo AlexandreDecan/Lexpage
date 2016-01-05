@@ -3,15 +3,12 @@ from django.conf.urls import url
 from django.core.urlresolvers import reverse_lazy
 
 from django.contrib.auth import views as auth_views
-from .views import LoginView, AccountListView
+from .views import LoginView
 
 from .forms import MyPasswordChangeForm, MyPasswordSetForm
 
 # Auth based
 urlpatterns = [
-                url(r'^list.json$',
-                    AccountListView.as_view(),
-                    name='auth_list'),
                 url(r'^login/$',
                     LoginView.as_view(),
                     name='auth_login'),

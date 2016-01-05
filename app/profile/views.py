@@ -1,6 +1,7 @@
-from django.http import HttpResponse, Http404
+import os
+
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import View, ListView
+from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 from django.contrib import messages
@@ -15,10 +16,6 @@ from notifications import notify
 
 from .forms import RegistrationForm, LoginForm, ChangeProfileForm, user_fields, profile_fields, ActivationForm
 from .models import ActivationKey, Profile, ActiveUser
-
-
-import json
-import os
 
 
 class ProfileChangeView(FormView):
@@ -147,17 +144,3 @@ class ActivationView(FormView):
         else:
             return redirect('registration_activation_failed')
 
-
-class AccountListView(View):
-    def get(self, request):
-        query = request.GET.get('query', None)
-        if not query or len(query) < 2:
-            raise Http404
-
-        users = ActiveUser.objects.filter(username__istartswith=query)
-        output = {'query': query, 'suggestions': []}
-        for user in users:
-            suggestion = user.get_username()
-            output['suggestions'].append(suggestion)
-
-        return HttpResponse(json.dumps(output), content_type='application/json')
