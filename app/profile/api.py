@@ -2,6 +2,7 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import APIException
+from rest_framework.permissions import IsAuthenticated
 
 from .models import User, Profile, ActiveUser
 
@@ -29,6 +30,7 @@ class UsernamesListView(APIView):
     """
     Return a list of available users whose username starts with the value in `query`.
     """
+    permission_classes = (IsAuthenticated,)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -48,7 +50,11 @@ class UsernamesListView(APIView):
             qs = ActiveUser.objects.filter(username__istartswith=query[prefix_length:])
         else:
             qs = ActiveUser.objects.none()
-        return qs
+
+        # Exclude logged in user because there is no sense in sending a message
+        # or hilighting self. Thanks to the "permission_classes" we know that
+        # the user is authenticated.
+        return qs.exclude(id=self.request.user.id)
 
     def get(self, request, format=None):
         prefix, _, query = self.get_request_parameters(request)
