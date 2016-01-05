@@ -136,7 +136,7 @@ class UsersListView(APIView):
 
     def get(self, request, format=None):
         qs = self.get_queryset()
-        usernames = [user.username for user in qs]
+        usernames = ['@%s' % user.username for user in qs]
         return Response({
             'query': request.query_params.get('query', None),
             'suggestions': usernames
