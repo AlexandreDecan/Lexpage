@@ -127,7 +127,7 @@ function board_add_quote(messageid, url, target) {
     Message retrieval endpoint must be specified using `url`.
      */
     function prepare_quoted_text(author, text) {
-        var message = "[quote="+author+"]\n"+text+"\n[/quote]\n\n\n";
+        var message = "[quote="+author["username"]+"]\n"+text+"\n[/quote]\n\n\n";
         // Do not copy img and embed objects.
         var regex1 = new RegExp("\\[img\\](.+)\\[/img\\]", "g");
         var regex2 = new RegExp("\\[embed\\](.+)\\[/embed\\]", "g");

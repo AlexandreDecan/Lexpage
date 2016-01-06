@@ -1,14 +1,19 @@
 from django.conf.urls import include
 from django.conf.urls import url
-
 from .views import ThreadView, ThreadUnreadRedirectView, ThreadReplyView, \
                 ThreadMarkUnreadView, ThreadDeleteView, ThreadCreateView, \
                 MessageRedirectView, MessageEditView, \
-                MessageDeleteView, MessageJSONView, MessageMarkUnreadView, \
+                MessageDeleteView, MessageMarkUnreadView, \
                 BoardLatestsView, BoardArchivesView, BoardArchivesMessagesView, \
                 ThreadCreateForPostView, FollowedView
 
 from .feeds import LatestsFeed
+from .api import MessageViewSet
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'message', MessageViewSet, 'board_api_message')
+
 
 thread_patterns = [
                 url(r'^$',
@@ -52,9 +57,6 @@ message_patterns = [
                 url(r'^delete/$',
                     MessageDeleteView.as_view(),
                     name='board_message_delete'),
-                url(r'^raw/$',
-                    MessageJSONView.as_view(),
-                    name='board_message_raw'),
 ]
 
 followed_patterns = [
@@ -113,7 +115,10 @@ urlpatterns = [
                 url(r'^message/(?P<message>\d+)/',
                     include(message_patterns)),
 
-               url(r'^rss/$',
+                url(r'^api/',
+                    include(router.urls)),
+
+                url(r'^rss/$',
                     LatestsFeed(),
                     name='board_rss'),
 ]
