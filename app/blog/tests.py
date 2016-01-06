@@ -181,24 +181,25 @@ class TagsTests(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
+
 class AutocompleteTests(TestCase):
     fixtures = ['devel']
 
     def test_400_without_query(self):
-        response = self.client.get(reverse('blog_tags_list'), format='json')
+        response = self.client.get(reverse('blog_api_tags'), format='json')
         self.assertEqual(response.status_code, 400)
 
     def test_partial_anchor(self):
-        response = self.client.get(reverse('blog_tags_list'), {'query': 'je'}, format='json')
+        response = self.client.get(reverse('blog_api_tags'), {'query': 'je'}, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual({'query': 'je', 'suggestions': [{'data': 1, 'value': 'jeu'}]}, response.data)
 
     def test_full_anchor(self):
-        response = self.client.get(reverse('blog_tags_list'), {'query': 'humour'}, format='json')
+        response = self.client.get(reverse('blog_api_tags'), {'query': 'humour'}, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual({'query': 'humour', 'suggestions': [{'data': 1, 'value': 'humour'}]}, response.data)
 
     def test_no_results(self):
-        response = self.client.get(reverse('blog_tags_list'), {'query': 'graveleux'}, format='json')
+        response = self.client.get(reverse('blog_api_tags'), {'query': 'graveleux'}, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual({'query': 'graveleux', 'suggestions': []}, response.data)

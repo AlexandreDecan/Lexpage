@@ -3,9 +3,11 @@ from rest_framework.views import APIView
 from rest_framework.exceptions import APIException
 from .models import BlogPost
 
+
 class EmptyQueryException(APIException):
     status_code = 400
     default_detail = 'Empty query'
+
 
 class TagsListView(APIView):
     """

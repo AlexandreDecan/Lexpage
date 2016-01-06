@@ -54,7 +54,7 @@ pending_patterns = [
 tag_patterns = [
                         url(r'^api/list$',
                             TagsListView.as_view(),
-                            name='blog_tags_list'),
+                            name='blog_api_tags'),
                         url(r'^$',
                             TagListView.as_view(),
                             {'taglist': ''},
