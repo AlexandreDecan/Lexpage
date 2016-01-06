@@ -160,7 +160,7 @@ function preview_markup(url, source_text, target_element) {
 
     $(target_element).html("<p class='text-center'><span class='fa fa-spinner fa-spin'/></p>");
 
-    $.get(url, {content: text})
+    $.post(url, {content: text})
         .done(function(data) {
             target_element.html(data);
             refresh_oembed(target_element);

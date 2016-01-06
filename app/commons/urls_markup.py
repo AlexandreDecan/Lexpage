@@ -7,9 +7,6 @@ urlpatterns = [
                 url(r'^(?P<markup>(bbcode)|(markdown))/preview/$',
                     MarkupPreviewView.as_view(),
                     name='markup_preview'),
-]
-
-urlpatterns += [
-    url(r'^bbcode/$', flatpage, {'url': '/bbcode/'}, name='markup_bbcode'),
-    url(r'^markdown/$', flatpage, {'url': '/markdown/'}, name='markup_markdown'),
+                url(r'^bbcode/$', flatpage, {'url': '/bbcode/'}, name='markup_bbcode'),
+                url(r'^markdown/$', flatpage, {'url': '/markdown/'}, name='markup_markdown'),
 ]
