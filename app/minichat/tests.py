@@ -18,22 +18,6 @@ class ViewsTests(TestCase):
         response = self.client.get(reverse('minichat_archives'), follow=True)
         self.assertEqual(response.status_code, 200)
 
-    def test_latests(self):
-        response = self.client.get(reverse('minichat_latests'))
-        self.assertEqual(response.status_code, 200)
-
-    def test_post_login_required(self):
-        url = reverse('minichat_post')
-        response = self.client.get(url)
-        self.assertRedirects(response, reverse('auth_login') + '?next=' + url, 302, 200)
-
-    def test_post_login(self):
-        self.client.login(username='user1', password='user1')
-        response = self.client.post(reverse('minichat_post'), {'text': 'Hello World!'})
-        self.assertRedirects(response, reverse('minichat_post'), target_status_code=200)
-        self.assertEqual(Message.objects.last().text, 'Hello World!')
-        self.client.logout()
-
 
 class AnchorTests(TestCase):
     fixtures = ['devel']
@@ -129,6 +113,38 @@ class ApiTests(APITestCase):
     def setUp(self):
         self.users = User.objects.all()
         self.author = self.users[0]
+
+    def test_latests(self):
+        response = self.client.get(reverse('minichat_latests'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_post_login_required(self):
+        url = reverse('minichat_post')
+        response = self.client.post(url, {'text': 'foo'})
+        self.assertEqual(response.status_code, 403)
+
+    def test_post_substitute(self):
+        self.client.login(username='user1', password='user1')
+        self.client.post(reverse('minichat_post'), {'text': 'Hello World!'})
+        self.assertEqual(Message.objects.last().text, 'Hello World!')
+        self.client.put(reverse('minichat_post'), {'text': 's/World/John'})
+        self.assertEqual(Message.objects.last().text, 'Hello John!')
+        self.client.logout()
+
+    def test_post_substitute_400(self):
+        """put can only be used for substitute"""
+        self.client.login(username='user1', password='user1')
+        self.client.post(reverse('minichat_post'), {'text': 'Hello World!'})
+        self.assertEqual(Message.objects.last().text, 'Hello World!')
+        response = self.client.put(reverse('minichat_post'), {'text': 'Hello john'})
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Message.objects.last().text, 'Hello World!')
+
+    def test_post_login(self):
+        self.client.login(username='user1', password='user1')
+        self.client.post(reverse('minichat_post'), {'text': 'Hello World!'})
+        self.assertEqual(Message.objects.last().text, 'Hello World!')
+        self.client.logout()
 
     def test_latest_minichat(self):
         Message.objects.all().delete()
