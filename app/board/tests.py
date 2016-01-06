@@ -143,7 +143,26 @@ class MessageViewsTests(TestCase):
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
 
-    def test_raw(self):
-        url = reverse('board_message_raw', kwargs={'message': self.messages[0].pk})
-        response = self.client.get(url)
+
+class APITests(TestCase):
+    fixtures = ['devel']
+
+    def setUp(self):
+        user = ActiveUser.objects.get(username='admin')
+
+        # Create dummy thread
+        thread = Thread(title='Hello World!')
+        thread.save()
+        self.msg1 = thread.post_message(user, 'Hello 1')
+        self.msg2 = thread.post_message(user, 'Hello 2')
+
+    def test_message_detail(self):
+        response = self.client.get(reverse('board_api_message-detail', kwargs={'pk': self.msg1.pk}), format='json')
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['text'], 'Hello 1')
+        self.assertEqual(response.data['author']['username'], 'admin')
+
+    def test_invalid_message_detail(self):
+        response = self.client.get(reverse('board_api_message-detail', kwargs={'pk': -1}), format='json')
+        self.assertEqual(response.status_code, 404)
+

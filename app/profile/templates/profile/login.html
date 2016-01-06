@@ -24,13 +24,4 @@
 <a href="{% url 'auth_password_reset' %}" class="btn btn-default">Mot de passe oublié ?</a>
 </form>
 
-<script>
-$(".username_complete").autocomplete({
-    serviceUrl: "{% url 'auth_list' %}",
-    minChars: 2,
-    autoSelectFirst:true
-});
-</script>
-
-
 {% endblock %}

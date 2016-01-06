@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
 from .views import ProfileChangeView, ProfileShowView, ProfileListView
+from .api import UsernamesListView
 
 urlpatterns = [
                        url(r'^edit/$',
@@ -16,5 +17,8 @@ urlpatterns = [
                        url(r'^view/(?P<username>[\w\.@+\-_]+)/$',
                            ProfileShowView.as_view(),
                            name='profile_show'),
+                       url(r'api/users$',
+                           UsernamesListView.as_view(),
+                           name='profile_api_list'),
 ]
 

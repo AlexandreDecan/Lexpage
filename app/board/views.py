@@ -364,19 +364,6 @@ class MessageMarkUnreadView(RedirectView):
         return reverse_lazy('board_latests')
 
 
-class MessageJSONView(View):
-    """
-    Return a message in JSON format.
-    """
-
-    def get(self, request, **kwargs):
-        message = get_object_or_404(Message.objects, pk=kwargs['message'])
-        output = {'text': message.text,
-                  'author': message.author.username,
-                  'date': str(message.date)}
-        return HttpResponse(json.dumps(output), content_type='application/json')
-
-
 class BoardLatestsView(ListView):
     """
     List of latest threads (by message date).

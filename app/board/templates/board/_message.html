@@ -114,14 +114,14 @@
                     href="#reply"
                     data-toggle="tooltip"
                     data-messageid="board-message-{{ message.pk }}"
-                    data-quote="{% url 'board_message_raw' message.pk %}"
+                    data-quote="{% url 'board_api_message-detail' message.pk %}"
                     title="Citer le message">
                     <span class="fa fa-reply"></span></a>
                 <a class="btn btn-xs btn-info btn-circle"
                     href="#reply"
                     data-toggle="tooltip"
                     data-messageid="board-message-{{ message.pk }}"
-                    data-addquote="{% url 'board_message_raw' message.pk %}"
+                    data-addquote="{% url 'board_api_message-detail' message.pk %}"
                     title="Ajouter aux messages cités">
                     <span class="fa fa-comments-o"></span></a>
                 {% if message.author == user and not message.moderated %}

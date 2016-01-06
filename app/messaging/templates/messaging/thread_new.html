@@ -18,7 +18,7 @@
     <script>
     $(document).ready(function () {
         $(".username_complete").autocomplete({
-            serviceUrl: "{% url 'auth_list' %}",
+            serviceUrl: "{% url 'profile_api_list' %}",
             minChars: 2,
             autoSelectFirst:true,
             delimiter: " ",

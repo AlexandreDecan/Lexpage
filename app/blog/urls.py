@@ -7,8 +7,8 @@ from django.views.generic import RedirectView
 from django.contrib.flatpages.views import flatpage
 from .views import PostListView, PostShowView, PendingPostListView
 from .views import DraftPostListView, PostCreateView, PostEditView, DraftPostEditView, PendingPostEditView
-from .views import JSONTagListView, TagListView, PostCommentsView
-
+from .views import TagListView, PostCommentsView
+from .api import TagsListView
 from .feeds import LatestEntriesFeed
 
 from datetime import date
@@ -52,9 +52,9 @@ pending_patterns = [
 ]
 
 tag_patterns = [
-                        url(r'^list.json$',
-                            JSONTagListView.as_view(),
-                            name='blog_tags_json'),
+                        url(r'^api/list$',
+                            TagsListView.as_view(),
+                            name='blog_api_tags'),
                         url(r'^$',
                             TagListView.as_view(),
                             {'taglist': ''},

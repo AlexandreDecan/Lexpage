@@ -1,5 +1,5 @@
-from django.http import HttpResponse, Http404
-from django.views.generic import ListView, View
+from django.http import HttpResponse
+from django.views.generic import ListView
 from django.views.generic.edit import FormView
 from django.views.generic.dates import MonthArchiveView
 
@@ -13,7 +13,6 @@ from .models import Message
 from .forms import MessageForm
 
 from notifications import notify
-from profile.models import ActiveUser
 
 from datetime import date
 import json
@@ -30,7 +29,7 @@ class MessageListView(MonthArchiveView):
     allow_empty = True
     template_name = 'minichat/list.html'
     context_object_name = 'message_list'
-    
+
     def get_context_data(self, **kwargs):
         context = super(MessageListView, self).get_context_data(**kwargs)
         context['date_list'] = Message.objects.dates('date', 'month')
@@ -100,37 +99,3 @@ class MessagePostView(FormView):
             return super(MessagePostView, self).form_valid(form)
 
 
-# Not used at the moment, but functional.
-"""
-class LatestsJSONView(View):
-    def get(self, request):
-        messages = Message.objects.order_by('-date')[:20]
-        output = []
-        for message in messages:
-            output.append({
-                'username': message.user.get_username(), 
-                'avatar': message.user.profile.avatar,
-                'text': message.text, 
-                'timestamp': timegm(message.date.utctimetuple())
-            })
-
-        return HttpResponse(simplejson.dumps(output), content_type='application/json')
-"""
-
-
-class UsersListView(View):
-    """
-    Return a list of available users whose username starts with the value in `query`.
-    """
-    def get(self, request):
-        query = request.GET.get('query', None)
-        if not query or len(query) < 3:
-            raise Http404
-
-        users = ActiveUser.objects.filter(username__istartswith=query[1:])
-        output = {'query': query, 'suggestions': []}
-        for user in users:
-            suggestion = {'value': '@%s' % user.get_username()}
-            output['suggestions'].append(suggestion)
-
-        return HttpResponse(json.dumps(output), content_type='application/json')

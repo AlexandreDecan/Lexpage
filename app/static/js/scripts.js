@@ -42,6 +42,15 @@ $(document).ready(function() {
 
     // Auto-hide navbar on scroll
     $(".navbar-fixed-top").autoHidingNavbar({showOnBottom: false});
+
+    // Add CSRF token for ajax calls
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (! (/^(GET|HEAD|OPTIONS|TRACE)$/.test(settings.type)) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+            }
+        }
+    });
 });
 
 
@@ -96,4 +105,20 @@ function notification_dismiss(url, target) {
     }
     $("#"+target+" a.close").addClass("fa-spinner fa-spin");
     $.get(url).done(done);
+}
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }

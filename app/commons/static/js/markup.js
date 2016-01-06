@@ -127,7 +127,7 @@ function board_add_quote(messageid, url, target) {
     Message retrieval endpoint must be specified using `url`.
      */
     function prepare_quoted_text(author, text) {
-        var message = "[quote="+author+"]\n"+text+"\n[/quote]\n\n\n";
+        var message = "[quote="+author["username"]+"]\n"+text+"\n[/quote]\n\n\n";
         // Do not copy img and embed objects.
         var regex1 = new RegExp("\\[img\\](.+)\\[/img\\]", "g");
         var regex2 = new RegExp("\\[embed\\](.+)\\[/embed\\]", "g");
@@ -160,7 +160,7 @@ function preview_markup(url, source_text, target_element) {
 
     $(target_element).html("<p class='text-center'><span class='fa fa-spinner fa-spin'/></p>");
 
-    $.get(url, {content: text})
+    $.post(url, {content: text})
         .done(function(data) {
             target_element.html(data);
             refresh_oembed(target_element);

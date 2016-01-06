@@ -9,9 +9,5 @@ pythonpath = 'app/'
 max_request = 200
 max_requests_jitter = 20
 
-
-# We need this for markup preview
-limit_request_line = 8190
-
 pidfile = 'gunicorn.pid'
 

@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from .search import SEARCH
 
+
 class MarkupViewsTests(TestCase):
     fixtures = ['devel']
 
@@ -9,29 +10,29 @@ class MarkupViewsTests(TestCase):
         pass
 
     def test_markuppage_bbcode(self):
-        response = self.client.get(reverse('markup_bbcode'))
+        response = self.client.post(reverse('markup_bbcode'))
         self.assertEqual(response.status_code, 200)
 
     def test_markuppage_markdown(self):
-        response = self.client.get(reverse('markup_markdown'))
+        response = self.client.post(reverse('markup_markdown'))
         self.assertEqual(response.status_code, 200)
 
     def test_markuppreview_loginrequired(self):
         url = reverse('markup_preview', kwargs={'markup': 'bbcode'})
-        response = self.client.get(url)
+        response = self.client.post(url)
         self.assertRedirects(response, reverse('auth_login') + '?next=' + url, 302, 200)
 
     def test_markuppreview_empty(self):
         self.client.login(username='user1', password='user1')
         url = reverse('markup_preview', kwargs={'markup': 'bbcode'})
-        response = self.client.get(url)
+        response = self.client.post(url)
         self.assertEqual(response.status_code, 200)
         self.client.logout()
 
     def test_markuppreview_not_empty(self):
         self.client.login(username='user1', password='user1')
         url = reverse('markup_preview', kwargs={'markup': 'bbcode'})
-        response = self.client.get(url, {'content': '[b]Hello World[/b]!'})
+        response = self.client.post(url, {'content': '[b]Hello World[/b]!'})
         self.assertContains(response, 'Hello World', status_code=200)
         self.client.logout()
 
