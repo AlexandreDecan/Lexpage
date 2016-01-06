@@ -19,6 +19,6 @@ urlpatterns = [
                            name='profile_show'),
                        url(r'api/users$',
                            UsernamesListView.as_view(),
-                           name='profile_usernames_list'),
+                           name='profile_api_list'),
 ]
 

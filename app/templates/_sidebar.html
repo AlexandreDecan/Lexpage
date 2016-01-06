@@ -61,7 +61,7 @@
                 <script>
                     $(document).ready(function () {
                         $("#minichat_form input.form-control").autocomplete({
-                            serviceUrl: "{% url 'profile_usernames_list' %}",
+                            serviceUrl: "{% url 'profile_api_list' %}",
                             minChars: 3,
                             autoSelectFirst:true,
                             delimiter: " ",

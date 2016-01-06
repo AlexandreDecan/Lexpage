@@ -17,11 +17,13 @@ class MinichatTextField(CharField):
     def to_representation(self, value):
         return super().to_representation(smiley(urlize3(value)))
 
+
 class MinichatDateField(CharField):
     def to_representation(self, value):
         message_date = naturalday(value, 'l j b.')
         message_time = time(value)
         return [message_date, message_time]
+
 
 class LatestMessagesPagination(PageNumberPagination):
     """Custom pagination for the minichat.
@@ -31,11 +33,13 @@ class LatestMessagesPagination(PageNumberPagination):
     """
     page_size = 10
 
+
 class MessageSerializer(ModelSerializer):
     """A serializer for the minichat messages with the enhanced user serializer that comes in the
     profile app, so we get the username and the avatar in the same request that the minichat
     messages."""
     user = UserSerializer()
+
     class Meta:
         model = Message
         fields = ('user', 'text', 'date',)
@@ -48,6 +52,7 @@ class MessageSerializer(ModelSerializer):
             return MinichatDateField, field_kwargs
         else:
             return field_class, field_kwargs
+
 
 class LatestMessagesViewSet(ReadOnlyModelViewSet):
     """A viewset that returns the latest messages, 10 by 10."""
