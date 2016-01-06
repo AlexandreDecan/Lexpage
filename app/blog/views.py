@@ -320,31 +320,3 @@ class TagListView(ListView):
         return ListView.dispatch(self, request, *args, **kwargs)
 
 
-class JSONTagListView(View):
-    """
-    Autocomplete-feature for the tags.
-    """
-
-    def get(self, request):
-        query = request.GET.get('query', None)
-        if not query:
-            raise Http404
-
-        posts = BlogPost.published.filter(tags__icontains=query)
-        output = {'query': query, 'suggestions': []}
-        count = {}
-
-        # Count the number of posts for each tag...
-        for post in posts:
-            for tag in [x for x in post.tags.split(' ') if query in x]:
-                count[tag] = count.setdefault(tag, 0) + 1
-
-        # ... and sort it
-        ordered_count = list(count.items())
-        ordered_count.sort(key=lambda x: x[1], reverse=True)
-        for tag, nb in ordered_count:
-            suggestion = {'value': tag, 'data': nb}
-            output['suggestions'].append(suggestion)
-
-        return HttpResponse(json.dumps(output), content_type='application/json')
-

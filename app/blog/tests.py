@@ -158,7 +158,7 @@ class PendingTests(TestCase):
 
     def test_edit(self):
         url = reverse('blog_pending_edit', kwargs={'pk': self.post.pk})
-        response = self.client.get(reverse('blog_pending_list'))
+        response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
 
@@ -176,15 +176,29 @@ class TagsTests(TestCase):
         response = self.client.post(reverse('blog_tags'), {'tags': 'hello'}, follow=True)
         self.assertEqual(response.status_code, 200)
 
-    def test_jsonlist(self):
-        response = self.client.get(reverse('blog_tags_json'))
-        self.assertEqual(response.status_code, 404)
-
-        response = self.client.get(reverse('blog_tags_json'), {'query': 'hello'})
-        self.assertEqual(response.status_code, 200)
-
     def test_jsonsearch(self):
         url = reverse('blog_tags', kwargs={'taglist': 'ab+cd'})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
+class AutocompleteTests(TestCase):
+    fixtures = ['devel']
+
+    def test_400_without_query(self):
+        response = self.client.get(reverse('blog_tags_list'), format='json')
+        self.assertEqual(response.status_code, 400)
+
+    def test_partial_anchor(self):
+        response = self.client.get(reverse('blog_tags_list'), {'query': 'je'}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'query': 'je', 'suggestions': [{'data': 1, 'value': 'jeu'}]}, response.data)
+
+    def test_full_anchor(self):
+        response = self.client.get(reverse('blog_tags_list'), {'query': 'humour'}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'query': 'humour', 'suggestions': [{'data': 1, 'value': 'humour'}]}, response.data)
+
+    def test_no_results(self):
+        response = self.client.get(reverse('blog_tags_list'), {'query': 'graveleux'}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'query': 'graveleux', 'suggestions': []}, response.data)

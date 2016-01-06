@@ -2,6 +2,8 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from minichat.models import Message
 from django.contrib.auth.models import User
+from rest_framework.test import APITestCase
+from django.utils.lorem_ipsum import words
 
 
 class ViewsTests(TestCase):
@@ -31,18 +33,6 @@ class ViewsTests(TestCase):
         self.assertRedirects(response, reverse('minichat_post'), target_status_code=200)
         self.assertEqual(Message.objects.last().text, 'Hello World!')
         self.client.logout()
-
-    def test_userslist_invalid(self):
-        response = self.client.get(reverse('minichat_userslist'))
-        self.assertEqual(response.status_code, 404)
-
-    def test_userslist_smallquery(self):
-        response = self.client.get(reverse('minichat_userslist'), {'query': 'a'})
-        self.assertEqual(response.status_code, 404)
-
-    def test_userslist(self):
-        response = self.client.get(reverse('minichat_userslist'), {'query': 'abc'})
-        self.assertEqual(response.status_code, 200)
 
 
 class AnchorTests(TestCase):
@@ -131,3 +121,61 @@ class SubstituteTests(TestCase):
     def test_no_match(self):
         message = Message(user=self.author, text='s/bye/nothing')
         self.assertEqual(message.substitute().text, 'Hello World!')
+
+
+class ApiTests(APITestCase):
+    fixtures = ['devel']
+
+    def setUp(self):
+        self.users = User.objects.all()
+        self.author = self.users[0]
+
+    def test_latest_minichat(self):
+        Message.objects.all().delete()
+        for i in range(0,57):
+            Message(user=self.author, text=words(5, False)).save()
+        Message(user=self.author, text='Last message').save()
+
+        response = self.client.get(reverse('minichat-api-latest-list'), format='json')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['count'], 58)
+        self.assertEqual(len(response.data['results']), 10)
+
+        first_message = response.data['results'][0]
+        # Striclty check the fields to avoir extra disclosure (field id is not sent)
+        self.assertEqual(list(first_message.keys()), ['user', 'text', 'date'])
+
+        # Striclty check the fields to avoir extra disclosure (we should only send username
+        # and profile, not password, email, ...)
+        self.assertEqual(list(first_message['user'].keys()), ['username', 'profile', 'get_absolute_url'])
+
+
+        # Striclty check the fields to avoir extra disclosure (we should only send avatar,
+        # not last_visit, ...)
+        self.assertEqual(list(first_message['user']['profile'].keys()), ['avatar'])
+
+        self.assertEqual(first_message['text'], 'Last message')
+
+    def test_smiley(self):
+        Message(user=self.author, text='je suis content :-)').save()
+
+        response = self.client.get(reverse('minichat-api-latest-list'), format='json')
+
+        self.assertEqual(response.status_code, 200)
+
+        first_message = response.data['results'][0]
+        self.assertEqual(first_message['text'], 'je suis content <img src="/static/images/smiley/smile.gif"/>')
+
+    def test_url(self):
+        Message(user=self.author, text='trop fort http://lexpage.net').save()
+
+        response = self.client.get(reverse('minichat-api-latest-list'), format='json')
+        formatted_url = '<a href="http://lexpage.net" title="http://lexpage.net" data-toggle="tooltip" data-placement="top" data-container="body" class="fa fa-external-link" rel="nofollow"></a>'
+
+        self.assertEqual(response.status_code, 200)
+
+        first_message = response.data['results'][0]
+        self.assertEqual(first_message['text'], 'trop fort %s' % formatted_url)
+
+
