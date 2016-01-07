@@ -36,6 +36,13 @@ class MarkupViewsTests(TestCase):
         self.assertContains(response, 'Hello World', status_code=200)
         self.client.logout()
 
+    def test_markup_embed(self):
+        self.client.login(username='user1', password='user1')
+        url = reverse('markup_preview', kwargs={'markup': 'bbcode'})
+        response = self.client.post(url, {'content': '[embed]http://lexpage.net[/embed]!'})
+        self.assertContains(response, '<a class="oembed" href="http://lexpage.net">http://lexpage.net</a>', status_code=200)
+        self.client.logout()
+
 
 class SearchViewsTests(TestCase):
     fixtures = ['devel']
