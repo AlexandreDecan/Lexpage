@@ -42,3 +42,12 @@ class NotificationTests(TestCase):
         notification = Notification.objects.get(recipient=User.objects.get(username='user1'))
         self.assertEqual(str(notification), '[user1] Nouvelle conversation')
 
+    def test_dismiss_notification_by_showing(self):
+        self.client.login(username='user1', password='user1')
+        notifications = Notification.objects.filter(recipient=User.objects.get(username='user1'))
+        self.assertEqual(len(notifications), 1)
+        notification_id = notifications[0].id
+        response = self.client.get(reverse('notification_show', kwargs={'pk': notification_id}))
+        self.assertEqual(response.status_code, 302)
+        notifications = Notification.objects.filter(recipient=User.objects.get(username='user1'))
+        self.assertEqual(len(notifications), 0)
