@@ -46,7 +46,7 @@ function minichat_init_post() {
 function minichat_post_message() {
     var method;
     if (/^s\/.*\/.*/.test($(minichat_input_text).val())){
-        method = 'PUT';
+        method = 'PATCH';
     } else {
         method = 'POST';
     }
