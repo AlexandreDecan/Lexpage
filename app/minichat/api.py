@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField
+from rest_framework.serializers import ModelSerializer
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
@@ -16,7 +16,6 @@ from minichat.templatetags.minichat import urlize3
 from commons.templatetags.markup_bbcode import smiley
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.template.defaultfilters import time
-from django.contrib.auth.models import User
 from django.contrib import messages
 
 class BadSubstituteException(APIException):
@@ -66,13 +65,11 @@ class MessageSerializer(ModelSerializer):
 
 
 class PostedMessageSerializer(MessageSerializer):
-    """A class where the user of the message is always the logged in user.
-    Used for posted message, because there the user does not need to be filled in in the request
-    and should always be set to the current logged in user."""
-    user = PrimaryKeyRelatedField(queryset=User.objects.all(), required=False, allow_null=True, default=None)
-
-    def validate_user(self, value):
-        return self.context['request'].user
+    """A subclass of MessageSerializer that only contains the text field, because there is no need
+    to be able to modify the other messages."""
+    class Meta:
+        model = Message
+        fields = ('text',)
 
 
 class LatestMessagesViewSet(ReadOnlyModelViewSet):
@@ -93,7 +90,9 @@ class MessagePostView(CreateAPIView):
         """Handles simple substitution"""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid()
-        message = Message(**serializer.validated_data)
+        validated_data = serializer.validated_data
+        validated_data['user'] = self.request.user
+        message = Message(**validated_data)
         substitute = message.substitute()
         if substitute:
             substitute.save()
@@ -106,7 +105,7 @@ class MessagePostView(CreateAPIView):
         return qs
 
     def perform_create(self, serializer):
-        message = serializer.save()
+        message = serializer.save(user=self.request.user)
 
         # Notify users that are anchored in this message
         anchors = message.parse_anchors()
