@@ -65,9 +65,10 @@ class MessageSerializer(ModelSerializer):
             return field_class, field_kwargs
 
 
-class CurrentUserMessageSerializer(MessageSerializer):
+class PostedMessageSerializer(MessageSerializer):
     """A class where the user of the message is always the logged in user.
-    used to post messages."""
+    Used for posted message, because there the user does not need to be filled in in the request
+    and should always be set to the current logged in user."""
     user = PrimaryKeyRelatedField(queryset=User.objects.all(), required=False, allow_null=True, default=None)
 
     def validate_user(self, value):
@@ -86,7 +87,7 @@ class MessagePostView(CreateAPIView):
     """
     model = Message
     permission_classes = (IsAuthenticated,)
-    serializer_class = CurrentUserMessageSerializer
+    serializer_class = PostedMessageSerializer
 
     def patch(self, request):
         """Handles simple substitution"""
