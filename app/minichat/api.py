@@ -6,6 +6,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.fields import CharField
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import APIException
+from rest_framework import status
 
 from .models import Message
 
@@ -81,24 +82,28 @@ class LatestMessagesViewSet(ReadOnlyModelViewSet):
 class MessagePostView(CreateAPIView):
     """
     Handle message submission.
+    We need CreateAPIView because there is ONE method we do not overwrite: get_success_headers
     """
     model = Message
     permission_classes = (IsAuthenticated,)
     serializer_class = PostedMessageSerializer
 
-    def patch(self, request):
-        """Handles simple substitution"""
+    def post(self, request):
+        """Handles simple substitution and message posting"""
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid()
+        serializer.is_valid(raise_exception=True)
         validated_data = serializer.validated_data
         validated_data['user'] = self.request.user
         message = Message(**validated_data)
         substitute = message.substitute()
         if substitute:
             substitute.save()
-            return Response(MessageSerializer(substitute).data)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
         else:
-            raise BadSubstituteException
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def get_queryset(self):
         qs = Message.objects.filter(user=self.request.user).order_by('-date')

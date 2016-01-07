@@ -45,14 +45,7 @@ function minichat_init_post() {
 
 function minichat_post_message() {
     var method;
-    if (/^s\/.*\/.*/.test($(minichat_input_text).val())){
-        method = 'PATCH';
-    } else {
-        method = 'POST';
-    }
-    $.ajax({ url: minichat_post_url,
-             data: $(minichat_form).serialize(),
-             type: method})
+    $.post(minichat_post_url, $(minichat_form).serialize())
         .done(function(data) {
             $(minichat_button).find('span').removeClass('fa-spinner fa-spin fa-warning btn-warning');
             $(minichat_input_text).val("");
