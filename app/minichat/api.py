@@ -61,8 +61,9 @@ class MessageSerializer(ModelSerializer):
             return MinichatTextField, field_kwargs
         elif field_name == 'date':
             return MinichatDateField, field_kwargs
-        else:
-            return field_class, field_kwargs
+       # There are no other fields, the last one is not a standard field because it is a primary key
+       # else:
+       #     return field_class, field_kwargs
 
 
 class PostedMessageSerializer(MessageSerializer):
@@ -104,10 +105,6 @@ class MessagePostView(CreateAPIView):
             self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-    def get_queryset(self):
-        qs = Message.objects.filter(user=self.request.user).order_by('-date')
-        return qs
 
     def perform_create(self, serializer):
         message = serializer.save(user=self.request.user)

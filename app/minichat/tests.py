@@ -151,6 +151,19 @@ class ApiTests(APITestCase):
         self.assertEqual(len(Notification.objects.all()), 1)
         self.client.logout()
 
+    def test_multiple_anchors(self):
+        for username in ('user2', 'user3'):
+            User.objects.create_user(
+                username=username, email='%s@example.com' % username, password='top_secret')
+        Notification.objects.all().delete()
+        self.assertEqual(len(Notification.objects.all()), 0)
+        self.client.login(username='user1', password='user1')
+        response = self.client.post(reverse('minichat_post'), {'text': '@admin hello @user2 @user3'})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Message.objects.last().text, '@admin hello @user2 @user3')
+        self.assertEqual(len(Notification.objects.all()), 3)
+        self.client.logout()
+
     def test_post_login(self):
         self.client.login(username='user1', password='user1')
         response = self.client.post(reverse('minichat_post'), {'text': 'Hello World!'})
