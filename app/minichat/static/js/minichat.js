@@ -44,7 +44,6 @@ function minichat_init_post() {
 }
 
 function minichat_post_message() {
-    var method;
     $.post(minichat_post_url, $(minichat_form).serialize())
         .done(function(data) {
             $(minichat_button).find('span').removeClass('fa-spinner fa-spin fa-warning btn-warning');
