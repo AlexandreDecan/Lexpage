@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 from django.utils.lorem_ipsum import words
 
+from notifications.models import Notification
 
 class ViewsTests(TestCase):
     fixtures = ['devel']
@@ -138,6 +139,16 @@ class ApiTests(APITestCase):
         response = self.client.post(reverse('minichat_post'), {'text': 's/World/John'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Message.objects.last().text, 'Hello John!')
+        self.client.logout()
+
+    def test_anchor(self):
+        Notification.objects.all().delete()
+        self.assertEqual(len(Notification.objects.all()), 0)
+        self.client.login(username='user1', password='user1')
+        response = self.client.post(reverse('minichat_post'), {'text': '@admin hello'})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Message.objects.last().text, '@admin hello')
+        self.assertEqual(len(Notification.objects.all()), 1)
         self.client.logout()
 
     def test_post_login(self):
