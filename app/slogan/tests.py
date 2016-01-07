@@ -18,10 +18,15 @@ class SlogansTests(TestCase):
         with self.assertRaises(Slogan.DoesNotExist):
             Slogan.visible.get(slogan='Hello Lexpage!')
         self.assertEqual(Slogan.objects.last().slogan, 'Hello Lexpage!')
+        self.assertEqual(str(Slogan.objects.last()), 'Hello Lexpage!')
 
         self.client.logout()
 
     def test_list(self):
         response = self.client.get(reverse('slogan_list'))
         self.assertEqual(response.status_code, 200)
+
+    def test_no_slogan(self):
+        Slogan.objects.all().delete()
+        self.assertEqual(Slogan.visible.get_random(), {'slogan': 'aucun', 'author': 'aucun'})
 
