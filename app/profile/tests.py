@@ -22,9 +22,6 @@ class AuthViewsTests(TestCase):
     def login(self):
         self.client.login(username='user1', password='user1')
 
-    def logout(self):
-        self.logout()
-
     def test_login(self):
         response = self.client.get(reverse('auth_login'))
         self.assertEqual(response.status_code, 200)
