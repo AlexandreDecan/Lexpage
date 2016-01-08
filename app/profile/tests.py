@@ -22,9 +22,6 @@ class AuthViewsTests(TestCase):
     def login(self):
         self.client.login(username='user1', password='user1')
 
-    def logout(self):
-        self.logout()
-
     def test_login(self):
         response = self.client.get(reverse('auth_login'))
         self.assertEqual(response.status_code, 200)
@@ -72,6 +69,30 @@ class AuthViewsTests(TestCase):
     def test_reset_password(self):
         response = self.client.get(reverse('auth_password_reset'), follow=True)
         self.assertEqual(response.status_code, 200)
+
+    def test_login_case_insensitive(self):
+        response = self.client.get(reverse('auth_login'))
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.post(reverse('auth_login'), {'username': 'User1', 'password': 'user1'}, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('_auth_user_id', self.client.session)
+
+    def test_login_password_case_insensitive(self):
+        response = self.client.get(reverse('auth_login'))
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.post(reverse('auth_login'), {'username': 'user1', 'password': 'User1'}, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('_auth_user_id', self.client.session)
+
+    def test_login_nonexistent_user(self):
+        response = self.client.get(reverse('auth_login'))
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.post(reverse('auth_login'), {'username': 'user2', 'password': 'user2'}, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('_auth_user_id', self.client.session)
 
 
 class RegisterViewsTests(TestCase):
