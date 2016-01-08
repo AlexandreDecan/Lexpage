@@ -1,0 +1,34 @@
+{# This is a nunjucks template.
+To compile it, install nunjucks and run the following command:
+
+precompile --name "/notifications/button.html" app/notifications/js_templates/menu_button.html > app/notifications/static/js/notifications.templates.js
+precompile --name "/notifications/list.html" app/notifications/js_templates/list.html >> app/notifications/static/js/notifications.templates.js
+
+Do not forget to minify the JS you have made.
+#}
+{% if notifications_list|length > 0 %}  
+      {% for notification in notifications_list %}
+          <div id="notification_{{notification.id}}" class="notification">
+            <div class="notification_icon"> 
+              <span class="fa fa-lg {{ notification.get_icon }}"></span> 
+            </div>
+            <div class="notification_dismiss">
+                <a class="fa fa-times close" href="javascript:notification_dismiss('{{notification.dismiss_url}}', 'notification_{{notification.id}}');"></a>
+            </div>
+            <div class="notification_title"><strong>
+                {% if notification.action %}
+                <a href="{{ notification.show_url }}">{{ notification.title }}</a>
+                {% else %}
+                    {{ notification.title }}
+                {% endif %}
+                </strong>
+            </div>
+            <div class="notification_descr">
+              {{ notification.description }}
+              <span class="notification_date">
+                &mdash; {{ notification.date }}
+              </span>
+            </div>
+          </div>
+      {% endfor %}
+{% endif %}

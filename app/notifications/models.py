@@ -1,18 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
+from rest_framework.reverse import reverse
 
 
 class Notification(models.Model):
     ICON = {
-        'blog': 'fa-clipboard', 
+        'blog': 'fa-clipboard',
         'messaging': 'fa-inbox',
-        'board': 'fa-comments-o', 
-        'profile': 'fa-user', 
+        'board': 'fa-comments-o',
+        'profile': 'fa-user',
         'slogan': 'fa-quote-right',
         'minichat': 'fa-at',
 
         'game': 'fa-gamepad',
-        
+
         'info': 'fa-info',
         'warning': 'fa-warning',
         'danger': 'fa-minus-circle',
@@ -37,6 +38,12 @@ class Notification(models.Model):
 
     def __str__(self):
         return '[%s] %s' % (self.recipient.get_username(), self.title)
+
+    def show_url(self):
+        return reverse('notification_show', kwargs={'pk': self.id})
+
+    def dismiss_url(self):
+        return reverse('notification_api_dismiss', kwargs={'pk': self.id})
 
     class Meta:
         get_latest_by = 'date'

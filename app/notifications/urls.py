@@ -1,12 +1,16 @@
 from django.conf.urls import url
-from .views import DismissView, ShowView
+from .views import ShowView
+from .api import NotificationApiView, NotificationsListApiView
 
 
 urlpatterns = [
-                url(r'^(?P<pk>\d+)/dismiss/$',
-                    DismissView.as_view(),
-                    name='notification_dismiss'),
-                url(r'^(?P<pk>\d+)/show/$',
+                url(r'api/notification/(?P<pk>\d+)$',
+                    NotificationApiView.as_view(),
+                    name='notification_api_dismiss'),
+                url(r'api/notifications$',
+                    NotificationsListApiView.as_view(),
+                    name='notifications_api_list'),
+                url(r'^(?P<pk>\d+)$',
                     ShowView.as_view(),
                     name='notification_show'),
 ]

@@ -1,0 +1,13 @@
+{# This is a nunjucks template.
+To compile it, install nunjucks and run the following commands:
+
+precompile --name "/notifications/button.html" app/notifications/js_templates/menu_button.html > app/notifications/static/js/notifications.templates.js
+precompile --name "/notifications/list.html" app/notifications/js_templates/list.html >> app/notifications/static/js/notifications.templates.js
+
+Do not forget to minify the JS you have made.
+#}
+{% if notifications_list|length > 0 %}
+    <span class="badge"><span class="fa fa-bell"></span> {{ notifications_list|length }}</span>
+{% else %}
+    <span class="fa fa-navicon"></span>
+{% endif %}

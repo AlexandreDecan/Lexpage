@@ -88,25 +88,6 @@ function replace_invalid_avatar(inside) {
 }
 
 
-function notification_initialize() {
-    $(".notification_list .notification_dismiss a.close").click(function (e) {
-        e.stopPropagation(); // Prevent dropdown to close
-    });
-}
-
-function notification_dismiss(url, target) {
-    // Disable click propagation (to keep dropdown opened)
-    function done(data) {
-        // Dismiss target
-        $("#"+target).fadeTo(250, 0.35);
-        // Remove link (to avoid 404)
-        $("#"+target+" a").click(function (e) { e.preventDefault(); e.stopPropagation(); });
-        $("#"+target+" a.close").removeClass("fa-spinner fa-spin");
-    }
-    $("#"+target+" a.close").addClass("fa-spinner fa-spin");
-    $.get(url).done(done);
-}
-
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
