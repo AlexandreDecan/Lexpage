@@ -2,13 +2,15 @@ var notifications_menu_button;
 var notifications_dropdown_button;
 var notifications_content_list;
 var notifications_content_url;
+var notifications_container;
 
 var notifications_button_template = "/notifications/button.html";
 var notifications_list_template = "/notifications/list.html";
 
 nunjucks.configure({ autoescape: false });
 
-function notifications_init_display(menu_button, dropdown_button, content_list, get_url) {
+function notifications_init_display(container, menu_button, dropdown_button, content_list, get_url) {
+    notifications_container = container;
     notifications_menu_button = menu_button;
     notifications_dropdown_button = dropdown_button;
     notifications_content_list = content_list;
@@ -20,7 +22,7 @@ function notifications_init_display(menu_button, dropdown_button, content_list, 
 function notifications_refresh() {
     $.get(notifications_content_url, function(data) {
         data_embedded = { 'notifications_list': data };
-        if (data.length == 0) { $(notifications_dropdown_button).hide(); } else {$(notifications_dropdown_button).show();}
+        if (data.length == 0) { $(notifications_container).hide(); } else {$(notifications_container).show();}
         $(notifications_dropdown_button).html(nunjucks.render(notifications_button_template, data_embedded));
         $(notifications_content_list).html(nunjucks.render(notifications_list_template, data_embedded));
         $(notifications_menu_button).html(nunjucks.render(notifications_button_template, data_embedded));

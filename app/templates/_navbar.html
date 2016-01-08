@@ -123,7 +123,7 @@
 
     {% if user.is_authenticated %}
         <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
+            <li class="dropdown" id="notifications_container">
             <a href="#" class="dropdown-notifications dropdown-toggle" data-toggle="dropdown" id="notifications_dropdown_button">
                 <span class="badge"><span class="fa fa-bell"> {{ notifications_list|length }}</span></span>
             </a>
@@ -163,8 +163,8 @@
     {% if user.is_authenticated %}
         <script>
             $(document).ready(function() {
-                $("#notifications_list").hide();
-                notifications_init_display("#notifications_button", "#notifications_dropdown_button", "#notifications_dropdown", "{% url 'notifications_api_list' %}");
+                $("#notifications_container").hide();
+                notifications_init_display("#notifications_container", "#notifications_button", "#notifications_dropdown_button", "#notifications_dropdown", "{% url 'notifications_api_list' %}");
             });
         </script>
     {% endif %}
