@@ -1,17 +1,16 @@
 {# Receive a post #}
 
-<div class="btn-group btn-group-xs">
-<a class="btn btn-share" href="http://www.facebook.com/sharer.php?u=http://{{ site.domain }}{% url 'blog_post_show' post.pk post.slug %}" 
-    data-toggle="tooltip" data-placement="top" data-container="body"
-    title="Partager sur Facebook" 
-    target="_blank"><span class="fa fa-facebook"></span></a>
-<a class="btn btn-share" href="http://twitter.com/share?url=http://{{ site.domain }}{% url 'blog_post_show' post.pk post.slug %}&text={{ post.title|urlencode }}" 
-    data-toggle="tooltip" data-placement="top" data-container="body"
-    title="Partager sur Twitter" 
-    target="_blank"><span class="fa fa-twitter"></span></a>
- 
-<a class="btn btn-share" href="https://plus.google.com/share?url=http://{{ site.domain }}{% url 'blog_post_show' post.pk post.slug %}" 
-    data-toggle="tooltip" data-placement="top" data-container="body"
-    title="Partager sur Google+" 
-    target="_blank"><span class="fa fa-google-plus"></span></a>
+<div class="post-share">
+    <a class="fa fa-facebook" href="https://www.facebook.com/sharer.php?u=http://{{ site.domain }}{% url 'blog_post_show' post.pk post.slug %}"
+        data-toggle="tooltip" data-placement="top" data-container="body"
+        title="Partager sur Facebook"
+        target="_blank"></a>
+    <a class="fa fa-twitter" href="https://twitter.com/share?url=http://{{ site.domain }}{% url 'blog_post_show' post.pk post.slug %}&text={{ post.title|urlencode }}"
+        data-toggle="tooltip" data-placement="top" data-container="body"
+        title="Partager sur Twitter"
+        target="_blank"></a>
+    <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://{{ site.domain }}{% url 'blog_post_show' post.pk post.slug %}"
+        data-toggle="tooltip" data-placement="top" data-container="body"
+        title="Partager sur Google+"
+        target="_blank"></a>
 </div>
