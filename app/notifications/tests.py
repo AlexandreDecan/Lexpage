@@ -5,13 +5,13 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
 from notifications.models import Notification
-from tests_helpers import LexpageTestCase, logged_in_test
+from tests_helpers import LexpageTestCase, logged_in_test, SELENIUM_AVAILABLE
 
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.support import expected_conditions as EC
-
+if SELENIUM_AVAILABLE:
+    from selenium.webdriver.support.wait import WebDriverWait
+    from selenium.webdriver.common.action_chains import ActionChains
+    from selenium.common.exceptions import NoSuchElementException
+    from selenium.webdriver.support import expected_conditions as EC
 
 class NotificationTests(TestCase):
     fixtures = ['devel']
