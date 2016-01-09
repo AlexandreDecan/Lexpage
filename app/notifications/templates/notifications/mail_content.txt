@@ -6,5 +6,5 @@ Vous avez {{ notifications|length }} notification{{ notifications|pluralize }} e
  - {{ notification.date|date:'d/m' }} : {{ notification.title }}
 {% endfor %}
 
-Rendez-vous sur http://www.lexpage.net pour plus de détails !
+Rendez-vous sur http://{{ site.domain }} pour plus de détails !
 
