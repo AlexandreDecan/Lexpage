@@ -46,3 +46,7 @@ LOGGING = {
         },
     },
 }
+
+# Selenium
+SELENIUM_WEBDRIVER = 'selenium.webdriver.firefox.webdriver.WebDriver'
+
