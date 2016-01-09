@@ -12,11 +12,13 @@
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbarA-collapse">
         <span class="sr-only">Menu</span>
         {% if user.is_authenticated %}
+        <span id="notifications_button">
             {% if notifications_list|length > 0 %}
                 <span class="badge"><span class="fa fa-bell"></span> {{ notifications_list|length }}</span>
             {% else %}
                 <span class="fa fa-navicon"></span>
             {% endif %}
+        </span>
         {% else %}
             <span class="fa fa-sign-in"></span>
         {% endif %}
@@ -123,39 +125,13 @@
 
     {% if user.is_authenticated %}
         <ul class="nav navbar-nav navbar-right">
-            {% if notifications_list|length > 0 %}  
-            <li class="dropdown">
-              <a href="#" class="dropdown-notifications dropdown-toggle" data-toggle="dropdown">
-                  <span class="badge"><span class="fa fa-bell"> {{ notifications_list|length }}</span></span>
-              </a>
-              <div class="dropdown-menu notification_list">
-                  {% for notification in notifications_list %}
-                      <div id="notification_{{notification.pk}}" class="notification">
-                        <div class="notification_icon"> 
-                          <span class="fa fa-lg {{ notification.get_icon }}"></span> 
-                        </div>
-                        <div class="notification_dismiss">
-                          <a class="fa fa-times close" href="javascript:notification_dismiss('{% url 'notification_dismiss' notification.pk %}', 'notification_{{notification.pk}}');"></a>
-                        </div>
-                        <div class="notification_title"><strong>
-                            {% if notification.action %}
-                                <a href="{% url 'notification_show' notification.pk %}">{{ notification.title }}</a>
-                            {% else %}
-                                {{ notification.title }}
-                            {% endif %}
-                            </strong>
-                        </div>
-                        <div class="notification_descr">
-                          {{ notification.description|safe }}
-                          <span class="notification_date">
-                            &mdash; {{ notification.date|date:'d/m' }}
-                          </span>
-                        </div>
-                      </div>
-                  {% endfor %}
-              </div>
+            <li class="dropdown" id="notifications_container"{% if notifications_list|length == 0 %} style="display:none;"{% endif %}>
+            <a href="#" class="dropdown-notifications dropdown-toggle" data-toggle="dropdown" id="notifications_dropdown_button">
+                <span class="badge"><span class="fa fa-bell"> {{ notifications_list|length }}</span></span>
+            </a>
+            <div class="dropdown-menu notification_list" id="notifications_dropdown">
+            </div>
             </li>
-            {% endif %}
 
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -185,6 +161,13 @@
                 <a href="{% url 'auth_login' %}" title="S'identifier"><span class="fa fa-sign-in fa-lg"></span></a>
             </li>
         </ul>
+    {% endif %}
+    {% if user.is_authenticated %}
+        <script>
+            $(document).ready(function() {
+                notifications_init_display("#notifications_container", "#notifications_button", "#notifications_dropdown_button", "#notifications_dropdown", "{% url 'notifications_api_list' %}");
+            });
+        </script>
     {% endif %}
     </div><!-- navbar collapse -->
   </div><!-- container -->

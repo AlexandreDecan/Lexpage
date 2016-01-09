@@ -10,8 +10,6 @@ var minichat_chars_output = "#minichat_form .minichat-remainingChars";
 
 var minichat_template = "/minichat/latests.html";
 
-nunjucks.configure({ autoescape: false });
-
 function minichat_init_display(content, get_url) {
     minichat_content = content
     minichat_content_url = get_url;
