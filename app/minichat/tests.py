@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 from django.utils.lorem_ipsum import words
 
+from notifications.models import Notification
 
 class ViewsTests(TestCase):
     fixtures = ['devel']
@@ -17,22 +18,6 @@ class ViewsTests(TestCase):
         self.assertEqual(response.status_code, 302)
         response = self.client.get(reverse('minichat_archives'), follow=True)
         self.assertEqual(response.status_code, 200)
-
-    def test_latests(self):
-        response = self.client.get(reverse('minichat_latests'))
-        self.assertEqual(response.status_code, 200)
-
-    def test_post_login_required(self):
-        url = reverse('minichat_post')
-        response = self.client.get(url)
-        self.assertRedirects(response, reverse('auth_login') + '?next=' + url, 302, 200)
-
-    def test_post_login(self):
-        self.client.login(username='user1', password='user1')
-        response = self.client.post(reverse('minichat_post'), {'text': 'Hello World!'})
-        self.assertRedirects(response, reverse('minichat_post'), target_status_code=200)
-        self.assertEqual(Message.objects.last().text, 'Hello World!')
-        self.client.logout()
 
 
 class AnchorTests(TestCase):
@@ -129,6 +114,62 @@ class ApiTests(APITestCase):
     def setUp(self):
         self.users = User.objects.all()
         self.author = self.users[0]
+
+    def test_latests(self):
+        response = self.client.get(reverse('minichat_latests'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_post_login_required(self):
+        url = reverse('minichat_post')
+        response = self.client.post(url, {'text': 'foo'})
+        self.assertEqual(response.status_code, 403)
+
+    def test_unallowed_methods(self):
+        """ Get Delete and Put are not allowed """
+        self.client.login(username='user1', password='user1')
+        for method in ('get', 'put', 'delete', 'patch'):
+            response = getattr(self.client, method)(reverse('minichat_post'))
+            self.assertEqual(response.status_code, 405)
+
+    def test_substitute(self):
+        self.client.login(username='user1', password='user1')
+        response = self.client.post(reverse('minichat_post'), {'text': 'Hello World!'})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Message.objects.last().text, 'Hello World!')
+        response = self.client.post(reverse('minichat_post'), {'text': 's/World/John'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Message.objects.last().text, 'Hello John!')
+        self.client.logout()
+
+    def test_anchor(self):
+        Notification.objects.all().delete()
+        self.assertEqual(len(Notification.objects.all()), 0)
+        self.client.login(username='user1', password='user1')
+        response = self.client.post(reverse('minichat_post'), {'text': '@admin hello'})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Message.objects.last().text, '@admin hello')
+        self.assertEqual(len(Notification.objects.all()), 1)
+        self.client.logout()
+
+    def test_multiple_anchors(self):
+        for username in ('user2', 'user3'):
+            User.objects.create_user(
+                username=username, email='%s@example.com' % username, password='top_secret')
+        Notification.objects.all().delete()
+        self.assertEqual(len(Notification.objects.all()), 0)
+        self.client.login(username='user1', password='user1')
+        response = self.client.post(reverse('minichat_post'), {'text': '@admin hello @user2 @user3'})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Message.objects.last().text, '@admin hello @user2 @user3')
+        self.assertEqual(len(Notification.objects.all()), 3)
+        self.client.logout()
+
+    def test_post_login(self):
+        self.client.login(username='user1', password='user1')
+        response = self.client.post(reverse('minichat_post'), {'text': 'Hello World!'})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Message.objects.last().text, 'Hello World!')
+        self.client.logout()
 
     def test_latest_minichat(self):
         Message.objects.all().delete()
