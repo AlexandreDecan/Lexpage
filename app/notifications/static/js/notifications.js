@@ -1,3 +1,4 @@
+var notifications_timer_delay = 30000;
 var notifications_menu_button;
 var notifications_dropdown_button;
 var notifications_content_list;
@@ -14,7 +15,11 @@ function notifications_init_display(container, menu_button, dropdown_button, con
     notifications_content_list = content_list;
     notifications_content_url = get_url;
 
-    notifications_refresh();
+
+    if ($(notifications_content_list)) {
+        setInterval(notifications_refresh, notifications_timer_delay);
+        notifications_refresh();
+    };
 }
 
 function notifications_refresh() {
