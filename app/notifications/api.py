@@ -11,7 +11,7 @@ class NotificationSerializer(ModelSerializer):
 
     class Meta:
         model = Notification
-        fields = ('id', 'title', 'description', 'action', 'recipient', 'app', 'key', 'date', 'show_url', 'dismiss_url')
+        fields = ('id', 'title', 'description', 'date', 'icon', 'show_url', 'dismiss_url')
 
 
 class NotificationApiView(DestroyAPIView):

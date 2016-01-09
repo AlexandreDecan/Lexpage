@@ -8,9 +8,9 @@ Do not forget to minify the JS you have made.
 #}
 {% if notifications_list|length > 0 %}  
       {% for notification in notifications_list %}
-          <div id="notification_{{notification.id}}" class="notification">
+          <div id="notification_{{notification.id}}" class="notification"><F12>
             <div class="notification_icon"> 
-              <span class="fa fa-lg {{ notification.get_icon }}"></span> 
+              <span class="fa fa-lg {{ notification.icon }}"></span> 
             </div>
             <div class="notification_dismiss">
                 <a class="fa fa-times close" href="javascript:notification_dismiss('{{notification.dismiss_url}}', 'notification_{{notification.id}}');"></a>

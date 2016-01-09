@@ -33,7 +33,7 @@ class Notification(models.Model):
     def dismiss(self):
         self.delete()
 
-    def get_icon(self):
+    def icon(self):
         return Notification.ICON.get(self.app, 'fa-warning')
 
     def __str__(self):
