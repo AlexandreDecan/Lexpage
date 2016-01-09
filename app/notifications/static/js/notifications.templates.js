@@ -83,7 +83,7 @@ output += "\n                ";
 output += "\n                </strong>\n            </div>\n            <div class=\"notification_descr\">\n              ";
 output += runtime.suppressValue(runtime.memberLookup((t_4),"description"), env.opts.autoescape);
 output += "\n              <span class=\"notification_date\">\n                &mdash; ";
-output += runtime.suppressValue(runtime.memberLookup((t_4),"date"), env.opts.autoescape);
+output += runtime.suppressValue(env.getFilter("relativeDate").call(context, runtime.memberLookup((t_4),"date")), env.opts.autoescape);
 output += "\n              </span>\n            </div>\n          </div>\n      ";
 ;
 }

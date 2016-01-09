@@ -7,8 +7,6 @@ var notifications_container;
 var notifications_button_template = "/notifications/button.html";
 var notifications_list_template = "/notifications/list.html";
 
-nunjucks.configure({ autoescape: false });
-
 function notifications_init_display(container, menu_button, dropdown_button, content_list, get_url) {
     notifications_container = container;
     notifications_menu_button = menu_button;

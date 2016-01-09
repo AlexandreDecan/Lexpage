@@ -26,7 +26,7 @@ Do not forget to minify the JS you have made.
             <div class="notification_descr">
               {{ notification.description }}
               <span class="notification_date">
-                &mdash; {{ notification.date }}
+                &mdash; {{ notification.date | relativeDate }}
               </span>
             </div>
           </div>
