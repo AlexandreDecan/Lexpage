@@ -37,20 +37,7 @@
                 {% endwith %}
         </div>
 
-        <div class="post-share">
-            <a class="fa fa-facebook" href="https://www.facebook.com/sharer.php?u=http://{{ site.domain }}{% url 'blog_post_show' post.pk post.slug %}"
-               data-toggle="tooltip" data-placement="top" data-container="body"
-               title="Partager sur Facebook"
-               target="_blank"></a>
-            <a class="fa fa-twitter" href="https://twitter.com/share?url=http://{{ site.domain }}{% url 'blog_post_show' post.pk post.slug %}&text={{ post.title|urlencode }}"
-               data-toggle="tooltip" data-placement="top" data-container="body"
-               title="Partager sur Twitter"
-               target="_blank"></a>
-            <a class="fa fa-google-plus" href="https://plus.google.com/share?url=http://{{ site.domain }}{% url 'blog_post_show' post.pk post.slug %}"
-               data-toggle="tooltip" data-placement="top" data-container="body"
-               title="Partager sur Google+"
-               target="_blank"></a>
-        </div>
+        {% include "blog/_share.html" %}
 
         <h3>
             {{ post.title }}
