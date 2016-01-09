@@ -10,10 +10,8 @@
 
     {% with static_ext=debug|yesno:",.min" %}
         {% block stylesheets %}
-            {% with preferred_theme=user.profile.get_theme|default:THEMES.DEFAULT %}
-                {%for theme, name in THEMES.ALL %}
-                <link href="{% static "css/"|add:theme|add:".css?v=151220" %}" rel="{%if preferred_theme != theme%}alternate {%endif%}stylesheet" title="{{name}}" />
-                {%endfor%}
+            {% with theme=user.profile.get_theme|default:THEMES.DEFAULT %}
+                <link href="{% static "css/"|add:theme|add:".css?v=151220" %}" rel="stylesheet"/>
             {% endwith %}
             <link href="{% static "libs/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet"/>
             <!--[if lt IE 9]>
