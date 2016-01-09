@@ -111,8 +111,10 @@
             {% if user.is_staff %}
               <li class="dropdown-header">Administrer</li>
               <li><a href="{% url 'admin:index' %}"><span class="fa fa-fw fa-gears"></span> Administration</a></li>
-              <li><a href="http://analytics.lexpage.net/"><span class="fa fa-fw fa-bar-chart-o"></span> Statistiques</a></li>
-            {% endif %}            
+              {% if ANALYTICS %}
+                <li><a href="http://analytics.lexpage.net/"><span class="fa fa-fw fa-bar-chart-o"></span> Statistiques</a></li>
+              {% endif %}
+            {% endif %}
           </ul><!-- menu -->
         </li><!-- site -->
       </ul><!-- navbar-->
