@@ -1,3 +1,39 @@
+(function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["/notifications/button.html"] = (function() {
+function root(env, context, frame, runtime, cb) {
+var lineno = null;
+var colno = null;
+var output = "";
+try {
+var parentTemplate = null;
+output += "\n";
+if(env.getFilter("length").call(context, runtime.contextOrFrameLookup(context, frame, "notifications_list")) > 0) {
+output += "\n    <span class=\"badge\"><span class=\"fa fa-bell\"></span> ";
+output += runtime.suppressValue(env.getFilter("length").call(context, runtime.contextOrFrameLookup(context, frame, "notifications_list")), env.opts.autoescape);
+output += "</span>\n";
+;
+}
+else {
+output += "\n    <span class=\"fa fa-navicon\"></span>\n";
+;
+}
+output += "\n";
+if(parentTemplate) {
+parentTemplate.rootRenderFunc(env, context, frame, runtime, cb);
+} else {
+cb(null, output);
+}
+;
+} catch (e) {
+  cb(runtime.handleError(e, lineno, colno));
+}
+}
+return {
+root: root
+};
+
+})();
+})();
+
 (function() {(window.nunjucksPrecompiled = window.nunjucksPrecompiled || {})["/notifications/list.html"] = (function() {
 function root(env, context, frame, runtime, cb) {
 var lineno = null;
