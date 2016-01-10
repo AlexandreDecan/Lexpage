@@ -26,6 +26,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.humanize',
     'django.contrib.flatpages',
+
     'rest_framework',
     'captcha',
 
@@ -114,6 +115,14 @@ LOGIN_REDIRECT_URL = 'homepage'
 LOGIN_URL = 'auth_login'
 LOGOUT_URL = 'auth_logout'
 
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
+
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 USER_IS_ONLINE_TIMEOUT = 5
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
@@ -127,14 +136,6 @@ ABSOLUTE_URL_OVERRIDES = {
 # Recaptcha
 RECAPTCHA_PUBLIC_KEY = '6LdAH_ASAAAAACAHEysPBjLekWJX94nYM0hI3hHy'
 
-# Rest Framework
-REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
-}
 
 # Themes
 THEMES = {
