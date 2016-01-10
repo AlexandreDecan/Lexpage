@@ -16,7 +16,8 @@ before_install:
 - unzip chromedriver_linux64.zip
 - sudo mv chromedriver /usr/bin
 install:
-- pip install -r requirements_travis.txt
+- pip install -r requirements_dev.txt # Testing libs
+- pip install -r requirements_prod.txt # Postgresql
 before_script:
 - "export DISPLAY=:99.0"
 - "sh -e /etc/init.d/xvfb start"
