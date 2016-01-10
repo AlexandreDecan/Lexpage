@@ -1,5 +1,5 @@
 from settings_common import *
-
+import os
 
 # General
 DEBUG = True
@@ -47,3 +47,5 @@ LOGGING = {
     },
 }
 
+# Tests
+SELENIUM_WEBDRIVER = os.environ.get('SELENIUM_WEBDRIVER', None)

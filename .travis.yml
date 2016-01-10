@@ -5,7 +5,7 @@ sudo: true
 dist: trusty
 env:
   global:
-  - DJANGO_SETTINGS_MODULE=settings_travis
+  - DJANGO_SETTINGS_MODULE=settings_dev
   matrix:
   - SELENIUM_WEBDRIVER=selenium.webdriver.chrome.webdriver.WebDriver
   - SELENIUM_WEBDRIVER=selenium.webdriver.firefox.webdriver.WebDriver
@@ -14,7 +14,7 @@ before_install:
 - unzip chromedriver_linux64.zip
 - sudo mv chromedriver /usr/bin
 install:
-- pip install -r requirements_travis.txt
+- pip install -r requirements_dev.txt
 before_script:
 - "export DISPLAY=:99.0"
 - "sh -e /etc/init.d/xvfb start"

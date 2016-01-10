@@ -10,7 +10,7 @@ try:
 except ImportError:
     SELENIUM_AVAILABLE = False
 
-if hasattr(settings, 'SELENIUM_WEBDRIVER') and SELENIUM_AVAILABLE:
+if getattr(settings, 'SELENIUM_WEBDRIVER', None) and SELENIUM_AVAILABLE:
     WebDriver = import_string(settings.SELENIUM_WEBDRIVER)
 else:
     WebDriver = None
