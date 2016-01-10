@@ -16,8 +16,8 @@ Do not forget to minify the JS you have made.
                 <a class="fa fa-times close" href="javascript:notification_dismiss('{{notification.dismiss_url}}', 'notification_{{notification.id}}');"></a>
             </div>
             <div class="notification_title"><strong>
-                {% if notification.show_url %}
-                <a href="{{ notification.show_url }}">{{ notification.title }}</a>
+                {% if notification.show_and_dismiss_url %}
+                <a href="{{ notification.show_and_dismiss_url }}">{{ notification.title }}</a>
                 {% else %}
                     {{ notification.title }}
                 {% endif %}

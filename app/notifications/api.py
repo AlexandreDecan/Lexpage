@@ -4,14 +4,16 @@ from .models import Notification
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.fields import CharField
 
+
 class NotificationSerializer(ModelSerializer):
     """A serializer for the Notifications"""
-    show_url = CharField()
+    show_and_dismiss_url = CharField(source='show_url')
     dismiss_url = CharField()
+    show_url = CharField(source='action')
 
     class Meta:
         model = Notification
-        fields = ('id', 'title', 'description', 'date', 'icon', 'show_url', 'dismiss_url')
+        fields = ('id', 'title', 'description', 'date', 'icon', 'show_url', 'show_and_dismiss_url', 'dismiss_url')
 
 
 class NotificationApiView(DestroyAPIView):
@@ -21,6 +23,7 @@ class NotificationApiView(DestroyAPIView):
 
     def get_queryset(self):
         return Notification.objects.filter(recipient=self.request.user)
+
 
 class NotificationsListApiView(ListAPIView):
     model = Notification

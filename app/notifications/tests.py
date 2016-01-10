@@ -72,7 +72,7 @@ class NotificationTests(TestCase):
         notification = response.data[0]
         self.assertEqual(notification['description'], 'admin a entamé une nouvelle conversation avec vous : <em>Test de conversation</em>.')
         self.assertTrue(notification['dismiss_url'].endswith('/notifications/api/notification/1'))
-        self.assertTrue(notification['show_url'].endswith('/notifications/1'))
+        self.assertTrue(notification['show_and_dismiss_url'].endswith('/notifications/1'))
 
 class NotificationBrowserTest(LexpageTestCase):
     fixtures = ['devel']
