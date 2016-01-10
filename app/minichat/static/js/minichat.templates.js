@@ -30,12 +30,12 @@ frame.set("loop.first", t_2 === 0);
 frame.set("loop.last", t_2 === t_3 - 1);
 frame.set("loop.length", t_3);
 output += "\n    ";
-if(runtime.memberLookup((runtime.memberLookup((t_5),"date")),0) != runtime.contextOrFrameLookup(context, frame, "previousDate")) {
+if(env.getFilter("naturalDay").call(context, runtime.memberLookup((t_5),"date")) != runtime.contextOrFrameLookup(context, frame, "previousDate")) {
 output += "\n    <div class=\"minichat-date\">\n        ";
-output += runtime.suppressValue(runtime.memberLookup((runtime.memberLookup((t_5),"date")),0), env.opts.autoescape);
+output += runtime.suppressValue(env.getFilter("naturalDay").call(context, runtime.memberLookup((t_5),"date")), env.opts.autoescape);
 output += "\n    </div>\n    ";
 var t_6;
-t_6 = runtime.memberLookup((runtime.memberLookup((t_5),"date")),0);
+t_6 = env.getFilter("naturalDay").call(context, runtime.memberLookup((t_5),"date"));
 frame.set("previousDate", t_6, true);
 if(frame.topLevel) {
 context.setVariable("previousDate", t_6);
@@ -62,7 +62,7 @@ output += runtime.suppressValue(runtime.memberLookup((runtime.memberLookup((runt
 output += "\" title=\"";
 output += runtime.suppressValue(runtime.memberLookup((runtime.memberLookup((t_5),"user")),"username"), env.opts.autoescape);
 output += "\" class=\"avatar verysmallavatar\"/></a>\n        <div class=\"minichat-text\">\n            <span class=\"minichat-time\">";
-output += runtime.suppressValue(runtime.memberLookup((runtime.memberLookup((t_5),"date")),1), env.opts.autoescape);
+output += runtime.suppressValue(env.getFilter("time").call(context, runtime.memberLookup((t_5),"date")), env.opts.autoescape);
 output += "</span>\n            ";
 output += runtime.suppressValue(runtime.memberLookup((t_5),"text"), env.opts.autoescape);
 output += "\n        </div>\n    </div>\n";

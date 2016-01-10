@@ -1,11 +1,17 @@
+import time
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from minichat.models import Message
 from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 from django.utils.lorem_ipsum import words
+from tests_helpers import LexpageTestCase
+from datetime import date, timedelta
+from django.contrib.humanize.templatetags.humanize import naturalday
 
 from notifications.models import Notification
+
+
 
 class ViewsTests(TestCase):
     fixtures = ['devel']
@@ -115,10 +121,6 @@ class ApiTests(APITestCase):
         self.users = User.objects.all()
         self.author = self.users[0]
 
-    def test_latests(self):
-        response = self.client.get(reverse('minichat_latests'))
-        self.assertEqual(response.status_code, 200)
-
     def test_post_login_required(self):
         url = reverse('minichat_post')
         response = self.client.post(url, {'text': 'foo'})
@@ -219,4 +221,19 @@ class ApiTests(APITestCase):
         first_message = response.data['results'][0]
         self.assertEqual(first_message['text'], 'trop fort %s' % formatted_url)
 
+class TemplateTestCase(LexpageTestCase):
 
+    def test_natural_date_invalid_date(self):
+        self.selenium.get(self.live_server_url)
+        filter_invalid_date = self.selenium.execute_script('return env.getFilter("naturalDay")("foo");');
+        self.assertEqual(filter_invalid_date, 'Invalid date')
+
+    def test_natural_date_django_equivalent(self):
+        self.selenium.get(self.live_server_url)
+        # One year and 30 days
+        for i in range(0, 365+30):
+            time.sleep(0.1)
+            d = date.today() - timedelta(days=i)
+            formatted_date = d.isoformat()
+            filter_date = self.selenium.execute_script('return env.getFilter("naturalDay")("%s");' % formatted_date);
+            self.assertEqual(filter_date, naturalday(d, 'l j b.'))

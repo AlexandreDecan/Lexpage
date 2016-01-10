@@ -15,8 +15,6 @@ from notifications import notify
 
 from minichat.templatetags.minichat import urlize3
 from commons.templatetags.markup_bbcode import smiley
-from django.contrib.humanize.templatetags.humanize import naturalday
-from django.template.defaultfilters import time
 from django.contrib import messages
 
 class BadSubstituteException(APIException):
@@ -27,14 +25,6 @@ class BadSubstituteException(APIException):
 class MinichatTextField(CharField):
     def to_representation(self, value):
         return super().to_representation(smiley(urlize3(value)))
-
-
-class MinichatDateField(CharField):
-    def to_representation(self, value):
-        message_date = naturalday(value, 'l j b.')
-        message_time = time(value)
-        return [message_date, message_time]
-
 
 class LatestMessagesPagination(PageNumberPagination):
     """Custom pagination for the minichat.
@@ -59,11 +49,8 @@ class MessageSerializer(ModelSerializer):
         field_class, field_kwargs = super(MessageSerializer, self).build_standard_field(field_name, model_field)
         if field_name == 'text':
             return MinichatTextField, field_kwargs
-        elif field_name == 'date':
-            return MinichatDateField, field_kwargs
-       # There are no other fields, the last one is not a standard field because it is a primary key
-       # else:
-       #     return field_class, field_kwargs
+        else:
+            return field_class, field_kwargs
 
 
 class PostedMessageSerializer(MessageSerializer):
