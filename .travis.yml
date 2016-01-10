@@ -3,9 +3,11 @@ python:
 - 3.4
 sudo: true
 dist: trusty
+addons:
+  postgresql: "9.4"
 env:
   global:
-  - DJANGO_SETTINGS_MODULE=settings_dev
+  - DJANGO_SETTINGS_MODULE=settings_travis
   matrix:
   - SELENIUM_WEBDRIVER=selenium.webdriver.chrome.webdriver.WebDriver
   - SELENIUM_WEBDRIVER=selenium.webdriver.firefox.webdriver.WebDriver
@@ -14,14 +16,16 @@ before_install:
 - unzip chromedriver_linux64.zip
 - sudo mv chromedriver /usr/bin
 install:
-- pip install -r requirements_dev.txt
+- pip install -r requirements_dev.txt # Testing libs
+- pip install -r requirements_prod.txt # Postgresql
 before_script:
 - "export DISPLAY=:99.0"
 - "sh -e /etc/init.d/xvfb start"
 - sleep 3 # give xvfb some time to start
+- psql -c 'create database appdb;' -U postgres
 script:
 - python app/manage.py collectstatic --noinput
-- coverage run --source app/ --omit */migrations/* --omit */management/* app/manage.py test
+- coverage run --source app/ --omit */migrations/* --omit */management/* app/manage.py test -v 3
 after_script:
 - python app/tests_helpers.py
 after_success:
