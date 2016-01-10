@@ -40,7 +40,8 @@ class Notification(models.Model):
         return '[%s] %s' % (self.recipient.get_username(), self.title)
 
     def show_url(self):
-        return reverse('notification_show', kwargs={'pk': self.id})
+        if self.action:
+            return reverse('notification_show', kwargs={'pk': self.id})
 
     def dismiss_url(self):
         return reverse('notification_api_dismiss', kwargs={'pk': self.id})
