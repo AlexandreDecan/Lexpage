@@ -33,6 +33,11 @@
     // border-bottom: 4px solid $brand-primary;
     border-radius: $border-radius-base;
     @include z-depth(4);
+
+    .notification_pagination {
+        margin-top: -$padding-large-vertical;
+    }
+
   }
 
   .navbar-right {

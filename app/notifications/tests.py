@@ -68,8 +68,8 @@ class NotificationTests(TestCase):
         self.client.login(username='user1', password='user1')
         response = self.client.get(reverse('notifications_api_list'), format='json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
-        notification = response.data[0]
+        self.assertEqual(len(response.data['results']), 1)
+        notification = response.data['results'][0]
         self.assertEqual(notification['description'], 'admin a entamé une nouvelle conversation avec vous : <em>Test de conversation</em>.')
         self.assertTrue(notification['dismiss_url'].endswith('/notifications/api/notification/1'))
         self.assertTrue(notification['show_and_dismiss_url'].endswith('/notifications/1'))
@@ -100,11 +100,15 @@ class NotificationBrowserTest(LexpageTestCase):
         notif_xpath = '//a[@id="notifications_dropdown_button"]/span[@class="badge"]/span[@class="fa fa-bell"]'
         notification_icon = self.selenium.find_element_by_xpath(notif_xpath)
         ActionChains(self.selenium).move_to_element(notification_icon).perform()
-        dismiss_xpath = '(//div[@class="notification_dismiss"])[1]'
+        dismiss_all_xpath = '//div[@class="notification_dismiss"]'
+        dismiss_xpath = '(%s)[1]' % dismiss_all_xpath
         WebDriverWait(self.selenium, 1).until(
             EC.visibility_of(self.selenium.find_element_by_xpath(dismiss_xpath)))
         for i in range(11, 0, -1):
             time.sleep(0.5)
+            # Test pagination
+            self.assertEqual(min(5, i),\
+                             len(self.selenium.find_elements_by_xpath(dismiss_all_xpath)))
             self.check_notification_count(i)
             dismiss_link = self.selenium.find_element_by_xpath(dismiss_xpath)
             dismiss_link.click()

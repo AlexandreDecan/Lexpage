@@ -6,29 +6,59 @@ precompile --name "/notifications/list.html" app/notifications/js_templates/list
 
 Do not forget to minify the JS you have made.
 #}
-{% if notifications_list|length > 0 %}  
-      {% for notification in notifications_list %}
-          <div id="notification_{{notification.id}}" class="notification"><F12>
-            <div class="notification_icon"> 
-              <span class="fa fa-lg {{ notification.icon }}"></span> 
-            </div>
-            <div class="notification_dismiss">
-                <a class="fa fa-times close" href="javascript:notification_dismiss('{{notification.dismiss_url}}', 'notification_{{notification.id}}');"></a>
-            </div>
-            <div class="notification_title"><strong>
-                {% if notification.show_and_dismiss_url %}
-                <a href="{{ notification.show_and_dismiss_url }}">{{ notification.title }}</a>
-                {% else %}
-                    {{ notification.title }}
-                {% endif %}
-                </strong>
-            </div>
-            <div class="notification_descr">
-              {{ notification.description }}
-              <span class="notification_date">
-                &mdash; {{ notification.date | relativeDate }}
-              </span>
-            </div>
-          </div>
-      {% endfor %}
+{# We use results and not length because we could see an epnty page (?page=100). #}
+{% if error %}
+  <div id="notification_error" class="notification">
+    <div class="notification_icon"> 
+      <span class="fa fa-lg fa-warning"></span> 
+    </div>
+    <div class="notification_title">
+        <strong>Erreur de chargement</strong>
+    </div>
+    <div class="notification_descr">
+      Une erreur est survenue lors du rafraichissement des notifications. Essayez de recharger la page.
+      Si le problème persiste et vous semble anormal, n'hésitez pas à contacter un administrateur du site,
+      ou à créer un <a href="https://github.com/AlexandreDecan/Lexpage/issues">ticket sur GitHub</a>.</p>
+    </div>
+  </div>
+{% elif results|length > 0 %}
+  {% if next or previous %}
+    <div class="notification notification_pagination">
+      {% if next %}
+      <div class="pull-right small">
+        <a title="Suivant" href="javascript:notifications_change_page('{{next}}')" class="change-page">Suivant <i class="fa fa-chevron-right"></i></a>
+      </div>
+      {% endif %}
+      {% if previous %}
+      <div class="pull-left small">
+        <a title="Précédent" href="javascript:notifications_change_page('{{previous}}')" class="change-page"><i class="fa fa-chevron-left"></i> Précédent</a>
+      </div>
+      {% endif %}
+      <div class="clearfix"></div>
+    </div>
+  {% endif %}
+  {% for notification in results %}
+    <div id="notification_{{notification.id}}" class="notification">
+      <div class="notification_icon">
+        <span class="fa fa-lg {{ notification.icon }}"></span> 
+      </div>
+      <div class="notification_dismiss">
+          <a class="fa fa-times close" href="javascript:notification_dismiss('{{notification.dismiss_url}}', 'notification_{{notification.id}}');"></a>
+      </div>
+      <div class="notification_title"><strong>
+          {% if notification.show_and_dismiss_url %}
+          <a href="{{ notification.show_and_dismiss_url }}">{{ notification.title }}</a>
+          {% else %}
+              {{ notification.title }}
+          {% endif %}
+          </strong>
+      </div>
+      <div class="notification_descr">
+        {{ notification.description }}
+        <span class="notification_date">
+          &mdash; {{ notification.date | relativeDate }}
+        </span>
+      </div>
+    </div>
+  {% endfor %}
 {% endif %}
