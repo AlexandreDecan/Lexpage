@@ -1,1 +1,1 @@
-Notifications en attente sur Lexpage
+Notifications en attente sur {{SITENAME}}

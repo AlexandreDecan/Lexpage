@@ -1,1 +1,1 @@
-Activation de votre compte Lexpage
+Activation de votre compte {{SITENAME}}

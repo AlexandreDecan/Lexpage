@@ -2,12 +2,13 @@
 
 {% block content %}
     <h3>Liste des slogans <small>({{ page_obj.paginator.count }})</small></h3>
-
+    {% if SITENAME == "Lexpage" %}
     <p class="well">Les slogans ont été introduits lors de la première version du Lexpage, entre 
     1996 et 1998. Ils consistaient alors à reprendre les publicités et les slogans
     de l'époque de sorte à y inclure Lexpage. Petit à petit, la liste s'est étoffée
     et c'est maintenant {{ page_obj.paginator.count }} slogans qui ont été proposés par les visiteurs
     du site. </p>
+    {%endif%}
 
     {% if user.is_authenticated %}
 

@@ -7,8 +7,10 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # General
 SITE_ID = 1
 INTERNAL_IPS = ('127.0.0.1',)
-ALLOWED_HOSTS = ['www.lexpage.net', '127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1']
 ANALYTICS = False  # Overridden in prod
+SITENAME = 'Roxpage'
+DEMONYM = 'Roxpagiens'
 
 # Configuration
 WSGI_APPLICATION = 'wsgi.application'
