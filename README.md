@@ -23,16 +23,16 @@ Le répertoire */app* contient tout ce qui est propre à Django et au Lexpage :
  - Les répertoires *blog*, *board*, *commons*, *messaging*, *minichat*, *notifications*, *profile* et *slogan*
    contiennent les applications.
  - Les répertoires *media*, *media_pub*, *static*, *static_pub* contiennent les fichiers statiques. *media* et
-   *media_pub* ne sont pas utilisés.
-   *static* contient les fichiers statiques globaux du site, qui seront collectés automatiquement depuis ce
-   répertoire et les sous-répertoires *static* des différentes
-   applications vers *static_pub*, qui contiendra également les avatars uploadés par les utilisateurs.
+   *media_pub* ne sont pas utilisés. Le dossier *static_pub* sert à accueillir les fichiers statiques collectés
+   automatiquement depuis les sous-répertoires *static* des différentes applications. C'est aussi dans ce dossier
+   que sont uploadés les avatars des utilisateurs. 
  - Le répertoire *templates* contient les templates globales du site. Les sous-répertoires *templates* des différentes
    applications contiennent les templates spécifiques
    à chaque application.
  - Le fichier *settings_common.py* contient les paramètres de base, quelque soit l'environnement.
  - Le fichier *settings_dev.py* contient les paramètres de développement, et doivent être utilisés en local.
    Il charge automatiquement tout ce qui se trouve dans *settings_common.py*.
+ - Le fichier *settings_travis.py* contient des éléments spécifiques pour la mise en plus du CI Travis.
  - Le reste est classique pour du Django.
   
 La racine du dépôt contient notamment :
@@ -40,7 +40,7 @@ La racine du dépôt contient notamment :
  - *requirements_common.txt* contient les dépendances communes aux différents environnements.
  - *requirements_dev.txt* contient les dépendances pour le développement et les tests.
    Il charge automatiquement les dépendances de *requirements_common.txt*.
- - *requirements_prod.txt* contient les dépendances pour la production.
+ - *requirements_prod.txt* contient les dépendances supplémentaires pour la production.
  
  
 ## Comment tester localement ?
@@ -153,8 +153,8 @@ nécessaire pour le thème. Le fichier *_mixins.scss* contient des mixins néces
 (ou des ré-écriture de certains mixins Bootstrap, dans le cas où des modifications doivent être appliquées
 directement sur ces derniers).
 
-En environnement de développement, le fichier */static/css/style.css* sera directement utilisé lorsque le
+En environnement de développement, le fichier *app/commons/static/css/style.css* sera directement utilisé lorsque le
 site est affiché (`DEBUG = True` dans les `settings`).
-En environnement de production, c'est le fichier */static_pub/css/style.min.css* qui sera utilisé.
+En environnement de production, c'est le fichier *app/static_pub/css/style.min.css* qui sera utilisé.
 Notez deux choses : la première est la présence du *.min*, et la seconde est la présence du *_pub*
 (voir remarque ci-dessus à propos de `collectstatic`).
