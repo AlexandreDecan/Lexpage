@@ -126,6 +126,77 @@ class NotificationBrowserTest(LexpageTestCase):
         }
         Notification(**notification).save()
 
+    @logged_in_test()
+    def test_notification_pagination(self):
+        """
+        Test the pagination:
+        - browse between the page
+        - Check that there are no more than 5 notifications per page
+        - Check that you can dismiss notifications even if you start on the last page
+        """
+        self.check_notification_count(1)
+        for i in range(0, 12):
+            self.create_notification()
+        # Now we have 13 notifications
+        self.selenium.refresh()
+        self.check_notification_count(13)
+        notif_xpath = '//a[@id="notifications_dropdown_button"]/span[@class="badge"]/span[@class="fa fa-bell"]'
+        notification_icon = self.selenium.find_element_by_xpath(notif_xpath)
+        ActionChains(self.selenium).move_to_element(notification_icon).perform()
+        dismiss_all_xpath = '//div[@class="notification_dismiss"]'
+        dismiss_xpath = '(%s)[1]' % dismiss_all_xpath
+        WebDriverWait(self.selenium, 1).until(
+            EC.visibility_of(self.selenium.find_element_by_xpath(dismiss_xpath)))
+        # We should be able to dismiss everything even if we start at the last page
+        time.sleep(.5)
+        next_link = lambda: self.selenium.find_element_by_css_selector('.notification_pagination .pull-right a')
+        previous_link = lambda: self.selenium.find_element_by_css_selector('.notification_pagination .pull-left a')
+        next_link().click()
+        previous_link() # Check that it exists
+        # Go back to first page..
+        time.sleep(.5)
+        previous_link().click()
+        time.sleep(.5)
+        with self.assertRaises(NoSuchElementException):
+            previous_link() # Check that previous link does not exist
+        # Then to third page
+        time.sleep(.5)
+        next_link().click()
+        time.sleep(.5)
+        previous_link() # Check that it exists
+        next_link().click()
+        time.sleep(.5)
+        dismiss_3_xpath = '(%s)[3]' % dismiss_all_xpath
+        dismiss_4_xpath = '(%s)[4]' % dismiss_all_xpath
+        # There should be 3 notifications here..
+        self.selenium.find_element_by_xpath(dismiss_3_xpath)
+        # But not 4!
+        with self.assertRaises(NoSuchElementException):
+            self.selenium.find_element_by_xpath(dismiss_4_xpath)
+
+        # Dismiss everything (without changing page)
+        for i in range(13, 0, -1):
+            time.sleep(0.5)
+            self.check_notification_count(i)
+            dismiss_link = self.selenium.find_element_by_xpath(dismiss_xpath)
+            dismiss_link.click()
+            time.sleep(.5)
+            # Check presence/absence of links
+            # We should always stay at the last page, so it should always raise the exception
+            with self.assertRaises(NoSuchElementException):
+                next_link() # Check that previous link does not exist
+            # If there are <= 5 notifications, we should not see the links. Otherwhise, we should:
+            # i-1 because we just dismissed a notification, remember?
+            if i-1 <= 5:
+                with self.assertRaises(NoSuchElementException):
+                    previous_link() # Check that previous link does not exist
+            else:
+                previous_link()
+
+        time.sleep(0.5)
+        with self.assertRaises(NoSuchElementException):
+            self.selenium.find_element_by_xpath(dismiss_xpath)
+
 
     def check_notification_count(self, count, timeout=5):
         """timeout can be set to a different value, e.g to test ajax pulling."""
