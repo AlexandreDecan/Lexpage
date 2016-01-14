@@ -36,6 +36,16 @@
 
     .notification_pagination {
         margin-top: -$padding-large-vertical;
+        position: relative;
+
+        .previous_page {
+            position: absolute;
+            left: $padding-large-vertical;
+        }
+        .next_page {
+            position: absolute;
+            right: $padding-large-vertical;
+        }
     }
 
   }

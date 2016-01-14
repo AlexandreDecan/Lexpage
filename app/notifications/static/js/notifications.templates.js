@@ -51,28 +51,32 @@ var parentTemplate = null;
 output += "\n";
 output += "\n";
 if(runtime.contextOrFrameLookup(context, frame, "error")) {
-output += "\n  <div id=\"notification_error\" class=\"notification\">\n    <div class=\"notification_icon\"> \n      <span class=\"fa fa-lg fa-warning\"></span> \n    </div>\n    <div class=\"notification_title\">\n        <strong>Erreur de chargement</strong>\n    </div>\n    <div class=\"notification_descr\">\n      Une erreur est survenue lors du rafraichissement des notifications. Essayez de recharger la page.\n      Si le problème persiste et vous semble anormal, n'hésitez pas à contacter un administrateur du site,\n      ou à créer un <a href=\"https://github.com/AlexandreDecan/Lexpage/issues\">ticket sur GitHub</a>.</p>\n    </div>\n  </div>\n";
+output += "\n  <div id=\"notification_error\" class=\"notification\">\n    <div class=\"notification_icon\"> \n      <span class=\"fa fa-lg fa-warning\"></span> \n    </div>\n    <div class=\"notification_title\">\n        <strong>Erreur de chargement</strong>\n    </div>\n    <div class=\"notification_descr\">\n      Une erreur est survenue lors du rafraichissement des notifications. Essayez de recharger la page.\n    </div>\n  </div>\n";
 ;
 }
 else {
 if(env.getFilter("length").call(context, runtime.contextOrFrameLookup(context, frame, "results")) > 0) {
 output += "\n  ";
 if(runtime.contextOrFrameLookup(context, frame, "next") || runtime.contextOrFrameLookup(context, frame, "previous")) {
-output += "\n    <div class=\"notification notification_pagination\">\n      ";
+output += "\n    <div class=\"notification notification_pagination text-center\">\n      ";
 if(runtime.contextOrFrameLookup(context, frame, "next")) {
-output += "\n      <div class=\"pull-right small\">\n        <a title=\"Suivant\" href=\"javascript:notifications_change_page('";
+output += "\n      <div class=\"next_page small\">\n          <a title=\"Suivant\" href=\"javascript:notifications_change_page('";
 output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "next"), env.opts.autoescape);
 output += "')\" class=\"change-page\">Suivant <i class=\"fa fa-chevron-right\"></i></a>\n      </div>\n      ";
 ;
 }
 output += "\n      ";
 if(runtime.contextOrFrameLookup(context, frame, "previous")) {
-output += "\n      <div class=\"pull-left small\">\n        <a title=\"Précédent\" href=\"javascript:notifications_change_page('";
+output += "\n      <div class=\"previous_page small\">\n          <a title=\"Précédent\" href=\"javascript:notifications_change_page('";
 output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "previous"), env.opts.autoescape);
 output += "')\" class=\"change-page\"><i class=\"fa fa-chevron-left\"></i> Précédent</a>\n      </div>\n      ";
 ;
 }
-output += "\n      <div class=\"clearfix\"></div>\n    </div>\n  ";
+output += "\n      <div class=\"text-muted small\">\n          ";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "current_page"), env.opts.autoescape);
+output += "/";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "total_pages"), env.opts.autoescape);
+output += "\n      </div>\n    </div>\n  ";
 ;
 }
 output += "\n  ";

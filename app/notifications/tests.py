@@ -70,6 +70,8 @@ class NotificationTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data['results']), 1)
         notification = response.data['results'][0]
+        self.assertEqual(response.data['total_pages'], 1)
+        self.assertEqual(response.data['current_page'], 1)
         self.assertEqual(notification['description'], 'admin a entamé une nouvelle conversation avec vous : <em>Test de conversation</em>.')
         self.assertTrue(notification['dismiss_url'].endswith('/notifications/api/notification/1'))
         self.assertTrue(notification['show_and_dismiss_url'].endswith('/notifications/1'))
@@ -149,8 +151,8 @@ class NotificationBrowserTest(LexpageTestCase):
             EC.visibility_of(self.selenium.find_element_by_xpath(dismiss_xpath)))
         # We should be able to dismiss everything even if we start at the last page
         time.sleep(.5)
-        next_link = lambda: self.selenium.find_element_by_css_selector('.notification_pagination .pull-right a')
-        previous_link = lambda: self.selenium.find_element_by_css_selector('.notification_pagination .pull-left a')
+        next_link = lambda: self.selenium.find_element_by_css_selector('.notification_pagination .next_page a')
+        previous_link = lambda: self.selenium.find_element_by_css_selector('.notification_pagination .previous_page a')
         next_link().click()
         previous_link() # Check that it exists
         # Go back to first page..
