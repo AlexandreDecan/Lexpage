@@ -87,11 +87,15 @@ class MessagePostView(CreateAPIView):
         if substitute:
             substitute.save()
             headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
+            data_with_anchors = serializer.data
+            data_with_anchors['anchors'] = []
+            return Response(data_with_anchors, status=status.HTTP_200_OK, headers=headers)
         else:
-            self.perform_create(serializer)
+            anchors = self.perform_create(serializer)
+            data_with_anchors = serializer.data
+            data_with_anchors['anchors'] = anchors
             headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+            return Response(data_with_anchors, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
         message = serializer.save(user=self.request.user)
@@ -109,7 +113,7 @@ class MessagePostView(CreateAPIView):
                 anchors_text = anchors[0].get_username()
             messages.success(self.request._request, 'Une notification a été envoyée à %s suite à votre message sur le minichat.' % anchors_text)
 
-        return message
+        return [anchor.get_username() for anchor in anchors]
 
     class Meta:
         fields = ('text',)
