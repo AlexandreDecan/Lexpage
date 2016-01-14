@@ -15,7 +15,6 @@ from notifications import notify
 
 from minichat.templatetags.minichat import urlize3
 from commons.templatetags.markup_bbcode import smiley
-from django.contrib import messages
 
 class BadSubstituteException(APIException):
     status_code = 400
@@ -104,14 +103,6 @@ class MessagePostView(CreateAPIView):
         anchors = message.parse_anchors()
         for anchor in anchors:
             notify.minichat_warn(anchor, message)
-
-        # Warn the user that we notified the other users
-        if len(anchors) > 0:
-            if len(anchors) > 1:
-                anchors_text = ', '.join([x.get_username() for x in anchors[:-2]]) + ' et ' + anchors[-1].get_username()
-            else:
-                anchors_text = anchors[0].get_username()
-            messages.success(self.request._request, 'Une notification a été envoyée à %s suite à votre message sur le minichat.' % anchors_text)
 
         return [anchor.get_username() for anchor in anchors]
 
