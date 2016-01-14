@@ -3,6 +3,7 @@ import time
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.utils.lorem_ipsum import words
 
 from notifications.models import Notification
 from tests_helpers import LexpageTestCase, logged_in_test, SELENIUM_AVAILABLE
@@ -75,6 +76,39 @@ class NotificationTests(TestCase):
         self.assertEqual(notification['description'], 'admin a entamé une nouvelle conversation avec vous : <em>Test de conversation</em>.')
         self.assertTrue(notification['dismiss_url'].endswith('/notifications/api/notification/1'))
         self.assertTrue(notification['show_and_dismiss_url'].endswith('/notifications/1'))
+
+    def test_notifications_pagination(self):
+        Notification.objects.all().delete()
+        for i in range(0,53):
+            notification = {
+                'title': words(2, False),
+                'description': words(6, False),
+                'recipient': User.objects.get(username='user1'),
+                'app': 'game',
+                'key': 'bar',
+            }
+            Notification(**notification).save()
+        self.client.login(username='user1', password='user1')
+        response = self.client.get(reverse('notifications_api_list'), format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data['results']), 5)
+        self.assertEqual(response.data['count'], 53)
+        self.assertEqual(response.data['total_pages'], 11)
+        self.assertEqual(response.data['current_page'], 1)
+        response = self.client.get(reverse('notifications_api_list'), {'page': 5}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data['results']), 5)
+        self.assertEqual(response.data['count'], 53)
+        self.assertEqual(response.data['total_pages'], 11)
+        self.assertEqual(response.data['current_page'], 5)
+        response = self.client.get(reverse('notifications_api_list'), {'page': 11}, format='json')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.data['results']), 3)
+        self.assertEqual(response.data['count'], 53)
+        self.assertEqual(response.data['total_pages'], 11)
+        self.assertEqual(response.data['current_page'], 11)
+
+
 
 class NotificationBrowserTest(LexpageTestCase):
     fixtures = ['devel']
@@ -178,7 +212,7 @@ class NotificationBrowserTest(LexpageTestCase):
 
         # Dismiss everything (without changing page)
         for i in range(13, 0, -1):
-            time.sleep(0.5)
+            time.sleep(1.5)
             self.check_notification_count(i)
             dismiss_link = self.selenium.find_element_by_xpath(dismiss_xpath)
             dismiss_link.click()

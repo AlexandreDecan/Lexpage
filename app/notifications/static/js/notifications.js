@@ -58,7 +58,7 @@ function notification_initialize() {
     $(".notification_list .notification_dismiss a.close").click(function (e) {
         e.stopPropagation(); // Prevent dropdown to close
     });
-    $(".notification_pagination .change-page").click(function(e) {
+    $(".notification_pagination > div > a").click(function(e) {
         e.stopPropagation(); // Prevent dropdown to close
     });
 }

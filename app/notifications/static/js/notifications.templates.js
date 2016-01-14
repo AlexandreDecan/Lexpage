@@ -60,16 +60,16 @@ output += "\n  ";
 if(runtime.contextOrFrameLookup(context, frame, "next") || runtime.contextOrFrameLookup(context, frame, "previous")) {
 output += "\n    <div class=\"notification notification_pagination text-center\">\n      ";
 if(runtime.contextOrFrameLookup(context, frame, "next")) {
-output += "\n      <div class=\"next_page small\">\n          <a title=\"Suivant\" href=\"javascript:notifications_change_page('";
+output += "\n      <div class=\"next_page small\">\n          <a href=\"javascript:notifications_change_page('";
 output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "next"), env.opts.autoescape);
-output += "')\" class=\"change-page\">Suivant <i class=\"fa fa-chevron-right\"></i></a>\n      </div>\n      ";
+output += "')\">Suivant <i class=\"fa fa-chevron-right\"></i></a>\n      </div>\n      ";
 ;
 }
 output += "\n      ";
 if(runtime.contextOrFrameLookup(context, frame, "previous")) {
-output += "\n      <div class=\"previous_page small\">\n          <a title=\"Précédent\" href=\"javascript:notifications_change_page('";
+output += "\n      <div class=\"previous_page small\">\n          <a href=\"javascript:notifications_change_page('";
 output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "previous"), env.opts.autoescape);
-output += "')\" class=\"change-page\"><i class=\"fa fa-chevron-left\"></i> Précédent</a>\n      </div>\n      ";
+output += "')\"><i class=\"fa fa-chevron-left\"></i> Précédent</a>\n      </div>\n      ";
 ;
 }
 output += "\n      <div class=\"text-muted small\">\n          ";
