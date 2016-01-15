@@ -6,8 +6,10 @@ precompile --name "/notifications/list.html" app/notifications/js_templates/list
 
 Do not forget to minify the JS you have made.
 #}
-{% if notifications_list|length > 0 %}
-    <span class="badge"><span class="fa fa-bell"></span> {{ notifications_list|length }}</span>
+{% if error %}
+    <span class="badge"><span class="fa fa-bell-slash"></span></span>
+{% elif count > 0 %}
+    <span class="badge"><span class="fa fa-bell"></span> {{ count }}</span>
 {% else %}
     <span class="fa fa-navicon"></span>
 {% endif %}

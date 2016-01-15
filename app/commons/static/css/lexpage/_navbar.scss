@@ -33,6 +33,21 @@
     // border-bottom: 4px solid $brand-primary;
     border-radius: $border-radius-base;
     @include z-depth(4);
+
+    .notification_pagination {
+        margin-top: -$padding-large-vertical;
+        position: relative;
+
+        .previous_page {
+            position: absolute;
+            left: $padding-large-vertical;
+        }
+        .next_page {
+            position: absolute;
+            right: $padding-large-vertical;
+        }
+    }
+
   }
 
   .navbar-right {
