@@ -47,8 +47,8 @@ function minichat_post_message() {
             if (data.anchors.length > 0) {
                 var beautified_users;
                 if (data.anchors.length > 1) {
-                    var users = data.anchors.join(', ');
-                    var comma = users.lastIndexOf(', ');
+                    var users = data.anchors.join(', à ');
+                    var comma = users.lastIndexOf(', à ');
                     beautified_users = users.substr(0, comma) + ' et à ' + users.substr(comma+1);
                 } else {
                     beautified_users = data.anchors[0];

@@ -47,7 +47,7 @@ class LexpageTestCase(LiveServerTestCase):
         password_input.send_keys(password)
         self.selenium.find_element_by_xpath('//button[text()="S\'identifier"]').click()
         WebDriverWait(self.selenium, 1).until(
-            lambda driver: driver.find_element_by_xpath('//p[contains(text(),"Bienvenue %s")]' % username))
+            lambda driver: driver.find_element_by_xpath('//div[contains(text(),"Bienvenue %s")]' % username))
 
 if __name__ == '__main__':
     # We call that script after the travis build to know which browser has been used
