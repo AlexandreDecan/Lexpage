@@ -6,7 +6,6 @@ class MessageAdmin(admin.ModelAdmin):  # pragma: no cover
     model = Message
     date_hierarchy = 'date'
     search_field = ('text',)
-    
 
 
 class ThreadAdmin(admin.ModelAdmin):  # pragma: no cover
@@ -23,6 +22,7 @@ class FlagAdmin(admin.ModelAdmin):  # pragma: no cover
 class MessageHistoryAdmin(admin.ModelAdmin):  # pragma: no cover
     model = MessageHistory
     list_display = ('edited_by', 'message', 'date')
+
 
 admin.site.register(Flag, FlagAdmin)
 admin.site.register(Thread, ThreadAdmin)

@@ -1,8 +1,8 @@
 from django.core.urlresolvers import reverse_lazy, reverse
 
-from django.http import HttpResponse, Http404
+from django.http import Http404
 
-from django.views.generic import View, ListView
+from django.views.generic import ListView
 from django.views.generic.base import RedirectView
 from django.views.generic.edit import FormView
 
@@ -14,14 +14,13 @@ from django.db.models import F
 from django.contrib import messages
 
 from .models import Message, Thread, Flag, MessageHistory, BlogBoardLink
+from .forms import MessageForm, MessageModerateForm, ThreadForm
 
 from blog.models import BlogPost
 from notifications import notify
 
-from .forms import MessageForm, MessageModerateForm, ThreadForm
 
 import datetime
-import json
 
 
 MESSAGES_PER_THREADPAGE = 10
@@ -184,7 +183,7 @@ class ThreadCreateView(FormView):
 
         self.thread = thread  # For success url
 
-        message = thread.post_message(self.request.user, data['text'])
+        thread.post_message(self.request.user, data['text'])
         return FormView.form_valid(self, form)
 
     def get_success_url(self):

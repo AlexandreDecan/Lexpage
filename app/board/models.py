@@ -53,7 +53,7 @@ class Thread(models.Model):
 
     def authors(self, N=None):
         """
-        Return an ordered list of N first authors. 
+        Return an ordered list of N first authors.
         """
         authors = Message.objects.all().filter(thread=self).order_by('date').values_list('author')
         tmp_set = set()
@@ -107,7 +107,7 @@ class Message(models.Model):
 
     def position(self):
         """
-        Return the relative position in the thread, 0-indexed. 
+        Return the relative position in the thread, 0-indexed.
         """
         return Message.objects.all().filter(thread=self.thread, date__lt=self.date).count()
 
@@ -122,7 +122,7 @@ class Message(models.Model):
     def delete(self, **kwargs):
         """
         Remove given message from thread. If this is the only message in the
-        thread, remove the thread. Update flags. Return previous message, or 
+        thread, remove the thread. Update flags. Return previous message, or
         None
         :param **kwargs:
         """
@@ -154,8 +154,8 @@ class Message(models.Model):
             return anchor
 
     def previous(self):
-        """ 
-        Return the previous message, or None. 
+        """
+        Return the previous message, or None.
         """
         try:
             return Message.objects.all().filter(thread=self.thread, date__lt=self.date).latest()
@@ -173,7 +173,7 @@ class Message(models.Model):
 
     def modify(self, author, text):
         """
-        Edit current message and create a MessageHistory instance. 
+        Edit current message and create a MessageHistory instance.
         """
         if USE_DIFF_FOR_HISTORY:
             diff = difflib.unified_diff(self.text.splitlines(),
@@ -193,13 +193,13 @@ class Message(models.Model):
 
     def last_modified(self):
         """
-        Return the last modification. 
+        Return the last modification.
         """
         return MessageHistory.objects.all().filter(message=self).latest('date')
 
     def number_modified(self):
         """
-        Return the number of times this message was modified. 
+        Return the number of times this message was modified.
         """
         return MessageHistory.objects.all().filter(message=self).count()
 
@@ -220,8 +220,8 @@ class MessageHistory(models.Model):
 class FlagManager(models.Manager):
     def read(self, user, message, force=False):
         """
-        Look for a Flag and create if needed. Update the message if newer, or 
-        if force is True. Return the flag.  
+        Look for a Flag and create if needed. Update the message if newer, or
+        if force is True. Return the flag.
         """
         if not user.is_authenticated():
             return
@@ -235,7 +235,7 @@ class FlagManager(models.Manager):
     def unread(self, user, message):
         """
         Set message as the first unread message on the thread. Remove the flag
-        if message is the first of the thread. 
+        if message is the first of the thread.
         """
         thread = message.thread
         try:
