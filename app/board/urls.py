@@ -11,6 +11,7 @@ from .feeds import LatestsFeed
 from .api import MessageViewSet
 from rest_framework import routers
 
+
 router = routers.DefaultRouter()
 router.register(r'message', MessageViewSet, 'board_api_message')
 
