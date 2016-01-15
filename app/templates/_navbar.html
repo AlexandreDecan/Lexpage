@@ -129,7 +129,7 @@
             <a href="#" class="dropdown-notifications dropdown-toggle" data-toggle="dropdown" id="notifications_dropdown_button">
                 <span class="badge"><span class="fa fa-bell"> {{ notifications_list|length }}</span></span>
             </a>
-            <div class="dropdown-menu notification_list" id="notifications_dropdown">
+            <div class="dropdown-menu notification_list" id="notifications_dropdown" onclick="event.stopPropagation();">
             </div>
             </li>
 
