@@ -15,7 +15,6 @@ from notifications import notify
 
 from minichat.templatetags.minichat import urlize3
 from commons.templatetags.markup_bbcode import smiley
-from django.contrib import messages
 
 class BadSubstituteException(APIException):
     status_code = 400
@@ -87,11 +86,15 @@ class MessagePostView(CreateAPIView):
         if substitute:
             substitute.save()
             headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_200_OK, headers=headers)
+            data_with_anchors = serializer.data
+            data_with_anchors['anchors'] = []
+            return Response(data_with_anchors, status=status.HTTP_200_OK, headers=headers)
         else:
-            self.perform_create(serializer)
+            anchors = self.perform_create(serializer)
+            data_with_anchors = serializer.data
+            data_with_anchors['anchors'] = anchors
             headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+            return Response(data_with_anchors, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
         message = serializer.save(user=self.request.user)
@@ -101,15 +104,7 @@ class MessagePostView(CreateAPIView):
         for anchor in anchors:
             notify.minichat_warn(anchor, message)
 
-        # Warn the user that we notified the other users
-        if len(anchors) > 0:
-            if len(anchors) > 1:
-                anchors_text = ', '.join([x.get_username() for x in anchors[:-2]]) + ' et ' + anchors[-1].get_username()
-            else:
-                anchors_text = anchors[0].get_username()
-            messages.success(self.request._request, 'Une notification a été envoyée à %s suite à votre message sur le minichat.' % anchors_text)
-
-        return message
+        return [anchor.get_username() for anchor in anchors]
 
     class Meta:
         fields = ('text',)

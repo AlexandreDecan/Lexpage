@@ -5,11 +5,10 @@
   text-align: center;
   margin-bottom: $padding-large-vertical;
   padding: $padding-small-vertical $padding-small-horizontal;
-  background-color: $well-bg;
-  border-radius: $border-radius-small;
   .avatar {
     margin-bottom: 2px;
   }
+  border-bottom: 2px dotted $brand-primary;
 }
 
 /* Full minichat, external div */
@@ -100,7 +99,12 @@
   color: $text-muted;
 }
 
-
+#minichat_wrapper {
+  .minichat_notification {
+    border-radius: $border-radius-small;
+    padding: $padding-small-vertical $padding-small-horizontal;
+  }
+}
 
 
 
