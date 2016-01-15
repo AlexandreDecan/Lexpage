@@ -7,7 +7,6 @@ var minichat_form = "#minichat_form";
 var minichat_button = "#minichat_form button[type='submit']";
 var minichat_input_text = "#minichat_form input[type='text']";
 var minichat_chars_output = "#minichat_form .minichat-remainingChars";
-var minichat_notification = "#minichat_wrapper .minichat_notification"
 
 var minichat_template = "/minichat/latests.html";
 
@@ -50,14 +49,11 @@ function minichat_post_message() {
                 if (data.anchors.length > 1) {
                     var users = data.anchors.join(', ');
                     var comma = users.lastIndexOf(', ');
-                    beautified_users = users.substr(0, comma) + ' et' + users.substr(comma+1);
+                    beautified_users = users.substr(0, comma) + ' et à ' + users.substr(comma+1);
                 } else {
                     beautified_users = data.anchors[0];
                 }
-                $(minichat_notification).html("Une notification a été envoyée à " + beautified_users + ".");
-                $(minichat_notification).show();
-            } else {
-                $(minichat_notification).hide();
+                contrib_message("info", "Une notification a été envoyée à " + beautified_users + ".")
             }
             $(minichat_button).find('span').removeClass('fa-spinner fa-spin fa-warning btn-warning');
             $(minichat_input_text).val("");

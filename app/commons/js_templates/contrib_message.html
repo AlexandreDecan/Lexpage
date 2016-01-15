@@ -1,0 +1,11 @@
+{# This is a nunjucks template.
+To compile it, install nunjucks and run the following command:
+
+precompile --name "/commons/contrib_message.html" app/commons/js_templates/contrib_message.html > app/commons/static/js/contrib_message.templates.js
+
+Do not forget to minify the JS you have made.
+#}
+<div class="alert alert-{{ type }} alert-dismissible fade in" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  {{ message }}
+</div>

@@ -9,7 +9,21 @@ if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
   document.querySelector('head').appendChild(msViewportStyle)
 }
 
+function contrib_message(msg_type, msg_content) {
+    $(".contrib-messages").append(nunjucks.render("/commons/contrib_message.html", { type: msg_type, message: msg_content }));
+    /*
+    $(".contrib-messages div").last().each(function () {
+        var du = 250;
+        var minop = 0.3;
+        var maxop = 1;
 
+        $(this).fadeTo(du, minop).fadeTo(du, maxop)
+            .fadeTo(du, minop).fadeTo(du, maxop)
+            .fadeTo(du, minop).fadeTo(du, maxop)
+            .fadeTo(du, minop).fadeTo(du, maxop);
+    });
+    */
+}
 
 $(document).ready(function() {
     // Replace empty or invalid avatar. 
@@ -37,9 +51,6 @@ $(document).ready(function() {
     // OEmbed-ed elements
     refresh_oembed($("body"));
 
-    // Init notifications if any
-    notification_initialize();
-
     // Auto-hide navbar on scroll
     $(".navbar-fixed-top").autoHidingNavbar({showOnBottom: false});
 
@@ -51,6 +62,9 @@ $(document).ready(function() {
             }
         }
     });
+
+    // Init notifications if any
+    notification_initialize();
 });
 
 
