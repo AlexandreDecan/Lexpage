@@ -250,6 +250,8 @@ class NotificationBrowserTest(LexpageTestCase):
             ('(42) Foobar', '⟨42⟩ Foobar'),
             ('( 1) Foobar', '( 1) Foobar'),
             ('(1) Foobar', '⟨1⟩ Foobar'),
+            ('Nascar (2016) | Foobar', 'Nascar ⟨2016⟩ | Foobar'),
+            ('(1) Fo(1)oba(4000)(c3)r', '⟨1⟩ Fo⟨1⟩oba⟨4000⟩(c3)r'),
             ('1Foobar', '1Foobar'),
             ('Foo bar', 'Foo bar'),
             ('F(00)bar', 'F⟨00⟩bar'),
