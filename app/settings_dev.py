@@ -6,6 +6,10 @@ DEBUG = True
 SECRET_KEY = 'SecretKeyForDevelopmentEnvironment'
 
 
+# Configuration
+WSGI_APPLICATION = 'ws4redis.django_runserver.application' # Needed for builtin runserver
+
+
 # Database
 DATABASES = {
     'default': {
@@ -47,5 +51,12 @@ LOGGING = {
     },
 }
 
+# Websockets
+REDIS_PUBLISHER = 'redis_helpers.FakeRedisPublisher'
+WS4REDIS_SUBSCRIBER = 'redis_helpers.FakeRedisSubscriber'
+
+
 # Tests
 SELENIUM_WEBDRIVER = os.environ.get('SELENIUM_WEBDRIVER', None)
+START_REDIS_COMMAND = os.environ.get('START_REDIS_COMMAND', None)
+STOP_REDIS_COMMAND = os.environ.get('STOP_REDIS_COMMAND', None)

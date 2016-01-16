@@ -5,9 +5,13 @@ sudo: true
 dist: trusty
 addons:
   postgresql: "9.4"
+services:
+- redis-server
 env:
   global:
   - DJANGO_SETTINGS_MODULE=settings_travis
+  - START_REDIS_COMMAND="sudo service redis-server start"
+  - STOP_REDIS_COMMAND="sudo service redis-server stop"
   matrix:
   - SELENIUM_WEBDRIVER=selenium.webdriver.chrome.webdriver.WebDriver
   - SELENIUM_WEBDRIVER=selenium.webdriver.firefox.webdriver.WebDriver
