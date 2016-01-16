@@ -48,7 +48,7 @@
             <script src="{% static "js/notifications"|add:static_ext|add:".js" %}?v=160116"></script>
             <script src="{% static "js/minichat"|add:static_ext|add:".js" %}?v=160116"></script>
             <script src="{% static "js/markup"|add:static_ext|add:".js" %}?v=160113"></script>
-            {% if user.is_authenticated %}
+            {% if user.is_authenticated and ENABLE_WEBSOCKET %}
             <script>
                 $(document).ready(function() {
                     console.log(ws_client);
