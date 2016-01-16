@@ -241,3 +241,23 @@ class NotificationBrowserTest(LexpageTestCase):
         WebDriverWait(self.selenium, timeout).until(
             lambda driver: driver.find_element_by_xpath(notif_xpath))
 
+    @logged_in_test()
+    def test_safe_title_function(self):
+        titles = (
+            ('Foobar', 'Foobar'),
+            ('Foobar(1)', 'Foobar⟨1⟩'),
+            ('Foobar()', 'Foobar()'),
+            ('Foobar(a)', 'Foobar(a)'),
+            ('(42) Foobar', '⟨42⟩ Foobar'),
+            ('( 1) Foobar', '( 1) Foobar'),
+            ('(1) Foobar', '⟨1⟩ Foobar'),
+            ('Nascar (2016) | Foobar', 'Nascar ⟨2016⟩ | Foobar'),
+            ('(1) Fo(1)oba(4000)(c3)r', '⟨1⟩ Fo⟨1⟩oba⟨4000⟩(c3)r'),
+            ('1Foobar', '1Foobar'),
+            ('Foo bar', 'Foo bar'),
+            ('F(00)bar', 'F⟨00⟩bar'),
+        )
+
+        for title, expected_result in titles:
+            self.assertEqual(self.selenium.execute_script('return notifications_safe_title("%s")' % title), expected_result)
+

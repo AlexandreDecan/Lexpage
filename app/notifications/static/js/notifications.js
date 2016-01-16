@@ -5,11 +5,16 @@ var notifications_content_list;
 var notifications_content_url;
 var notifications_initial_content_url;
 var notifications_container;
+var notifications_vanilla_page_title;
 var notifications_previous_page = null;
 var notifications_fetch_failed = false;
 
 var notifications_button_template = "/notifications/button.html";
 var notifications_list_template = "/notifications/list.html";
+
+function notifications_safe_title(title){
+    return title.replace(/\((\d+)\)/g,'⟨$1⟩'); // Mind "⟨" != "("
+}
 
 function notifications_init_display(container, menu_button, dropdown_button, content_list, get_url) {
     notifications_container = container;
@@ -18,6 +23,7 @@ function notifications_init_display(container, menu_button, dropdown_button, con
     notifications_content_list = content_list;
     notifications_content_url = get_url;
     notifications_initial_content_url = get_url;
+    notifications_vanilla_page_title = notifications_safe_title(document.title);
 
 
     if ($(notifications_content_list)) {
@@ -48,10 +54,20 @@ function notifications_refresh_fallback() {
 function notifications_refresh() {
     $.get(notifications_content_url, function(data) {
         notifications_previous_page = data.previous;
-        if (data.count == 0) { $(notifications_container).hide(); } else {$(notifications_container).show();}
         $(notifications_dropdown_button).html(nunjucks.render(notifications_button_template, data));
         $(notifications_content_list).html(nunjucks.render(notifications_list_template, data));
         $(notifications_menu_button).html(nunjucks.render(notifications_button_template, data));
+        var prefix_title;
+        if (data.count == 0) {
+            $(notifications_container).hide();
+            prefix_title = '';
+        } else {
+            $(notifications_container).show();
+            prefix_title = '(' + data.count + ') ';
+        }
+        if (notifications_vanilla_page_title) {
+            document.title = prefix_title + notifications_vanilla_page_title;
+        }
         notification_initialize();
     }).error(function(){
         if (notifications_previous_page){ // We can not fetch the notifications, let's try to load the last previously known page
@@ -68,6 +84,9 @@ function notifications_refresh() {
             $(notifications_dropdown_button).html(nunjucks.render(notifications_button_template, {'error': true}));
             $(notifications_content_list).html(nunjucks.render(notifications_list_template, {'error': true}));
             $(notifications_menu_button).html(nunjucks.render(notifications_button_template, {'error': true}));
+            if (notifications_vanilla_page_title) {
+                document.title = notifications_vanilla_page_title;
+            }
         }
     });
 }
