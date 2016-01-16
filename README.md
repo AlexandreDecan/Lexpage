@@ -1,4 +1,4 @@
-# Lexpage v4 [![Build Status](https://travis-ci.org/AlexandreDecan/Lexpage.svg)](https://travis-ci.org/AlexandreDecan/Lexpage)  [![Coverage Status](https://coveralls.io/repos/AlexandreDecan/Lexpage/badge.svg?branch=master&service=github)](https://coveralls.io/github/AlexandreDecan/Lexpage?branch=master)
+# Lexpage v4 [![Build Status](https://travis-ci.org/AlexandreDecan/Lexpage.svg?branch=master)](https://travis-ci.org/AlexandreDecan/Lexpage)  [![Coverage Status](https://coveralls.io/repos/AlexandreDecan/Lexpage/badge.svg?branch=master&service=github)](https://coveralls.io/github/AlexandreDecan/Lexpage?branch=master)
 
 Bienvenue sur le dépôt *officiel* du Lexpage ! 
 
