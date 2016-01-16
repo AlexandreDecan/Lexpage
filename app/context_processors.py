@@ -9,4 +9,6 @@ def global_settings(request):
         'site': Site.objects.get_current(),
         'THEMES': settings.THEMES,
         'ANALYTICS': settings.ANALYTICS,
+        'SITENAME': settings.SITENAME,
+        'DEMONYM': settings.DEMONYM,
     }
