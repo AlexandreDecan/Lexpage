@@ -5,9 +5,13 @@ from minichat.models import Message
 from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 from django.utils.lorem_ipsum import words
-from tests_helpers import LexpageTestCase
+from tests_helpers import LexpageTestCase, logged_in_test, SELENIUM_AVAILABLE, without_redis
 from datetime import date, timedelta
 from django.contrib.humanize.templatetags.humanize import naturalday
+
+if SELENIUM_AVAILABLE:
+    from selenium.webdriver.support.wait import WebDriverWait
+    from selenium.common.exceptions import NoSuchElementException
 
 from notifications.models import Notification
 
@@ -246,3 +250,70 @@ class TemplateTestCase(LexpageTestCase):
             formatted_date = d.isoformat()
             filter_date = self.selenium.execute_script('return env.getFilter("naturalDay")("%s");' % formatted_date);
             self.assertEqual(filter_date, naturalday(d, 'l j b.'))
+
+class MinichatBrowserTest(LexpageTestCase):
+    fixtures = ['devel']
+
+    def setUp(self):
+        self.users = User.objects.all()
+        self.author = self.users[0]
+        super().setUp()
+
+    def post_message(self, timeout=5, text_message='Hello World'):
+        text_message_xpath = '//div[@class="minichat-text" and text()[contains(.,"%s")]]' % text_message
+        with self.assertRaises(NoSuchElementException):
+            self.selenium.find_element_by_xpath(text_message_xpath)
+        time.sleep(1)
+        Message(user=self.author, text=text_message).save()
+        WebDriverWait(self.selenium, timeout).until(
+            lambda driver: driver.find_element_by_xpath(text_message_xpath))
+
+    @logged_in_test()
+    def test_minichat_message(self):
+        self.post_message()
+
+    @without_redis()
+    @logged_in_test()
+    def test_minichat_message_without_redis(self):
+        """Without redis, a message takes up to 30 seconds to get printed"""
+        text_message = 'Je suis un test'
+        text_message_xpath = '//div[@class="minichat-text" and text()[contains(.,"%s")]]' % text_message
+        with self.assertRaises(NoSuchElementException):
+            self.selenium.find_element_by_xpath(text_message_xpath)
+        time.sleep(1)
+        Message(user=self.author, text=text_message).save()
+        time.sleep(15)
+        with self.assertRaises(NoSuchElementException):
+            self.selenium.find_element_by_xpath(text_message_xpath)
+        WebDriverWait(self.selenium, 20).until(
+            lambda driver: driver.find_element_by_xpath(text_message_xpath))
+
+    @logged_in_test()
+    def test_minichat_is_not_reloaded_with_websockets(self):
+        """This test will ensure that the minichat is not reloaded with websockets
+        if there are no new messages"""
+        self.post_message()
+        # At this point the minichat should not be updated anymore
+        # We will replace it with something else and wait.
+        placeholder = '<h2>Bob! T\'as mis ou le minichat?</h2>'
+        self.selenium.execute_script('$(minichat_content).html("%s");' % placeholder);
+        minichat_html = lambda: self.selenium.execute_script('return $(minichat_content).html();')
+        self.assertEqual(minichat_html(), placeholder)
+        time.sleep(3*30+1) # Wait 3 refresh interval + 1s
+        self.assertEqual(minichat_html(), placeholder)
+
+    @without_redis()
+    @logged_in_test()
+    def test_minichat_is_reloaded_without_websockets(self):
+        """This test will ensure that the minichat is reloaded without websockets
+        even if there are no new messages"""
+        time.sleep(1)
+        # At this point the minichat should be updated every 30 seconds
+        # because redis is not started
+        placeholder = '<h2>Bob! T\'as mis ou le minichat?</h2>'
+        self.selenium.execute_script('$(minichat_content).html("%s");' % placeholder);
+        minichat_html = lambda: self.selenium.execute_script('return $(minichat_content).html();')
+        self.assertEqual(minichat_html(), placeholder)
+        time.sleep(2*30+1) # Wait 2 refresh interval + 1s
+        self.assertNotEqual(minichat_html(), placeholder)
+

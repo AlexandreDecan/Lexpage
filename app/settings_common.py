@@ -31,6 +31,7 @@ INSTALLED_APPS = (
 
     'rest_framework',
     'captcha',
+    'ws4redis',
 
     'profile',
     'slogan',
@@ -85,6 +86,7 @@ TEMPLATES = [  # https://docs.djangoproject.com/en/1.9/ref/templates/upgrading/#
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
+                'ws4redis.context_processors.default',
             ],
         },
     },
@@ -133,6 +135,13 @@ ABSOLUTE_URL_OVERRIDES = {
 
 # Recaptcha
 RECAPTCHA_PUBLIC_KEY = '6LdAH_ASAAAAACAHEysPBjLekWJX94nYM0hI3hHy'
+
+
+# Websockets
+WEBSOCKET_URL = '/ws/'
+WS4REDIS_HEARTBEAT = 'bob?'
+from websockets_helpers import get_allowed_channels
+WS4REDIS_ALLOWED_CHANNELS = get_allowed_channels
 
 
 # Themes

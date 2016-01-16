@@ -1,3 +1,5 @@
 -r requirements_common.txt
 coveralls==1.1
 selenium==2.48.0
+whitenoise==2.0.6
+redislite==3.0.271

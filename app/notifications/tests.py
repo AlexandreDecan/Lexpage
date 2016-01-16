@@ -4,9 +4,8 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.utils.lorem_ipsum import words
-
 from notifications.models import Notification
-from tests_helpers import LexpageTestCase, logged_in_test, SELENIUM_AVAILABLE
+from tests_helpers import LexpageTestCase, logged_in_test, SELENIUM_AVAILABLE, sqlite_sleep
 
 if SELENIUM_AVAILABLE:
     from selenium.webdriver.support.wait import WebDriverWait
@@ -131,9 +130,9 @@ class NotificationBrowserTest(LexpageTestCase):
         self.check_notification_count(1)
         for i in range(0, 10):
             self.create_notification()
-        self.selenium.refresh()
+
         self.check_notification_count(11)
-        notif_xpath = '//a[@id="notifications_dropdown_button"]/span[@class="badge"]/span[@class="fa fa-bell"]'
+        notif_xpath = '//a[@id="notifications_dropdown_button"]'
         notification_icon = self.selenium.find_element_by_xpath(notif_xpath)
         ActionChains(self.selenium).move_to_element(notification_icon).perform()
         dismiss_all_xpath = '//div[@class="notification_dismiss"]'
@@ -141,14 +140,14 @@ class NotificationBrowserTest(LexpageTestCase):
         WebDriverWait(self.selenium, 1).until(
             EC.visibility_of(self.selenium.find_element_by_xpath(dismiss_xpath)))
         for i in range(11, 0, -1):
-            time.sleep(0.5)
+            time.sleep(1.5)
             # Test pagination
             self.assertEqual(min(5, i),\
                              len(self.selenium.find_elements_by_xpath(dismiss_all_xpath)))
             self.check_notification_count(i)
             dismiss_link = self.selenium.find_element_by_xpath(dismiss_xpath)
             dismiss_link.click()
-        time.sleep(0.5)
+        time.sleep(1)
         with self.assertRaises(NoSuchElementException):
             self.selenium.find_element_by_xpath(dismiss_xpath)
 
@@ -161,6 +160,7 @@ class NotificationBrowserTest(LexpageTestCase):
             'key': 'bar',
         }
         Notification(**notification).save()
+        sqlite_sleep(0.1)
 
     @logged_in_test()
     def test_notification_pagination(self):
@@ -176,7 +176,7 @@ class NotificationBrowserTest(LexpageTestCase):
         # Now we have 13 notifications
         self.selenium.refresh()
         self.check_notification_count(13)
-        notif_xpath = '//a[@id="notifications_dropdown_button"]/span[@class="badge"]/span[@class="fa fa-bell"]'
+        notif_xpath = '//a[@id="notifications_dropdown_button"]'
         notification_icon = self.selenium.find_element_by_xpath(notif_xpath)
         ActionChains(self.selenium).move_to_element(notification_icon).perform()
         dismiss_all_xpath = '//div[@class="notification_dismiss"]'
@@ -212,7 +212,8 @@ class NotificationBrowserTest(LexpageTestCase):
 
         # Dismiss everything (without changing page)
         for i in range(13, 0, -1):
-            time.sleep(1.5)
+            time.sleep(.5)
+            sqlite_sleep(1)
             self.check_notification_count(i)
             dismiss_link = self.selenium.find_element_by_xpath(dismiss_xpath)
             dismiss_link.click()

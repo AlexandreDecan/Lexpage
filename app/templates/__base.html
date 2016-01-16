@@ -29,14 +29,33 @@
             <script src="{% static "libs/moment/moment"|add:static_ext|add:".js" %}"></script>
             <script src="{% static "libs/nunjucks/nunjucks-slim"|add:static_ext|add:".js" %}"></script>
             <script src="{% static "js/moment.fr"|add:static_ext|add:".js" %}"></script>
+            {% if user.is_authenticated %}
+            <script src="{% static "js/websocket_client"|add:static_ext|add:".js" %}?v=160115"></script>
+            <script>
+                // define the websocket client so other apps can register
+                ws_client = new WebsocketClient({heartbeat_msg: {{ WS4REDIS_HEARTBEAT }}});
+            </script>
+            {% else%}
+            <script>
+                ws_client = false;
+            </script>
+            {% endif %}
             <script src="{% static "js/contrib_message.templates"|add:static_ext|add:".js" %}?v=160115"></script>
             <script src="{% static "js/minichat.templates"|add:static_ext|add:".js" %}?v=160110"></script>
             <script src="{% static "js/notifications.templates"|add:static_ext|add:".js" %}?v=160113"></script>
             <script src="{% static "js/nunjucks"|add:static_ext|add:".js" %}"></script>
             <script src="{% static "js/scripts"|add:static_ext|add:".js" %}?v=160110"></script>
-            <script src="{% static "js/notifications"|add:static_ext|add:".js" %}?v=160113"></script>
-            <script src="{% static "js/minichat"|add:static_ext|add:".js" %}?v=160110"></script>
+            <script src="{% static "js/notifications"|add:static_ext|add:".js" %}?v=160115"></script>
+            <script src="{% static "js/minichat"|add:static_ext|add:".js" %}?v=160115"></script>
             <script src="{% static "js/markup"|add:static_ext|add:".js" %}?v=160113"></script>
+            {% if user.is_authenticated %}
+            <script>
+                $(document).ready(function() {
+                    console.log(ws_client);
+                    ws_client.connect('{{ WEBSOCKET_URI }}lexpage?subscribe-broadcast&subscribe-user&echo');
+                });
+            </script>
+        {% endif %}
         {% endblock javascript %}
         {{ form.media }}
     {% endwith %}
