@@ -4,7 +4,8 @@ import os
 # General
 DEBUG = True
 SECRET_KEY = 'SecretKeyForDevelopmentEnvironment'
-
+SITENAME = 'Lexpage-test'
+DEMONYM = 'Lexpagiens'
 
 # Configuration
 WSGI_APPLICATION = 'ws4redis.django_runserver.application' # Needed for builtin runserver

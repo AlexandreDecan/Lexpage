@@ -32,5 +32,4 @@ def homepage(request):
         thread.annotate_flag(request.user)
     context['thread_list'] = threads
 
-    return render(request, 'homepage.html',
-                              context)
+    return render(request, 'homepage.html', context)
