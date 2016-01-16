@@ -11,4 +11,5 @@ def global_settings(request):
         'ANALYTICS': settings.ANALYTICS,
         'SITENAME': settings.SITENAME,
         'DEMONYM': settings.DEMONYM,
+        'ENABLE_WEBSOCKET': settings.ENABLE_WEBSOCKET,
     }
