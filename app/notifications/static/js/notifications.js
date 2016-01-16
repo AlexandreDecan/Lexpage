@@ -8,6 +8,8 @@ var notifications_container;
 var notifications_vanilla_page_title;
 var notifications_previous_page = null;
 var notifications_fetch_failed = false;
+var notifications_template_button_checksum = null;
+var notifications_template_list_checksum = null;
 
 var notifications_button_template = "/notifications/button.html";
 var notifications_list_template = "/notifications/list.html";
@@ -54,21 +56,36 @@ function notifications_refresh_fallback() {
 function notifications_refresh() {
     $.get(notifications_content_url, function(data) {
         notifications_previous_page = data.previous;
-        $(notifications_dropdown_button).html(nunjucks.render(notifications_button_template, data));
-        $(notifications_content_list).html(nunjucks.render(notifications_list_template, data));
-        $(notifications_menu_button).html(nunjucks.render(notifications_button_template, data));
-        var prefix_title;
-        if (data.count == 0) {
-            $(notifications_container).hide();
-            prefix_title = '';
-        } else {
-            $(notifications_container).show();
-            prefix_title = '(' + data.count + ') ';
+
+        var template_list_html = nunjucks.render(notifications_list_template, data);
+        var template_button_html = nunjucks.render(notifications_button_template, data);
+        var list_checksum = string_checksum(template_list_html);
+        var button_checksum = string_checksum(template_button_html);
+
+        if (notifications_template_list_checksum != list_checksum){
+            $(notifications_content_list).html(template_list_html);
+            notification_initialize();
+            notifications_template_list_checksum = list_checksum;
         }
-        if (notifications_vanilla_page_title) {
-            document.title = prefix_title + notifications_vanilla_page_title;
+
+        if (notifications_template_button_checksum != button_checksum){
+            // Button has changed, so probably has the notification count
+            $(notifications_menu_button).html(template_button_html);
+            $(notifications_dropdown_button).html(template_button_html);
+
+            var prefix_title;
+            if (data.count == 0) {
+                $(notifications_container).hide();
+                prefix_title = '';
+            } else {
+                $(notifications_container).show();
+                prefix_title = '(' + data.count + ') ';
+            }
+            if (notifications_vanilla_page_title) {
+                document.title = prefix_title + notifications_vanilla_page_title;
+            }
+            notifications_template_button_checksum = button_checksum;
         }
-        notification_initialize();
     }).error(function(){
         if (notifications_previous_page){ // We can not fetch the notifications, let's try to load the last previously known page
             notifications_fetch_failed = true;
@@ -87,6 +104,8 @@ function notifications_refresh() {
             if (notifications_vanilla_page_title) {
                 document.title = notifications_vanilla_page_title;
             }
+            notifications_template_list_checksum = null;
+            notifications_template_button_checksum = null;
         }
     });
 }
