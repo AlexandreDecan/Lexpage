@@ -15,9 +15,27 @@ function minichat_init_display(content, get_url) {
     minichat_content_url = get_url;
 
     if (minichat_content) {
-        setInterval(minichat_refresh, minichat_timer_delay);
+        setInterval(minichat_refresh_fallback, minichat_timer_delay);
         minichat_refresh();
+        if (ws_client){
+            ws_client.register('minichat', 'on_message', minichat_websocket_message_dispatch);
+        }
     };
+
+}
+
+function minichat_refresh_fallback() {
+    if (!ws_client || !ws_client.isConnected()){
+        minichat_refresh();
+    }
+}
+
+function minichat_websocket_message_dispatch(data) {
+    switch(data.action) {
+        case 'reload_minichat':
+            minichat_refresh();
+            break;
+    }
 }
 
 function minichat_refresh() {
@@ -58,11 +76,11 @@ function minichat_post_message() {
             $(minichat_button).find('span').removeClass('fa-spinner fa-spin fa-warning btn-warning');
             $(minichat_input_text).val("");
             minichat_update_chars_count();
-            minichat_refresh();
+            minichat_refresh_fallback();
         })
         .fail(function(data) {
             $(minichat_button).find('span').removeClass('fa-spinner fa-spin').addClass('fa-warning');
-            minichat_refresh();
+            minichat_refresh_fallback();
         });
 }
 

@@ -21,9 +21,28 @@ function notifications_init_display(container, menu_button, dropdown_button, con
 
 
     if ($(notifications_content_list)) {
-        setInterval(notifications_refresh, notifications_timer_delay);
+        setInterval(notifications_refresh_fallback, notifications_timer_delay);
         notifications_refresh();
+        if (ws_client){
+            ws_client.register('notifications', 'on_connect', notifications_refresh);
+            ws_client.register('notifications', 'on_message', notifications_websocket_message_dispatch);
+        }
     };
+}
+
+function notifications_websocket_message_dispatch(data) {
+    switch(data.action) {
+        case 'update_counter':
+            notifications_refresh();
+            break;
+    }
+}
+
+
+function notifications_refresh_fallback() {
+    if (!ws_client || !ws_client.isConnected()){
+        notifications_refresh();
+    }
 }
 
 function notifications_refresh() {
@@ -67,7 +86,7 @@ function notification_dismiss(url, target) {
     // Disable click propagation (to keep dropdown opened)
     function done(data) {
         // Dismiss target
-        notifications_refresh();
+        notifications_refresh_fallback();
     }
     $("#"+target+" a.close").addClass("fa-spinner fa-spin");
     $.ajax({url: url, type: 'DELETE'}).done(done);
