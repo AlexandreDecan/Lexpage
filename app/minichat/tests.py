@@ -162,6 +162,70 @@ class ApiTests(APITestCase):
         self.assertEqual(len(Notification.objects.all()), 1)
         self.client.logout()
 
+    def test_anchor_recreated_after_updating_message(self):
+        Notification.objects.all().delete()
+        self.assertEqual(len(Notification.objects.all()), 0)
+        self.client.login(username='user1', password='user1')
+        response = self.client.post(reverse('minichat_post'), {'text': '@admin hello'})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(Notification.objects.all()), 1)
+        Notification.objects.all().delete()
+        self.assertEqual(len(Notification.objects.all()), 0)
+        response = self.client.post(reverse('minichat_post'), {'text': 's/hello/world'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['text'], 's/hello/world')
+        self.assertEqual(response.data['anchors'], ['admin'])
+        self.assertEqual(Message.objects.last().text, '@admin world')
+        self.assertEqual(len(Notification.objects.all()), 1)
+        self.client.logout()
+
+
+    def test_anchor_deleted_after_updating_message(self):
+        Notification.objects.all().delete()
+        self.assertEqual(len(Notification.objects.all()), 0)
+        self.client.login(username='user1', password='user1')
+        response = self.client.post(reverse('minichat_post'), {'text': '@admin hello'})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(Notification.objects.all()), 1)
+        response = self.client.post(reverse('minichat_post'), {'text': 's/@admin/nobody'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['text'], 's/@admin/nobody')
+        self.assertEqual(response.data['anchors'], [])
+        self.assertEqual(Message.objects.last().text, 'nobody hello')
+        self.assertEqual(len(Notification.objects.all()), 0)
+        self.client.logout()
+
+
+    def test_anchor_created_after_updating_message(self):
+        Notification.objects.all().delete()
+        self.assertEqual(len(Notification.objects.all()), 0)
+        self.client.login(username='user1', password='user1')
+        response = self.client.post(reverse('minichat_post'), {'text': 'admin hello'})
+        self.assertEqual(response.status_code, 201)
+        response = self.client.post(reverse('minichat_post'), {'text': 's/a/@a'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['text'], 's/a/@a')
+        self.assertEqual(response.data['anchors'], ['admin'])
+        self.assertEqual(Message.objects.last().text, '@admin hello')
+        self.assertEqual(len(Notification.objects.all()), 1)
+        self.client.logout()
+
+
+    def test_anchor_updated_after_updating_message(self):
+        Notification.objects.all().delete()
+        self.assertEqual(len(Notification.objects.all()), 0)
+        self.client.login(username='user1', password='user1')
+        response = self.client.post(reverse('minichat_post'), {'text': '@admin hello'})
+        self.assertEqual(response.status_code, 201)
+        response = self.client.post(reverse('minichat_post'), {'text': 's/hello/world'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['text'], 's/hello/world')
+        self.assertEqual(response.data['anchors'], ['admin'])
+        self.assertEqual(Message.objects.last().text, '@admin world')
+        self.assertEqual(len(Notification.objects.all()), 1)
+        self.client.logout()
+
+
     def test_multiple_anchors(self):
         for username in ('user2', 'user3'):
             User.objects.create_user(
