@@ -25,10 +25,7 @@ def notify(recipients, title, description, action, app, key):
     for recipient in recipients:
         # Is there a notification?
         try:
-            notification = Notification.objects.get(app=app, key=key, recipient=recipient)
-            notification.action = action
-            notification.description = description
-            notification.save()
+            Notification.objects.get(app=app, key=key, recipient=recipient)
         except Notification.DoesNotExist:
             # Create a new notification and save it
             n = Notification(title=title, description=description, action=action,

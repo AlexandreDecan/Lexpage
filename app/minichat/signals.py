@@ -17,7 +17,7 @@ from .models import Message
 def remove_notifications(sender, **kwargs):
     """ Before Saving and Deleting, remove notifications.
     If needed, they will be added again in post_save."""
-    if not kwargs.get('raw', False):
+    if not kwargs.get('raw', False): # check that this is not a fixture
         message = kwargs['instance']
         # If the message existed, use the existing one
         if message.id:
@@ -29,9 +29,10 @@ def remove_notifications(sender, **kwargs):
 
 @receiver(post_save, sender=Message)
 def send_notifications(sender, **kwargs):
-    """ Before Saving and Deleting, remove notifications.
-    If needed, they will be added again in post_save."""
-    if not kwargs.get('raw', False):
+    """ After Saving, send a notification to the users
+    We user after to avoid a race condition where the notifications
+    would be send before the message is actually saved."""
+    if not kwargs.get('raw', False): # check that this is not a fixture
         message = kwargs['instance']
         anchors = message.parse_anchors()
         for anchor in anchors:
