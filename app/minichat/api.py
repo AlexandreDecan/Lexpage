@@ -11,7 +11,6 @@ from rest_framework import status
 from .models import Message
 
 from profile.api import UserSerializer
-from notifications import notify
 
 from minichat.templatetags.minichat import urlize3
 from commons.templatetags.markup_bbcode import smiley
@@ -87,24 +86,14 @@ class MessagePostView(CreateAPIView):
             substitute.save()
             headers = self.get_success_headers(serializer.data)
             data_with_anchors = serializer.data
-            data_with_anchors['anchors'] = []
+            data_with_anchors['anchors'] = [anchor.get_username() for anchor in substitute.parse_anchors()]
             return Response(data_with_anchors, status=status.HTTP_200_OK, headers=headers)
         else:
-            anchors = self.perform_create(serializer)
+            self.perform_create(serializer)
             data_with_anchors = serializer.data
-            data_with_anchors['anchors'] = anchors
+            data_with_anchors['anchors'] = [anchor.get_username() for anchor in message.parse_anchors()]
             headers = self.get_success_headers(serializer.data)
             return Response(data_with_anchors, status=status.HTTP_201_CREATED, headers=headers)
-
-    def perform_create(self, serializer):
-        message = serializer.save(user=self.request.user)
-
-        # Notify users that are anchored in this message
-        anchors = message.parse_anchors()
-        for anchor in anchors:
-            notify.minichat_warn(anchor, message)
-
-        return [anchor.get_username() for anchor in anchors]
 
     class Meta:
         fields = ('text',)
