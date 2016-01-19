@@ -103,11 +103,11 @@ class SubstituteTests(TestCase):
 
     def test_valid_multiple_substitutions(self):
         message = Message(user=self.author, text='s/o/p')
-        self.assertEqual(message.substitute().text, 'Hellp Wprld!')
+        self.assertEqual(message.substitute().text, 'Hellp World!')
 
     def test_empty_pattern(self):
         message = Message(user=self.author, text='s/o/')
-        self.assertEqual(message.substitute().text, 'Hell Wrld!')
+        self.assertEqual(message.substitute().text, 'Hell World!')
 
     def test_empty_match(self):
         message = Message(user=self.author, text='s//o')

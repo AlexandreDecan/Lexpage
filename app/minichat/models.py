@@ -32,7 +32,7 @@ class Message(models.Model):
 
     def substitute(self):
         """
-        If message is, eg. 's/from/to', replace every occurrence of 'from' by
+        If message is, eg. 's/from/to', replace first occurrence of 'from' by
         'to' in the last message of this author.
         :return: Unsaved modified message or None
         """
@@ -43,7 +43,7 @@ class Message(models.Model):
                 message = Message.objects.filter(user=self.user).latest()
 
                 # Replace text
-                message.text = message.text.replace(match.groups()[0], match.groups()[1])
+                message.text = message.text.replace(match.groups()[0], match.groups()[1], 1)
                 return message
             except Message.DoesNotExist:
                 return None
