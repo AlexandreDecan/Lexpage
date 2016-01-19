@@ -33,14 +33,15 @@ class Message(models.Model):
     def substitute(self):
         """
         If message is, eg. 's/from/to', replace first occurrence of 'from' by
-        'to' in the last message of this author.
-        :return: Unsaved modified message or None
+        'to' in the last message of this author. Old text is available using *old_tex* attribute.
+        :return: Unsaved modified message, or None
         """
         match = re.match(r's/(.+)/(.*)', self.text)
         if match:
             try:
                 # Get latest message for this author
                 message = Message.objects.filter(user=self.user).latest()
+                message.old_text = message.text
 
                 # Replace text
                 message.text = message.text.replace(match.groups()[0], match.groups()[1], 1)

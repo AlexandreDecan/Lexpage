@@ -62,6 +62,9 @@ function minichat_init_post() {
 function minichat_post_message() {
     $.post(minichat_post_url, $(minichat_form).serialize())
         .done(function(data) {
+            if (data.substituted) {
+                contrib_message("info", "Votre dernier message est devenu \"<em>"+ data.substituted.text +"</em>\".");
+            }
             if (data.anchors.length > 0) {
                 var beautified_users;
                 if (data.anchors.length > 1) {

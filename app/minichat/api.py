@@ -15,6 +15,7 @@ from profile.api import UserSerializer
 from minichat.templatetags.minichat import urlize3
 from commons.templatetags.markup_bbcode import smiley
 
+
 class BadSubstituteException(APIException):
     status_code = 400
     default_detail = 'Malformed substitute'
@@ -23,6 +24,7 @@ class BadSubstituteException(APIException):
 class MinichatTextField(CharField):
     def to_representation(self, value):
         return super().to_representation(smiley(urlize3(value)))
+
 
 class LatestMessagesPagination(PageNumberPagination):
     """Custom pagination for the minichat.
@@ -65,6 +67,7 @@ class LatestMessagesViewSet(ReadOnlyModelViewSet):
     serializer_class = MessageSerializer
     pagination_class = LatestMessagesPagination
 
+
 class MessagePostView(CreateAPIView):
     """
     Handle message submission.
@@ -86,7 +89,16 @@ class MessagePostView(CreateAPIView):
             substitute.save()
             headers = self.get_success_headers(serializer.data)
             data_with_anchors = serializer.data
-            data_with_anchors['anchors'] = [anchor.get_username() for anchor in substitute.parse_anchors()]
+
+            original_anchors = Message(user=request.user, text=substitute.old_text).parse_anchors()
+            substituted_anchors = substitute.parse_anchors()
+            anchors = []
+            for anchor in substituted_anchors:
+                if anchor not in original_anchors:
+                    anchors.append(anchor.get_username())
+
+            data_with_anchors['anchors'] = anchors
+            data_with_anchors['substituted'] = PostedMessageSerializer(substitute).data
             return Response(data_with_anchors, status=status.HTTP_200_OK, headers=headers)
         else:
             self.perform_create(serializer)
