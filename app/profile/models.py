@@ -409,7 +409,8 @@ class Profile(models.Model):
                                   verbose_name='Pays actuel')
     city = models.CharField(max_length=100,
                             blank=True,
-                            verbose_name='Ville actuelle')
+                            verbose_name='Ville actuelle',
+                            help_text='Visible uniquement par les utilisateurs connectés.')
     website_name = models.CharField(max_length=200,
                                     blank=True,
                                     verbose_name='Nom du site web',
@@ -418,7 +419,8 @@ class Profile(models.Model):
                                   verbose_name='Adresse du site web',
                                   help_text='L\'adresse doit débuter par http://')
     birthdate = models.DateField(blank=True, null=True,
-                                 verbose_name='Date de naissance')
+                                 verbose_name='Date de naissance',
+                                 help_text='Visible uniquement par les utilisateurs connectés.')
     avatar = models.URLField(blank=True,
                              verbose_name='Adresse de l\'avatar',
                              help_text='Des exemples d\'avatars sont disponibles sur <a href="http://www.avatarsdb.com">AvatarsDB</a>. '+

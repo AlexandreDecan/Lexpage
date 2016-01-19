@@ -22,18 +22,26 @@
             <dt>Genre</dt>
             <dd>{{ profile.profile.get_gender_display|default:'-' }}</dd>
             <dt>Date de naissance</dt>
+            {% if user.is_authenticated %}
             <dd>{{ profile.profile.birthdate|default:'-' }}
                 {% if profile.profile.get_age %}
                     ({{ profile.profile.get_age }} ans)
                 {% endif %}
             </dd>
+            {% else %}
+            <dd><em>masqué</em></dd>
+            {% endif %}
         </dl>
 
         <dl class="dl-horizontal">
             <dt>Pays</dt>
             <dd>{{ profile.profile.get_country_display|default:'-' }}</dd>
             <dt>Ville</dt>
+            {% if user.is_authenticated %}
             <dd>{{ profile.profile.city|default:'-' }}</dd>
+            {% else %}
+            <dd><em>masqué</em></dd>
+            {% endif %}
         </dl>
 
         <dl class="dl-horizontal">
@@ -43,17 +51,24 @@
             <dd>{{ profile.profile.website_url|urlize|default:'-' }}</dd>
         </dl>
 
+        <dl class="dl-horizontal">
+            <dt>Création du compte</dt>
+            {% if user.is_authenticated %}
+            <dd>{{ profile.date_joined|naturalday }} à {{ profile.date_joined|time:"H:i:s" }} ({{ profile.date_joined|naturaltime }})</dd>
+            {% else %}
+            <dd><em>masqué</em></dd>
+            {% endif %}
+        </dl>
+
     {% if perms.profile.can_see_details or user.username == profile.username %}
         <hr/>
-        <p class="text-muted">Les informations suivantes ne sont pas rendues publiques.</p> 
+        <p class="text-muted">Les informations suivantes ne sont pas publiques.</p>
 
         <dl class="dl-horizontal text-muted">
             <dt>Nom</dt>
             <dd>{{ profile.last_name|default:'-' }}</dd>
             <dt>Adresse e-mail</dt>
             <dd>{{ profile.email|urlize|default:'-' }}</dd>
-            <dt>Création du compte</dt>
-            <dd>{{ profile.date_joined|naturalday }} à {{ profile.date_joined|time:"H:i:s" }} ({{ profile.date_joined|naturaltime }})</dd>
             <dt>Dernière identification</dt>
             <dd>{{ profile.last_login|naturalday }} à {{ profile.last_login|time:"H:i:s" }} ({{ profile.last_login|naturaltime }})</dd>
             <dt>Dernière visite</dt>
