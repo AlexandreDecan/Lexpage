@@ -209,8 +209,14 @@ class ThreadCreateForPostView(FormView):
         return FormView.dispatch(self, request, *args, **kwargs)
 
     def get_initial(self):
+        title= 'Billet - {}'.format(self.blogpost.title)
+        max_length = Thread._meta.get_field('title').max_length
+
+        if len(title) > max_length:
+            title = title[:max_length - 3].rsplit(' ', 1)[0] + '...'
+
         return {
-            'title': 'Billet - {}'.format(self.blogpost.title)
+            'title': title,
         }
 
     def get_context_data(self, **kwargs):
