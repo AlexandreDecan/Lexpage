@@ -159,6 +159,7 @@
   &.post-item-large {
     margin: $padding-base-vertical 0px 2 * $padding-base-vertical 0px;
     padding: $padding-base-vertical $padding-base-horizontal;
+    min-height: 120px;
 
     .post-embed {
       @media (max-width: $screen-sm) {
@@ -180,9 +181,10 @@
     .post-icon-bg {
       display: block;
       position: absolute;
-      top: - $padding-base-vertical;
+      top: 20px;
       right: $padding-base-horizontal * 3;
-      font-size: 10em;
+      font-size: 100px;
+
       color: rgba(0, 0, 0, 0.1);
       z-index: 1;
     }

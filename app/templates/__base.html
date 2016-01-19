@@ -11,7 +11,7 @@
     {% with static_ext=debug|yesno:",.min" %}
         {% block stylesheets %}
             {% with theme=user.profile.get_theme|default:THEMES.DEFAULT %}
-                <link href="{% static "css/"|add:theme|add:".css?v=151220" %}" rel="stylesheet"/>
+                <link href="{% static "css/"|add:theme|add:".css?v=160119" %}" rel="stylesheet"/>
             {% endwith %}
             <link href="{% static "libs/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet"/>
             <!--[if lt IE 9]>
@@ -46,7 +46,7 @@
             <script src="{% static "js/nunjucks"|add:static_ext|add:".js" %}"></script>
             <script src="{% static "js/scripts"|add:static_ext|add:".js" %}?v=160110"></script>
             <script src="{% static "js/notifications"|add:static_ext|add:".js" %}?v=160116"></script>
-            <script src="{% static "js/minichat"|add:static_ext|add:".js" %}?v=160116"></script>
+            <script src="{% static "js/minichat"|add:static_ext|add:".js" %}?v=160119"></script>
             <script src="{% static "js/markup"|add:static_ext|add:".js" %}?v=160113"></script>
             {% if user.is_authenticated and ENABLE_WEBSOCKET %}
             <script>
