@@ -21,26 +21,22 @@
             <dd>{{ profile.first_name|default:'-' }}</dd>
             <dt>Genre</dt>
             <dd>{{ profile.profile.get_gender_display|default:'-' }}</dd>
-            <dt>Date de naissance</dt>
             {% if user.is_authenticated %}
+            <dt>Date de naissance</dt>
             <dd>{{ profile.profile.birthdate|default:'-' }}
                 {% if profile.profile.get_age %}
                     ({{ profile.profile.get_age }} ans)
                 {% endif %}
             </dd>
-            {% else %}
-            <dd><em>masqué</em></dd>
             {% endif %}
         </dl>
 
         <dl class="dl-horizontal">
             <dt>Pays</dt>
             <dd>{{ profile.profile.get_country_display|default:'-' }}</dd>
-            <dt>Ville</dt>
             {% if user.is_authenticated %}
+            <dt>Ville</dt>
             <dd>{{ profile.profile.city|default:'-' }}</dd>
-            {% else %}
-            <dd><em>masqué</em></dd>
             {% endif %}
         </dl>
 
@@ -51,14 +47,12 @@
             <dd>{{ profile.profile.website_url|urlize|default:'-' }}</dd>
         </dl>
 
+        {% if user.is_authenticated %}
         <dl class="dl-horizontal">
             <dt>Création du compte</dt>
-            {% if user.is_authenticated %}
             <dd>{{ profile.date_joined|naturalday }} à {{ profile.date_joined|time:"H:i:s" }} ({{ profile.date_joined|naturaltime }})</dd>
-            {% else %}
-            <dd><em>masqué</em></dd>
-            {% endif %}
         </dl>
+        {% endif %}
 
     {% if perms.profile.can_see_details or user.username == profile.username %}
         <hr/>
