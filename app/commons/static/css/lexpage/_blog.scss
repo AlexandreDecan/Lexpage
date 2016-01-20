@@ -113,14 +113,17 @@
     }
   }
 
-
   // Behavior for small thumbnails
   &.post-item-small {
     margin: $padding-small-vertical 0px 2 * $padding-small-vertical 0px;
     padding: $padding-small-vertical $padding-small-horizontal;
 
-    .post-tags, .post-comment, .post-next, .post-date, .post-icon-bg {
+    .post-tags, .post-comment, .post-next, .post-date {
       display: none;
+    }
+
+    .post-wrapper:before{
+        display: none;
     }
 
     .post-title,
@@ -178,20 +181,13 @@
       }
     }
 
-    .post-icon-bg {
-      display: block;
-      position: absolute;
-      top: 20px;
-      right: $padding-base-horizontal * 3;
-      font-size: 100px;
-
-      color: rgba(0, 0, 0, 0.1);
-      z-index: 1;
-    }
-
     .post-wrapper {
       position: relative;
       z-index: 2;
+
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: right center;
     }
 
     .post-title {
