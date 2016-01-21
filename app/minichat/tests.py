@@ -217,12 +217,18 @@ class ApiTests(APITestCase):
         self.client.login(username='user1', password='user1')
         response = self.client.post(reverse('minichat_post'), {'text': '@admin hello'})
         self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data['anchors'], ['admin'])
+        self.assertEqual(len(Notification.objects.all()), 1)
+        date_before_update = Notification.objects.get(recipient=User.objects.get(username='admin')).date
+        self.assertIsNotNone(date)
         response = self.client.post(reverse('minichat_post'), {'text': 's/hello/@user1 world'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['text'], 's/hello/@user1 world')
         self.assertEqual(response.data['anchors'], ['user1'])
         self.assertEqual(Message.objects.last().text, '@admin @user1 world')
         self.assertEqual(len(Notification.objects.all()), 2)
+        date_after_update = Notification.objects.get(recipient=User.objects.get(username='admin')).date
+        self.assertEqual(date_before_update, date_after_update)
         self.client.logout()
 
 
