@@ -35,27 +35,6 @@ def notify(recipients, title, description, action, app, key):
     return nb
 
 
-def delete_notification(recipients, app, key):
-    """
-    Remove a notification
-    We call delete and not dismiss because the goal is really to delete notification.
-    """
-
-    if not hasattr(recipients, '__iter__'):
-        recipients = [recipients]
-
-    nb = 0  # number of notifications deleted
-    for recipient in recipients:
-        # Is there a notification?
-        try:
-            Notification.objects.get(app=app, key=key, recipient=recipient).delete()
-            nb += 1
-        except Notification.DoesNotExist:
-            # The notification was already dismissed
-            pass
-    return nb
-
-
 def escape(string):
     return force_escape(string)
 
@@ -157,12 +136,6 @@ def slogan_new(user, slogan):
            % (escape(slogan.slogan), user.get_username()),
            reverse('admin:slogan_slogan_changelist'), 'slogan', slogan.pk)
 
-
-def minichat_unwarn(user, message):
-    """
-    Remove a notification for the user and the minichat.
-    """
-    delete_notification(user, 'minichat', message.pk)
 
 def minichat_warn(user, message):
     """

@@ -162,7 +162,7 @@ class ApiTests(APITestCase):
         self.assertEqual(len(Notification.objects.all()), 1)
         self.client.logout()
 
-    def test_anchor_recreated_after_updating_message(self):
+    def test_anchor_not_recreated_after_updating_message(self):
         Notification.objects.all().delete()
         self.assertEqual(len(Notification.objects.all()), 0)
         self.client.login(username='user1', password='user1')
@@ -176,7 +176,7 @@ class ApiTests(APITestCase):
         self.assertEqual(response.data['text'], 's/hello/world')
         self.assertEqual(response.data['anchors'], [])
         self.assertEqual(Message.objects.last().text, '@admin world')
-        self.assertEqual(len(Notification.objects.all()), 1)
+        self.assertEqual(len(Notification.objects.all()), 0)
         self.client.logout()
 
 
