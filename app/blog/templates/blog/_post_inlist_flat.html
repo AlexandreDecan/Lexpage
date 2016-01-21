@@ -1,12 +1,12 @@
 {% load markup_markdown %}
 {% load humanize %}
+{% load static %}
 
 {% if post.title %}
 <div class="post-content {{ style }}">
-    <div class="post-icon-bg">
-        <span class="fa {{ post.get_icon }}"></span>
-    </div>
-    <div class="post-wrapper">
+    {% with theme=user.profile.get_theme|default:THEMES.DEFAULT %}
+    <div class="post-wrapper" style="background-image: url('{% static "libs/font-awesome/svg/"|add:theme|add:"/"|add:post.get_icon|add:".svg" %}')"/>
+    {% endwith %}
         <div class="post-metadata">
             <div class="post-comment">
                 <a href="{% url 'blog_post_comments' post.pk %}">
