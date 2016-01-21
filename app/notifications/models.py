@@ -1,7 +1,33 @@
 from django.db import models
 from django.contrib.auth.models import User
 from rest_framework.reverse import reverse
+from django.db.utils import IntegrityError
 
+class UniqueNotificationManager(models.Manager):
+
+    def get_or_create(self, *args, **kwargs):
+        """Create Notifications and silently ignore database integrity errors
+        (caused by failed unique constraints).
+        Returns the number of notifications created"""
+        nb = 0
+        recipients = kwargs.pop('recipients', None)
+        if not recipients:
+            # if there are no recipients, there should be a recipient
+            recipients = kwargs.pop('recipient')
+
+        if not hasattr(recipients, '__iter__'):
+            recipients = [recipients]
+
+        for recipient in recipients:
+            recipient_kwargs = dict(kwargs)
+            recipient_kwargs['recipient'] = recipient
+            try:
+                new_notification = self.model(**recipient_kwargs)
+                new_notification.save()
+                nb += 1
+            except IntegrityError: # Unique constraint failed
+                pass
+        return nb
 
 class Notification(models.Model):
     ICON = {
@@ -23,12 +49,14 @@ class Notification(models.Model):
     }
 
     title = models.CharField(verbose_name='Titre', max_length=100)
-    description = models.CharField(verbose_name='Description', max_length=255, blank=True)
-    action = models.CharField(verbose_name='Action', max_length=255, blank=True)
+    description = models.CharField(verbose_name='Description', max_length=255, blank=True, default='')
+    action = models.CharField(verbose_name='Action', max_length=255, blank=True, default='')
     recipient = models.ForeignKey(User, verbose_name='Destinataire')
     app = models.CharField(verbose_name='Application', max_length=50)
     key = models.CharField(verbose_name='Clé', max_length=100)
     date = models.DateTimeField(verbose_name='Date', auto_now_add=True)
+
+    objects = UniqueNotificationManager()
 
     def dismiss(self):
         self.delete()
@@ -49,4 +77,5 @@ class Notification(models.Model):
     class Meta:
         get_latest_by = 'date'
         ordering = ['date']
+        unique_together = ('app', 'key', 'recipient')
 
