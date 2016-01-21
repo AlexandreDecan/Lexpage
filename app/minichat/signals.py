@@ -42,13 +42,14 @@ def send_notifications(sender, **kwargs):
 @receiver(post_delete, sender=Message)
 @receiver(post_save, sender=Message)
 def send_minichat_update_message(sender, **kwargs):
-    try:
-        RedisPublisher = get_redis_publisher()
-        redis_publisher = RedisPublisher(facility='lexpage', broadcast=True)
-        message = {'action': 'reload_minichat', 'app': 'minichat'}
-        redis_message = RedisMessage(json.dumps(message))
-        redis_publisher.publish_message(redis_message)
-    except ConnectionError:
-        logger = logging.getLogger()
-        logger.exception('Error when publishing a message to the websocket channel')
+    if not kwargs.get('raw', False): # check that this is not a fixture
+        try:
+            RedisPublisher = get_redis_publisher()
+            redis_publisher = RedisPublisher(facility='lexpage', broadcast=True)
+            message = {'action': 'reload_minichat', 'app': 'minichat'}
+            redis_message = RedisMessage(json.dumps(message))
+            redis_publisher.publish_message(redis_message)
+        except ConnectionError:
+            logger = logging.getLogger()
+            logger.exception('Error when publishing a message to the websocket channel')
 
