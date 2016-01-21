@@ -1,4 +1,6 @@
-from rest_framework.serializers import ModelSerializer
+import datetime
+
+from rest_framework.serializers import ModelSerializer, ValidationError
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
@@ -86,20 +88,25 @@ class MessagePostView(CreateAPIView):
         message = Message(**validated_data)
         substitute = message.substitute()
         if substitute:
-            substitute.save()
-            headers = self.get_success_headers(serializer.data)
-            data_with_anchors = serializer.data
+            if datetime.datetime.now() - substitute.date <= datetime.timedelta(minutes=5):
+                substitute.save()
+                headers = self.get_success_headers(serializer.data)
+                data_with_anchors = serializer.data
 
-            original_anchors = Message(user=request.user, text=substitute.old_text).parse_anchors()
-            substituted_anchors = substitute.parse_anchors()
-            anchors = []
-            for anchor in substituted_anchors:
-                if anchor not in original_anchors:
-                    anchors.append(anchor.get_username())
+                original_anchors = Message(user=request.user, text=substitute.old_text).parse_anchors()
+                substituted_anchors = substitute.parse_anchors()
+                # Not using set to preserve anchors order.
+                anchors = []
+                for anchor in substituted_anchors:
+                    if anchor not in original_anchors:
+                        anchors.append(anchor.get_username())
 
-            data_with_anchors['anchors'] = anchors
-            data_with_anchors['substituted'] = PostedMessageSerializer(substitute).data
-            return Response(data_with_anchors, status=status.HTTP_200_OK, headers=headers)
+                data_with_anchors['anchors'] = anchors
+                data_with_anchors['substituted'] = PostedMessageSerializer(substitute).data
+                return Response(data_with_anchors, status=status.HTTP_200_OK, headers=headers)
+            else:
+                # Notice that ValidationError comes from rest_framework.serializers, not Django!
+                raise ValidationError('Un message ne peut être modifié que dans les 5 minutes qui suivent sa création.')
         else:
             self.perform_create(serializer)
             data_with_anchors = serializer.data

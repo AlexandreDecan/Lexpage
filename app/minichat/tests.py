@@ -137,6 +137,25 @@ class ApiTests(APITestCase):
             response = getattr(self.client, method)(reverse('minichat_post'))
             self.assertEqual(response.status_code, 405)
 
+    def test_old_message_cant_be_modified(self):
+        self.client.login(username='user1', password='user1')
+        Message.objects.all().delete()
+        self.assertEqual(len(Message.objects.all()), 0)
+        response = self.client.post(reverse('minichat_post'), {'text': 'Hello World!'})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data['text'], 'Hello World!')
+        self.assertEqual(len(Message.objects.all()), 1)
+
+        latest_message = Message.objects.latest()
+        latest_message.date = latest_message.date - timedelta(minutes=6)
+        latest_message.save()
+
+        response = self.client.post(reverse('minichat_post'), {'text': 's/hello/world'})
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(len(Message.objects.all()), 1)
+        latest_message.refresh_from_db()
+        self.assertEqual(latest_message.text, 'Hello World!')
+
     def test_substitute(self):
         self.client.login(username='user1', password='user1')
         response = self.client.post(reverse('minichat_post'), {'text': 'Hello World!'})
