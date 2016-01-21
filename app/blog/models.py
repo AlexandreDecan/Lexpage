@@ -19,7 +19,7 @@ POST_ICONS = {
     'archive': 'fa-archive',
     'astuces': 'fa-key',
     'bd': 'fa-comment-o',
-    'bière': 'fa-beer', 
+    'bière': 'fa-beer',
     'blague': 'fa-smile-o',
     'bouffe': 'fa-cutlery',
     'cadeau': 'fa-gift',
@@ -124,7 +124,7 @@ class BlogPost(models.Model):
     STATUS_CHOICES = (
         (STATUS_DRAFT, 'Brouillon'),
         (STATUS_SUBMITTED, 'Proposé'),
-        (STATUS_APPROVED, 'Validé'), 
+        (STATUS_APPROVED, 'Validé'),
         (STATUS_PUBLISHED, 'Publié'),
         (STATUS_HIDDEN, 'Masqué')
     )
@@ -136,9 +136,9 @@ class BlogPost(models.Model):
     PRIORITY_VERY_LOW = 14
 
     PRIORITY_CHOICES = (
-        (PRIORITY_VERY_HIGH, 'Urgente'), 
-        (PRIORITY_HIGH, 'Haute'), 
-        (PRIORITY_NORMAL, 'Normale'), 
+        (PRIORITY_VERY_HIGH, 'Urgente'),
+        (PRIORITY_HIGH, 'Haute'),
+        (PRIORITY_NORMAL, 'Normale'),
         (PRIORITY_LOW, 'Faible'),
         (PRIORITY_VERY_LOW, 'Très faible')
     )

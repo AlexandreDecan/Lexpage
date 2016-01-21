@@ -1,8 +1,8 @@
-from django.http import HttpResponse, Http404
+from django.http import Http404
 
 from django.core.urlresolvers import reverse_lazy
 
-from django.views.generic import View, ListView, TemplateView, RedirectView
+from django.views.generic import ListView, TemplateView, RedirectView
 from django.views.generic.edit import FormView
 from django.views.generic.dates import MonthArchiveView
 
@@ -19,8 +19,6 @@ from .forms import UserCreatePostForm, StaffCreatePostForm, UserEditPostForm, St
 
 from .models import BlogPost
 from datetime import date
-
-import json
 
 
 class PostListView(MonthArchiveView):
