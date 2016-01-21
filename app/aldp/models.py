@@ -15,22 +15,24 @@ class DatestampedWithMessagesAndAuthor(models.Model):
                                          related_name='+', blank=True, null=True)
     end_message = models.ForeignKey(Message, verbose_name='Message de cloture',
                                        related_name='+', blank=True, null=True)
+    start_message_template = models.ForeignKey('MessageTemplate', verbose_name='Template utilisé pour l\'annonce',
+                                         related_name='+', blank=True, null=True)
+    end_message_template = models.ForeignKey('MessageTemplate', verbose_name='Template utilisé pour la clôture',
+                                       related_name='+', blank=True, null=True)
 
     class Meta:
         abstract = True
         ordering = ['date_started']
 
     def start(self):
-        assert self.start_date is None
-        self.start_date = datetime.now()
-        self.clean()
-        self.save()
+        if self.start_date is None:
+            self.start_date = datetime.now()
+            self.save()
 
     def stop(self):
-        assert self.end_date is None
-        self.end_date = datetime.now()
-        self.clean()
-        self.save()
+        if self.end_date is None and self.start_date is not None:
+            self.end_date = datetime.now()
+            self.save()
 
 class Season(DatestampedWithMessagesAndAuthor):
     number = models.SmallIntegerField(verbose_name='Numéro')
@@ -41,8 +43,29 @@ class Season(DatestampedWithMessagesAndAuthor):
     class Meta:
         verbose_name = 'Saison'
 
+    def attach(self, turn):
+        """Attach a turn from a season."""
+        turn.season = self
+        turn.save()
+
+    def detach(self, turn):
+        """Detach a turn from a season. Runs clean(), which should delete start and end dates."""
+        # TODO Check that there are no attached answers
+        # detach devrait être refusé non seulement s'il y a des réponses, mais
+        # aussi si start_date est déjà dépassé (condition plus restrictive que
+        # la présence de réponses). En effet, une fois la manche "visible"
+        # (donc start_date <= now()), il n'y a pas de raison de pouvoir la
+        # détacher.
+
+        turn.season = None
+        turn.start_date = None
+        turn.end_date = None
+        turn.save()
+
+
 class Turn(DatestampedWithMessagesAndAuthor):
     number = models.SmallIntegerField(verbose_name='Numéro', blank=True, null=True)
+    title = models.CharField(verbose_name='Titre', max_length=80)
     season = models.ForeignKey('Season', verbose_name='Saison', blank=True, null=True)
     # Todo: check unicity of (Season, Number)
     # Todo: Prevent a turn to be started if another one is started
@@ -53,27 +76,10 @@ class Turn(DatestampedWithMessagesAndAuthor):
 
     def __str__(self):
         if not self.number:
-            return 'Manche détachée'
+            return '%s (manche détachée)' % self.title
         else:
-            return 'Manche %s de la saison %s' % (self.number, self.season.number)
+            return '%s (Saison %s, manche %s)' % (self.number, self.season.number)
 
-    def attach(self, season):
-        """Attach a turn from a season."""
-        self.season = season
-        self.save()
-
-    def detach(self, season):
-        """Detach a turn from a season. Runs clean(), which should delete start and end dates."""
-        # TODO Check that there are no attached answers
-        self.season = None
-        self.clean()
-        self.save()
-
-    def clean(self):
-        """If there is no season, start_date and end_date should be unset."""
-        if self.season is None:
-            self.start_date = None
-            self.end_date = None
 
 class Question(models.Model):
     author = models.ForeignKey(User, related_name='+', verbose_name='Author', blank=True)
@@ -99,3 +105,17 @@ class Subscription(models.Model):
     class Meta:
         verbose_name = 'Inscription'
 
+class MessageTemplate(models.Model):
+    """A template that can be used for the starting and the ending of turns and seasons."""
+    # TODO: Filter in form
+    KIND_CHOICES = (
+        (0, 'Saison'),
+        (1, 'Manche'),
+    )
+
+    kind = models.IntegerField(choices=KIND_CHOICES,
+                               verbose_name='Type de template')
+    name = models.CharField(verbose_name='Nom', max_length=80)
+    title = models.CharField(verbose_name='Titre du message', max_length=80, blank=True, null=True,
+                             help_text='Uniquement utilisé pour les messages démarrant une saison')
+    text = models.TextField(verbose_name='Message', help_text='Mis en page avec le BBCode, plus une subsitition de quelques fieds.')
