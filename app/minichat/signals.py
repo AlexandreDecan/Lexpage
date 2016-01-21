@@ -21,10 +21,21 @@ def remove_notifications(sender, **kwargs):
         message = kwargs['instance']
         # If the message existed, use the existing one
         if message.id:
-            message = Message.objects.get(pk=message.id)
+            existing_message = Message.objects.get(pk=message.id)
+            existing_anchors = existing_message.parse_anchors()
+        else:
+            # The message is new, nothing to discard
+            return
+
         anchors = message.parse_anchors()
-        for anchor in anchors:
-            notify.minichat_unwarn(anchor, message)
+        if not 'raw' in kwargs: # message is being deleted
+            for anchor in anchors:
+                notify.minichat_unwarn(anchor, message)
+        else:
+            if existing_message:
+                discarded_anchors = list(set(existing_anchors) - set(anchors))
+                for anchor in discarded_anchors:
+                    notify.minichat_unwarn(anchor, message)
 
 
 @receiver(post_save, sender=Message)
