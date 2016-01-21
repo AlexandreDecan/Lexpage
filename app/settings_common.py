@@ -42,8 +42,9 @@ INSTALLED_APPS = (
     'messaging',
     'board',
     'notifications',
-
+    'aldp',
 )
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
