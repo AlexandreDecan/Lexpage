@@ -12,6 +12,6 @@ class SeasonCreateView(FormView):
 
     template_name = 'aldp/season_create.html'
     form_class = SeasonForm
-    success_url = None
+    success_url = '/'
 
     dispatch = method_decorator(permission_required('aldp.create_season'))(FormView.dispatch)

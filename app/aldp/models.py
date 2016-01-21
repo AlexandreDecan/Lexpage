@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 from board.models import Message
 
@@ -37,8 +38,8 @@ class DatestampedWithMessagesAndAuthor(models.Model):
 class Season(DatestampedWithMessagesAndAuthor):
     number = models.SmallIntegerField(verbose_name='Numéro')
     title = models.CharField(verbose_name='Titre', max_length=80)
-    slug = models.SlugField(max_length=90)
     description = models.TextField(verbose_name='Description', help_text='Description de la saison')
+    slug = models.SlugField(max_length=90)
 
     class Meta:
         verbose_name = 'Saison'
@@ -61,6 +62,14 @@ class Season(DatestampedWithMessagesAndAuthor):
         turn.start_date = None
         turn.end_date = None
         turn.save()
+
+    def save(self, *args, **kwargs):
+        """
+        Override save behavior by computing the value of the slug field.
+        """
+
+        self.slug = slugify(self.title)
+        return super().save(*args, **kwargs)
 
 
 class Turn(DatestampedWithMessagesAndAuthor):

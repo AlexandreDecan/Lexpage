@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.core.urlresolvers import reverse
 from aldp.models import Season, Turn, Question
 from django.contrib.auth.models import User
 
@@ -86,4 +87,42 @@ class SignalTests(TestCase):
         self.assertIsNone(turn.start_date)
         self.assertIsNone(turn.end_date)
 
+
+class FormTests(TestCase):
+    fixtures = ['devel']
+
+    def test_season_permissions(self):
+        response = self.client.get(reverse('season_create'))
+        self.assertEqual(response.status_code, 302)
+        nb_seasons = Season.objects.count()
+        response = self.client.post(reverse('season_create'), {'number': '1',
+                                                              'title': 'La première',
+                                                              'description': '''La première mais pas
+                                                              la dernière!'''})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Season.objects.count(), nb_seasons)
+
+    def test_season_permissions_regular_user(self):
+        self.client.login(username='user1', password='user1')
+        response = self.client.get(reverse('season_create'))
+        self.assertEqual(response.status_code, 302)
+        nb_seasons = Season.objects.count()
+        response = self.client.post(reverse('season_create'), {'number': '1',
+                                                              'title': 'La première',
+                                                              'description': '''La première mais pas
+                                                              la dernière!'''})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Season.objects.count(), nb_seasons)
+
+    def test_season_permissions_admin_user(self):
+        self.client.login(username='admin', password='admin')
+        response = self.client.get(reverse('season_create'))
+        self.assertEqual(response.status_code, 200)
+        nb_seasons = Season.objects.count()
+        response = self.client.post(reverse('season_create'), {'number': '1',
+                                                              'title': 'La première',
+                                                              'description': '''La première mais pas
+                                                              la dernière!'''})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Season.objects.count(), nb_seasons+1)
 
