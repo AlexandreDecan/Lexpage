@@ -6,13 +6,13 @@ class PostAdmin(admin.ModelAdmin):  # pragma: no cover
     model = BlogPost
     list_display = ('title', 'tags', 'author', 'date_created', 'date_published', 'status')
     readonly_fields = ('status',)
-    
+
     search_field = ('author__username', 'title', 'tags')
     date_hierarchy = 'date_published'
-    
+
     list_editable = ('tags',)
     list_filter = ('status', )
-    
+
     actions = ['approve', 'publish', 'hide']
     prepopulated_fields = {"slug": ("title",)}
 

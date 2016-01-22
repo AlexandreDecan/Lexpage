@@ -6,14 +6,14 @@ import re
 
 def clean_tags(tagstr):
     """
-    Take a string and returns a list of unique tags, 
-    in lowercase. Raise a forms.ValidationError if there is 
+    Take a string and returns a list of unique tags,
+    in lowercase. Raise a forms.ValidationError if there is
     one tag with less than 2 chars. """
     re_tag = re.compile(r'^[\w\-]{2,}$', re.UNICODE)
-    
+
     tags = [x.lower().strip() for x in tagstr.split()]
     new_tags = []
-    for tag in tags: 
+    for tag in tags:
         if len(tag) < 2:
             raise forms.ValidationError('Le tag "%s" est trop court, il doit au moins faire 2 caractères.' % tag)
         if re_tag.match(tag) is None:
@@ -46,9 +46,9 @@ class UserCreatePostForm(forms.ModelForm):
 
     ACTION_CHOICES = (
         (ACTION_DELETE, 'Supprimer'),
-        (ACTION_DRAFT, 'Enregistrer dans mes brouillons'), 
-        (ACTION_SUBMIT, 'Soumettre aux modérateurs'), 
-        (ACTION_APPROVE, 'Valider pour publication'), 
+        (ACTION_DRAFT, 'Enregistrer dans mes brouillons'),
+        (ACTION_SUBMIT, 'Soumettre aux modérateurs'),
+        (ACTION_APPROVE, 'Valider pour publication'),
         (ACTION_PUBLISH, 'Publier directement')
     )
 
@@ -83,7 +83,7 @@ class StaffCreatePostForm(UserCreatePostForm):
 
 
 class UserEditPostForm(UserCreatePostForm):
-    action = forms.ChoiceField(choices=UserCreatePostForm.ACTION_CHOICES[:3], label='Action', initial=UserCreatePostForm.ACTION_DRAFT, required=True)    
+    action = forms.ChoiceField(choices=UserCreatePostForm.ACTION_CHOICES[:3], label='Action', initial=UserCreatePostForm.ACTION_DRAFT, required=True)
 
     class Meta:
         model = BlogPost
