@@ -65,7 +65,11 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
+STATICFILES_STORAGE = 'minify.MinifyStatic'
 
+MINIFY_JS = True
+MINIFY_CSS = True
+MINIFY_IGNORED_PATHS = ['admin/', 'images/', 'libs/', 'rest_framework/']  # List of path prefixes
 
 # Templates
 TEMPLATES = [  # https://docs.djangoproject.com/en/1.9/ref/templates/upgrading/#the-templates-settings
