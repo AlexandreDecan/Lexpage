@@ -185,29 +185,29 @@ class NotificationBrowserTest(LexpageTestCase):
         WebDriverWait(self.selenium, 1).until(
             EC.visibility_of(self.selenium.find_element_by_xpath(dismiss_xpath)))
         # We should be able to dismiss everything even if we start at the last page
-        time.sleep(.5)
+        time.sleep(1)
         next_link = lambda: self.selenium.find_element_by_css_selector('.notification_pagination .next_page a')
         previous_link = lambda: self.selenium.find_element_by_css_selector('.notification_pagination .previous_page a')
         next_link().click()
         WebDriverWait(self.selenium, 2).until(
             EC.visibility_of(pagination('2/3')))
-        time.sleep(0.1)
+        time.sleep(1)
         previous_link().click()
         WebDriverWait(self.selenium, 2).until(
             EC.visibility_of(pagination('1/3')))
-        time.sleep(0.1)
+        time.sleep(1)
         with self.assertRaises(NoSuchElementException):
             previous_link() # Check that previous link does not exist
         # Then to third page
         next_link().click()
         WebDriverWait(self.selenium, 2).until(
             EC.visibility_of(pagination('2/3')))
-        time.sleep(0.1)
+        time.sleep(1)
         previous_link() # Check that it exists
         next_link().click()
         WebDriverWait(self.selenium, 2).until(
             EC.visibility_of(pagination('3/3')))
-        time.sleep(0.1)
+        time.sleep(1)
         dismiss_3_xpath = '(%s)[3]' % dismiss_all_xpath
         dismiss_4_xpath = '(%s)[4]' % dismiss_all_xpath
         # There should be 3 notifications here..
