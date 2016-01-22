@@ -111,13 +111,13 @@ class NotificationTests(TestCase):
         notification = {
             'title': words(2, False),
             'description': words(6, False),
-            'recipient': User.objects.get(username='user1'),
+            'recipients': User.objects.get(username='user1'),
             'app': 'game',
             'key': 'bar',
         }
-        nb = Notification.objects.get_or_create(**notification)
+        nb = len(Notification.objects.get_or_create(**notification))
         self.assertEqual(nb, 1)
-        nb = Notification.objects.get_or_create(**notification)
+        nb = len(Notification.objects.get_or_create(**notification))
         self.assertEqual(nb, 0)
 
 class NotificationBrowserTest(LexpageTestCase):

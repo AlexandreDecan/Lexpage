@@ -3,31 +3,33 @@ from django.contrib.auth.models import User
 from rest_framework.reverse import reverse
 from django.db.utils import IntegrityError
 
+
 class UniqueNotificationManager(models.Manager):
-
     def get_or_create(self, *args, **kwargs):
-        """Create Notifications and silently ignore database integrity errors
+        """
+        Create Notifications and silently ignore database integrity errors
         (caused by failed unique constraints).
-        Returns the number of notifications created"""
-        nb = 0
-        recipients = kwargs.pop('recipients', None)
-        if not recipients:
-            # if there are no recipients, there should be a recipient
-            recipients = kwargs.pop('recipient')
 
+        Returns the created notifications
+        """
+
+        recipients = kwargs.pop('recipients')
         if not hasattr(recipients, '__iter__'):
             recipients = [recipients]
 
+        notifications = []
         for recipient in recipients:
-            recipient_kwargs = dict(kwargs)
-            recipient_kwargs['recipient'] = recipient
+            parameters = dict(kwargs)
+            parameters['recipient'] = recipient
             try:
-                new_notification = self.model(**recipient_kwargs)
+                new_notification = self.model(**parameters)
                 new_notification.save()
-                nb += 1
+                notifications.append(new_notification)
+
             except IntegrityError: # Unique constraint failed
                 pass
-        return nb
+        return notifications
+
 
 class Notification(models.Model):
     ICON = {
