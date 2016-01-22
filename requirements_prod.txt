@@ -1,3 +1,4 @@
 -r requirements_common.txt
-gunicorn==19.4.1
+gevent==1.1rc3
 psycopg2==2.6.1
+uwsgi==2.0.12

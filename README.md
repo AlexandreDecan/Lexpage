@@ -36,7 +36,6 @@ Le répertoire */app* contient tout ce qui est propre à Django et au Lexpage :
  - Le reste est classique pour du Django.
   
 La racine du dépôt contient notamment :
- - *gunicorn.py* contient la configuration Gunicorn pour exécuter l'application.
  - *requirements_common.txt* contient les dépendances communes aux différents environnements.
  - *requirements_dev.txt* contient les dépendances pour le développement et les tests.
    Il charge automatiquement les dépendances de *requirements_common.txt*.
