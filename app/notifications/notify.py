@@ -16,8 +16,8 @@ def notify(recipients, title, description, action, app, key):
     Return the number of notifications sent.
     """
 
-    nb = Notification.objects.get_or_create(title=title, description=description, action=action,
-                                           recipients=recipients, app=app, key=key)
+    nb = len(Notification.objects.get_or_create(title=title, description=description, action=action,
+                                                recipients=recipients, app=app, key=key))
     return nb
 
 
