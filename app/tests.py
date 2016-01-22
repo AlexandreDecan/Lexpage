@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
 from blog.models import BlogPost
-from board.models import Thread
+from board.models import Thread, Message
 
 
 class ViewsTests(TestCase):
@@ -41,8 +41,7 @@ class ViewsTests(TestCase):
         Thread.objects.all().delete()
         thread = Thread(title='Test thread', slug='test-thread')
         thread.save()
-        message = thread.post_message(User.objects.get(username='user1'), 'foo')
-        message.save()
+        Message(author=User.objects.get(username='user1'), thread=thread, text='foo').save()
 
         response = self.client.get(reverse('homepage'))
         self.assertEqual(response.status_code, 200)

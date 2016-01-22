@@ -41,7 +41,7 @@ class ThreadViewsTests(TestCase):
 
     def test_threadpost(self):
         old_message = self.threads[0].last_message
-        self.threads[0].post_message(ActiveUser.objects.get(username='user1'), 'Hello World!')
+        Message(author=ActiveUser.objects.get(username='user1'), thread=self.threads[0], text='Hello World!').save()
         self.threads[0].refresh_from_db()
         self.assertNotEqual(self.threads[0].last_message, old_message)
 
@@ -78,8 +78,10 @@ class ThreadViewsTests(TestCase):
         # Create dummy thread
         thread = Thread(title='Hello World!')
         thread.save()
-        msg1 = thread.post_message(user, 'Hello 1')
-        msg2 = thread.post_message(user, 'Hello 2')
+        msg1 = Message(author=user, thread=thread, text='Hello 1')
+        msg2 = Message(author=user, thread=thread, text='Hello 2')
+        msg1.save()
+        msg2.save()
 
         thread.refresh_from_db()
         self.assertEqual(thread.number, 2)
@@ -90,13 +92,11 @@ class ThreadViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
         thread.refresh_from_db()
-        self.assertEqual(thread.number, 1)
-        self.assertEqual(msg1, Message.objects.get(pk=msg1.pk))
 
+        self.assertEqual(thread.number, 1)
+        self.assertEqual(thread.last_message, msg1)
         with self.assertRaises(Message.DoesNotExist):
             Message.objects.get(pk=msg2.pk)
-
-        self.assertEqual(thread.last_message, msg1)
 
         # Remove first (and last) message
         response = self.client.get(reverse('board_message_delete', kwargs={'message': msg1.pk}))
@@ -161,8 +161,11 @@ class APITests(TestCase):
         # Create dummy thread
         thread = Thread(title='Hello World!')
         thread.save()
-        self.msg1 = thread.post_message(user, 'Hello 1')
-        self.msg2 = thread.post_message(user, 'Hello 2')
+
+        self.msg1 = Message(author=user, thread=thread, text='Hello 1')
+        self.msg2 = Message(author=user, thread=thread, text='Hello 2')
+        self.msg1.save()
+        self.msg2.save()
 
     def test_message_detail(self):
         response = self.client.get(reverse('board_api_message-detail', kwargs={'pk': self.msg1.pk}), format='json')

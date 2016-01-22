@@ -19,7 +19,9 @@ class Thread(models.Model):
     slug = models.SlugField(max_length=90, unique=False)
     number = models.IntegerField(verbose_name='Nombre de messages', default=0)
     date_created = models.DateTimeField(verbose_name='Date de création', auto_now_add=True)
-    last_message = models.ForeignKey('Message', verbose_name='Dernier message', on_delete=models.SET_DEFAULT, db_constraint=False, related_name='+', default=-1)
+    # models.DO_NOTHING is required as we update last_message using a *_delete signal.
+    # if models.CASCADE or models.SET_DEFAULT, then its value is updated after signal handling.
+    last_message = models.ForeignKey('Message', verbose_name='Dernier message', on_delete=models.DO_NOTHING, db_constraint=False, related_name='+', default=-1)
 
     class Meta:
         get_latest_by = 'date_created'
@@ -53,7 +55,7 @@ class Thread(models.Model):
 
     def authors(self, N=None):
         """
-        Return an ordered list of N first authors. 
+        Return an ordered list of N first authors.
         """
         authors = Message.objects.all().filter(thread=self).order_by('date').values_list('author')
         tmp_set = set()
@@ -64,19 +66,6 @@ class Thread(models.Model):
             return output
         else:
             return output[:N]
-
-    def post_message(self, user, text):
-        """
-        Post a new message in this thread.
-        :param user: Author of the message.
-        :param text: Text content.
-        :return: The newly created Message instance.
-        """
-        # Create a new message
-        message = Message(author=user, thread=self, text=text)
-        message.save()
-
-        return message
 
 
 class Message(models.Model):
@@ -102,7 +91,7 @@ class Message(models.Model):
 
     def position(self):
         """
-        Return the relative position in the thread, 0-indexed. 
+        Return the relative position in the thread, 0-indexed.
         """
         return Message.objects.all().filter(thread=self.thread, date__lt=self.date).count()
 
@@ -115,8 +104,8 @@ class Message(models.Model):
         return not self.moderated and (datetime.datetime.now() - self.date).total_seconds() <= 5 * 60
 
     def previous_message(self):
-        """ 
-        Return the previous message, or None. 
+        """
+        Return the previous message, or None.
         """
         try:
             return Message.objects.all().filter(thread=self.thread, date__lt=self.date).latest()
@@ -134,7 +123,7 @@ class Message(models.Model):
 
     def modify(self, author, text):
         """
-        Edit current message and create a MessageHistory instance. 
+        Edit current message and create a MessageHistory instance.
         """
         if USE_DIFF_FOR_HISTORY:
             diff = difflib.unified_diff(self.text.splitlines(),
@@ -154,13 +143,13 @@ class Message(models.Model):
 
     def last_modified(self):
         """
-        Return the last modification. 
+        Return the last modification.
         """
         return MessageHistory.objects.filter(message=self).latest('date')
 
     def number_modified(self):
         """
-        Return the number of times this message was modified. 
+        Return the number of times this message was modified.
         """
         return MessageHistory.objects.filter(message=self).count()
 
@@ -181,8 +170,8 @@ class MessageHistory(models.Model):
 class FlagManager(models.Manager):
     def read(self, user, message, force=False):
         """
-        Look for a Flag and create if needed. Update the message if newer, or 
-        if force is True. Return the flag.  
+        Look for a Flag and create if needed. Update the message if newer, or
+        if force is True. Return the flag.
         """
         if not user.is_authenticated():
             return
@@ -196,7 +185,7 @@ class FlagManager(models.Manager):
     def unread(self, user, message):
         """
         Set message as the first unread message on the thread. Remove the flag
-        if message is the first of the thread. 
+        if message is the first of the thread.
         """
         thread = message.thread
         try:
