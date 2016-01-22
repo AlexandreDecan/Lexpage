@@ -81,13 +81,21 @@ class ThreadViewsTests(TestCase):
         msg1 = thread.post_message(user, 'Hello 1')
         msg2 = thread.post_message(user, 'Hello 2')
 
+        thread.refresh_from_db()
+        self.assertEqual(thread.number, 2)
+        self.assertEqual(thread.last_message, msg2)
+
         # Remove second message
         response = self.client.get(reverse('board_message_delete', kwargs={'message': msg2.pk}), follow=True)
         self.assertEqual(response.status_code, 200)
 
         thread.refresh_from_db()
+        self.assertEqual(thread.number, 1)
+        self.assertEqual(msg1, Message.objects.get(pk=msg1.pk))
+
         with self.assertRaises(Message.DoesNotExist):
             Message.objects.get(pk=msg2.pk)
+
         self.assertEqual(thread.last_message, msg1)
 
         # Remove first (and last) message

@@ -19,7 +19,7 @@ class Thread(models.Model):
     slug = models.SlugField(max_length=90, unique=False)
     number = models.IntegerField(verbose_name='Nombre de messages', default=0)
     date_created = models.DateTimeField(verbose_name='Date de création', auto_now_add=True)
-    last_message = models.ForeignKey('Message', verbose_name='Dernier message', db_constraint=False, related_name='+', default=-1)
+    last_message = models.ForeignKey('Message', verbose_name='Dernier message', on_delete=models.SET_DEFAULT, db_constraint=False, related_name='+', default=-1)
 
     class Meta:
         get_latest_by = 'date_created'
@@ -76,11 +76,6 @@ class Thread(models.Model):
         message = Message(author=user, thread=self, text=text)
         message.save()
 
-        # Update last message
-        self.last_message = message
-        self.number = self.number + 1
-        self.save()
-
         return message
 
 
@@ -119,41 +114,7 @@ class Message(models.Model):
         """
         return not self.moderated and (datetime.datetime.now() - self.date).total_seconds() <= 5 * 60
 
-    def delete(self, **kwargs):
-        """
-        Remove given message from thread. If this is the only message in the
-        thread, remove the thread. Update flags. Return previous message, or 
-        None
-        :param **kwargs:
-        """
-        if self.thread.number == 1:
-            # Delete thread (and by cascade, this message)
-            self.thread.delete()
-            return None
-        else:
-            # Get previous message
-            previous = self.previous()
-            # If there is no previous, then remove the flags
-            if previous is None:
-                Flag.objects.all().filter(thread=self.thread, message=self).delete()
-                anchor = next(self)
-            else:
-                anchor = previous
-                # Update flags
-                Flag.objects.all().filter(thread=self.thread, message=self).update(message=previous)
-
-                # Update last_message, if needed
-                if self.thread.last_message == self:
-                    self.thread.last_message = previous
-
-            self.thread.number = self.thread.number - 1
-            self.thread.save()
-
-            # Remove message
-            super(Message, self).delete()
-            return anchor
-
-    def previous(self):
+    def previous_message(self):
         """ 
         Return the previous message, or None. 
         """
@@ -162,7 +123,7 @@ class Message(models.Model):
         except Message.DoesNotExist:
             return None
 
-    def __next__(self):
+    def next_message(self):
         """
         Return the next message, or None.
         """
@@ -195,13 +156,13 @@ class Message(models.Model):
         """
         Return the last modification. 
         """
-        return MessageHistory.objects.all().filter(message=self).latest('date')
+        return MessageHistory.objects.filter(message=self).latest('date')
 
     def number_modified(self):
         """
         Return the number of times this message was modified. 
         """
-        return MessageHistory.objects.all().filter(message=self).count()
+        return MessageHistory.objects.filter(message=self).count()
 
 
 class MessageHistory(models.Model):
@@ -244,7 +205,7 @@ class FlagManager(models.Manager):
             # No flag, do nothing
             return None
 
-        previous = message.previous()
+        previous = message.previous_message()
         if previous:
             # Update the flag
             flag.message = previous

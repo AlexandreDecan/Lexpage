@@ -55,7 +55,7 @@ class ThreadView(ListView):
 
         # Do we need to display the last message of the previous page?
         if context['page_obj'].has_previous:
-            previous_message = context['message_list'][0].previous()
+            previous_message = context['message_list'][0].previous_message()
             context['previous'] = previous_message
 
         # Update flag if needed
@@ -338,7 +338,11 @@ class MessageDeleteView(RedirectView):
 
         if self.request.user.has_perm('board.can_destroy') or\
                 (self.request.user == message.author and message.is_time_to_delete()):
-            anchor = message.delete()
+
+            previous = message.next_message()
+            anchor = previous if previous else message.next_message()
+            message.delete()
+
             messages.success(self.request, "Le message a été supprimé.")
             if anchor:
                 return reverse_lazy('board_message_show', kwargs={'message': anchor.pk})
