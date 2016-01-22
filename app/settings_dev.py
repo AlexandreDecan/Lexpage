@@ -11,10 +11,6 @@ DEMONYM = 'Lexpagiens'
 WSGI_APPLICATION = 'ws4redis.django_runserver.application' # Needed for builtin runserver
 
 
-# Static
-MINIFY_JS = MINIFY_CSS = False
-
-
 # Database
 DATABASES = {
     'default': {
