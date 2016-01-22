@@ -8,57 +8,57 @@
     <meta name="viewport" content="initial-scale=1.0">
     <title>{% block title %}{{SITENAME}}{% endblock %}</title>
 
-    {% with static_ext=debug|yesno:",.min" %}
-        {% block stylesheets %}
-            {% with theme=user.profile.get_theme|default:THEMES.DEFAULT %}
-                <link href="{% static "css/"|add:theme|add:".css?v=160119" %}" rel="stylesheet"/>
-            {% endwith %}
-            <link href="{% static "libs/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet"/>
-            <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-            <![endif]-->
-        {% endblock stylesheets %}
-        <link rel="icon" type="image/png" href="{% static "images/favicon.png" %}" />
-        {% block javascript %}
+
+    {% block stylesheets %}
+        {% with theme=user.profile.get_theme|default:THEMES.DEFAULT %}
+            <link href="{% static "css/"|add:theme|add:".css?v=160119" %}" rel="stylesheet"/>
+        {% endwith %}
+        <link href="{% static "libs/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet"/>
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    {% endblock stylesheets %}
+    <link rel="icon" type="image/png" href="{% static "images/favicon.png" %}" />
+    {% block javascript %}
+        <script>
+            var URL_PREFIX = ""; // markup.js, script.js
+            var USERNAME = "{{ user.username }}";
+        </script>
+        <script src="{% static "libs/jquery/dist/jquery.min.js" %}"></script>
+        <script src="{% static "libs/moment/moment.js" %}"></script>
+        <script src="{% static "libs/nunjucks/nunjucks-slim.js" %}"></script>
+        <script src="{% static "js/moment.fr.js" %}"></script>
+        {% if user.is_authenticated and ENABLE_WEBSOCKET %}
+            <script src="{% static "js/websocket_client.js" %}?v=160115"></script>
             <script>
-                var URL_PREFIX = ""; // markup.js, script.js
-                var USERNAME = "{{ user.username }}";
+            // define the websocket client so other apps can register
+            ws_client = new WebsocketClient({heartbeat_msg: {{ WS4REDIS_HEARTBEAT }}});
             </script>
-            <script src="{% static "libs/jquery/dist/jquery.min.js" %}"></script>
-            <script src="{% static "libs/moment/moment"|add:static_ext|add:".js" %}"></script>
-            <script src="{% static "libs/nunjucks/nunjucks-slim"|add:static_ext|add:".js" %}"></script>
-            <script src="{% static "js/moment.fr"|add:static_ext|add:".js" %}"></script>
-            {% if user.is_authenticated and ENABLE_WEBSOCKET %}
-                <script src="{% static "js/websocket_client"|add:static_ext|add:".js" %}?v=160115"></script>
-                <script>
-                // define the websocket client so other apps can register
-                ws_client = new WebsocketClient({heartbeat_msg: {{ WS4REDIS_HEARTBEAT }}});
-                </script>
-            {% else%}
-                <script>
-                ws_client = false;
-                </script>
-            {% endif %}
-            <script src="{% static "js/contrib_message.templates"|add:static_ext|add:".js" %}?v=160115"></script>
-            <script src="{% static "js/minichat.templates"|add:static_ext|add:".js" %}?v=160110"></script>
-            <script src="{% static "js/notifications.templates"|add:static_ext|add:".js" %}?v=160113"></script>
-            <script src="{% static "js/nunjucks"|add:static_ext|add:".js" %}"></script>
-            <script src="{% static "js/scripts"|add:static_ext|add:".js" %}?v=160110"></script>
-            <script src="{% static "js/notifications"|add:static_ext|add:".js" %}?v=160116"></script>
-            <script src="{% static "js/minichat"|add:static_ext|add:".js" %}?v=160119"></script>
-            <script src="{% static "js/markup"|add:static_ext|add:".js" %}?v=160113"></script>
-            {% if user.is_authenticated and ENABLE_WEBSOCKET %}
+        {% else%}
             <script>
-                $(document).ready(function() {
-                    console.log(ws_client);
-                    ws_client.connect('{{ WEBSOCKET_URI }}lexpage?subscribe-broadcast&subscribe-user&echo');
-                });
+            ws_client = false;
             </script>
         {% endif %}
-        {% endblock javascript %}
-        {{ form.media }}
-    {% endwith %}
+        <script src="{% static "js/contrib_message.templates.js" %}?v=160115"></script>
+        <script src="{% static "js/minichat.templates.js" %}?v=160110"></script>
+        <script src="{% static "js/notifications.templates.js" %}?v=160113"></script>
+        <script src="{% static "js/nunjucks.js" %}"></script>
+        <script src="{% static "js/scripts.js" %}?v=160110"></script>
+        <script src="{% static "js/notifications.js" %}?v=160116"></script>
+        <script src="{% static "js/minichat.js" %}?v=160119"></script>
+        <script src="{% static "js/markup.js" %}?v=160113"></script>
+        {% if user.is_authenticated and ENABLE_WEBSOCKET %}
+        <script>
+            $(document).ready(function() {
+                console.log(ws_client);
+                ws_client.connect('{{ WEBSOCKET_URI }}lexpage?subscribe-broadcast&subscribe-user&echo');
+            });
+        </script>
+    {% endif %}
+    {% endblock javascript %}
+    {{ form.media }}
+
 </head>
 <body>
 
