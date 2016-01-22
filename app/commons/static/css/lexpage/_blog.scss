@@ -179,13 +179,17 @@
     }
 
     .post-icon-bg {
+      span {
+        vertical-align: super;
+        margin-top: 15px;
+        font-size: 120px;
+        color: rgba(0, 0, 0, 0.1);
+      }
+
       display: block;
       position: absolute;
-      top: 20px;
       right: $padding-base-horizontal * 3;
-      font-size: 100px;
 
-      color: rgba(0, 0, 0, 0.1);
       z-index: 1;
     }
 
