@@ -16,22 +16,8 @@ def notify(recipients, title, description, action, app, key):
     Return the number of notifications sent.
     """
 
-    description = '' if description is None else description
-    action = '' if action is None else action
-    if not hasattr(recipients, '__iter__'):
-        recipients = [recipients]
-
-    nb = 0  # number of notifications sent
-    for recipient in recipients:
-        # Is there a notification?
-        try:
-            Notification.objects.get(app=app, key=key, recipient=recipient)
-        except Notification.DoesNotExist:
-            # Create a new notification and save it
-            n = Notification(title=title, description=description, action=action,
-                             recipient=recipient, app=app, key=key)
-            nb += 1
-            n.save()
+    nb = Notification.objects.get_or_create(title=title, description=description, action=action,
+                                           recipients=recipients, app=app, key=key)
     return nb
 
 

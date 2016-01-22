@@ -84,7 +84,7 @@ class NotificationTests(TestCase):
                 'description': words(6, False),
                 'recipient': User.objects.get(username='user1'),
                 'app': 'game',
-                'key': 'bar',
+                'key': 'foo%s' % i,
             }
             Notification(**notification).save()
         self.client.login(username='user1', password='user1')
@@ -107,7 +107,18 @@ class NotificationTests(TestCase):
         self.assertEqual(response.data['total_pages'], 11)
         self.assertEqual(response.data['current_page'], 11)
 
-
+    def test_manager(self):
+        notification = {
+            'title': words(2, False),
+            'description': words(6, False),
+            'recipient': User.objects.get(username='user1'),
+            'app': 'game',
+            'key': 'bar',
+        }
+        nb = Notification.objects.get_or_create(**notification)
+        self.assertEqual(nb, 1)
+        nb = Notification.objects.get_or_create(**notification)
+        self.assertEqual(nb, 0)
 
 class NotificationBrowserTest(LexpageTestCase):
     fixtures = ['devel']
@@ -118,7 +129,7 @@ class NotificationBrowserTest(LexpageTestCase):
         Test that the ajax polling works to update the notifications count
         """
         self.check_notification_count(1)
-        self.create_notification()
+        self.create_notification('foo')
         self.check_notification_count(2, timeout=40)
 
     @logged_in_test()
@@ -129,7 +140,7 @@ class NotificationBrowserTest(LexpageTestCase):
         """
         self.check_notification_count(1)
         for i in range(0, 10):
-            self.create_notification()
+            self.create_notification('foo%s' % i)
         time.sleep(2)
         self.check_notification_count(11)
         notif_xpath = '//a[@id="notifications_dropdown_button"]'
@@ -150,13 +161,13 @@ class NotificationBrowserTest(LexpageTestCase):
         with self.assertRaises(NoSuchElementException):
             self.selenium.find_element_by_xpath(dismiss_xpath)
 
-    def create_notification(self, user='user1'):
+    def create_notification(self, key, user='user1'):
         notification = {
             'title': 'Foobar',
             'description': 'this is a test',
             'recipient': User.objects.get(username='user1'),
             'app': 'game',
-            'key': 'bar',
+            'key': key,
         }
         Notification(**notification).save()
         sqlite_sleep(1)
@@ -171,7 +182,7 @@ class NotificationBrowserTest(LexpageTestCase):
         """
         self.check_notification_count(1)
         for i in range(0, 12):
-            self.create_notification()
+            self.create_notification('foo%s' % i)
         # Now we have 13 notifications
         self.check_notification_count(13)
         time.sleep(1)
