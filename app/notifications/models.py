@@ -24,12 +24,12 @@ class UniqueNotificationManager(models.Manager):
             parameters = dict(kwargs)
             parameters['recipient'] = recipient
             try:
+                notif = Notification.objects.get(recipient=recipient, app=kwargs['app'], key=kwargs['key'])
+            except Notification.DoesNotExist:
                 new_notification = self.model(**parameters)
                 new_notification.save()
                 notifications.append(new_notification)
 
-            except IntegrityError: # Unique constraint failed
-                pass
         return notifications
 
 
