@@ -11,8 +11,8 @@ var notifications_fetch_failed = false;
 var notifications_template_button_checksum = null;
 var notifications_template_list_checksum = null;
 
-var notifications_button_template = "/notifications/button.html";
-var notifications_list_template = "/notifications/list.html";
+var notifications_button_template = "notifications/button.html";
+var notifications_list_template = "notifications/list.html";
 
 function notifications_safe_title(title){
     return title.replace(/\((\d+)\)/g,'⟨$1⟩'); // Mind "⟨" != "("

@@ -1,12 +1,7 @@
 {# This is a nunjucks template.
-To compile it, install nunjucks and run the following command:
-
-precompile --name "/notifications/button.html" app/notifications/js_templates/menu_button.html > app/notifications/static/js/notifications.templates.js
-precompile --name "/notifications/list.html" app/notifications/js_templates/list.html >> app/notifications/static/js/notifications.templates.js
-
-Do not forget to minify the JS you have made.
+To compile it, run "grunt".
 #}
-{# We use results and not length because we could see an epnty page (?page=100). #}
+{# We use results and not length because we could see an empty page (?page=100). #}
 {% if error %}
   <div id="notification_error" class="notification">
     <div class="notification_icon"> 
