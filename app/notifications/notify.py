@@ -5,34 +5,18 @@ from django.template.defaultfilters import force_escape
 from .models import Notification
 
 
-def notify(recipients, title, description, action, app, key):
-    """
-    Send a notification to given recipient with a title, description, action,
-    app name and key. Description and action can be None. If recipient is
-    an iterable, then send the notification to each of the recipients.
-    The notification is not added if a similar notification (with app and key)
-    exists for the recipient.
-
-    Return the number of notifications sent.
-    """
-
-    nb = len(Notification.objects.get_or_create(title=title, description=description, action=action,
-                                                recipients=recipients, app=app, key=key))
-    return nb
-
-
-def escape(string):
-    return force_escape(string)
-
-
 def blog_pending_new(user, post):
     """
     Send a notification to every user in BlogTeam.
     """
     recipients = User.objects.filter(groups__name='BlogTeam')
-    notify(recipients, 'Un billet est en attente de validation',
-           'Le billet <em>%s</em> proposé par %s est en attente de validation.' % (escape(post.title), post.author),
-           reverse('blog_pending_edit', kwargs={'pk': post.pk}), 'blog', 'pending-%d' % post.pk)
+    Notification.objects.get_or_create(
+            recipients=recipients,
+            title='Un billet est en attente de validation',
+            description='Le billet <em>%s</em> proposé par %s est en attente de validation.' % (force_escape(post.title), post.author),
+            action=reverse('blog_pending_edit', kwargs={'pk': post.pk}),
+            app='blog',
+            key='pending-%d' % post.pk)
 
 
 def blog_pending_clean(user, post):
@@ -48,10 +32,13 @@ def blog_pending_approve(user, post):
     """
     blog_pending_clean(user, post)
     if post.author != user:
-        notify(post.author, 'Votre billet a été accepté',
-               'Le billet <em>%s</em> que vous avez proposé a été accepté par %s et sera prochainement publié.'
-               % (escape(post.title), user.get_username()),
-               None, 'blog', 'validate-%d' % post.pk)
+        Notification.objects.get_or_create(
+                recipient=post.author,
+                title='Votre billet a été accepté',
+                description='Le billet <em>%s</em> que vous avez proposé a été accepté par %s et sera prochainement publié.'
+                             % (force_escape(post.title), user.get_username()),
+                app='blog',
+                key='validate-%d' % post.pk)
 
 
 def blog_pending_delete(user, post):
@@ -60,10 +47,13 @@ def blog_pending_delete(user, post):
     """
     blog_pending_clean(user, post)
     if post.author != user:
-        notify(post.author, 'Votre billet a été refusé',
-               'Le billet <em>%s</em> que vous avez proposé a été refusé par %s.'
-               % (escape(post.title), user.get_username()),
-               None, 'blog', 'validate-%d' % post.pk)
+        Notification.objects.get_or_create(
+                recipient=post.author,
+                title='Votre billet a été refusé',
+                description='Le billet <em>%s</em> que vous avez proposé a été refusé par %s.'
+                             % (force_escape(post.title), user.get_username()),
+                app='blog',
+                key='validate-%d' % post.pk)
 
 
 def messaging_thread_new(user, thread):
@@ -73,10 +63,14 @@ def messaging_thread_new(user, thread):
     """
     recipients = thread.recipients
     recipients.remove(user)
-    notify(recipients, 'Nouvelle conversation',
-           '%s a entamé une nouvelle conversation avec vous : <em>%s</em>.'
-           % (user.get_username(), escape(thread.title)),
-           reverse('messaging_show', kwargs={'thread': thread.pk}), 'messaging', 'thread-%d' % thread.pk)
+    Notification.objects.get_or_create(
+            recipients=recipients,
+            title='Nouvelle conversation',
+            description='%s a entamé une nouvelle conversation avec vous : <em>%s</em>.'
+                         % (user.get_username(), force_escape(thread.title)),
+            action=reverse('messaging_show', kwargs={'thread': thread.pk}),
+            app='messaging',
+            key='thread-%d' % thread.pk)
 
 
 def messaging_mesage_new(user, thread):
@@ -86,55 +80,40 @@ def messaging_mesage_new(user, thread):
     """
     recipients = thread.recipients
     recipients.remove(user)
-    notify(recipients, 'Nouveau message',
-           '%s a posté un nouveau message dans la conversation <em>%s</em>.'
-           % (user.get_username(), escape(thread.title)),
-           reverse('messaging_show', kwargs={'thread': thread.pk})+'#unread', 'messaging', 'thread-%d' % thread.pk)
+    Notification.objects.get_or_create(
+            recipients=recipients,
+            title='Nouveau message',
+            description='%s a posté un nouveau message dans la conversation <em>%s</em>.'
+                         % (user.get_username(), force_escape(thread.title)),
+            action=reverse('messaging_show', kwargs={'thread': thread.pk})+'#unread',
+            app='messaging',
+            key='thread-%d' % thread.pk)
 
 
 def board_post_moderate(user, message):
     """
     Notify the user that his post has been moderated.
     """
-    notify(message.author, 'Message modéré',
-           'L\'un de vos messages a été modéré par %s dans la discussion <em>%s</em>.'
-           % (user.get_username(), escape(message.thread.title)),
-           reverse('board_message_show', kwargs={'message': message.pk}), 'board', 'thread-%d' % message.thread.pk)
+    Notification.objects.get_or_create(
+            recipient=message.author,
+            title='Message modéré',
+            description='L\'un de vos messages a été modéré par %s dans la discussion <em>%s</em>.'
+                         % (user.get_username(), force_escape(message.thread.title)),
+            action=reverse('board_message_show', kwargs={'message': message.pk}),
+            app='board',
+            key='thread-%d' % message.thread.pk)
 
 
 def profile_new(user):
     """
     Send a notification to welcome a newly created user.
     """
-    notify(user, 'Bienvenue sur Lexpage',
-           'Bienvenue sur Lexpage. Pensez à compléter votre profil et à choisir un avatar !',
-           reverse('profile_edit'), 'profile', 'new')
+    Notification.objects.get_or_create(
+            recipient=user,
+            title='Bienvenue sur Lexpage',
+            description='Bienvenue sur Lexpage. Pensez à compléter votre profil et à choisir un avatar !',
+            action=reverse('profile_edit'),
+            app='profile',
+            key='new')
 
 
-def slogan_new(user, slogan):
-    """
-    Send a notification to every user that is in SloganTeam
-    that a new slogan has been posted.
-    """
-    recipients = User.objects.filter(groups__name='SloganTeam')
-    notify(recipients, 'Nouveau slogan',
-           'Le slogan <em>%s</em> a été proposé par %s et doit être validé pour être visible.'
-           % (escape(slogan.slogan), user.get_username()),
-           reverse('admin:slogan_slogan_changelist'), 'slogan', slogan.pk)
-
-
-def minichat_warn(user, message):
-    """
-    Send a notification to target user to warn him that someone has
-    said his name in the minichat.
-    """
-    # The following line is commented because it leads to a tiny bug. Indeed, len(urlize3(text) could be greater
-    # than len(text), and sometimes greater than 255 chars which is a pain for the field in db and possibly leads to
-    # a truncated <a> when displayed.
-    # text = smiley(urlize3(message.text))
-    text = message.text
-    notify(user,
-           'Minichat', '%s vous a adressé un message : <br/><em>%s</em>' % (message.user, text),
-           message.get_absolute_url(),
-           'minichat',
-           message.pk)

@@ -8,14 +8,33 @@ from ws4redis.redis_store import RedisMessage
 from redis.exceptions import ConnectionError
 
 from redis_helpers import get_redis_publisher
-from notifications.notify import minichat_warn
 from notifications.models import Notification
 
 from .models import Message
 
 
+def create_minichat_notification(user, message):
+    """
+    Send a notification to target user to warn him that someone has
+    said his name in the minichat.
+    """
+    # The following line is commented because it leads to a tiny bug. Indeed, len(urlize3(text) could be greater
+    # than len(text), and sometimes greater than 255 chars which is a pain for the field in db and possibly leads to
+    # a truncated <a> when displayed.
+    # text = smiley(urlize3(message.text))
+    text = message.text
+    Notification.objects.get_or_create(
+            recipient=user,
+            title='Minichat',
+            description='%s vous a adressé un message : <br/><em>%s</em>' % (message.user, text),
+            action=message.get_absolute_url(),
+            app='minichat',
+            key=message.pk
+    )
+
+
 @receiver(pre_delete, sender=Message)
-def remove_notifications(sender, **kwargs):
+def remove_notifications_on_message_deletion(sender, **kwargs):
     """
     Before deletion, remove notifications.
     """
@@ -26,7 +45,7 @@ def remove_notifications(sender, **kwargs):
 
 
 @receiver(pre_save, sender=Message)
-def change_notifications(sender, **kwargs):
+def change_notifications_on_message_edition(sender, **kwargs):
     """
     If message has changed, remove the old uneeded notifications and add the new ones.
     """
@@ -40,11 +59,11 @@ def change_notifications(sender, **kwargs):
             for recipient in old_recipients.difference(new_recipients):
                 Notification.objects.filter(app='minichat', key=old_message.id, recipient=recipient).delete()
             for recipient in new_recipients.difference(old_recipients):
-                minichat_warn(recipient, new_message)
+                create_minichat_notification(recipient, new_message)
 
 
 @receiver(post_save, sender=Message)
-def send_notifications(sender, created, **kwargs):
+def send_notifications_on_message_creation(sender, created, **kwargs):
     """
     On saving a new message, send notifications to involved users.
     """
@@ -53,7 +72,7 @@ def send_notifications(sender, created, **kwargs):
             message = kwargs['instance']
             anchors = message.parse_anchors()
             for anchor in anchors:
-                minichat_warn(anchor, message)
+                create_minichat_notification(anchor, message)
 
 
 @receiver(post_delete, sender=Message)

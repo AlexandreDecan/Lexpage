@@ -12,10 +12,12 @@ class UniqueNotificationManager(models.Manager):
 
         Returns the created notifications
         """
-
-        recipients = kwargs.pop('recipients')
-        if not hasattr(recipients, '__iter__'):
-            recipients = [recipients]
+        if 'recipients' in kwargs:
+            recipients = kwargs.pop('recipients', [])
+        elif 'recipient':
+            recipients = [kwargs.pop('recipient')]
+        else:
+            raise ValueError('At least *recipient* or *recipients* should be specified')
 
         notifications = []
         for recipient in recipients:

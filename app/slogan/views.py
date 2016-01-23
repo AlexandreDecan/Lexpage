@@ -37,7 +37,6 @@ class SloganAddView(CreateView):
         obj_slogan = Slogan(author=author, slogan=slogan, is_visible=False)
         obj_slogan.save()
 
-        notify.slogan_new(user, obj_slogan)
         messages.success(self.request, 'Votre slogan a été enregistré. Il sera visible en ligne prochainement.')
         
         return redirect('slogan_list')

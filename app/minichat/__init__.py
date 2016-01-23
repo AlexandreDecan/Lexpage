@@ -1,1 +1,1 @@
-default_app_config = 'minichat.apps.MinichatConfig'
+default_app_config = 'minichat.config.MinichatConfig'
