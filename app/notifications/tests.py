@@ -115,23 +115,12 @@ class NotificationTests(TestCase):
             'app': 'game',
             'key': 'bar',
         }
-        nb = len(Notification.objects.get_or_create(**notification))
-        self.assertEqual(nb, 1)
-        nb = len(Notification.objects.get_or_create(**notification))
-        self.assertEqual(nb, 0)
+        _, created = Notification.objects.get_or_create(**notification)
+        self.assertTrue(created)
 
-    def test_manager_recipients_list(self):
-        notification = {
-            'title': words(2, False),
-            'description': words(6, False),
-            'recipients': User.objects.all()[:2],
-            'app': 'game',
-            'key': 'bar',
-        }
-        nb = len(Notification.objects.get_or_create(**notification))
-        self.assertEqual(nb, 2)
-        nb = len(Notification.objects.get_or_create(**notification))
-        self.assertEqual(nb, 0)
+        _, created = Notification.objects.get_or_create(**notification)
+        self.assertFalse(created)
+
 
 class NotificationBrowserTest(LexpageTestCase):
     fixtures = ['devel']

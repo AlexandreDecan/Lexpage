@@ -140,7 +140,7 @@ class ActivationView(FormView):
         activated_user = ActivationKey.objects.activate_user(key)
 
         if activated_user:
-            # TODO: Handle this notification using a pre_save signal, comparing new and old value of user.is_active
+            # Don't use a signal to handle this, because it will handle every User.save(), which occurs on EVERY page!
             Notification.objects.get_or_create(
                 recipient=activated_user,
                 title='Bienvenue sur Lexpage',

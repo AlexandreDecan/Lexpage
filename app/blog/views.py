@@ -1,6 +1,8 @@
+from django.contrib.auth.models import User
 from django.http import Http404
 
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
+from django.template.defaultfilters import force_escape
 
 from django.views.generic import ListView, TemplateView, RedirectView
 from django.views.generic.edit import FormView
@@ -12,14 +14,69 @@ from django.utils.decorators import method_decorator
 
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-
-from notifications import notify
+from notifications.models import Notification
 
 from .forms import UserCreatePostForm, StaffCreatePostForm, UserEditPostForm, StaffEditPostForm, SearchByTagsForm
 
 from .models import BlogPost
 from datetime import date
 
+
+# ##################### NOTIFICATIONS
+
+def notify_pending_new(user, post):
+    """
+    Send a notification to every user in BlogTeam.
+    """
+    recipients = User.objects.filter(groups__name='BlogTeam')
+    for recipient in recipients:
+        Notification.objects.get_or_create(
+            recipient=recipient,
+            title='Un billet est en attente de validation',
+            description='Le billet <em>%s</em> proposé par %s est en attente de validation.' % (force_escape(post.title), post.author),
+            action=reverse('blog_pending_edit', kwargs={'pk': post.pk}),
+            app='blog',
+            key='pending-%d' % post.pk)
+
+
+def notify_pending_clean(user, post):
+    """
+    Remove the notifications related to the post that had been handled.
+    """
+    Notification.objects.filter(app='blog', key='pending-%d' % post.pk).delete()
+
+
+def notify_pending_approve(user, post):
+    """
+    Warn the author that his post has been accepted EXCEPT if author = user.
+    """
+    notify_pending_clean(user, post)
+    if post.author != user:
+        Notification.objects.get_or_create(
+                recipient=post.author,
+                title='Votre billet a été accepté',
+                description='Le billet <em>%s</em> que vous avez proposé a été accepté par %s et sera prochainement publié.'
+                             % (force_escape(post.title), user.get_username()),
+                app='blog',
+                key='validate-%d' % post.pk)
+
+
+def notify_pending_delete(user, post):
+    """
+    Warn the author that his post has been rejected EXCEPT if author = user.
+    """
+    notify_pending_clean(user, post)
+    if post.author != user:
+        Notification.objects.get_or_create(
+                recipient=post.author,
+                title='Votre billet a été refusé',
+                description='Le billet <em>%s</em> que vous avez proposé a été refusé par %s.'
+                             % (force_escape(post.title), user.get_username()),
+                app='blog',
+                key='validate-%d' % post.pk)
+
+
+# ################# VIEWS
 
 class PostListView(MonthArchiveView):
     """
@@ -100,10 +157,10 @@ def _handle_status(request, post, action):
     # Clean the notifications if post.pk exists, ie. if it is already saved
     # in the database and thus, if it has already generated notifications.
     if post.pk is not None:
-        notify.blog_pending_clean(request.user, post)
+        notify_pending_clean(request.user, post)
 
     if action == UserCreatePostForm.ACTION_DELETE:
-        notify.blog_pending_delete(request.user, post)
+        notify_pending_delete(request.user, post)
         post.delete()
         messages.success(request, 'Le billet a été supprimé définitivement.')
     elif action == UserCreatePostForm.ACTION_DRAFT:
@@ -111,13 +168,13 @@ def _handle_status(request, post, action):
         messages.success(request, 'Le billet a été sauvegardé dans vos brouillons.')
     elif action == UserCreatePostForm.ACTION_SUBMIT:
         post.change_status(request.user, BlogPost.STATUS_SUBMITTED)
-        notify.blog_pending_new(request.user, post)
+        notify_pending_new(request.user, post)
         messages.success(request, 'Le billet va être soumis aux modérateurs.')
     elif action == UserCreatePostForm.ACTION_APPROVE:
         post.change_status(request.user, BlogPost.STATUS_APPROVED)
         # Only notify if the post wasn't yet accepted
         if post.status != BlogPost.STATUS_APPROVED:
-            notify.blog_pending_approve(request.user, post)
+            notify_pending_approve(request.user, post)
         messages.success(request, 'Le billet a été approuvé pour la publication.')
     elif action == UserCreatePostForm.ACTION_PUBLISH:
         post.change_status(request.user, BlogPost.STATUS_PUBLISHED)
