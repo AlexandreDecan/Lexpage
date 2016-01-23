@@ -7,30 +7,20 @@ from django.db.utils import IntegrityError
 class UniqueNotificationManager(models.Manager):
     def get_or_create(self, *args, **kwargs):
         """
-        Create Notifications and silently ignore database integrity errors
-        (caused by failed unique constraints).
-
-        Returns the created notifications
+        Get or create Notification and ensure there are no two notificiations with the same user, app and key.
+        Returns a tuple of (Notification, created), where created is a boolean
+        specifying whether a Notification was created.
         """
-        if 'recipients' in kwargs:
-            recipients = kwargs.pop('recipients', [])
-        elif 'recipient':
-            recipients = [kwargs.pop('recipient')]
-        else:
-            raise ValueError('At least *recipient* or *recipients* should be specified')
+        recipient = kwargs['recipient']
+        app = kwargs['app']
+        key = kwargs['key']
 
-        notifications = []
-        for recipient in recipients:
-            parameters = dict(kwargs)
-            parameters['recipient'] = recipient
-            try:
-                notif = Notification.objects.get(recipient=recipient, app=kwargs['app'], key=kwargs['key'])
-            except Notification.DoesNotExist:
-                new_notification = self.model(**parameters)
-                new_notification.save()
-                notifications.append(new_notification)
-
-        return notifications
+        try:
+            return Notification.objects.get(recipient=recipient, app=app, key=key), False
+        except Notification.DoesNotExist:
+            notification = Notification(*args, **kwargs)
+            notification.save()
+            return notification, True
 
 
 class Notification(models.Model):

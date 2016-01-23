@@ -29,8 +29,9 @@ def notify_pending_new(user, post):
     Send a notification to every user in BlogTeam.
     """
     recipients = User.objects.filter(groups__name='BlogTeam')
-    Notification.objects.get_or_create(
-            recipients=recipients,
+    for recipient in recipients:
+        Notification.objects.get_or_create(
+            recipient=recipient,
             title='Un billet est en attente de validation',
             description='Le billet <em>%s</em> proposé par %s est en attente de validation.' % (force_escape(post.title), post.author),
             action=reverse('blog_pending_edit', kwargs={'pk': post.pk}),

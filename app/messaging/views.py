@@ -37,14 +37,15 @@ class ReplyView(FormView):
         thread = box.thread
         recipients = thread.recipients
         recipients.remove(self.request.user)
-        Notification.objects.get_or_create(
-            recipients=recipients,
-            title='Nouveau message',
-            description='%s a posté un nouveau message dans la conversation <em>%s</em>.'
-                         % (self.request.user.get_username(), force_escape(thread.title)),
-            action=reverse('messaging_show', kwargs={'thread': thread.pk})+'#unread',
-            app='messaging',
-            key='thread-%d' % thread.pk)
+        for recipient in recipients:
+            Notification.objects.get_or_create(
+                recipient=recipient,
+                title='Nouveau message',
+                description='%s a posté un nouveau message dans la conversation <em>%s</em>.'
+                             % (self.request.user.get_username(), force_escape(thread.title)),
+                action=reverse('messaging_show', kwargs={'thread': thread.pk})+'#unread',
+                app='messaging',
+                key='thread-%d' % thread.pk)
 
         messages.success(self.request, "Message enregistré.")
         return redirect(reverse_lazy('messaging_show', kwargs={'thread': self.kwargs['thread']}))
@@ -149,14 +150,15 @@ class NewThreadView(FormView):
         recipients = thread.recipients
         recipients.remove(self.request.user)
 
-        Notification.objects.get_or_create(
-            recipients=recipients,
-            title='Nouvelle conversation',
-            description='%s a entamé une nouvelle conversation avec vous : <em>%s</em>.'
-                         % (self.request.user.get_username(), force_escape(thread.title)),
-            action=reverse('messaging_show', kwargs={'thread': thread.pk}),
-            app='messaging',
-            key='thread-%d' % thread.pk)
+        for recipient in recipients:
+            Notification.objects.get_or_create(
+                recipient=recipient,
+                title='Nouvelle conversation',
+                description='%s a entamé une nouvelle conversation avec vous : <em>%s</em>.'
+                             % (self.request.user.get_username(), force_escape(thread.title)),
+                action=reverse('messaging_show', kwargs={'thread': thread.pk}),
+                app='messaging',
+                key='thread-%d' % thread.pk)
 
         messages.success(self.request, 'La nouvelle conversation a été enregistrée.')
         return redirect(reverse_lazy('messaging_show', kwargs={'thread': new_box.thread.pk}))
