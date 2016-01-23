@@ -8,11 +8,10 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import connection
 from django.core.servers.basehttp import WSGIServer
-from django.test.testcases import LiveServerThread, QuietWSGIRequestHandler
+from django.test.testcases import LiveServerThread, QuietWSGIRequestHandler, _StaticFilesHandler
 
 from ws4redis.django_runserver import _websocket_url, _websocket_app, _django_app
 
-from whitenoise.django import DjangoWhiteNoise
 from socketserver import ThreadingMixIn
 
 from redis_helpers import get_redis_publisher
@@ -38,7 +37,7 @@ else:
 def application(environ, start_response):
     if _websocket_url and environ.get('PATH_INFO').startswith(_websocket_url):
         return _websocket_app(environ, start_response)
-    return DjangoWhiteNoise(_django_app)(environ, start_response)
+    return _StaticFilesHandler(_django_app)(environ, start_response)
 
 
 class MultiThreadLiveServerThread(LiveServerThread):

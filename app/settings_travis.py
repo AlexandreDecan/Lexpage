@@ -1,5 +1,10 @@
 from settings_dev import *
 
+
+# Static
+MINIFY_JS = MINIFY_CSS = True
+
+
 # Database
 DATABASES = {
     'default': {
