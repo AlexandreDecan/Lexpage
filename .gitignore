@@ -15,6 +15,9 @@ bower_components
 # Sass cache
 *.sass-cache
 
+# node modules
+node_modules/*
+
 # pycharm
 .idea/*
 

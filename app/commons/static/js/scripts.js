@@ -10,7 +10,7 @@ if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
 }
 
 function contrib_message(msg_type, msg_content) {
-    $(".contrib-messages").append(nunjucks.render("/commons/contrib_message.html", { type: msg_type, message: msg_content }));
+    $(".contrib-messages").append(nunjucks.render("commons/contrib_message.html", { type: msg_type, message: msg_content }));
     /*
     $(".contrib-messages div").last().each(function () {
         var du = 250;

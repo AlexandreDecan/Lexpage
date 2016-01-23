@@ -102,6 +102,26 @@ Fastidieux ? Pas tellement : si vous utilisez le serveur de développement de Dj
 avec `python app/manage.py runserver`), vous n'aurez pas à vous en soucier : le serveur de développement de Django
 est prévu pour aller rechercher les fichiers statiques directement dans leur répertoire d'origine.
 
+### Compiler les templates javascript
+
+Ce projet utilise [nunjucks](https://mozilla.github.io/nunjucks/) pour générer
+des templates javascript dont le rendu est effectué par les clients. Ces
+templates sont dans les répertoires 'js_templates' de chaque application.
+
+Les templates sont précompilés, de manière à ne service qu'une version légère de
+la librairie aux clients. Chaque modification d'un template nécéssite donc une
+compilation.
+
+Pour ce faire, nous utilisons [grunt](http://gruntjs.com/). Voici la démarche à
+suivre pour précompiler les templates (après avoir installé `grunt` et `npm`):
+
+```
+npm install
+grunt
+```
+
+Le fichier contenant les templates compilés (de toutes les applications
+confondues) est `app/commons/static/js/nunjucks.templates.js`.
 
 ### Les problèmes fréquents et leurs solutions connues
 

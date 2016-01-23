@@ -8,7 +8,7 @@ var minichat_button = "#minichat_form button[type='submit']";
 var minichat_input_text = "#minichat_form input[type='text']";
 var minichat_chars_output = "#minichat_form .minichat-remainingChars";
 
-var minichat_template = "/minichat/latests.html";
+var minichat_template = "minichat/latests.html";
 
 function minichat_init_display(content, get_url) {
     minichat_content = content

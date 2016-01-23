@@ -1,0 +1,10 @@
+{# This is a nunjucks template.
+To compile it, run "grunt".
+#}
+{% if error %}
+    <span class="badge"><span class="fa fa-bell-slash"></span></span>
+{% elif count > 0 %}
+    <span class="badge"><span class="fa fa-bell"></span> {{ count }}</span>
+{% else %}
+    <span class="fa fa-navicon"></span>
+{% endif %}
