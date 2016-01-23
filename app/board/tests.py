@@ -250,8 +250,8 @@ class BoardsBrowserTests(LexpageTestCase):
         Thread.objects.all().delete()
         thread = Thread(title='Test thread', slug='test-thread')
         thread.save()
-        message = thread.post_message(User.objects.get(username='user1'), 'foo')
-        message.save()
+        Message(author=User.objects.get(username='user1'), thread=thread, text='foo').save()
+
         self.selenium.refresh()
         self.selenium.find_element_by_link_text('Test thread').click()
         self.selenium.find_element_by_css_selector('span.fa.fa-trash-o').click()
