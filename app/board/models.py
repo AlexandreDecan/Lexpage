@@ -19,7 +19,9 @@ class Thread(models.Model):
     slug = models.SlugField(max_length=90, unique=False)
     number = models.IntegerField(verbose_name='Nombre de messages', default=0)
     date_created = models.DateTimeField(verbose_name='Date de création', auto_now_add=True)
-    last_message = models.ForeignKey('Message', verbose_name='Dernier message', db_constraint=False, related_name='+', default=-1)
+    # models.DO_NOTHING is required as we update last_message using a *_delete signal.
+    # if models.CASCADE or models.SET_DEFAULT, then its value is updated after signal handling.
+    last_message = models.ForeignKey('Message', verbose_name='Dernier message', on_delete=models.DO_NOTHING, db_constraint=False, related_name='+', default=-1)
 
     class Meta:
         get_latest_by = 'date_created'
@@ -53,7 +55,7 @@ class Thread(models.Model):
 
     def authors(self, N=None):
         """
-        Return an ordered list of N first authors. 
+        Return an ordered list of N first authors.
         """
         authors = Message.objects.all().filter(thread=self).order_by('date').values_list('author')
         tmp_set = set()
@@ -64,24 +66,6 @@ class Thread(models.Model):
             return output
         else:
             return output[:N]
-
-    def post_message(self, user, text):
-        """
-        Post a new message in this thread.
-        :param user: Author of the message.
-        :param text: Text content.
-        :return: The newly created Message instance.
-        """
-        # Create a new message
-        message = Message(author=user, thread=self, text=text)
-        message.save()
-
-        # Update last message
-        self.last_message = message
-        self.number = self.number + 1
-        self.save()
-
-        return message
 
 
 class Message(models.Model):
@@ -107,7 +91,7 @@ class Message(models.Model):
 
     def position(self):
         """
-        Return the relative position in the thread, 0-indexed. 
+        Return the relative position in the thread, 0-indexed.
         """
         return Message.objects.all().filter(thread=self.thread, date__lt=self.date).count()
 
@@ -119,50 +103,16 @@ class Message(models.Model):
         """
         return not self.moderated and (datetime.datetime.now() - self.date).total_seconds() <= 5 * 60
 
-    def delete(self, **kwargs):
+    def previous_message(self):
         """
-        Remove given message from thread. If this is the only message in the
-        thread, remove the thread. Update flags. Return previous message, or 
-        None
-        :param **kwargs:
-        """
-        if self.thread.number == 1:
-            # Delete thread (and by cascade, this message)
-            self.thread.delete()
-            return None
-        else:
-            # Get previous message
-            previous = self.previous()
-            # If there is no previous, then remove the flags
-            if previous is None:
-                Flag.objects.all().filter(thread=self.thread, message=self).delete()
-                anchor = next(self)
-            else:
-                anchor = previous
-                # Update flags
-                Flag.objects.all().filter(thread=self.thread, message=self).update(message=previous)
-
-                # Update last_message, if needed
-                if self.thread.last_message == self:
-                    self.thread.last_message = previous
-
-            self.thread.number = self.thread.number - 1
-            self.thread.save()
-
-            # Remove message
-            super(Message, self).delete()
-            return anchor
-
-    def previous(self):
-        """ 
-        Return the previous message, or None. 
+        Return the previous message, or None.
         """
         try:
             return Message.objects.all().filter(thread=self.thread, date__lt=self.date).latest()
         except Message.DoesNotExist:
             return None
 
-    def __next__(self):
+    def next_message(self):
         """
         Return the next message, or None.
         """
@@ -173,7 +123,7 @@ class Message(models.Model):
 
     def modify(self, author, text):
         """
-        Edit current message and create a MessageHistory instance. 
+        Edit current message and create a MessageHistory instance.
         """
         if USE_DIFF_FOR_HISTORY:
             diff = difflib.unified_diff(self.text.splitlines(),
@@ -193,15 +143,15 @@ class Message(models.Model):
 
     def last_modified(self):
         """
-        Return the last modification. 
+        Return the last modification.
         """
-        return MessageHistory.objects.all().filter(message=self).latest('date')
+        return MessageHistory.objects.filter(message=self).latest('date')
 
     def number_modified(self):
         """
-        Return the number of times this message was modified. 
+        Return the number of times this message was modified.
         """
-        return MessageHistory.objects.all().filter(message=self).count()
+        return MessageHistory.objects.filter(message=self).count()
 
 
 class MessageHistory(models.Model):
@@ -220,8 +170,8 @@ class MessageHistory(models.Model):
 class FlagManager(models.Manager):
     def read(self, user, message, force=False):
         """
-        Look for a Flag and create if needed. Update the message if newer, or 
-        if force is True. Return the flag.  
+        Look for a Flag and create if needed. Update the message if newer, or
+        if force is True. Return the flag.
         """
         if not user.is_authenticated():
             return
@@ -235,7 +185,7 @@ class FlagManager(models.Manager):
     def unread(self, user, message):
         """
         Set message as the first unread message on the thread. Remove the flag
-        if message is the first of the thread. 
+        if message is the first of the thread.
         """
         thread = message.thread
         try:
@@ -244,7 +194,7 @@ class FlagManager(models.Manager):
             # No flag, do nothing
             return None
 
-        previous = message.previous()
+        previous = message.previous_message()
         if previous:
             # Update the flag
             flag.message = previous

@@ -55,7 +55,7 @@ class ThreadView(ListView):
 
         # Do we need to display the last message of the previous page?
         if context['page_obj'].has_previous:
-            previous_message = context['message_list'][0].previous()
+            previous_message = context['message_list'][0].previous_message()
             context['previous'] = previous_message
 
         # Update flag if needed
@@ -118,7 +118,8 @@ class ThreadReplyView(FormView):
 
     def form_valid(self, form):
         data = form.cleaned_data
-        self.thread.post_message(self.request.user, data['text'])
+        message = Message(author=self.request.user, thread=self.thread, text=data['text'])
+
         return FormView.form_valid(self, form)
 
     def get_success_url(self):
@@ -179,12 +180,15 @@ class ThreadCreateView(FormView):
 
     def form_valid(self, form):
         data = form.cleaned_data
+
         thread = Thread(title=data['title'])
         thread.save()
 
+        message = Message(author=self.request.user, thread=thread, text=data['text'])
+        message.save()
+
         self.thread = thread  # For success url
 
-        message = thread.post_message(self.request.user, data['text'])
         return FormView.form_valid(self, form)
 
     def get_success_url(self):
@@ -231,7 +235,8 @@ class ThreadCreateForPostView(FormView):
         thread.save()
 
         # Post message
-        thread.post_message(self.request.user, data['text'])
+        message = Message(author=self.request.user, thread=thread, text=data['text'])
+        message.save()
 
         # Create link with blogpost
         link = BlogBoardLink(thread=thread, post=self.blogpost)
@@ -338,7 +343,11 @@ class MessageDeleteView(RedirectView):
 
         if self.request.user.has_perm('board.can_destroy') or\
                 (self.request.user == message.author and message.is_time_to_delete()):
-            anchor = message.delete()
+
+            previous = message.next_message()
+            anchor = previous if previous else message.next_message()
+            message.delete()
+
             messages.success(self.request, "Le message a été supprimé.")
             if anchor:
                 return reverse_lazy('board_message_show', kwargs={'message': anchor.pk})
@@ -429,7 +438,6 @@ class FollowedView(ListView):
     paginate_by = THREADS_PER_PAGE
     paginate_orphans = THREADS_PER_PAGE // 5
 
-
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         if 'filter_unread' in kwargs:
@@ -437,7 +445,6 @@ class FollowedView(ListView):
         else:
             self.filter_unread = False
         return ListView.dispatch(self, *args, **kwargs)
-
 
     def get_queryset(self):
         queryset = Flag.objects.all().filter(user=self.request.user)
