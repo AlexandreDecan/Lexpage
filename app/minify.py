@@ -34,7 +34,7 @@ class MinifyStatic(StaticFilesStorage):
                         assert yuicompress == 0, 'YUI Compressor failed on %s' % name
                         new_content = minified_content.read()
                         file = ContentFile(new_content)
-                    except Exception:
+                    except Exception: # pragma: no cover
                         logging.exception('Minify %s error for %s' % (suffix, name))
                         file = original_file
         return super()._save(name, file)
