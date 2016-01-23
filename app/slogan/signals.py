@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -33,3 +33,9 @@ def remove_notifications_when_approved(sender, created, **kwargs):
         if not created and slogan.is_visible:
             if slogan.is_visible:
                 Notification.objects.filter(app='slogan', key=slogan.pk).delete()
+
+
+@receiver(post_delete, sender=Slogan)
+def remove_notifications_when_deleted(sender, **kwargs):
+    slogan = kwargs['instance']
+    Notification.objects.filter(app='slogan', key=slogan.pk).delete()
