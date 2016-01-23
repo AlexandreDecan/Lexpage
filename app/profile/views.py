@@ -1,4 +1,5 @@
 import os
+from django.core.urlresolvers import reverse
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView
@@ -12,7 +13,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.views import login as view_login
 from django.contrib.auth import authenticate, login
 
-from notifications import notify
+from notifications.models import Notification
 
 from .forms import RegistrationForm, LoginForm, ChangeProfileForm, user_fields, profile_fields, ActivationForm
 from .models import ActivationKey, Profile, ActiveUser
@@ -139,7 +140,14 @@ class ActivationView(FormView):
         activated_user = ActivationKey.objects.activate_user(key)
 
         if activated_user:
-            notify.profile_new(activated_user)
+            # TODO: Handle this notification using a pre_save signal, comparing new and old value of user.is_active
+            Notification.objects.get_or_create(
+                recipient=activated_user,
+                title='Bienvenue sur Lexpage',
+                description='Bienvenue sur Lexpage. Pensez à compléter votre profil et à choisir un avatar !',
+                action=reverse('profile_edit'),
+                app='profile',
+                key='new')
             return redirect('registration_activation_complete')
         else:
             return redirect('registration_activation_failed')

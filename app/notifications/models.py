@@ -12,22 +12,24 @@ class UniqueNotificationManager(models.Manager):
 
         Returns the created notifications
         """
-
-        recipients = kwargs.pop('recipients')
-        if not hasattr(recipients, '__iter__'):
-            recipients = [recipients]
+        if 'recipients' in kwargs:
+            recipients = kwargs.pop('recipients', [])
+        elif 'recipient':
+            recipients = [kwargs.pop('recipient')]
+        else:
+            raise ValueError('At least *recipient* or *recipients* should be specified')
 
         notifications = []
         for recipient in recipients:
             parameters = dict(kwargs)
             parameters['recipient'] = recipient
             try:
+                notif = Notification.objects.get(recipient=recipient, app=kwargs['app'], key=kwargs['key'])
+            except Notification.DoesNotExist:
                 new_notification = self.model(**parameters)
                 new_notification.save()
                 notifications.append(new_notification)
 
-            except IntegrityError: # Unique constraint failed
-                pass
         return notifications
 
 
