@@ -17,18 +17,6 @@ except ImportError:
     datetime_now = datetime.datetime.now
 
 
-@receiver(post_save, sender=User)
-def create_profile_for_user(sender, **kwargs):
-    """
-    Post save signal handler for User model. Add a Profile instance to any newly created
-    User instance.
-    """
-    if kwargs.get('created', True) and not kwargs.get('raw', False):
-        profile, is_new = Profile.objects.get_or_create(user=kwargs['instance'])
-        if is_new:
-            profile.save()
-
-
 class ActiveUserManager(UserManager):
     def get_queryset(self):
         return super(ActiveUserManager, self).get_queryset().filter(is_active=True)

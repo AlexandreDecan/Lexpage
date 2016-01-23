@@ -103,17 +103,3 @@ def board_post_moderate(user, message):
             app='board',
             key='thread-%d' % message.thread.pk)
 
-
-def profile_new(user):
-    """
-    Send a notification to welcome a newly created user.
-    """
-    Notification.objects.get_or_create(
-            recipient=user,
-            title='Bienvenue sur Lexpage',
-            description='Bienvenue sur Lexpage. Pensez à compléter votre profil et à choisir un avatar !',
-            action=reverse('profile_edit'),
-            app='profile',
-            key='new')
-
-
