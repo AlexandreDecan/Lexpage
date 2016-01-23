@@ -24,3 +24,6 @@ venv*
 
 # Gunicorn
 gunicorn.pid
+
+# Static files
+app/static_pub/*
