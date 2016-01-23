@@ -1,4 +1,5 @@
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
+from django.template.defaultfilters import force_escape
 
 from django.views.generic import ListView, View
 from django.views.generic.edit import FormView
@@ -8,10 +9,9 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 from django.contrib import messages
-from django.db.models import F
+from notifications.models import Notification
 
 from profile.models import ActiveUser
-from notifications import notify
 
 from .forms import NewThreadForm, ReplyForm
 from .models import Message, Thread, MessageBox
@@ -33,7 +33,19 @@ class ReplyView(FormView):
     def form_valid(self, form):
         box = get_object_or_404(MessageBox.objects, thread=self.kwargs['thread'], user=self.request.user)
         box.thread.post_message(self.request.user, form.cleaned_data['text'])
-        notify.messaging_mesage_new(self.request.user, box.thread)
+
+        thread = box.thread
+        recipients = thread.recipients
+        recipients.remove(self.request.user)
+        Notification.objects.get_or_create(
+            recipients=recipients,
+            title='Nouveau message',
+            description='%s a posté un nouveau message dans la conversation <em>%s</em>.'
+                         % (self.request.user.get_username(), force_escape(thread.title)),
+            action=reverse('messaging_show', kwargs={'thread': thread.pk})+'#unread',
+            app='messaging',
+            key='thread-%d' % thread.pk)
+
         messages.success(self.request, "Message enregistré.")
         return redirect(reverse_lazy('messaging_show', kwargs={'thread': self.kwargs['thread']}))
 
@@ -132,7 +144,20 @@ class NewThreadView(FormView):
                 data['recipients'].remove(recipient)
                 break
         new_box = Thread.objects.create_thread(self.request.user, data['title'], data['text'], data['recipients'])
-        notify.messaging_thread_new(self.request.user, new_box.thread)
+
+        thread = new_box.thread
+        recipients = thread.recipients
+        recipients.remove(self.request.user)
+
+        Notification.objects.get_or_create(
+            recipients=recipients,
+            title='Nouvelle conversation',
+            description='%s a entamé une nouvelle conversation avec vous : <em>%s</em>.'
+                         % (self.request.user.get_username(), force_escape(thread.title)),
+            action=reverse('messaging_show', kwargs={'thread': thread.pk}),
+            app='messaging',
+            key='thread-%d' % thread.pk)
+
         messages.success(self.request, 'La nouvelle conversation a été enregistrée.')
         return redirect(reverse_lazy('messaging_show', kwargs={'thread': new_box.thread.pk}))
 

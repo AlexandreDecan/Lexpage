@@ -56,35 +56,3 @@ def blog_pending_delete(user, post):
                 key='validate-%d' % post.pk)
 
 
-def messaging_thread_new(user, thread):
-    """
-    Notify the participants (except the author) that a new thread is
-    created.
-    """
-    recipients = thread.recipients
-    recipients.remove(user)
-    Notification.objects.get_or_create(
-            recipients=recipients,
-            title='Nouvelle conversation',
-            description='%s a entamé une nouvelle conversation avec vous : <em>%s</em>.'
-                         % (user.get_username(), force_escape(thread.title)),
-            action=reverse('messaging_show', kwargs={'thread': thread.pk}),
-            app='messaging',
-            key='thread-%d' % thread.pk)
-
-
-def messaging_mesage_new(user, thread):
-    """
-    Notify the participants (except the author) that a new message has
-    been posted, except if a notification for a new thread is pending.
-    """
-    recipients = thread.recipients
-    recipients.remove(user)
-    Notification.objects.get_or_create(
-            recipients=recipients,
-            title='Nouveau message',
-            description='%s a posté un nouveau message dans la conversation <em>%s</em>.'
-                         % (user.get_username(), force_escape(thread.title)),
-            action=reverse('messaging_show', kwargs={'thread': thread.pk})+'#unread',
-            app='messaging',
-            key='thread-%d' % thread.pk)
