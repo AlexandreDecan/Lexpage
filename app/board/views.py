@@ -1,6 +1,7 @@
 from django.core.urlresolvers import reverse_lazy, reverse
 
 from django.http import HttpResponse, Http404
+from django.template.defaultfilters import force_escape
 
 from django.views.generic import View, ListView
 from django.views.generic.base import RedirectView
@@ -12,6 +13,7 @@ from django.utils.decorators import method_decorator
 
 from django.db.models import F
 from django.contrib import messages
+from notifications.models import Notification
 
 from .models import Message, Thread, Flag, MessageHistory, BlogBoardLink
 
@@ -310,7 +312,16 @@ class MessageEditView(FormView):
         if self.request.user.has_perm('board.can_moderate') and ('moderated' in data):
             if data['moderated']:
                 self.message.moderated = True
-                notify.board_post_moderate(self.request.user, self.message)
+
+                Notification.objects.get_or_create(
+                    recipient=self.message.author,
+                    title='Message modéré',
+                    description='L\'un de vos messages a été modéré par %s dans la discussion <em>%s</em>.'
+                                 % (self.request.user.get_username(), force_escape(self.message.thread.title)),
+                    action=reverse('board_message_show', kwargs={'message': self.message.pk}),
+                    app='board',
+                    key='thread-%d' % self.message.thread.pk)
+
                 messages.warning(self.request, "Le message a été modéré.")
             else:
                 self.message.moderated = False

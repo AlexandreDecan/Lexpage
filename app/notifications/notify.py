@@ -88,18 +88,3 @@ def messaging_mesage_new(user, thread):
             action=reverse('messaging_show', kwargs={'thread': thread.pk})+'#unread',
             app='messaging',
             key='thread-%d' % thread.pk)
-
-
-def board_post_moderate(user, message):
-    """
-    Notify the user that his post has been moderated.
-    """
-    Notification.objects.get_or_create(
-            recipient=message.author,
-            title='Message modéré',
-            description='L\'un de vos messages a été modéré par %s dans la discussion <em>%s</em>.'
-                         % (user.get_username(), force_escape(message.thread.title)),
-            action=reverse('board_message_show', kwargs={'message': message.pk}),
-            app='board',
-            key='thread-%d' % message.thread.pk)
-
