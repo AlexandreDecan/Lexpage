@@ -32,7 +32,7 @@ Le répertoire */app* contient tout ce qui est propre à Django et au Lexpage :
  - Le fichier *settings_common.py* contient les paramètres de base, quelque soit l'environnement.
  - Le fichier *settings_dev.py* contient les paramètres de développement, et doivent être utilisés en local.
    Il charge automatiquement tout ce qui se trouve dans *settings_common.py*.
- - Le fichier *settings_travis.py* contient des éléments spécifiques pour la mise en plus du CI Travis.
+ - Le fichier *settings_travis.py* contient des éléments spécifiques pour la mise en place du CI Travis.
  - Le reste est classique pour du Django.
   
 La racine du dépôt contient notamment :
