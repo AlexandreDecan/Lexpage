@@ -9,7 +9,7 @@ images_dir = "../images"
 environment = :production
 
 if environment == :production
-  output_style = :compressed
+  output_style = :expanded # This will be minified by `collectstatic`. See app/minify.py.
   line_comments = false
 else
   output_style = :expanded

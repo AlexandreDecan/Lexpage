@@ -12,6 +12,7 @@ env:
   - DJANGO_SETTINGS_MODULE=settings_travis
   - START_REDIS_COMMAND="sudo service redis-server start"
   - STOP_REDIS_COMMAND="sudo service redis-server stop"
+  - RUN_NPM_TESTS="yes"
   matrix:
   - SELENIUM_WEBDRIVER=selenium.webdriver.chrome.webdriver.WebDriver
   - SELENIUM_WEBDRIVER=selenium.webdriver.firefox.webdriver.WebDriver
@@ -19,9 +20,14 @@ before_install:
 - wget https://chromedriver.storage.googleapis.com/2.20/chromedriver_linux64.zip
 - unzip chromedriver_linux64.zip
 - sudo mv chromedriver /usr/bin
+- travis_retry npm install grunt-cli -g
+- sudo apt-get update # For compass, see #141
+- sudo apt-get install -y ruby-dev
 install:
 - pip install -r requirements_dev.txt # Testing libs
 - pip install -r requirements_prod.txt # Postgresql
+- travis_retry npm install
+- travis_retry bundle install
 before_script:
 - "export DISPLAY=:99.0"
 - "sh -e /etc/init.d/xvfb start"

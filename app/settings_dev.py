@@ -65,3 +65,4 @@ WS4REDIS_SUBSCRIBER = 'helpers_redis.FakeRedisSubscriber'
 SELENIUM_WEBDRIVER = os.environ.get('SELENIUM_WEBDRIVER', None)
 START_REDIS_COMMAND = os.environ.get('START_REDIS_COMMAND', None)
 STOP_REDIS_COMMAND = os.environ.get('STOP_REDIS_COMMAND', None)
+RUN_NPM_TESTS = os.environ.get('RUN_NPM_TESTS', False)
