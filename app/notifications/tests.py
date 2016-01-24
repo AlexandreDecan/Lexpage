@@ -5,13 +5,15 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.utils.lorem_ipsum import words
 from notifications.models import Notification
-from tests_helpers import LexpageTestCase, logged_in_test, SELENIUM_AVAILABLE, sqlite_sleep
+from helpers_tests import LexpageTestCase, logged_in_test, SELENIUM_AVAILABLE, sqlite_sleep
+
 
 if SELENIUM_AVAILABLE:
     from selenium.webdriver.support.wait import WebDriverWait
     from selenium.webdriver.common.action_chains import ActionChains
     from selenium.common.exceptions import NoSuchElementException
     from selenium.webdriver.support import expected_conditions as EC
+
 
 class NotificationTests(TestCase):
     fixtures = ['devel']
@@ -249,7 +251,6 @@ class NotificationBrowserTest(LexpageTestCase):
         time.sleep(0.5)
         with self.assertRaises(NoSuchElementException):
             self.selenium.find_element_by_xpath(dismiss_xpath)
-
 
     def dismiss_notification(self):
         dismiss_all_xpath = '//div[@class="notification_dismiss"]'

@@ -63,5 +63,3 @@ class PostsTests(TestCase):
             url = reverse('messaging_mark_'+mark, kwargs={'thread': self.thread.pk})
             response = self.client.get(url, follow=True)
             self.assertEqual(response.status_code, 200)
-
-

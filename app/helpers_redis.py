@@ -27,6 +27,7 @@ class FakeRedisSubscriber(RedisSubscriber):
 #    def get_file_descriptor(self):
 #        return None
 
+
 class FakeRedisPublisher(RedisPublisher):
     def __init__(self, **kwargs):
         connection = r

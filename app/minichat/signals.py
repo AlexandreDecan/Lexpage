@@ -7,7 +7,7 @@ from django.dispatch import receiver
 from ws4redis.redis_store import RedisMessage
 from redis.exceptions import ConnectionError
 
-from redis_helpers import get_redis_publisher
+from helpers_redis import get_redis_publisher
 from notifications.models import Notification
 
 from .models import Message

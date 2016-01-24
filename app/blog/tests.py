@@ -87,11 +87,11 @@ class StatusTests(TestCase):
         self.client.login(username='admin', password='admin')
         self.user = ActiveUser.objects.filter(username='admin')[0]
         self.post = BlogPost(title='Hello World!',
-                        author=self.user,
-                        tags='hello world',
-                        abstract='Hello World!',
-                        text='Hello World!',
-                        priority=BlogPost.PRIORITY_NORMAL)
+                             author=self.user,
+                             tags='hello world',
+                             abstract='Hello World!',
+                             text='Hello World!',
+                             priority=BlogPost.PRIORITY_NORMAL)
         self.post.save()
 
         self.url = reverse('blog_pending_edit', kwargs={'pk': self.post.pk})
@@ -145,11 +145,11 @@ class PendingTests(TestCase):
         self.client.login(username='admin', password='admin')
         self.user = ActiveUser.objects.filter(username='admin')[0]
         self.post = BlogPost(title='Hello World!',
-                        author=self.user,
-                        tags='hello world',
-                        abstract='Hello World!',
-                        text='Hello World!',
-                        priority=BlogPost.STATUS_SUBMITTED)
+                             author=self.user,
+                             tags='hello world',
+                             abstract='Hello World!',
+                             text='Hello World!',
+                             priority=BlogPost.STATUS_SUBMITTED)
         self.post.save()
 
     def test_list(self):

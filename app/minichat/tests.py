@@ -5,16 +5,14 @@ from minichat.models import Message
 from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 from django.utils.lorem_ipsum import words
-from tests_helpers import LexpageTestCase, logged_in_test, SELENIUM_AVAILABLE, without_redis
+from helpers_tests import LexpageTestCase, logged_in_test, SELENIUM_AVAILABLE, without_redis
 from datetime import date, timedelta
 from django.contrib.humanize.templatetags.humanize import naturalday
+from notifications.models import Notification
 
 if SELENIUM_AVAILABLE:
     from selenium.webdriver.support.wait import WebDriverWait
     from selenium.common.exceptions import NoSuchElementException
-
-from notifications.models import Notification
-
 
 
 class ViewsTests(TestCase):
@@ -198,7 +196,6 @@ class ApiTests(APITestCase):
         self.assertEqual(len(Notification.objects.all()), 0)
         self.client.logout()
 
-
     def test_anchor_deleted_after_updating_message(self):
         Notification.objects.all().delete()
         self.assertEqual(len(Notification.objects.all()), 0)
@@ -214,7 +211,6 @@ class ApiTests(APITestCase):
         self.assertEqual(len(Notification.objects.all()), 0)
         self.client.logout()
 
-
     def test_anchor_created_after_updating_message(self):
         Notification.objects.all().delete()
         self.assertEqual(len(Notification.objects.all()), 0)
@@ -229,7 +225,6 @@ class ApiTests(APITestCase):
         self.assertEqual(len(Notification.objects.all()), 1)
         self.client.logout()
 
-
     def test_anchor_updated_after_updating_message(self):
         Notification.objects.all().delete()
         self.assertEqual(len(Notification.objects.all()), 0)
@@ -243,7 +238,6 @@ class ApiTests(APITestCase):
         self.assertEqual(Message.objects.last().text, '@admin @user1 world')
         self.assertEqual(len(Notification.objects.all()), 2)
         self.client.logout()
-
 
     def test_multiple_anchors(self):
         for username in ('user2', 'user3'):
@@ -317,6 +311,7 @@ class ApiTests(APITestCase):
         first_message = response.data['results'][0]
         self.assertEqual(first_message['text'], 'trop fort %s' % formatted_url)
 
+
 class TemplateTestCase(LexpageTestCase):
 
     def test_natural_date_invalid_date(self):
@@ -333,6 +328,7 @@ class TemplateTestCase(LexpageTestCase):
             formatted_date = d.isoformat()
             filter_date = self.selenium.execute_script('return env.getFilter("naturalDay")("%s");' % formatted_date);
             self.assertEqual(filter_date, naturalday(d, 'l j b.'))
+
 
 class MinichatBrowserTest(LexpageTestCase):
     fixtures = ['devel']

@@ -8,8 +8,7 @@ from board.models import Thread, Message, Flag
 from blog.models import BlogPost
 from profile.models import ActiveUser
 
-
-from tests_helpers import LexpageTestCase, logged_in_test, SELENIUM_AVAILABLE
+from helpers_tests import LexpageTestCase, logged_in_test, SELENIUM_AVAILABLE
 
 if SELENIUM_AVAILABLE:
     from selenium.common.exceptions import NoSuchElementException
