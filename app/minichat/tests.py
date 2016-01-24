@@ -279,7 +279,7 @@ class ApiTests(APITestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['count'], 58)
-        self.assertEqual(len(response.data['results']), 10)
+        self.assertEqual(len(response.data['results']), 20)
 
         first_message = response.data['results'][0]
         # Striclty check the fields to avoir extra disclosure (field id is not sent)
