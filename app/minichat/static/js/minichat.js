@@ -18,6 +18,7 @@ function minichat_init_display(content, get_url) {
         setInterval(minichat_refresh_fallback, minichat_timer_delay);
         minichat_refresh();
         if (ws_client){
+            ws_client.register('minichat', 'on_connect', minichat_refresh);
             ws_client.register('minichat', 'on_message', minichat_websocket_message_dispatch);
         }
     };
