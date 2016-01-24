@@ -238,7 +238,7 @@ function get_markup_toolbar(markup, target) {
     }
 
     function get_button(target, markup, action) {
-        var link = $('<a>', {class: "btn btn-default"});
+        var link = $('<a>', {"class": "btn btn-default"});
         link.click({markup:markup, action:action, target:target}, function(e) {
             markup_proceed(MARKUP[e.data.markup][e.data.action], e.data.target);
         });
@@ -246,7 +246,7 @@ function get_markup_toolbar(markup, target) {
 
         var span;
         if (MARKUP[markup][action].icon) {
-            span = $('<span>', {class: "fa "+MARKUP[markup][action].icon});
+            span = $('<span>', {"class": "fa "+MARKUP[markup][action].icon});
         } else if (MARKUP[markup][action].label) {
             span = $('<span>', {text: MARKUP[markup][action].label});
         } else {
@@ -259,14 +259,14 @@ function get_markup_toolbar(markup, target) {
 
     function get_button_group(target, markup, group) {
         var i;
-        inner_div = $("<div>", {class:"btn-group btn-group-sm"});
+        inner_div = $("<div>", {"class":"btn-group btn-group-sm"});
         for (i=0; i<group.length; i++) {
             inner_div.append(get_button(target, markup, group[i]));
         }
         return inner_div;
     }
 
-    html = $('<div>', {class:"markup-toolbar btn-toolbar"});
+    html = $('<div>', {"class":"markup-toolbar btn-toolbar"});
 
     // Add buttons
     var i;
@@ -278,9 +278,9 @@ function get_markup_toolbar(markup, target) {
     // If BBCode, add smileys
     if (markup == BBCODE_name) {
         function get_smiley_html(target) {
-            var html = $("<div>", {class: "smiley-popup"});
+            var html = $("<div>", {"class": "smiley-popup"});
             for (var i=0; i<SMILEY_LIST.length; i++) {
-                var elem = $("<a>", {class:"btn btn-xs"});
+                var elem = $("<a>", {"class":"btn btn-xs"});
                 elem.click({smiley:SMILEY_LIST[i], target:target}, function(e){
                     markup_proceed(get_smiley_tag(e.data.smiley), e.data.target);
                 });
@@ -290,8 +290,8 @@ function get_markup_toolbar(markup, target) {
             return html;
         }
 
-        var div = $("<div>", {class: "btn-group btn-group-sm"});
-        var link = $("<a>", {class:"btn btn-default"});
+        var div = $("<div>", {"class": "btn-group btn-group-sm"});
+        var link = $("<a>", {"class": "btn btn-default"});
         add_tooltip(link, "Liste des smileys");
 
         link.click({target:target}, function(e) {
@@ -305,7 +305,7 @@ function get_markup_toolbar(markup, target) {
             }
         });
 
-        link.append($("<span>", {class: "fa fa-smile-o"}));
+        link.append($("<span>", {"class": "fa fa-smile-o"}));
 
         div.append(link);
         div.append(get_button(target, markup, 'sign'));
@@ -313,8 +313,8 @@ function get_markup_toolbar(markup, target) {
     }
 
     // Add preview
-    var div = $("<div>", {class:"btn-group btn-group-sm"});
-    var link = $("<a>", {class: "btn btn-default"});
+    var div = $("<div>", {"class": "btn-group btn-group-sm"});
+    var link = $("<a>", {"class": "btn btn-default"});
     link.click({target:target, markup:markup}, function(e) {
         // Get first preview div, if any
         var preview = e.data.target.next(".markup-preview").get(0);
@@ -324,7 +324,7 @@ function get_markup_toolbar(markup, target) {
             e.data.target.removeClass("hidden");
         } else {
             // Hide target and add preview div
-            var div = $("<div>", {class: "markup-preview"});
+            var div = $("<div>", {"class": "markup-preview"});
             div.css('min-height', target.css("height"));
             div.css('max-height', target.css('height'));
             div.css('overflow', 'auto');
@@ -333,7 +333,7 @@ function get_markup_toolbar(markup, target) {
             preview_markup(MARKUP_URL.preview[e.data.markup], e.data.target.val(), div);
         }
     });
-    link.append($("<span>", {class: "fa fa-eye"}));
+    link.append($("<span>", {"class": "fa fa-eye"}));
     add_tooltip(link, "Prévisualisation");
     div.append(link);
 
@@ -341,12 +341,12 @@ function get_markup_toolbar(markup, target) {
 
 
     // Add help button
-    var div = $("<div>", {class:"btn-group btn-group-sm"});
-    var link = $("<a>", {class: "btn btn-default"});
+    var div = $("<div>", {"class":"btn-group btn-group-sm"});
+    var link = $("<a>", {"class": "btn btn-default"});
     link.attr("href", MARKUP_URL.help[markup])
     add_tooltip(link, "Aide sur "+markup)
     link.attr("target", "new");
-    link.append($("<span>", {class: "fa fa-question"}));
+    link.append($("<span>", {"class": "fa fa-question"}));
     div.append(link);
     html.append(div);
 
