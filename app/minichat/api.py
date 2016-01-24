@@ -34,7 +34,7 @@ class LatestMessagesPagination(PageNumberPagination):
     going to the archives.
     To achieve that, we will need to set "page_query_param" and "max_page_size".
     """
-    page_size = 10
+    page_size = 20
 
 
 class MessageSerializer(ModelSerializer):
