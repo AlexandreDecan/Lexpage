@@ -1,7 +1,15 @@
+import unittest
+import subprocess
+import os
+import filecmp
+import glob
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from .search import SEARCH
+from difflib import context_diff
 
+backup_file = lambda x: '%s.orig' % x
 
 class MarkupViewsTests(TestCase):
     fixtures = ['devel']
@@ -70,3 +78,47 @@ class SearchViewsTests(TestCase):
                       'date_end': '01/01/15'}
             response = self.client.post(reverse('search'), fields)
             self.assertEqual(response.status_code, 200)
+
+
+@unittest.skipIf(not settings.RUN_NPM_TESTS, 'Grunt tests are disabled')
+class StaticFileTests(TestCase):
+    nunjucks_templates = 'app/commons/static/js/nunjucks.templates.js'
+    styles = glob.glob('app/commons/static/css/*.css')
+    files = [nunjucks_templates] + styles
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        for path in cls.files:
+            os.rename(path, backup_file(path))
+
+    @classmethod
+    def tearDownClass(cls):
+        for path in cls.files:
+            os.rename(backup_file(path), path)
+        super().tearDownClass()
+
+    def compare_with_backup(self, path):  # pragma: no cover
+        samefile = filecmp.cmp(path, backup_file(path), False)
+        if not samefile:
+            files = []
+            for filename in (backup_file(path), path):
+                with open(filename) as f:
+                    content = f.readlines()
+                files.append(content)
+            for line in context_diff(*files, fromfile=backup_file(path), tofile=path):
+                print(line)
+        self.assertTrue(samefile)
+
+    def test_templates_rendered(self):
+        grunt = subprocess.call(['grunt', 'nunjucks'])
+        self.assertEqual(grunt, 0)
+        self.compare_with_backup(self.nunjucks_templates)
+
+    def test_css_rendered(self):
+        grunt = subprocess.call(['grunt', 'compass'])
+        self.assertEqual(grunt, 0)
+        for filename in self.styles:
+            self.compare_with_backup(filename)
+
+

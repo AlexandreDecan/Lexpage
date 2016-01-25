@@ -117,7 +117,7 @@ suivre pour précompiler les templates (après avoir installé `grunt` et `npm`)
 
 ```
 npm install
-grunt
+grunt nunjucks
 ```
 
 Le fichier contenant les templates compilés (de toutes les applications
@@ -172,8 +172,15 @@ nécessaire pour le thème. Le fichier *_mixins.scss* contient des mixins néces
 (ou des ré-écriture de certains mixins Bootstrap, dans le cas où des modifications doivent être appliquées
 directement sur ces derniers).
 
+Pour compiler le css, nous utilisons [grunt](http://gruntjs.com/) et
+[compass](http://compass-style.org/). Voici la démarche à suivre pour compiler les
+styles (après avoir installé `npm`, `grunt-cli`, et `bundler`):
+
+```
+npm install
+bundle install --path=vendor
+grunt compass
+```
+
 En environnement de développement, le fichier *app/commons/static/css/style.css* sera directement utilisé lorsque le
 site est affiché (`DEBUG = True` dans les `settings`).
-En environnement de production, c'est le fichier *app/static_pub/css/style.min.css* qui sera utilisé.
-Notez deux choses : la première est la présence du *.min*, et la seconde est la présence du *_pub*
-(voir remarque ci-dessus à propos de `collectstatic`).
