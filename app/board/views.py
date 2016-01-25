@@ -118,6 +118,7 @@ class ThreadReplyView(FormView):
     def form_valid(self, form):
         data = form.cleaned_data
         message = Message(author=self.request.user, thread=self.thread, text=data['text'])
+        message.save()
 
         return FormView.form_valid(self, form)
 
