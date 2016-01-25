@@ -148,13 +148,3 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
         WebDriverWait(self.selenium, 1).until(
             lambda driver: driver.find_element_by_xpath('//div[contains(.,"Bienvenue %s")]' % username))
 
-
-if __name__ == '__main__':
-    # We call that script after the travis build to know which browser has been used
-    print('Capabilities for %s' % settings.SELENIUM_WEBDRIVER)
-    webdriver = WebDriver()
-    capabilities = webdriver.capabilities
-    for key, value in capabilities.items():
-        print(key, ':', value)
-    webdriver.quit()
-
