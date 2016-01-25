@@ -49,7 +49,6 @@
         {% if user.is_authenticated and ENABLE_WEBSOCKET %}
         <script>
             $(document).ready(function() {
-                console.log(ws_client);
                 ws_client.connect('{{ WEBSOCKET_URI }}lexpage?subscribe-broadcast&subscribe-user&echo');
             });
         </script>

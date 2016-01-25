@@ -23,7 +23,7 @@ function WebsocketClient(options, $) {
         return websocket_status;
     }
 
-    this.connect = function(uri) {
+    var connect = function(uri) {
         try {
             deferred = $.Deferred();
             ws = new WebSocket(uri);
@@ -36,6 +36,8 @@ function WebsocketClient(options, $) {
             deferred.reject(new Error(err));
         }
     }
+
+    this.connect = connect;
 
     function send_heartbeat() {
         try {
@@ -63,6 +65,7 @@ function WebsocketClient(options, $) {
     function connection_alive() {
         if(!websocket_status) {
             websocket_status = true;
+            console.log('ws connected');
             call_all_callbacks('on_connect');
         }
     }
@@ -70,6 +73,7 @@ function WebsocketClient(options, $) {
     function connection_dead() {
         if(websocket_status) {
             websocket_status = false;
+            console.log('ws closed');
             call_all_callbacks('on_disconnect');
         }
     }
@@ -93,7 +97,7 @@ function WebsocketClient(options, $) {
             var interval = generateInteval(attempts);
             timer = setTimeout(function() {
                 attempts++;
-                this.connect(ws.url);
+                connect(ws.url);
             }, interval);
         }
     }
