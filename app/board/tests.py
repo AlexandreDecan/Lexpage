@@ -75,9 +75,14 @@ class ThreadViewsTests(TestCase):
             self.assertEqual(response.status_code, 200, url)
 
     def test_threadreply(self):
+        nb_messages = Message.objects.count()
         url = reverse('board_thread_reply', kwargs={'thread': self.threads[0].pk})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+        response = self.client.post(reverse('board_thread_reply', kwargs={'thread': self.threads[0].pk}),
+                                    {'text': 'Hello World!'}, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Message.objects.count(), nb_messages + 1)
 
     def test_threadmarkunread(self):
         url = reverse('board_thread_mark_unread', kwargs={'thread': self.threads[0].pk})
