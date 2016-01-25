@@ -353,7 +353,7 @@ class MessageDeleteView(RedirectView):
         if self.request.user.has_perm('board.can_destroy') or\
                 (self.request.user == message.author and message.is_time_to_delete()):
 
-            previous = message.next_message()
+            previous = message.previous_message()
             anchor = previous if previous else message.next_message()
             message.delete()
 
