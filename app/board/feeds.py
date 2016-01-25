@@ -30,25 +30,3 @@ class LatestsFeed(Feed):
     def item_link(self, item):
         return item.get_absolute_url()
 
-
-class _LatestsFeed(Feed):
-    title = 'Discussions récentes'
-    link = reverse_lazy('board_latests')
-    description = 'Discussions actives sur Lexpage'
-
-    def items(self):
-        date_limit = datetime.date.today() - datetime.timedelta(5)
-        date_limit = datetime.datetime(date_limit.year, date_limit.month, date_limit.day)
-        return Thread.objects.all().filter(last_message__date__gte=date_limit).order_by('-last_message__date')
-
-    def item_title(self, item):
-        return item.title
-
-    def item_pubdate(self, item):
-        return item.last_message.date
-
-    def item_description(self, item):
-        return 'Dernier message par %s.<br/> %s' % (item.last_message.author.username, linebreaksbr(item.last_message.text))
-
-    def item_link(self, item):
-        return reverse_lazy('board_thread_show', kwargs={'thread': item.pk, 'slug': item.slug})
