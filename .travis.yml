@@ -36,7 +36,5 @@ before_script:
 script:
 - coverage run    --source app/ --omit */migrations/* --omit */management/* app/manage.py collectstatic --noinput
 - coverage run -a --source app/ --omit */migrations/* --omit */management/* app/manage.py test -v 3
-after_script:
-- python app/tests_helpers.py
 after_success:
 - coveralls
