@@ -13,6 +13,10 @@ class SearchForm(forms.Form):
     date_end = forms.DateField(required=False, label='Filtrer par date, fin de la période', help_text='Laissez vide si vous ne souhaitez pas ce critère.',
                                widget=DateTimePicker(options={'format': 'DD/MM/YYYY', 'pickTime': False}))
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['author'].widget.attrs.update({'class': 'author_complete'})
+
     def clean_query_text(self):
         if len(self.cleaned_data['query_text'].strip()) == 0:
             raise forms.ValidationError('Ce champ ne peut pas être vide.')

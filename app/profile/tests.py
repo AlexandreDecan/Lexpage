@@ -185,7 +185,7 @@ class AutocompleteTests(TestCase):
     def test_partial_anchor_and_multiple_answers(self):
         response = self.client.get(reverse('profile_api_list'), {'query': 'use'}, format='json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual({'query': 'use', 'suggestions': ['user2', 'user3']}, response.data)
+        self.assertEqual({'query': 'use', 'suggestions': ['user1', 'user2', 'user3']}, response.data)
 
     @user1_login()
     def test_full_anchor(self):
@@ -221,7 +221,7 @@ class AutocompleteTests(TestCase):
     def test_partial_anchor_with_at_and_multiple_responses(self):
         response = self.client.get(reverse('profile_api_list'), {'query': '@use', 'prefix': '@'}, format='json')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual({'query': '@use', 'suggestions': ['@user2', '@user3']}, response.data)
+        self.assertEqual({'query': '@use', 'suggestions': ['@user1', '@user2', '@user3']}, response.data)
 
     @user1_login()
     def test_full_anchor_with_at(self):

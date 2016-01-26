@@ -13,7 +13,17 @@
 {% for field in form %}
     {% include "_form_field.html" with field=field %}
 {% endfor %}
-
+<script>
+$(document).ready(function () {
+    $(".author_complete").autocomplete({
+        serviceUrl: "{% url 'profile_api_list' %}",
+        minChars: 2,
+        autoSelectFirst:true,
+        delimiter: " ",
+        tabDisabled: true
+    });
+});
+</script>
 <button class="btn btn-primary" type="submit">Rechercher</button>
 </form>
 
