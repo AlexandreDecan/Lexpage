@@ -145,7 +145,7 @@ RECAPTCHA_PUBLIC_KEY = '6LdAH_ASAAAAACAHEysPBjLekWJX94nYM0hI3hHy'
 ENABLE_WEBSOCKET = True
 WEBSOCKET_URL = '/ws/'
 WS4REDIS_HEARTBEAT = 'bob?'
-from helpers_websockets import get_allowed_channels
+from helpers.websockets import get_allowed_channels
 WS4REDIS_ALLOWED_CHANNELS = get_allowed_channels
 
 

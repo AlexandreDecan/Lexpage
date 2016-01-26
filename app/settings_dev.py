@@ -57,8 +57,8 @@ LOGGING = {
 }
 
 # Websockets
-REDIS_PUBLISHER = 'helpers_redis.FakeRedisPublisher'
-WS4REDIS_SUBSCRIBER = 'helpers_redis.FakeRedisSubscriber'
+REDIS_PUBLISHER = 'helpers.redis.FakeRedisPublisher'
+WS4REDIS_SUBSCRIBER = 'helpers.redis.FakeRedisSubscriber'
 
 
 # Tests
