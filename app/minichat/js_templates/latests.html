@@ -1,16 +1,15 @@
 {# This is a nunjucks template.
 To compile it, run "grunt".
 #}
-<div class="minichat-content">
+<div class="minichat-content minichat-{% if maximized %}maximized{% else %}minimized{% endif %}">
 {% set previousDate = "none" %}
-{% for message in results %}
+{% for message in results%}
     {% if message.date|naturalDay != previousDate %}
     <div class="minichat-date">
         {{ message.date|naturalDay }}
     </div>
     {% set previousDate = message.date|naturalDay %}
     {% endif %}
-
     <div class="minichat-message {% if message.user.username == user %}self-author{% else %}other-author{% endif %}">
         <a class="minichat-user" href="{{ message.user.get_absolute_url }}">
             <img src="{{ message.user.profile.avatar }}" title="{{ message.user.username }}" class="avatar verysmallavatar"/></a>

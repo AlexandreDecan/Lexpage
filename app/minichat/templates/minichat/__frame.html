@@ -2,13 +2,27 @@
 <div id="minichat" class="sidebar-block">
     <h2>Minichat
         <div class="pull-right">
-            <a class="btn"
-               href="{% url 'minichat_archives' %}"
-               data-toggle="tooltip"
-               data-placement="top"
-               title="Archives">
-                <span class="fa fa-folder-open"></span>
-            </a>
+            <div class="btn-group" role="group" aria-label="...">
+                <a class="btn"
+                   href="{% url 'minichat_archives' %}"
+                   data-toggle="tooltip"
+                   data-placement="top"
+                   title="Archives">
+                    <span class="fa fa-folder-open"></span>
+                </a>
+                <a class="btn"
+                   data-toggle="tooltip"
+                   data-placement="top"
+                   title="Maximiser" id="minichat_maximize">
+                    <span class="fa fa-expand"></span>
+                </a>
+                <a class="btn" style="display:none;"
+                   data-toggle="tooltip"
+                   data-placement="top"
+                   title="Minimiser" id="minichat_minimize">
+                    <span class="fa fa-compress"></span>
+                </a>
+            </div>
         </div>
     </h2>
 
