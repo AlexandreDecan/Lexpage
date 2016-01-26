@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.utils.lorem_ipsum import words
 from notifications.models import Notification
-from helpers_tests import LexpageTestCase, logged_in_test, SELENIUM_AVAILABLE, sqlite_sleep
+from helpers.tests import LexpageTestCase, logged_in_test, SELENIUM_AVAILABLE, sqlite_sleep
 
 
 if SELENIUM_AVAILABLE:

@@ -5,7 +5,7 @@ from minichat.models import Message
 from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 from django.utils.lorem_ipsum import words
-from helpers_tests import LexpageTestCase, logged_in_test, SELENIUM_AVAILABLE, without_redis
+from helpers.tests import LexpageTestCase, logged_in_test, SELENIUM_AVAILABLE, without_redis
 from datetime import date, timedelta
 from django.contrib.humanize.templatetags.humanize import naturalday
 from notifications.models import Notification

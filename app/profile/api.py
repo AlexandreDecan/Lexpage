@@ -55,10 +55,7 @@ class UsernamesListView(APIView):
         else:
             qs = ActiveUser.objects.none()
 
-        # Exclude logged in user because there is no sense in sending a message
-        # or hilighting self. Thanks to the "permission_classes" we know that
-        # the user is authenticated.
-        return qs.exclude(id=self.request.user.id)
+        return qs
 
     def get(self, request, format=None):
         prefix, _, query = self.get_request_parameters(request)

@@ -14,7 +14,7 @@ from ws4redis.django_runserver import _websocket_url, _websocket_app, _django_ap
 
 from socketserver import ThreadingMixIn
 
-from helpers_redis import get_redis_publisher
+from helpers.redis import get_redis_publisher
 redis_publisher = get_redis_publisher()
 
 
