@@ -45,6 +45,7 @@
         <script src="{% static "js/scripts.js" %}?v=160110"></script>
         <script src="{% static "js/notifications.js" %}?v=160116"></script>
         <script src="{% static "js/minichat.js" %}?v=160119"></script>
+        <script src="{% static "js/online.js" %}?v=160126"></script>
         <script src="{% static "js/markup.js" %}?v=160113"></script>
         {% if user.is_authenticated and ENABLE_WEBSOCKET %}
         <script>
@@ -122,6 +123,11 @@
     <script src="{% static "libs/jquery.tagcloud.min.js" %}"></script>
     <script src="{% static "libs/jquery.bootstrap-autohidingnavbar.min.js" %}"></script>
     <script src="{% static "libs/modernizr.min.js" %}"></script>
+    {% if user.is_authenticated and not INCOGNITO %}
+    <script>
+        online_init_ping("{% url 'online_ping' %}", {{USER_IS_ONLINE_TIMEOUT}});
+    </script>
+    {% endif %}
 {% endblock %}
 
 
