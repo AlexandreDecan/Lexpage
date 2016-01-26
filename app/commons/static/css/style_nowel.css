@@ -6702,14 +6702,7 @@ body {
 
 /* Full minichat, external div */
 #minichat_content {
-  max-height: 380px;
-  overflow: auto;
   margin-bottom: 10px;
-}
-@media (max-width: 768px) {
-  #minichat_content {
-    max-height: 280px;
-  }
 }
 
 #minichat_form {
@@ -6717,49 +6710,86 @@ body {
   border-top: 2px dotted #9e0707;
 }
 
+@media (max-width: 768px) {
+  #minichat_maximize {
+    display: none;
+  }
+}
+
 /* Full minichat, internal div */
 .minichat-content {
-  font-size: 12px;
-  padding: 1px 5px;
-  /* Full message (time, text, user, ...) */
+  overflow: auto;
   /* Time (HH:MM) */
-  /* Actual text of the message */
-}
-.minichat-content .minichat-message {
-  margin-bottom: 14px;
-}
-.minichat-content .minichat-message .avatar {
-  margin-top: -4px;
-  vertical-align: top;
-}
-.minichat-content .minichat-message.self-author .avatar {
-  float: right;
-}
-.minichat-content .minichat-message.self-author .minichat-text {
-  margin-right: 35px;
-  border-right: 2px solid #9e0707;
-  border-radius: 3px 0 0 3px;
-}
-.minichat-content .minichat-message.other-author .avatar {
-  float: left;
-}
-.minichat-content .minichat-message.other-author .minichat-text {
-  border-left: 2px solid #9e0707;
-  margin-left: 35px;
-  border-radius: 0 3px 3px 0;
-}
-.minichat-content .minichat-time {
-  display: inline-block;
-  padding-right: 5px;
-  font-size: 80%;
-  color: #777777;
 }
 .minichat-content .minichat-date {
   text-align: center;
   margin-top: 3px;
   color: #777777;
 }
-.minichat-content .minichat-text {
+.minichat-content .minichat-time {
+  display: inline-block;
+  font-size: 80%;
+  color: #777777;
+}
+
+.minichat-content.minichat-maximized {
+  max-height: 480px;
+  padding: 6px 12px;
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+.minichat-content.minichat-maximized .minichat-message {
+  margin-bottom: 14px;
+}
+.minichat-content.minichat-maximized .minichat-message .minichat-text {
+  margin-left: 35px;
+}
+.minichat-content.minichat-maximized .minichat-message .avatar {
+  float: left;
+}
+.minichat-content.minichat-maximized .minichat-time {
+  padding-right: 6px;
+}
+
+.minichat-content.minichat-minimized {
+  max-height: 380px;
+  padding: 1px 5px;
+  font-size: 12px;
+  /* Full message (time, text, user, ...) */
+  /* Actual text of the message */
+}
+@media (max-width: 768px) {
+  .minichat-content.minichat-minimized {
+    max-height: 280px;
+  }
+}
+.minichat-content.minichat-minimized .minichat-message {
+  margin-bottom: 14px;
+}
+.minichat-content.minichat-minimized .minichat-message .avatar {
+  margin-top: -4px;
+  vertical-align: top;
+}
+.minichat-content.minichat-minimized .minichat-message.self-author .avatar {
+  float: right;
+}
+.minichat-content.minichat-minimized .minichat-message.self-author .minichat-text {
+  margin-right: 35px;
+  border-right: 2px solid #9e0707;
+  border-radius: 3px 0 0 3px;
+}
+.minichat-content.minichat-minimized .minichat-message.other-author .avatar {
+  float: left;
+}
+.minichat-content.minichat-minimized .minichat-message.other-author .minichat-text {
+  border-left: 2px solid #9e0707;
+  margin-left: 35px;
+  border-radius: 0 3px 3px 0;
+}
+.minichat-content.minichat-minimized .minichat-time {
+  padding-right: 5px;
+}
+.minichat-content.minichat-minimized .minichat-text {
   position: relative;
   margin-top: 3px;
   margin-bottom: 3px;
@@ -6767,7 +6797,7 @@ body {
   -webkit-box-shadow: 0 0px 5px 1px rgba(0, 0, 0, 0.3);
   box-shadow: 0 0px 5px 1px rgba(0, 0, 0, 0.3);
 }
-.minichat-content .minichat-text:hover {
+.minichat-content.minichat-minimized .minichat-text:hover {
   -webkit-box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.3);
   box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.3);
 }

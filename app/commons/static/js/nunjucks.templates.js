@@ -33,7 +33,16 @@ var colno = null;
 var output = "";
 try {
 var parentTemplate = null;
-output += "\n<div class=\"minichat-content\">\n";
+output += "\n<div class=\"minichat-content minichat-";
+if(runtime.contextOrFrameLookup(context, frame, "maximized")) {
+output += "maximized";
+;
+}
+else {
+output += "minimized";
+;
+}
+output += "\">\n";
 var t_1;
 t_1 = "none";
 frame.set("previousDate", t_1, true);
@@ -74,7 +83,7 @@ context.addExport("previousDate", t_6);
 output += "\n    ";
 ;
 }
-output += "\n\n    <div class=\"minichat-message ";
+output += "\n    <div class=\"minichat-message ";
 if(runtime.memberLookup((runtime.memberLookup((t_5),"user")),"username") == runtime.contextOrFrameLookup(context, frame, "user")) {
 output += "self-author";
 ;

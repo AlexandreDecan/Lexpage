@@ -1,0 +1,98 @@
+<div style="clearfix"></div>
+<div id="minichat" class="sidebar-block">
+    <h2>Minichat
+        <div class="pull-right">
+            <div class="btn-group" role="group" aria-label="...">
+                <a class="btn"
+                   href="{% url 'minichat_archives' %}"
+                   data-toggle="tooltip"
+                   data-placement="top"
+                   title="Archives">
+                    <span class="fa fa-folder-open"></span>
+                </a>
+                <a class="btn"
+                   data-toggle="tooltip"
+                   data-placement="top"
+                   title="Maximiser" id="minichat_maximize">
+                    <span class="fa fa-expand"></span>
+                </a>
+                <a class="btn" style="display:none;"
+                   data-toggle="tooltip"
+                   data-placement="top"
+                   title="Minimiser" id="minichat_minimize">
+                    <span class="fa fa-compress"></span>
+                </a>
+            </div>
+        </div>
+    </h2>
+
+    <div id="minichat_wrapper">
+        {% if user.is_authenticated %}
+            {% load online %}
+            {% who_is_online as online_users %}
+            {% if online_users %}
+                <div class="sidebar-online" data-toggle="tooltip" data-placement="left" title="Actuellement en ligne">
+                    {% for user in online_users %}
+                        <a href="{% url 'profile_show' user %}">
+                            <img src="{{ user.profile.avatar }}" title="{{ user.username }}" class="avatar smallavatar"/></a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endif %}
+
+        <div id="minichat_content">
+            <p class="text-muted text-center">
+                <span class="fa fa-spinner fa-spin"></span> Chargement...</p>
+        </div>
+        {% if user.is_authenticated %}
+
+            <form action="{% url 'minichat_post' %}" class="form-inline" method="post" id="minichat_form">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input name="text" maxlength="150" type="text" class="form-control" placeholder="Nouveau message"/>
+
+                    <span class="input-group-btn">
+
+                    <button class="btn btn-default btn-circle" type="submit">
+                        <span class="fa fa-pencil"></span>
+                    </button>
+                    </span>
+                </div>
+                <div class="minichat-remainingChars">
+                    <span id="remainingChars"></span>
+                </div>
+
+            </form>
+
+            <script>
+                $(document).ready(function () {
+                    $("#minichat_form input.form-control").autocomplete({
+                        serviceUrl: "{% url 'profile_api_list' %}",
+                        minChars: 3,
+                        autoSelectFirst:true,
+                        delimiter: " ",
+                        params: {'prefix': '@'},
+                        tabDisabled: true,
+                        onSearchStart: function (query) {
+                            if (query.query.toLowerCase().charAt(0)=="@") {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        },
+                    });
+                });
+            </script>
+        {% endif %}
+    </div><!-- minichat_content -->
+
+    <script>
+        $(document).ready(function() {
+            minichat_init_display($("#minichat_content"), "{% url 'minichat-api-latest-list' %}");
+            {% if user.is_authenticated %}
+                minichat_init_post();
+                minichat_init_remaining_chars();
+            {% endif %}
+        });
+    </script>
+</div> <!-- panel -->

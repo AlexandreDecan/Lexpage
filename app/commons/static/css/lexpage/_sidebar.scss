@@ -13,13 +13,7 @@
 
 /* Full minichat, external div */
 #minichat_content {
-  max-height:380px;
-  overflow:auto;
   margin-bottom: $padding-large-vertical;
-
-  @media (max-width: $screen-sm) {
-    max-height: 280px;
-  }
 }
 
 #minichat_form {
@@ -27,10 +21,64 @@
   border-top: 2px dotted $brand-primary;
 }
 
+#minichat_maximize {
+  @media (max-width: $screen-sm) {
+    display: none;
+  }
+}
+
 /* Full minichat, internal div */
 .minichat-content {
-  font-size: $font-size-small;
+  overflow:auto;
+
+  .minichat-date {
+    text-align: center;
+    margin-top: 3px;
+    color: $text-muted;
+  }
+
+  /* Time (HH:MM) */
+  .minichat-time {
+    display: inline-block;
+    font-size: 80%;
+    color: $text-muted;
+  }
+}
+
+.minichat-content.minichat-maximized {
+  max-height:480px;
+
+  padding: $padding-base-vertical $padding-base-horizontal;
+  font-size: $font-size-base;
+  margin-bottom: $padding-large-vertical + 4px;
+
+  .minichat-message {
+    margin-bottom: $padding-large-vertical + 4px;
+
+    .minichat-text {
+      margin-left: 35px;
+    }
+
+    .avatar {
+      float: left;
+    }
+  }
+
+  .minichat-time {
+    padding-right: $padding-base-horizontal / 2;
+  }
+
+}
+
+.minichat-content.minichat-minimized {
+  max-height:380px;
+
+  @media (max-width: $screen-sm) {
+    max-height: 280px;
+  }
+
   padding: $padding-xs-vertical $padding-xs-horizontal;
+  font-size: $font-size-small;
 
   /* Full message (time, text, user, ...) */
   .minichat-message {
@@ -64,18 +112,8 @@
     }
   }
 
-  /* Time (HH:MM) */
   .minichat-time {
-    display: inline-block;
     padding-right: $padding-small-horizontal / 2;
-    font-size: 80%;
-    color: $text-muted;
-  }
-
-  .minichat-date {
-    text-align: center;
-    margin-top: 3px;
-    color: $text-muted;
   }
 
   /* Actual text of the message */
@@ -91,6 +129,7 @@
     }
   }
 }
+
 
 .minichat-remainingChars {
   margin-top: $padding-large-vertical;

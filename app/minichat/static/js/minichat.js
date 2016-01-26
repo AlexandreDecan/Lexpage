@@ -7,12 +7,22 @@ var minichat_form = "#minichat_form";
 var minichat_button = "#minichat_form button[type='submit']";
 var minichat_input_text = "#minichat_form input[type='text']";
 var minichat_chars_output = "#minichat_form .minichat-remainingChars";
+var minichat_minimize = "#minichat_minimize";
+var minichat_maximize = "#minichat_maximize";
+
+var minichat_maximized = false;
 
 var minichat_template = "minichat/latests.html";
+
+var page_content = ".page .pagecontent";
+var content_column = ".content-column";
+var sidebar_column = ".sidebar-column";
 
 function minichat_init_display(content, get_url) {
     minichat_content = content
     minichat_content_url = get_url;
+    $(minichat_minimize).click(minichat_minimize_frame);
+    $(minichat_maximize).click(minichat_maximize_frame);
 
     if (minichat_content) {
         setInterval(minichat_refresh_fallback, minichat_timer_delay);
@@ -41,7 +51,7 @@ function minichat_websocket_message_dispatch(data) {
 
 function minichat_refresh() {
     $.get(minichat_content_url, function(data) {
-        data_with_username = $.extend({ user: USERNAME }, data);
+        data_with_username = $.extend({ 'user': USERNAME, 'maximized': minichat_maximized }, data);
         $(minichat_content).html(nunjucks.render(minichat_template, data_with_username));
         replace_invalid_avatar($(minichat_content));
         activate_tooltips($(minichat_content));
@@ -100,4 +110,30 @@ function minichat_init_remaining_chars() {
     minichat_update_chars_count();
     $(minichat_input_text).change(minichat_update_chars_count);
     $(minichat_input_text).keyup(minichat_update_chars_count);
+}
+
+function minichat_minimize_frame(){
+    $(minichat_maximize).show();
+    $(minichat_minimize).hide();
+    $(page_content).show();
+    $(sidebar_column).removeClass('col-md-12')
+    $(sidebar_column).addClass('col-md-3')
+    $(content_column).removeClass('col-md-12')
+    $(content_column).addClass('col-md-9')
+    $(minichat_form + " .input-group").removeClass('col-md-12');
+    minichat_maximized = false;
+    minichat_refresh();
+}
+
+function minichat_maximize_frame(){
+    $(minichat_maximize).hide();
+    $(minichat_minimize).show();
+    $(page_content).hide();
+    $(sidebar_column).removeClass('col-md-3')
+    $(sidebar_column).addClass('col-md-12')
+    $(content_column).removeClass('col-md-9')
+    $(content_column).addClass('col-md-12')
+    $(minichat_form + " .input-group").addClass('col-md-12');
+    minichat_maximized = true;
+    minichat_refresh();
 }

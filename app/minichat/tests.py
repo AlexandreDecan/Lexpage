@@ -396,3 +396,24 @@ class MinichatBrowserTest(LexpageTestCase):
         time.sleep(2*30+1) # Wait 2 refresh interval + 1s
         self.assertNotEqual(minichat_html(), placeholder)
 
+    @logged_in_test()
+    def test_minichat_maximize_minimize(self):
+        time.sleep(1)
+        minichat_minimized = lambda: self.selenium.find_element_by_css_selector('.minichat-content.minichat-minimized')
+        minichat_maximized = lambda: self.selenium.find_element_by_css_selector('.minichat-content.minichat-maximized')
+        minichat_minimized()
+        with self.assertRaises(NoSuchElementException):
+            minichat_maximized()
+        self.selenium.find_element_by_id('minichat_maximize').click()
+        time.sleep(1)
+        self.post_message(text_message='Maximized')
+        with self.assertRaises(NoSuchElementException):
+            minichat_minimized()
+        minichat_maximized()
+        self.selenium.find_element_by_id('minichat_minimize').click()
+        minichat_minimized()
+        with self.assertRaises(NoSuchElementException):
+            minichat_maximized()
+        time.sleep(1)
+        self.post_message(text_message='Re-minimized')
+
