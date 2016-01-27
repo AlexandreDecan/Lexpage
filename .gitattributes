@@ -2,3 +2,4 @@ app/commons/static/libs/* linguist-vendored
 app/commons/static/css/bootstrap/* linguist-vendored
 app/commons/static/css/*.css linguist-vendored
 app/commons/static/js/nunjucks.templates.js linguist-vendored
+tasks/* linguist-vendored
