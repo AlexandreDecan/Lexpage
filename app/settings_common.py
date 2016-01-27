@@ -42,8 +42,9 @@ INSTALLED_APPS = (
     'messaging',
     'board',
     'notifications',
-
+    'online',
 )
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -52,7 +53,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'profile.last_visit_middleware.SetLastVisitMiddleware',
+    'online.last_visit_middleware.SetLastVisitMiddleware',
 )
 
 
@@ -81,6 +82,7 @@ TEMPLATES = [  # https://docs.djangoproject.com/en/1.9/ref/templates/upgrading/#
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'online.context_processors.online_settings',
                 'context_processors.global_settings',
                 'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.request',
@@ -128,7 +130,7 @@ REST_FRAMEWORK = {
 }
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-USER_IS_ONLINE_TIMEOUT = 5
+USER_IS_ONLINE_TIMEOUT = 5 # in minutes
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 SESSION_COOKIE_AGE = 7257600  # 3 months
 
