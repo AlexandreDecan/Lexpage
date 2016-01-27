@@ -319,8 +319,14 @@ class TemplateTestCase(LexpageTestCase):
         filter_invalid_date = self.selenium.execute_script('return env.getFilter("naturalDay")("foo");');
         self.assertEqual(filter_invalid_date, 'Invalid date')
 
-    def test_natural_date_django_equivalent(self):
-        self.selenium.get(self.live_server_url)
+    def test_natural_date_on_home_page(self):
+        self.natural_date_django_equivalent(self.live_server_url)
+
+    def test_natural_date_on_search_page(self):
+        self.natural_date_django_equivalent('%s%s' % (self.live_server_url, reverse('search')))
+
+    def natural_date_django_equivalent(self, url):
+        self.selenium.get(url)
         # One year and 30 days
         for i in range(0, 365+30):
             time.sleep(0.1)

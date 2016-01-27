@@ -20,12 +20,10 @@ class DateTimePicker(DateTimeInput):
     class Media:
         class JsFiles(object):
             def __iter__(self):
-                yield 'libs/datetimewidget/js/moment.min.js'
-                yield 'libs/datetimewidget/js/bootstrap-datetimepicker.js'
-                yield 'libs/datetimewidget/js/bootstrap-datetimepicker.fr.js'
+                yield 'libs/moment-datepicker/moment-datepicker.min.js'
 
         js = JsFiles()
-        css = {'all': ('libs/datetimewidget/css/bootstrap-datetimepicker.min.css',), }
+        css = {'all': ('libs/moment-datepicker/datepicker.css',), }
 
     # http://momentjs.com/docs/#/parsing/string-format/
     # http://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
@@ -67,7 +65,7 @@ class DateTimePicker(DateTimeInput):
     js_template = '''
         <script language="javascript">
             $(document).ready(function() {
-                $("#%(picker_id)s").datetimepicker(%(options)s);
+                $("#%(picker_id)s").datepicker(%(options)s);
             });
         </script>'''
 
@@ -76,7 +74,7 @@ class DateTimePicker(DateTimeInput):
             icon_attrs = {'class': 'fa fa-calendar'}
             options.update({'icons': {'date': 'fa fa-calendar', 'time': 'fa fa-calendar'}})
         if not div_attrs:
-            div_attrs = {'class': 'input-group date'}
+            div_attrs = {'class': 'input-group date', 'data-date': ''}
         if format is None and options and options.get('format'):
             format = self.conv_datetime_format_js2py(options.get('format'))
         super(DateTimePicker, self).__init__(attrs, format)
