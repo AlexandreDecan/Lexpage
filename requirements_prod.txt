@@ -1,4 +1,4 @@
 -r requirements_common.txt
 gevent==1.1rc3
 psycopg2==2.6.1
-uwsgi==2.0.12
+uwsgi==2.0.12 --no-use-wheel
