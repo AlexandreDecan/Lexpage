@@ -65,8 +65,8 @@ class DateTimePicker(DateTimeInput):
         </div>'''
 
     js_template = '''
-        <script>
-            $(function() {
+        <script language="javascript">
+            $(document).ready(function() {
                 $("#%(picker_id)s").datetimepicker(%(options)s);
             });
         </script>'''
