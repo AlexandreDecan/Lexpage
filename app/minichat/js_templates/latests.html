@@ -2,22 +2,32 @@
 To compile it, run "grunt".
 #}
 <div class="minichat-content">
-{% set previousDate = "none" %}
-{% for message in results %}
-    {% if message.date|naturalDay != previousDate %}
-    <div class="minichat-date">
+{% set previousDate = "" %}
+{%- for message in results %}
+    {%- if message.date|naturalDay != previousDate -%}
+      <div class="minichat-date">
         {{ message.date|naturalDay }}
-    </div>
-    {% set previousDate = message.date|naturalDay %}
-    {% endif %}
+      </div>
+      {%- set previousDate = message.date|naturalDay %}
+      {%- set date_changed = true %}{# Used to determine if we need to add the user-first css class #}
+    {%- else %}
+      {%- set date_changed = false %}
+    {%- endif %}
 
+    {%- if date_changed or results[loop.index0-1].user.username != message.user.username %}
     <div class="minichat-message {% if message.user.username == user %}self-author{% else %}other-author{% endif %}">
         <a class="minichat-user" href="{{ message.user.get_absolute_url }}">
             <img src="{{ message.user.profile.avatar }}" title="{{ message.user.username }}" class="avatar verysmallavatar"/></a>
-        <div class="minichat-text">
+            <div class="minichat-text">
+    {%- endif %}
+            <div>
             <span class="minichat-time">{{ message.date|time }}</span>
             {{ message.text }}
+            </div>
+    {%- if loop.last or results[loop.index].date|naturalDay != previousDate or
+          results[loop.index].user.username != message.user.username %}
         </div>
     </div>
-{% endfor %}
+    {%- endif %}
+{%- endfor %}
 </div>

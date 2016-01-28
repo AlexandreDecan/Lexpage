@@ -83,7 +83,14 @@
     position: relative;
     margin-top: 3px;
     margin-bottom: 3px;
-    padding: $padding-xs-vertical $padding-xs-horizontal;
+    padding: 0px;
+
+    div {
+        padding: $padding-xs-vertical $padding-xs-horizontal;
+        &:not(:first-child){
+            border-top: 1px rgba(0, 0, 0, 0.1) solid;
+        }
+    }
 
     @include z-depth(1);
     &:hover {

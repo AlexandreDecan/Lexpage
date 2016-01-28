@@ -6761,9 +6761,15 @@ body {
   position: relative;
   margin-top: 3px;
   margin-bottom: 3px;
-  padding: 1px 5px;
+  padding: 0px;
   -webkit-box-shadow: 0 0px 5px 1px rgba(0, 0, 0, 0.3);
   box-shadow: 0 0px 5px 1px rgba(0, 0, 0, 0.3);
+}
+.minichat-content .minichat-text div {
+  padding: 1px 5px;
+}
+.minichat-content .minichat-text div:not(:first-child) {
+  border-top: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .minichat-content .minichat-text:hover {
   -webkit-box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.3);
