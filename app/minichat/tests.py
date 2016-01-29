@@ -5,7 +5,7 @@ from minichat.models import Message
 from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 from django.utils.lorem_ipsum import words
-from helpers.tests import LexpageTestCase, logged_in_test, SELENIUM_AVAILABLE, without_redis
+from helpers.tests import LexpageTestCase, logged_in_test, SELENIUM_AVAILABLE, without_redis, sqlite_sleep
 from datetime import date, timedelta
 from django.contrib.humanize.templatetags.humanize import naturalday
 from notifications.models import Notification
@@ -339,7 +339,7 @@ class MinichatBrowserTest(LexpageTestCase):
         super().setUp()
 
     def post_message(self, timeout=5, text_message='Hello World'):
-        text_message_xpath = '//div[@class="minichat-text" and text()[contains(.,"%s")]]' % text_message
+        text_message_xpath = '//div[@class="minichat-text"]/div[text()[contains(.,"%s")]]' % text_message
         with self.assertRaises(NoSuchElementException):
             self.selenium.find_element_by_xpath(text_message_xpath)
         time.sleep(1)
@@ -356,7 +356,7 @@ class MinichatBrowserTest(LexpageTestCase):
     def test_minichat_message_without_redis(self):
         """Without redis, a message takes up to 30 seconds to get printed"""
         text_message = 'Je suis un test'
-        text_message_xpath = '//div[@class="minichat-text" and text()[contains(.,"%s")]]' % text_message
+        text_message_xpath = '//div[@class="minichat-text"]/div[text()[contains(.,"%s")]]' % text_message
         with self.assertRaises(NoSuchElementException):
             self.selenium.find_element_by_xpath(text_message_xpath)
         time.sleep(1)
@@ -396,3 +396,228 @@ class MinichatBrowserTest(LexpageTestCase):
         time.sleep(2*30+1) # Wait 2 refresh interval + 1s
         self.assertNotEqual(minichat_html(), placeholder)
 
+class MinichatNunjucksTest(LexpageTestCase):
+
+    def setUp(self):
+        # Running the tests just before midnight could cause failures
+        if time.strftime("%H%M") in ['2358', '2359']: # pragma: no cover
+            time.sleep(125)
+        self.users = []
+        for username in ('user1', 'user2', 'user3'):
+            user = User.objects.create_user(
+                username=username, email='%s@example.com' % username, password=username)
+            user.save()
+            sqlite_sleep(.5)
+            self.users.append(user)
+
+    def verify_minichat_groups(self, groups):
+        """This fonction tests that messages in the minichat are splitted correctly between the
+        groups in the current page.
+
+        groups (list of a list): Content of the messages, as they should be shown on the page.
+        """
+        time.sleep(2)
+        messages = self.selenium.find_elements_by_css_selector('.minichat-text')
+        self.assertEqual(len(groups), len(messages))
+        for message_group in messages:
+            inner_messages = message_group.find_elements_by_xpath('./div')
+            group = groups.pop(0)
+            self.assertEqual(len(group), len(inner_messages))
+            for inner_message in inner_messages:
+                self.assertIn(group.pop(0), inner_message.text)
+
+    def verify_minichat_read(self, expected_read, expected_unread):
+        """This fonction tests that messages in the minichat are marked as read
+        or unread as expected
+        """
+        all_messages = self.selenium.find_elements_by_css_selector('.minichat-text div')
+        unread_messages = self.selenium.find_elements_by_css_selector('.minichat-text div.new')
+        unread_messages_text = [e.text for e in unread_messages]
+        read_messages_text = [e.text for e in all_messages if e.text not in unread_messages_text]
+        for expected_messages, actual_messages in ((expected_read, read_messages_text),
+                                                   (expected_unread, unread_messages_text),):
+            self.assertEqual(len(expected_messages), len(actual_messages))
+            all_messages_found = []
+            for e in expected_messages:
+                messages_found = [a for a in actual_messages if a.endswith(e)]
+                self.assertEqual(len(messages_found), 1)
+                all_messages_found += messages_found
+            self.assertEqual(len(all_messages_found), len(list(set(all_messages_found))))
+
+    @logged_in_test()
+    def test_one_message_class(self):
+        Message(user=self.users[0], text='Hello World!').save()
+        self.verify_minichat_groups([['Hello World!']])
+
+    @logged_in_test()
+    def test_two_messages_class(self):
+        Message(user=self.users[0], text='Hello World!').save()
+        sqlite_sleep(.5)
+        Message(user=self.users[0], text='Traduction: Bonjour').save()
+        self.verify_minichat_groups([
+            [
+                'Traduction: Bonjour',
+                'Hello World!',
+            ],
+        ])
+
+    @logged_in_test()
+    def test_three_messages_class(self):
+        Message(user=self.users[0], text='Hello World!').save()
+        sqlite_sleep(.5)
+        Message(user=self.users[0], text='Traduction: Bonjour').save()
+        sqlite_sleep(.5)
+        Message(user=self.users[0], text='(en Anglais)').save()
+        self.verify_minichat_groups([
+            [
+                '(en Anglais)',
+                'Traduction: Bonjour',
+                'Hello World!',
+            ],
+        ])
+
+    @logged_in_test()
+    def test_three_messages_different_users(self):
+        Message(user=self.users[0], text='Hello World!').save()
+        sqlite_sleep(.5)
+        Message(user=self.users[1], text='Traduction: Bonjour').save()
+        sqlite_sleep(.5)
+        Message(user=self.users[2], text='(en Anglais)').save()
+        self.verify_minichat_groups([
+            [ '(en Anglais)', ],
+            [ 'Traduction: Bonjour', ],
+            [ 'Hello World!', ],
+        ])
+
+    @logged_in_test(incognito=False)
+    def test_conversation(self):
+        self.selenium.refresh()
+        Message(user=self.users[0], text='Hello You').save()
+        sqlite_sleep(.5)
+        self.verify_minichat_groups([
+            ['Hello You'],
+        ])
+        self.verify_minichat_read(['Hello You'], [])
+        Message(user=self.users[1], text='Yes').save()
+        sqlite_sleep(.5)
+        self.verify_minichat_groups([
+            ['Yes'],
+            ['Hello You'],
+        ])
+        self.verify_minichat_read(['Hello You'], ['Yes'])
+        Message(user=self.users[1], text='Am here').save()
+        sqlite_sleep(.5)
+        self.verify_minichat_groups([
+            ['Am here', 'Yes'],
+            ['Hello You'],
+        ])
+        self.verify_minichat_read(['Hello You'], ['Yes', 'Am here'])
+        self.selenium.refresh()
+        self.verify_minichat_groups([
+            ['Am here', 'Yes'],
+            ['Hello You'],
+        ])
+        self.verify_minichat_read(['Hello You', 'Yes', 'Am here'], [])
+        Message(user=self.users[0], text='It is original').save()
+        sqlite_sleep(.5)
+        self.verify_minichat_groups([
+            ['It is original'],
+            ['Am here', 'Yes'],
+            ['Hello You'],
+        ])
+        self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original'], [])
+        Message(user=self.users[1], text='Yup.').save()
+        sqlite_sleep(.5)
+        self.verify_minichat_groups([
+            ['Yup.'],
+            ['It is original'],
+            ['Am here', 'Yes'],
+            ['Hello You'],
+        ])
+        self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original'], ['Yup.'])
+        Message(user=self.users[0], text='ok...').save()
+        sqlite_sleep(.5)
+        self.verify_minichat_groups([
+            ['ok...'],
+            ['Yup.'],
+            ['It is original'],
+            ['Am here', 'Yes'],
+            ['Hello You'],
+        ])
+        self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original', 'Yup.',
+                                   'ok...'], [])
+        Message(user=self.users[1], text='what ok?').save()
+        sqlite_sleep(.5)
+        self.verify_minichat_groups([
+            ['what ok?'],
+            ['ok...'],
+            ['Yup.'],
+            ['It is original'],
+            ['Am here', 'Yes'],
+            ['Hello You'],
+        ])
+        self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original', 'Yup.',
+                                   'ok...'], ['what ok?'])
+        Message(user=self.users[0], text='does not matter').save()
+        sqlite_sleep(.5)
+        self.verify_minichat_groups([
+            ['does not matter'],
+            ['what ok?'],
+            ['ok...'],
+            ['Yup.'],
+            ['It is original'],
+            ['Am here', 'Yes'],
+            ['Hello You'],
+        ])
+        self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original', 'Yup.',
+                                   'ok...', 'what ok?', 'does not matter'], [])
+        Message(user=self.users[0], text='brb').save()
+        sqlite_sleep(.5)
+        self.verify_minichat_groups([
+            ['brb', 'does not matter'],
+            ['what ok?'],
+            ['ok...'],
+            ['Yup.'],
+            ['It is original'],
+            ['Am here', 'Yes'],
+            ['Hello You'],
+        ])
+        self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original', 'Yup.',
+                                   'ok...', 'what ok?', 'does not matter', 'brb'], [])
+        Message(user=self.users[0], text='ZZz').save()
+        self.verify_minichat_groups([
+            ['ZZz', 'brb', 'does not matter'],
+            ['what ok?'],
+            ['ok...'],
+            ['Yup.'],
+            ['It is original'],
+            ['Am here', 'Yes'],
+            ['Hello You'],
+        ])
+        self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original', 'Yup.',
+                                   'ok...', 'what ok?', 'does not matter', 'brb', 'ZZz'], [])
+
+    @logged_in_test()
+    def test_not_same_day(self):
+        Message(user=self.users[0], text='All my troubles..').save()
+        sqlite_sleep(.5)
+        message = Message.objects.latest()
+        message.date = message.date - timedelta(1)
+        message.save()
+        sqlite_sleep(.5)
+        Message(user=self.users[0], text='Hello World!').save()
+        groups = [
+            [ 'Hello World!', ],
+            [ 'All my troubles..' ],
+        ]
+        self.verify_minichat_groups(groups)
+
+    def test_message_before_login(self):
+        self.login('user1', 'user1', False)
+        self.logout()
+        Message(user=self.users[2], text='No one is there').save()
+        self.login('user1', 'user1', False)
+        self.verify_minichat_groups([
+            [ 'No one is there', ],
+        ])
+        self.verify_minichat_read([], [ 'No one is there', ])
