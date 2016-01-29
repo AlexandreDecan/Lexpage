@@ -57,9 +57,16 @@
         float: left;
       }
       .minichat-text {
-        border-left: 2px solid $brand-primary;
+        border-left: 0px;
+        position: relative;
         margin-left: 35px;
         border-radius: 0 $border-radius-small $border-radius-small 0;
+        div {
+          border-left: 2px solid $brand-primary;
+          &.new{
+            border-left-color: lighten($brand-danger, 5%);
+          }
+        }
       }
     }
   }
@@ -88,7 +95,8 @@
     div {
         padding: $padding-xs-vertical $padding-xs-horizontal;
         &:not(:first-child){
-            border-top: 1px rgba(0, 0, 0, 0.1) solid;
+            /* We use box shadow because having borders of the same size causes disruption in the right line*/
+            box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.1) inset;
         }
     }
 

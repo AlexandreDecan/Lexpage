@@ -67,10 +67,10 @@ class MultiThreadLiveServerTestCase(LiveServerTestCase):
 
 ###### decorators
 
-def logged_in_test(username='user1', password='user1'):
+def logged_in_test(username='user1', password='user1', incognito=None):
     def decorator(function):
         def wrapper(_self, *args, **kwargs):
-            _self.login(username, password)
+            _self.login(username, password, incognito)
             function(_self, *args, **kwargs)
         return wrapper
     return decorator
@@ -135,13 +135,19 @@ class LexpageTestCase(MultiThreadLiveServerTestCase):
             self.skip_without_redis_commands()
             os.system(settings.STOP_REDIS_COMMAND)
 
-    def login(self, username, password):
+    def logout(self):
+        self.selenium.get('%s%s' % (self.live_server_url, reverse('auth_logout')))
+
+    def login(self, username, password, incognito=None):
         self.selenium.get('%s%s' % (self.live_server_url, reverse('auth_login')))
         username_input = self.selenium.find_element_by_name("username")
         username_input.send_keys(username)
         password_input = self.selenium.find_element_by_name("password")
         password_input.send_keys(password)
-        incognito = connection.vendor == 'sqlite'
+        if incognito is None:
+            incognito = connection.vendor == 'sqlite'
+        if not incognito and connection.vendor == 'sqlite':
+            self.skipTest('This test requires a connection without incognito mode. It is not possible with sqlite.')
         if incognito:
             self.selenium.find_element_by_name('incognito').click()
         self.selenium.find_element_by_xpath('//button[text()="S\'identifier"]').click()

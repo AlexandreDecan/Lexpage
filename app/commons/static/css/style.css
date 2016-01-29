@@ -6742,9 +6742,16 @@ body {
   float: left;
 }
 .minichat-content .minichat-message.other-author .minichat-text {
-  border-left: 2px solid #3e5d71;
+  border-left: 0px;
+  position: relative;
   margin-left: 35px;
   border-radius: 0 3px 3px 0;
+}
+.minichat-content .minichat-message.other-author .minichat-text div {
+  border-left: 2px solid #3e5d71;
+}
+.minichat-content .minichat-message.other-author .minichat-text div.new {
+  border-left-color: #de6764;
 }
 .minichat-content .minichat-time {
   display: inline-block;
@@ -6769,7 +6776,8 @@ body {
   padding: 1px 5px;
 }
 .minichat-content .minichat-text div:not(:first-child) {
-  border-top: 1px rgba(0, 0, 0, 0.1) solid;
+  /* We use box shadow because having borders of the same size causes disruption in the right line*/
+  box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.1) inset;
 }
 .minichat-content .minichat-text:hover {
   -webkit-box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.3);

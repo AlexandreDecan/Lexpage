@@ -24,6 +24,7 @@
         <script>
             var URL_PREFIX = ""; // markup.js, script.js
             var USERNAME = "{{ user.username }}";
+            var LAST_VISIT = "{{ user.profile.last_visit|date:"c" }}";
         </script>
         <script src="{% static "libs/jquery/dist/jquery.min.js" %}"></script>
         <script src="{% static "libs/moment/moment.js" %}"></script>

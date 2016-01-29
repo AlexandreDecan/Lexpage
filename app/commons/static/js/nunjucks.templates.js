@@ -43,46 +43,44 @@ context.setVariable("previousDate", t_1);
 if(frame.topLevel) {
 context.addExport("previousDate", t_1);
 }
+output += "\n";
+var t_2;
+t_2 = false;
+frame.set("messageRead", t_2, true);
+if(frame.topLevel) {
+context.setVariable("messageRead", t_2);
+}
+if(frame.topLevel) {
+context.addExport("messageRead", t_2);
+}
 frame = frame.push();
-var t_4 = runtime.contextOrFrameLookup(context, frame, "results");
-if(t_4) {var t_3 = t_4.length;
-for(var t_2=0; t_2 < t_4.length; t_2++) {
-var t_5 = t_4[t_2];
-frame.set("message", t_5);
-frame.set("loop.index", t_2 + 1);
-frame.set("loop.index0", t_2);
-frame.set("loop.revindex", t_3 - t_2);
-frame.set("loop.revindex0", t_3 - t_2 - 1);
-frame.set("loop.first", t_2 === 0);
-frame.set("loop.last", t_2 === t_3 - 1);
-frame.set("loop.length", t_3);
-if(env.getFilter("naturalDay").call(context, runtime.memberLookup((t_5),"date")) != runtime.contextOrFrameLookup(context, frame, "previousDate")) {
+var t_5 = runtime.contextOrFrameLookup(context, frame, "results");
+if(t_5) {var t_4 = t_5.length;
+for(var t_3=0; t_3 < t_5.length; t_3++) {
+var t_6 = t_5[t_3];
+frame.set("message", t_6);
+frame.set("loop.index", t_3 + 1);
+frame.set("loop.index0", t_3);
+frame.set("loop.revindex", t_4 - t_3);
+frame.set("loop.revindex0", t_4 - t_3 - 1);
+frame.set("loop.first", t_3 === 0);
+frame.set("loop.last", t_3 === t_4 - 1);
+frame.set("loop.length", t_4);
+if(env.getFilter("naturalDay").call(context, runtime.memberLookup((t_6),"date")) != runtime.contextOrFrameLookup(context, frame, "previousDate")) {
 output += "<div class=\"minichat-date\">\n        ";
-output += runtime.suppressValue(env.getFilter("naturalDay").call(context, runtime.memberLookup((t_5),"date")), env.opts.autoescape);
+output += runtime.suppressValue(env.getFilter("naturalDay").call(context, runtime.memberLookup((t_6),"date")), env.opts.autoescape);
 output += "\n      </div>";
-var t_6;
-t_6 = env.getFilter("naturalDay").call(context, runtime.memberLookup((t_5),"date"));
-frame.set("previousDate", t_6, true);
-if(frame.topLevel) {
-context.setVariable("previousDate", t_6);
-}
-if(frame.topLevel) {
-context.addExport("previousDate", t_6);
-}
 var t_7;
-t_7 = true;
-frame.set("date_changed", t_7, true);
+t_7 = env.getFilter("naturalDay").call(context, runtime.memberLookup((t_6),"date"));
+frame.set("previousDate", t_7, true);
 if(frame.topLevel) {
-context.setVariable("date_changed", t_7);
+context.setVariable("previousDate", t_7);
 }
 if(frame.topLevel) {
-context.addExport("date_changed", t_7);
+context.addExport("previousDate", t_7);
 }
-;
-}
-else {
 var t_8;
-t_8 = false;
+t_8 = true;
 frame.set("date_changed", t_8, true);
 if(frame.topLevel) {
 context.setVariable("date_changed", t_8);
@@ -92,31 +90,75 @@ context.addExport("date_changed", t_8);
 }
 ;
 }
-if(runtime.contextOrFrameLookup(context, frame, "date_changed") || runtime.memberLookup((runtime.memberLookup((runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "results")),runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "loop")),"index0") - 1)),"user")),"username") != runtime.memberLookup((runtime.memberLookup((t_5),"user")),"username")) {
-output += "\n    <div class=\"minichat-message ";
-if(runtime.memberLookup((runtime.memberLookup((t_5),"user")),"username") == runtime.contextOrFrameLookup(context, frame, "user")) {
-output += "self-author";
+else {
+var t_9;
+t_9 = false;
+frame.set("date_changed", t_9, true);
+if(frame.topLevel) {
+context.setVariable("date_changed", t_9);
+}
+if(frame.topLevel) {
+context.addExport("date_changed", t_9);
+}
+;
+}
+if(runtime.memberLookup((runtime.memberLookup((t_6),"user")),"username") == runtime.contextOrFrameLookup(context, frame, "user")) {
+var t_10;
+t_10 = true;
+frame.set("messageRead", t_10, true);
+if(frame.topLevel) {
+context.setVariable("messageRead", t_10);
+}
+if(frame.topLevel) {
+context.addExport("messageRead", t_10);
+}
+;
+}
+if(runtime.contextOrFrameLookup(context, frame, "date_changed") || runtime.memberLookup((runtime.memberLookup((runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "results")),runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "loop")),"index0") - 1)),"user")),"username") != runtime.memberLookup((runtime.memberLookup((t_6),"user")),"username")) {
+output += "\n    <div class=\"minichat-message";
+if(runtime.memberLookup((runtime.memberLookup((t_6),"user")),"username") == runtime.contextOrFrameLookup(context, frame, "user")) {
+output += " self-author";
 ;
 }
 else {
-output += "other-author";
+output += " other-author";
 ;
 }
 output += "\">\n        <a class=\"minichat-user\" href=\"";
-output += runtime.suppressValue(runtime.memberLookup((runtime.memberLookup((t_5),"user")),"get_absolute_url"), env.opts.autoescape);
+output += runtime.suppressValue(runtime.memberLookup((runtime.memberLookup((t_6),"user")),"get_absolute_url"), env.opts.autoescape);
 output += "\">\n            <img src=\"";
-output += runtime.suppressValue(runtime.memberLookup((runtime.memberLookup((runtime.memberLookup((t_5),"user")),"profile")),"avatar"), env.opts.autoescape);
+output += runtime.suppressValue(runtime.memberLookup((runtime.memberLookup((runtime.memberLookup((t_6),"user")),"profile")),"avatar"), env.opts.autoescape);
 output += "\" title=\"";
-output += runtime.suppressValue(runtime.memberLookup((runtime.memberLookup((t_5),"user")),"username"), env.opts.autoescape);
+output += runtime.suppressValue(runtime.memberLookup((runtime.memberLookup((t_6),"user")),"username"), env.opts.autoescape);
 output += "\" class=\"avatar verysmallavatar\"/></a>\n            <div class=\"minichat-text\">";
 ;
 }
-output += "\n            <div>\n            <span class=\"minichat-time\">";
-output += runtime.suppressValue(env.getFilter("time").call(context, runtime.memberLookup((t_5),"date")), env.opts.autoescape);
+output += "\n    <div";
+if(!runtime.contextOrFrameLookup(context, frame, "messageRead") && env.getFilter("isAfter").call(context, runtime.memberLookup((t_6),"date"),runtime.contextOrFrameLookup(context, frame, "last_visit"))) {
+output += " class=\"new\"";
+;
+}
+else {
+if(!runtime.contextOrFrameLookup(context, frame, "messageRead")) {
+var t_11;
+t_11 = true;
+frame.set("messageRead", t_11, true);
+if(frame.topLevel) {
+context.setVariable("messageRead", t_11);
+}
+if(frame.topLevel) {
+context.addExport("messageRead", t_11);
+}
+;
+}
+;
+}
+output += ">\n            <span class=\"minichat-time\">";
+output += runtime.suppressValue(env.getFilter("time").call(context, runtime.memberLookup((t_6),"date")), env.opts.autoescape);
 output += "</span>\n            ";
-output += runtime.suppressValue(runtime.memberLookup((t_5),"text"), env.opts.autoescape);
+output += runtime.suppressValue(runtime.memberLookup((t_6),"text"), env.opts.autoescape);
 output += "\n            </div>";
-if(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "loop")),"last") || env.getFilter("naturalDay").call(context, runtime.memberLookup((runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "results")),runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "loop")),"index"))),"date")) != runtime.contextOrFrameLookup(context, frame, "previousDate") || runtime.memberLookup((runtime.memberLookup((runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "results")),runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "loop")),"index"))),"user")),"username") != runtime.memberLookup((runtime.memberLookup((t_5),"user")),"username")) {
+if(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "loop")),"last") || env.getFilter("naturalDay").call(context, runtime.memberLookup((runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "results")),runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "loop")),"index"))),"date")) != runtime.contextOrFrameLookup(context, frame, "previousDate") || runtime.memberLookup((runtime.memberLookup((runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "results")),runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "loop")),"index"))),"user")),"username") != runtime.memberLookup((runtime.memberLookup((t_6),"user")),"username")) {
 output += "\n        </div>\n    </div>";
 ;
 }
