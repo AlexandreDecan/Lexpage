@@ -1,36 +1,27 @@
 {# This is a nunjucks template.
 To compile it, run "grunt".
 #}
-<div class="minichat-content">
-{% set previousDate = "" %}
 {% set messageRead = false %}
-{%- for message in results %}
-    {%- if message.date|naturalDay != previousDate -%}
-      <div class="minichat-date">
-        {{ message.date|naturalDay }}
-      </div>
-      {%- set previousDate = message.date|naturalDay %}
-      {%- set date_changed = true %}{# Used to determine if we need to add the user-first css class #}
-    {%- else %}
-      {%- set date_changed = false %}
-      {%- endif %}
-      {%- if message.user.username == user %}{% set messageRead = true %}{% endif %}
-
-    {%- if date_changed or results[loop.index0-1].user.username != message.user.username %}
-    <div class="minichat-message{% if message.user.username == user %} self-author{% else %} other-author{% endif %}">
-        <a class="minichat-user" href="{{ message.user.get_absolute_url }}">
-            <img src="{{ message.user.profile.avatar }}" title="{{ message.user.username }}" class="avatar verysmallavatar"/></a>
-            <div class="minichat-text">
-    {%- endif %}
-    <div{% if not messageRead and message.date|isAfter(last_visit) %} class="new"
-        {%- elif not messageRead %}{% set messageRead=true %}{% endif %}>
-            <span class="minichat-time">{{ message.date|time }}</span>
-            {{ message.text }}
-            </div>
-    {%- if loop.last or results[loop.index].date|naturalDay != previousDate or
-          results[loop.index].user.username != message.user.username %}
-        </div>
+<div class="minichat-content">
+{% for date_group in dates %}
+    <div class="minichat-date">
+    {{ date_group.date|naturalDay }}
     </div>
-    {%- endif %}
-{%- endfor %}
+    {% for group in date_group.groups %}
+        <div class="minichat-message{% if group.user.username == current_username %} self-author{% else %} other-author{% endif %}">
+        <a class="minichat-user" href="{{ group.user.get_absolute_url }}">
+            <img src="{{ group.user.profile.avatar }}" title="{{ group.user.username }}" class="avatar verysmallavatar"/></a>
+            <div class="minichat-text">
+            {% for message in group.messages|reverse %}
+                <div{% if not messageRead and message|isAfter(last_visit) %} class="new"
+                    {%- elif not messageRead %}{% set messageRead=True %}{% endif %}>
+                  <span class="minichat-time">{{ message.date|time }}</span>
+                  {{ message.text }}
+                </div>
+            {% endfor %}
+            </div>
+
+        </div>
+    {% endfor %}
+{% endfor %}
 </div>

@@ -41,8 +41,30 @@ function minichat_websocket_message_dispatch(data) {
 
 function minichat_refresh() {
     $.get(minichat_content_url, function(data) {
-        data_with_username = $.extend({ 'user': USERNAME, 'last_visit': LAST_VISIT }, data);
-        $(minichat_content).html(nunjucks.render(minichat_template, data_with_username));
+
+        // Group by date
+        var date_groups = _.groupBy(data.results, function(e) { return moment(e.date).format("YYYY-MM-DD"); });
+
+        // Group by author inside each groups
+        var ndata = _.map(date_groups, function(messages, date) {
+            var last_user=null;
+            var groups=[];
+            var group;
+            for(var i=0; i<messages.length; i++){
+                var message = messages[i];
+                if (!last_user || message.user.username != last_user.username) {
+                    if (group) { groups.push(group); }
+
+                    last_user = message.user;
+                    group = {'user': last_user, 'messages': []};
+                }
+                group.messages.push(message);
+            }
+            groups.push(group);
+            return {'date':date, 'groups':groups};
+        });
+        var data = {dates: ndata, 'current_username': USERNAME, 'last_visit': LAST_VISIT};
+        $(minichat_content).html(nunjucks.render(minichat_template, data));
         replace_invalid_avatar($(minichat_content));
         activate_tooltips($(minichat_content));
     });
