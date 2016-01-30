@@ -63,6 +63,10 @@ $(document).ready(function() {
         }
     });
 
+    $(window).blur(function(){
+        LAST_VISIT = $.now();
+    });
+
     // Init notifications if any
     notification_initialize();
 });
