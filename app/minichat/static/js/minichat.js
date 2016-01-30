@@ -101,3 +101,11 @@ function minichat_init_remaining_chars() {
     $(minichat_input_text).change(minichat_update_chars_count);
     $(minichat_input_text).keyup(minichat_update_chars_count);
 }
+
+
+$(document).ready(function() {
+    $(window).focus(function(){
+        minichat_refresh();
+    });
+}
+
