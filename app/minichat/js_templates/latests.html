@@ -33,4 +33,9 @@ To compile it, run "grunt".
     </div>
     {%- endif %}
 {%- endfor %}
+{%- if next and results|length < 100 -%}
+<div class="text-center"><a class="btn btn-default" id="minichat_load_more">Voir plus</a></div>
+{%- else %}
+<div class="text-center"><a class="btn btn-default" href="{{ archives }}">Archives</a></div>
+{%- endif %}
 </div>

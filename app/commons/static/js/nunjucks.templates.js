@@ -166,6 +166,16 @@ output += "\n        </div>\n    </div>";
 }
 }
 frame = frame.pop();
+if(runtime.contextOrFrameLookup(context, frame, "next") && env.getFilter("length").call(context, runtime.contextOrFrameLookup(context, frame, "results")) < 100) {
+output += "<div class=\"text-center\"><a class=\"btn btn-default\" id=\"minichat_load_more\">Voir plus</a></div>";
+;
+}
+else {
+output += "\n<div class=\"text-center\"><a class=\"btn btn-default\" href=\"";
+output += runtime.suppressValue(runtime.contextOrFrameLookup(context, frame, "archives"), env.opts.autoescape);
+output += "\">Archives</a></div>";
+;
+}
 output += "\n</div>\n";
 if(parentTemplate) {
 parentTemplate.rootRenderFunc(env, context, frame, runtime, cb);

@@ -35,7 +35,8 @@ class LatestMessagesPagination(PageNumberPagination):
     To achieve that, we will need to set "page_query_param" and "max_page_size".
     """
     page_size = 20
-
+    page_size_query_param = 'count'
+    max_page_size = 100
 
 class MessageSerializer(ModelSerializer):
     """A serializer for the minichat messages with the enhanced user serializer that comes in the

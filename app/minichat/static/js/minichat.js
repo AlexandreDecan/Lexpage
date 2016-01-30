@@ -1,18 +1,22 @@
 var minichat_timer_delay = 30000;
+var minichat_page_size = 20;
 var minichat_content;
 var minichat_content_url;
 var minichat_post_url;
+var minichat_archives_url;
 
 var minichat_form = "#minichat_form";
 var minichat_button = "#minichat_form button[type='submit']";
 var minichat_input_text = "#minichat_form input[type='text']";
 var minichat_chars_output = "#minichat_form .minichat-remainingChars";
+var minichat_load_more = "#minichat_load_more";
 
 var minichat_template = "minichat/latests.html";
 
-function minichat_init_display(content, get_url) {
+function minichat_init_display(content, get_url, archives_url) {
     minichat_content = content
     minichat_content_url = get_url;
+    minichat_archives_url = archives_url;
 
     if (minichat_content) {
         setInterval(minichat_refresh_fallback, minichat_timer_delay);
@@ -40,11 +44,15 @@ function minichat_websocket_message_dispatch(data) {
 }
 
 function minichat_refresh() {
-    $.get(minichat_content_url, function(data) {
-        data_with_username = $.extend({ 'user': USERNAME, 'last_visit': LAST_VISIT }, data);
+    $.get(minichat_content_url + "?count=" + minichat_page_size, function(data) {
+        data_with_username = $.extend({ 'user': USERNAME, 'last_visit': LAST_VISIT, 'archives': minichat_archives_url }, data);
         $(minichat_content).html(nunjucks.render(minichat_template, data_with_username));
         replace_invalid_avatar($(minichat_content));
         activate_tooltips($(minichat_content));
+        $(minichat_load_more).click(function(){
+            minichat_page_size += 10;
+            minichat_refresh();
+        });
     });
 }
 
