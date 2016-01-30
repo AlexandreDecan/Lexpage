@@ -153,6 +153,12 @@ context.addExport("messageRead", t_11);
 }
 ;
 }
+if(runtime.memberLookup((t_6),"notification")) {
+output += " data-notification=\"";
+output += runtime.suppressValue(runtime.memberLookup((t_6),"notification"), env.opts.autoescape);
+output += "\"";
+;
+}
 output += ">\n            <span class=\"minichat-time\">";
 output += runtime.suppressValue(env.getFilter("time").call(context, runtime.memberLookup((t_6),"date")), env.opts.autoescape);
 output += "</span>\n            ";

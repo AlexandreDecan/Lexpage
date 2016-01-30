@@ -23,7 +23,8 @@ To compile it, run "grunt".
             <div class="minichat-text">
     {%- endif %}
     <div{% if not messageRead and message.date|isAfter(last_visit) %} class="new"
-        {%- elif not messageRead %}{% set messageRead=true %}{% endif %}>
+        {%- elif not messageRead %}{% set messageRead=true %}{% endif %}
+        {%- if message.notification%} data-notification="{{message.notification}}"{%endif%}>
             <span class="minichat-time">{{ message.date|time }}</span>
             {{ message.text }}
             </div>

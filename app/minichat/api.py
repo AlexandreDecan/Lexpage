@@ -1,6 +1,6 @@
 import datetime
 
-from rest_framework.serializers import ModelSerializer, ValidationError
+from rest_framework.serializers import ModelSerializer, ValidationError, SerializerMethodField
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
@@ -13,6 +13,7 @@ from rest_framework import status
 from .models import Message
 
 from profile.api import UserSerializer
+from notifications.models import Notification
 
 from minichat.templatetags.minichat import urlize3
 from commons.templatetags.markup_bbcode import smiley
@@ -42,10 +43,20 @@ class MessageSerializer(ModelSerializer):
     profile app, so we get the username and the avatar in the same request that the minichat
     messages."""
     user = UserSerializer()
+    notification = SerializerMethodField()
+
+    def get_notification(self, obj):
+        request = self.context.get('request', None)
+        if request is not None and request.user and request.user.is_authenticated():
+            try:
+                notification = Notification.objects.get(app='minichat', recipient=request.user, key=obj.id)
+                return notification.dismiss_url
+            except Notification.DoesNotExist:
+                return None
 
     class Meta:
         model = Message
-        fields = ('user', 'text', 'date',)
+        fields = ('user', 'text', 'date', 'notification',)
 
     def build_standard_field(self, field_name, model_field):
         field_class, field_kwargs = super(MessageSerializer, self).build_standard_field(field_name, model_field)

@@ -277,7 +277,7 @@ class ApiTests(APITestCase):
 
         first_message = response.data['results'][0]
         # Striclty check the fields to avoir extra disclosure (field id is not sent)
-        self.assertEqual(list(first_message.keys()), ['user', 'text', 'date'])
+        self.assertEqual(list(first_message.keys()), ['user', 'text', 'date', 'notification'])
 
         # Striclty check the fields to avoir extra disclosure (we should only send username
         # and profile, not password, email, ...)
@@ -289,6 +289,30 @@ class ApiTests(APITestCase):
         self.assertEqual(list(first_message['user']['profile'].keys()), ['avatar'])
 
         self.assertEqual(first_message['text'], 'Last message')
+
+    def test_latest_minichat_notifications(self):
+        self.client.login(username='user1', password='user1')
+        Message.objects.all().delete()
+        for i in range(0,32):
+            Message(user=self.author, text=words(5, False)).save()
+
+        Message(user=self.users[1], text='@admin foo').save()
+        response = self.client.get(reverse('minichat-api-latest-list'), format='json')
+        self.assertEqual(response.status_code, 200)
+        latest = response.data['results'][0]
+        self.assertIsNone(latest['notification'])
+
+        Message(user=self.users[1], text='@user1 foo').save()
+        response = self.client.get(reverse('minichat-api-latest-list'), format='json')
+        latest = response.data['results'][0]
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNotNone(latest['notification'])
+
+        self.client.logout()
+        response = self.client.get(reverse('minichat-api-latest-list'), format='json')
+        latest = response.data['results'][0]
+        self.assertEqual(response.status_code, 200)
+        self.assertNotNone(latest['notification'])
 
     def test_smiley(self):
         Message(user=self.author, text='je suis content :-)').save()
