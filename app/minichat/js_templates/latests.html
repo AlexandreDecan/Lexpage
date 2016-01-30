@@ -1,9 +1,9 @@
 {# This is a nunjucks template.
 To compile it, run "grunt".
-#}
+-#}
 <div class="minichat-content">
-{% set previousDate = "" %}
-{% set messageRead = false %}
+{%- set previousDate = "" %}
+{%- set messageRead = false %}
 {%- for message in results %}
     {%- if message.date|naturalDay != previousDate -%}
       <div class="minichat-date">
@@ -25,7 +25,7 @@ To compile it, run "grunt".
     <div{% if not messageRead and message.date|isAfter(last_visit) %} class="new"
         {%- elif not messageRead %}{% set messageRead=true %}{% endif %}>
             <span class="minichat-time">{{ message.date|time }}</span>
-            {{ message.text }}
+            {{ message.text|highlight(user) }}
             </div>
     {%- if loop.last or results[loop.index].date|naturalDay != previousDate or
           results[loop.index].user.username != message.user.username %}

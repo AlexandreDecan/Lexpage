@@ -445,6 +445,57 @@ class MinichatNunjucksTest(LexpageTestCase):
             self.assertEqual(len(all_messages_found), len(list(set(all_messages_found))))
 
     @logged_in_test()
+    def test_highlight(self):
+        for input_text, number in [('coucou @user1', 1),
+                            ('@user1', 1),
+                            ('@user12', 0),
+                            ('x @user1 x', 1),
+                            ('@user1 coucou', 1),
+                            ('@user1 @user1', 2),
+                            ('@user1 @user2', 1),
+                            ('@ @user1', 1),
+                            ('@@user1', 1),
+                            ('@@user2', 0),
+                            ('@', 0),
+                            ('no no no no', 0),
+                            ('cool@user1.com', 1),
+                            ('cucou@user12.com', 0),
+                            ('coucou @user12', 0),
+                            ('coucou @user12 salut', 0),
+                            ('@user2', 0)]:
+            Message.objects.all().delete()
+            sqlite_sleep(.5)
+            Message(user=self.users[1], text=input_text).save()
+            time.sleep(1)
+            nb_notifications = len(Notification.objects.filter(recipient=self.users[0]))
+            if number > 0:
+                self.assertEqual(nb_notifications, 1, 'A notification is not created for %s' % input_text)
+            else:
+                self.assertEqual(nb_notifications, 0, 'A notification is created for %s' % input_text)
+
+            highlights = self.selenium.find_elements_by_css_selector('.minichat-text div strong')
+            self.assertEqual(len(highlights), number, 'Test failed with %s' % input_text)
+
+    def test_highlight_when_logged_out(self):
+        self.selenium.get(self.live_server_url)
+        for input_text, number in [('coucou @user1', 0),
+                            ('@user1', 0),
+                            ('@user1 @user1', 0),
+                            ('@ @user1', 0),
+                            ('@', 0),
+                            ('no no no no', 0),
+                            ('cucou@user12.com', 0),
+                            ('coucou @user12 salut', 0),
+                            ('@user2', 0)]:
+            Message.objects.all().delete()
+            sqlite_sleep(.5)
+            Message(user=self.users[1], text=input_text).save()
+            self.selenium.refresh()
+            time.sleep(1)
+            highlights = self.selenium.find_elements_by_css_selector('.minichat-text div strong')
+            self.assertEqual(len(highlights), number, 'Test failed with %s' % input_text)
+
+    @logged_in_test()
     def test_one_message_class(self):
         Message(user=self.users[0], text='Hello World!').save()
         self.verify_minichat_groups([['Hello World!']])
