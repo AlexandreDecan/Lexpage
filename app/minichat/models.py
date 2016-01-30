@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 import re
 from profile.models import ActiveUser
 
-
 class Message(models.Model):
     user = models.ForeignKey(User, related_name='+')
     text = models.CharField(max_length=180, verbose_name='Message')
@@ -52,6 +51,12 @@ class Message(models.Model):
 
     def get_absolute_url(self):
         return reverse('minichat_archives', kwargs={'year': self.date.year, 'month': self.date.month}) + '#m{}'.format(self.pk)
+
+    @property
+    def notification(self):
+        """This is needed to be able to add this extra field in the API. Without this we would need
+        to override internal DRF fields, which would add a lot of unneeded complexity."""
+        return None
 
     class Meta:
         get_latest_by = 'date'

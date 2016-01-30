@@ -121,12 +121,14 @@ function notification_initialize() {
 }
 
 function notification_dismiss(url, target) {
-    // Disable click propagation (to keep dropdown opened)
+    $("#"+target+" a.close").addClass("fa-spinner fa-spin");
+    notification_dismiss_only(url);
+}
+
+function notification_dismiss_only(url) {
     function done(data) {
-        // Dismiss target
         notifications_refresh_fallback();
     }
-    $("#"+target+" a.close").addClass("fa-spinner fa-spin");
     $.ajax({url: url, type: 'DELETE'}).done(done);
 }
 
