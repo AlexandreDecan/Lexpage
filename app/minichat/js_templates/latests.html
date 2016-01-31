@@ -15,7 +15,7 @@ To compile it, run "grunt".
             {%- for message in group.messages|reverse -%}
                 <div{% if not messageRead and message.date|isAfter(last_visit) %} class="new"{% endif %}>
                   <span class="minichat-time">{{ message.date|time }}</span>
-                  {{ message.text }}
+                  {{ message.text|highlight(current_username) }}
                 </div>
             {%- endfor -%}
             </div>

@@ -118,7 +118,7 @@ output += " class=\"new\"";
 output += ">\n                  <span class=\"minichat-time\">";
 output += runtime.suppressValue(env.getFilter("time").call(context, runtime.memberLookup((t_14),"date")), env.opts.autoescape);
 output += "</span>\n                  ";
-output += runtime.suppressValue(runtime.memberLookup((t_14),"text"), env.opts.autoescape);
+output += runtime.suppressValue(env.getFilter("highlight").call(context, runtime.memberLookup((t_14),"text"),runtime.contextOrFrameLookup(context, frame, "current_username")), env.opts.autoescape);
 output += "\n                </div>";
 ;
 }
