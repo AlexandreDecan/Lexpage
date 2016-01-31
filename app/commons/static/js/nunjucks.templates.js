@@ -33,7 +33,7 @@ var colno = null;
 var output = "";
 try {
 var parentTemplate = null;
-output += "\n<div class=\"minichat-content\">\n";
+output += "\n<div class=\"minichat-content\">";
 var t_1;
 t_1 = "";
 frame.set("previousDate", t_1, true);
@@ -43,7 +43,6 @@ context.setVariable("previousDate", t_1);
 if(frame.topLevel) {
 context.addExport("previousDate", t_1);
 }
-output += "\n";
 var t_2;
 t_2 = false;
 frame.set("messageRead", t_2, true);
@@ -156,7 +155,7 @@ context.addExport("messageRead", t_11);
 output += ">\n            <span class=\"minichat-time\">";
 output += runtime.suppressValue(env.getFilter("time").call(context, runtime.memberLookup((t_6),"date")), env.opts.autoescape);
 output += "</span>\n            ";
-output += runtime.suppressValue(runtime.memberLookup((t_6),"text"), env.opts.autoescape);
+output += runtime.suppressValue(env.getFilter("highlight").call(context, runtime.memberLookup((t_6),"text"),runtime.contextOrFrameLookup(context, frame, "user")), env.opts.autoescape);
 output += "\n            </div>";
 if(runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "loop")),"last") || env.getFilter("naturalDay").call(context, runtime.memberLookup((runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "results")),runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "loop")),"index"))),"date")) != runtime.contextOrFrameLookup(context, frame, "previousDate") || runtime.memberLookup((runtime.memberLookup((runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "results")),runtime.memberLookup((runtime.contextOrFrameLookup(context, frame, "loop")),"index"))),"user")),"username") != runtime.memberLookup((runtime.memberLookup((t_6),"user")),"username")) {
 output += "\n        </div>\n    </div>";

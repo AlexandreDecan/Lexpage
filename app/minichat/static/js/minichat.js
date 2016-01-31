@@ -41,7 +41,7 @@ function minichat_websocket_message_dispatch(data) {
 
 function minichat_refresh() {
     $.get(minichat_content_url, function(data) {
-        data_with_username = $.extend({ 'user': USERNAME, 'last_visit': LAST_VISIT }, data);
+        data_with_username = $.extend({ 'user': USERNAME, 'last_visit': LAST_VISIT, 'user_regexp': user_regexp }, data);
         $(minichat_content).html(nunjucks.render(minichat_template, data_with_username));
         replace_invalid_avatar($(minichat_content));
         activate_tooltips($(minichat_content));
