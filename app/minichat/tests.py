@@ -462,8 +462,8 @@ class MinichatNunjucksTest(LexpageTestCase):
         Message(user=self.users[0], text='Traduction: Bonjour').save()
         self.verify_minichat_groups([
             [
-                'Traduction: Bonjour',
                 'Hello World!',
+                'Traduction: Bonjour',
             ],
         ])
 
@@ -476,9 +476,9 @@ class MinichatNunjucksTest(LexpageTestCase):
         Message(user=self.users[0], text='(en Anglais)').save()
         self.verify_minichat_groups([
             [
-                '(en Anglais)',
-                'Traduction: Bonjour',
                 'Hello World!',
+                'Traduction: Bonjour',
+                '(en Anglais)',
             ],
         ])
 
@@ -514,13 +514,13 @@ class MinichatNunjucksTest(LexpageTestCase):
         Message(user=self.users[1], text='Am here').save()
         sqlite_sleep(.5)
         self.verify_minichat_groups([
-            ['Am here', 'Yes'],
+            ['Yes', 'Am here'],
             ['Hello You'],
         ])
         self.verify_minichat_read(['Hello You'], ['Yes', 'Am here'])
         self.selenium.refresh()
         self.verify_minichat_groups([
-            ['Am here', 'Yes'],
+            ['Yes', 'Am here'],
             ['Hello You'],
         ])
         self.verify_minichat_read(['Hello You', 'Yes', 'Am here'], [])
@@ -528,7 +528,7 @@ class MinichatNunjucksTest(LexpageTestCase):
         sqlite_sleep(.5)
         self.verify_minichat_groups([
             ['It is original'],
-            ['Am here', 'Yes'],
+            ['Yes', 'Am here'],
             ['Hello You'],
         ])
         self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original'], [])
@@ -537,7 +537,7 @@ class MinichatNunjucksTest(LexpageTestCase):
         self.verify_minichat_groups([
             ['Yup.'],
             ['It is original'],
-            ['Am here', 'Yes'],
+            ['Yes', 'Am here'],
             ['Hello You'],
         ])
         self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original'], ['Yup.'])
@@ -547,7 +547,7 @@ class MinichatNunjucksTest(LexpageTestCase):
             ['ok...'],
             ['Yup.'],
             ['It is original'],
-            ['Am here', 'Yes'],
+            ['Yes', 'Am here'],
             ['Hello You'],
         ])
         self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original', 'Yup.',
@@ -559,7 +559,7 @@ class MinichatNunjucksTest(LexpageTestCase):
             ['ok...'],
             ['Yup.'],
             ['It is original'],
-            ['Am here', 'Yes'],
+            ['Yes', 'Am here'],
             ['Hello You'],
         ])
         self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original', 'Yup.',
@@ -572,7 +572,7 @@ class MinichatNunjucksTest(LexpageTestCase):
             ['ok...'],
             ['Yup.'],
             ['It is original'],
-            ['Am here', 'Yes'],
+            ['Yes', 'Am here'],
             ['Hello You'],
         ])
         self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original', 'Yup.',
@@ -580,24 +580,24 @@ class MinichatNunjucksTest(LexpageTestCase):
         Message(user=self.users[0], text='brb').save()
         sqlite_sleep(.5)
         self.verify_minichat_groups([
-            ['brb', 'does not matter'],
+            ['does not matter', 'brb'],
             ['what ok?'],
             ['ok...'],
             ['Yup.'],
             ['It is original'],
-            ['Am here', 'Yes'],
+            ['Yes', 'Am here'],
             ['Hello You'],
         ])
         self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original', 'Yup.',
                                    'ok...', 'what ok?', 'does not matter', 'brb'], [])
         Message(user=self.users[0], text='ZZz').save()
         self.verify_minichat_groups([
-            ['ZZz', 'brb', 'does not matter'],
+            ['does not matter', 'brb', 'ZZz'],
             ['what ok?'],
             ['ok...'],
             ['Yup.'],
             ['It is original'],
-            ['Am here', 'Yes'],
+            ['Yes', 'Am here'],
             ['Hello You'],
         ])
         self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original', 'Yup.',

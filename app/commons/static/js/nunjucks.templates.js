@@ -33,7 +33,6 @@ var colno = null;
 var output = "";
 try {
 var parentTemplate = null;
-output += "\n";
 var t_1;
 t_1 = false;
 frame.set("messageRead", t_1, true);
@@ -43,7 +42,7 @@ context.setVariable("messageRead", t_1);
 if(frame.topLevel) {
 context.addExport("messageRead", t_1);
 }
-output += "\n<div class=\"minichat-content\">\n";
+output += "<div class=\"minichat-content\">";
 frame = frame.push();
 var t_4 = runtime.contextOrFrameLookup(context, frame, "dates");
 if(t_4) {var t_3 = t_4.length;
@@ -57,9 +56,9 @@ frame.set("loop.revindex0", t_3 - t_2 - 1);
 frame.set("loop.first", t_2 === 0);
 frame.set("loop.last", t_2 === t_3 - 1);
 frame.set("loop.length", t_3);
-output += "\n    <div class=\"minichat-date\">\n    ";
+output += "<div class=\"minichat-date\">\n    ";
 output += runtime.suppressValue(env.getFilter("naturalDay").call(context, runtime.memberLookup((t_5),"date")), env.opts.autoescape);
-output += "\n    </div>\n    ";
+output += "\n    </div>";
 frame = frame.push();
 var t_8 = runtime.memberLookup((t_5),"groups");
 if(t_8) {var t_7 = t_8.length;
@@ -73,8 +72,17 @@ frame.set("loop.revindex0", t_7 - t_6 - 1);
 frame.set("loop.first", t_6 === 0);
 frame.set("loop.last", t_6 === t_7 - 1);
 frame.set("loop.length", t_7);
-output += "\n        <div class=\"minichat-message";
+output += "<div class=\"minichat-message";
 if(runtime.memberLookup((runtime.memberLookup((t_9),"user")),"username") == runtime.contextOrFrameLookup(context, frame, "current_username")) {
+var t_10;
+t_10 = true;
+frame.set("messageRead", t_10, true);
+if(frame.topLevel) {
+context.setVariable("messageRead", t_10);
+}
+if(frame.topLevel) {
+context.addExport("messageRead", t_10);
+}
 output += " self-author";
 ;
 }
@@ -88,60 +96,44 @@ output += "\">\n            <img src=\"";
 output += runtime.suppressValue(runtime.memberLookup((runtime.memberLookup((runtime.memberLookup((t_9),"user")),"profile")),"avatar"), env.opts.autoescape);
 output += "\" title=\"";
 output += runtime.suppressValue(runtime.memberLookup((runtime.memberLookup((t_9),"user")),"username"), env.opts.autoescape);
-output += "\" class=\"avatar verysmallavatar\"/></a>\n            <div class=\"minichat-text\">\n            ";
+output += "\" class=\"avatar verysmallavatar\"/></a>\n            <div class=\"minichat-text\">";
 frame = frame.push();
-var t_12 = env.getFilter("reverse").call(context, runtime.memberLookup((t_9),"messages"));
-if(t_12) {var t_11 = t_12.length;
-for(var t_10=0; t_10 < t_12.length; t_10++) {
-var t_13 = t_12[t_10];
-frame.set("message", t_13);
-frame.set("loop.index", t_10 + 1);
-frame.set("loop.index0", t_10);
-frame.set("loop.revindex", t_11 - t_10);
-frame.set("loop.revindex0", t_11 - t_10 - 1);
-frame.set("loop.first", t_10 === 0);
-frame.set("loop.last", t_10 === t_11 - 1);
-frame.set("loop.length", t_11);
-output += "\n                <div";
-if(!runtime.contextOrFrameLookup(context, frame, "messageRead") && env.getFilter("isAfter").call(context, t_13,runtime.contextOrFrameLookup(context, frame, "last_visit"))) {
+var t_13 = env.getFilter("reverse").call(context, runtime.memberLookup((t_9),"messages"));
+if(t_13) {var t_12 = t_13.length;
+for(var t_11=0; t_11 < t_13.length; t_11++) {
+var t_14 = t_13[t_11];
+frame.set("message", t_14);
+frame.set("loop.index", t_11 + 1);
+frame.set("loop.index0", t_11);
+frame.set("loop.revindex", t_12 - t_11);
+frame.set("loop.revindex0", t_12 - t_11 - 1);
+frame.set("loop.first", t_11 === 0);
+frame.set("loop.last", t_11 === t_12 - 1);
+frame.set("loop.length", t_12);
+output += "<div";
+if(!runtime.contextOrFrameLookup(context, frame, "messageRead") && env.getFilter("isAfter").call(context, runtime.memberLookup((t_14),"date"),runtime.contextOrFrameLookup(context, frame, "last_visit"))) {
 output += " class=\"new\"";
 ;
 }
-else {
-if(!runtime.contextOrFrameLookup(context, frame, "messageRead")) {
-var t_14;
-t_14 = runtime.contextOrFrameLookup(context, frame, "True");
-frame.set("messageRead", t_14, true);
-if(frame.topLevel) {
-context.setVariable("messageRead", t_14);
-}
-if(frame.topLevel) {
-context.addExport("messageRead", t_14);
-}
-;
-}
-;
-}
 output += ">\n                  <span class=\"minichat-time\">";
-output += runtime.suppressValue(env.getFilter("time").call(context, runtime.memberLookup((t_13),"date")), env.opts.autoescape);
+output += runtime.suppressValue(env.getFilter("time").call(context, runtime.memberLookup((t_14),"date")), env.opts.autoescape);
 output += "</span>\n                  ";
-output += runtime.suppressValue(runtime.memberLookup((t_13),"text"), env.opts.autoescape);
-output += "\n                </div>\n            ";
+output += runtime.suppressValue(runtime.memberLookup((t_14),"text"), env.opts.autoescape);
+output += "\n                </div>";
 ;
 }
 }
 frame = frame.pop();
-output += "\n            </div>\n\n        </div>\n    ";
+output += "</div>\n        </div>";
 ;
 }
 }
 frame = frame.pop();
-output += "\n";
 ;
 }
 }
 frame = frame.pop();
-output += "\n</div>\n";
+output += "</div>\n";
 if(parentTemplate) {
 parentTemplate.rootRenderFunc(env, context, frame, runtime, cb);
 } else {
