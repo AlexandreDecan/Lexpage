@@ -1,4 +1,4 @@
-function create_minichat() {
+function create_minichat(username, last_visit, ws_client) {
     var _timer_delay = 30;
     var _split_delay = 5 * 60;
 
@@ -6,9 +6,10 @@ function create_minichat() {
     var _post_url;
     var _template_url = "minichat/latests.html";
 
-    var _ws_client = ws_client; // Need to be set outside!
-    var _username = USERNAME; // Need to be set outside!
-    var _read_date = LAST_VISIT; // Need to be set outside!
+    var _ws_client = ws_client;
+    var _username = username;
+    var _read_date = last_visit;
+
     var _replace_invalid_avatar = replace_invalid_avatar; // Need to be set outside!
     var _activate_tooltips = activate_tooltips; // Need to be set outside!
     var _contrib_message = contrib_message; // Need to be set outside!
@@ -146,7 +147,3 @@ function create_minichat() {
 
     return this;
 };
-
-$(document).ready(function() {
-   minichat = create_minichat();
-});

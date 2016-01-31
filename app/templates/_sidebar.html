@@ -82,6 +82,7 @@
 
         <script>
             $(document).ready(function() {
+                minichat = create_minichat(USERNAME, LAST_VISIT, ws_client);
                 minichat.init_display($("#minichat_content"), "{% url 'minichat-api-latest-list' %}");
                 {% if user.is_authenticated %}
                     minichat.init_post();
