@@ -93,7 +93,7 @@ frame.set("loop.first", t_9 === 0);
 frame.set("loop.last", t_9 === t_10 - 1);
 frame.set("loop.length", t_10);
 output += "<div";
-if(runtime.memberLookup((runtime.memberLookup((t_8),"user")),"username") != runtime.contextOrFrameLookup(context, frame, "current_username") && env.getFilter("isAfter").call(context, runtime.memberLookup((t_12),"date"),runtime.contextOrFrameLookup(context, frame, "last_visit"))) {
+if(runtime.memberLookup((runtime.memberLookup((t_8),"user")),"username") != runtime.contextOrFrameLookup(context, frame, "current_username") && env.getFilter("isAfter").call(context, runtime.memberLookup((t_12),"date"),runtime.contextOrFrameLookup(context, frame, "read_date"))) {
 output += " class=\"new\"";
 ;
 }
