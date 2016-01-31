@@ -1,5 +1,6 @@
 var minichat = function() {
-    var _timer_delay = 30000;
+    var _timer_delay = 30;
+    var _split_delay = 5 * 60;
 
     var _content_url;
     var _post_url;
@@ -26,7 +27,7 @@ var minichat = function() {
         _content_url = content_url;
 
         if (_content_selector) {
-            setInterval(this.refresh_fallback, _timer_delay);
+            setInterval(this.refresh_fallback, _timer_delay * 1000);
             this.refresh();
 
             if (_ws_client){
@@ -76,26 +77,28 @@ var minichat = function() {
 
             // Group by author inside each groups
             var ndata = _.map(date_groups, function (messages, date) {
-                var last_user = null;
+                var last_message = null;
                 var groups = [];
                 var group;
                 for (var i = 0; i < messages.length; i++) {
                     var message = messages[i];
-                    if (!last_user || message.user.username != last_user.username) {
-                        if (group) {
-                            groups.push(group);
-                        }
 
-                        last_user = message.user;
-                        group = {'user': last_user, 'messages': []};
+                    if (!last_message || (last_message.user.username != message.user.username) ||
+                        (moment(last_message.date).diff(moment(message.date), 'seconds') >= _split_delay)) {
+                        if (group)
+                            groups.push(group);
+                        group = {'user': message.user, 'messages': []};
                     }
+
+                    last_message = message;
                     group.messages.push(message);
                 }
                 groups.push(group);
                 return {'date': date, 'groups': groups};
             });
-            var data = {dates: ndata, 'current_username': _username, 'last_visit': _last_visit};
-            $(_content_selector).html(nunjucks.render(_template_url, data));
+
+            var context = {dates: ndata, 'current_username': _username, 'last_visit': _last_visit};
+            $(_content_selector).html(nunjucks.render(_template_url, context));
             _replace_invalid_avatar($(_content_selector));
             _activate_tooltips($(_content_selector));
         });
