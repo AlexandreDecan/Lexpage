@@ -18,7 +18,7 @@ env.addFilter('highlight', function(val, user) {
     if (user == ""){ // anonymous user
         return val;
     } else {
-        var user_regexp = new RegExp("(@" + user + ")(?=\\b)", "g");
+        var user_regexp = new RegExp("(@" + user + ")(\\b)?", "g");
         return val.replace(user_regexp, "<strong>$1</strong>");
     };
 }, true);
