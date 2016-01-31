@@ -1,4 +1,4 @@
-var minichat = function() {
+function create_minichat() {
     var _timer_delay = 30;
     var _split_delay = 5 * 60;
 
@@ -8,7 +8,7 @@ var minichat = function() {
 
     var _ws_client = ws_client; // Need to be set outside!
     var _username = USERNAME; // Need to be set outside!
-    var _last_visit = LAST_VISIT; // Need to be set outside!
+    var _read_date = LAST_VISIT; // Need to be set outside!
     var _replace_invalid_avatar = replace_invalid_avatar; // Need to be set outside!
     var _activate_tooltips = activate_tooltips; // Need to be set outside!
     var _contrib_message = contrib_message; // Need to be set outside!
@@ -67,37 +67,40 @@ var minichat = function() {
         }
     };
 
+    this.group_messages = function(messages) {
+        // Group by date
+        var date_groups = _.groupBy(messages, function (e) {
+            return moment(e.date).format("YYYY-MM-DD");
+        });
+
+        // Group by author inside each groups
+        return _.map(date_groups, function (messages, date) {
+            var last_message = null;
+            var groups = [];
+            var group;
+            for (var i = 0; i < messages.length; i++) {
+                var message = messages[i];
+
+                if (!last_message || (last_message.user.username != message.user.username) ||
+                    (moment(last_message.date).diff(moment(message.date), 'seconds') >= _split_delay)) {
+                    if (group)
+                        groups.push(group);
+                    group = {'user': message.user, 'messages': []};
+                }
+
+                last_message = message;
+                group.messages.push(message);
+            }
+            groups.push(group);
+            return {'date': date, 'groups': groups};
+        });
+    };
+
     this.refresh = function () {
         $.get(_content_url, function (data) {
+            var messages = minichat.group_messages(data.results);
 
-            // Group by date
-            var date_groups = _.groupBy(data.results, function (e) {
-                return moment(e.date).format("YYYY-MM-DD");
-            });
-
-            // Group by author inside each groups
-            var ndata = _.map(date_groups, function (messages, date) {
-                var last_message = null;
-                var groups = [];
-                var group;
-                for (var i = 0; i < messages.length; i++) {
-                    var message = messages[i];
-
-                    if (!last_message || (last_message.user.username != message.user.username) ||
-                        (moment(last_message.date).diff(moment(message.date), 'seconds') >= _split_delay)) {
-                        if (group)
-                            groups.push(group);
-                        group = {'user': message.user, 'messages': []};
-                    }
-
-                    last_message = message;
-                    group.messages.push(message);
-                }
-                groups.push(group);
-                return {'date': date, 'groups': groups};
-            });
-
-            var context = {dates: ndata, 'current_username': _username, 'last_visit': _last_visit};
+            var context = {dates: messages, 'current_username': _username, 'read_date': _read_date};
             $(_content_selector).html(nunjucks.render(_template_url, context));
             _replace_invalid_avatar($(_content_selector));
             _activate_tooltips($(_content_selector));
@@ -142,4 +145,8 @@ var minichat = function() {
     };
 
     return this;
-}();
+};
+
+$(document).ready(function() {
+   minichat = create_minichat();
+});
