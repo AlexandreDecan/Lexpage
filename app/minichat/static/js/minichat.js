@@ -1,9 +1,8 @@
-function create_minichat(username, last_visit, ws_client) {
+app_minichat = function (username, last_visit, ws_client) {
     var _timer_delay = 30;
     var _split_delay = 5 * 60;
 
     var _content_url;
-    var _post_url;
     var _template_url = "minichat/latests.html";
 
     var _ws_client = ws_client;
@@ -14,58 +13,50 @@ function create_minichat(username, last_visit, ws_client) {
     var _activate_tooltips = activate_tooltips; // Need to be set outside!
     var _contrib_message = contrib_message; // Need to be set outside!
 
-    var _content_selector;
-    var _form_selector = "#minichat_form";
-    var _button_selector = "#minichat_form button[type='submit']";
-    var _input_text_selector = "#minichat_form input[type='text']";
-    var _remaining_chars_selector = "#minichat_form .minichat-remainingChars";
+    var _container_selector;
+    var _form_selector;
+    var _button_selector;
+    var _input_text_selector;
+    var _remaining_chars_selector;
 
-    var minichat = this;
+    var app = this;
 
 
-    this.init_display = function(content_selector, content_url) {
-        _content_selector = content_selector;
+    this.init_display = function(container_selector, form_selector, content_url) {
+        _container_selector = container_selector;
         _content_url = content_url;
 
-        if (_content_selector) {
-            setInterval(this.refresh_fallback, _timer_delay * 1000);
-            this.refresh();
+        _form_selector = form_selector;
+        _button_selector = _form_selector + " button[type='submit']";
+        _input_text_selector = _form_selector + " input[type='text']";
+        _remaining_chars_selector = _form_selector + " .minichat-remainingChars";
 
-            if (_ws_client){
-                _ws_client.register('minichat', 'on_connect', this.refresh);
-                _ws_client.register('minichat', 'on_message', this.websocket_message_dispatch);
-            }
+        // Register if available
+        if (_ws_client){
+            ws_client.register('minichat', 'on_message', function(data) {
+                if (data.action == "reload_minichat") {
+                    app.refresh_content();
+                }
+            });
         }
-    };
 
-    this.init_post = function () {
-        _post_url = $(_form_selector).attr("action");
+        setInterval(function () {
+            // If not connected, use fallback
+            if (!_ws_client || !_ws_client.isConnected()) {
+                app.refresh_content();
+            }
+        });
 
-        $(_button_selector).click(
-            function(e) {
+        $(_button_selector).click(function(e) {
                 e.preventDefault();
                 $(_button_selector).find('span').addClass('fa-spinner fa-spin');
-                minichat.post_message();
-            }
-        );
-
+                app.post_message();
+        });
         this.update_chars_count();
         $(_input_text_selector).change(this.update_chars_count);
         $(_input_text_selector).keyup(this.update_chars_count);
-    };
 
-    this.refresh_fallback = function () {
-        if (!_ws_client || !_ws_client.isConnected()){
-            this.refresh();
-        }
-    };
-
-    this.websocket_message_dispatch = function (data) {
-        switch(data.action) {
-            case 'reload_minichat':
-                this.refresh();
-                break;
-        }
+        this.refresh_content();
     };
 
     this.group_messages = function(messages) {
@@ -97,19 +88,19 @@ function create_minichat(username, last_visit, ws_client) {
         });
     };
 
-    this.refresh = function () {
+    this.refresh_content = function () {
         $.get(_content_url, function (data) {
-            var messages = minichat.group_messages(data.results);
+            var messages = app.group_messages(data.results);
 
             var context = {dates: messages, 'current_username': _username, 'read_date': _read_date};
-            $(_content_selector).html(nunjucks.render(_template_url, context));
-            _replace_invalid_avatar($(_content_selector));
-            _activate_tooltips($(_content_selector));
+            $(_container_selector).html(nunjucks.render(_template_url, context));
+            _replace_invalid_avatar($(_container_selector));
+            _activate_tooltips($(_container_selector));
         });
     };
 
     this.post_message = function () {
-        $.post(_post_url, $(_form_selector).serialize())
+        $.post($(_form_selector).attr("action"), $(_form_selector).serialize())
             .done(function(data) {
                 if (data.substituted) {
                     contrib_message("info", "Votre dernier message est devenu \"<em>"+ data.substituted.text +"</em>\".");
@@ -126,20 +117,21 @@ function create_minichat(username, last_visit, ws_client) {
                 }
                 $(_button_selector).find('span').removeClass('fa-spinner fa-spin fa-warning btn-warning');
                 $(_input_text_selector).val("");
-                minichat.update_chars_count();
-                minichat.refresh_fallback();
+                app.update_chars_count();
+                app.refresh_content();
             })
-            .fail(function(data) {
+            .fail(function() {
                 $(_button_selector).find('span').removeClass('fa-spinner fa-spin').addClass('fa-warning');
-                minichat_refresh_fallback();
+                app.refresh_content();
             }
         );
     };
 
     this.update_chars_count = function () {
         var remaining = $(_input_text_selector).attr("maxlength") - $(_input_text_selector).val().length;
-        var plural = "";
-        if (remaining > 1) plural = "s";
+        var plural;
+        if (remaining > 1) plural = "s"; else plural = "";
+
         $(_input_text_selector).parent().toggleClass("has-warning", remaining == 0);
         $(_remaining_chars_selector).text(remaining + "  caractère"+plural+" restant"+plural);
     };
