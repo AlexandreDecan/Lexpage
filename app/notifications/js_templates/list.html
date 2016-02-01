@@ -15,23 +15,6 @@ To compile it, run "grunt".
     </div>
   </div>
 {% elif results|length > 0 %}
-  {% if next or previous %}
-    <div class="notification notification_pagination text-center">
-      {% if next %}
-      <div class="next_page small">
-          <a href="javascript:notifications_change_page('{{next}}')">Suivant <i class="fa fa-chevron-right"></i></a>
-      </div>
-      {% endif %}
-      {% if previous %}
-      <div class="previous_page small">
-          <a href="javascript:notifications_change_page('{{previous}}')"><i class="fa fa-chevron-left"></i> Précédent</a>
-      </div>
-      {% endif %}
-      <div class="text-muted small">
-          {{current_page}}/{{total_pages}}
-      </div>
-    </div>
-  {% endif %}
   {% for notification in results %}
     <div id="notification_{{notification.id}}" class="notification">
       <div class="notification_icon">

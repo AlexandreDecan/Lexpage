@@ -1,0 +1,33 @@
+{% if data|length > 0 %}
+
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <span class="badge"><span class="fa fa-bell"> {{ data|length }}</span></span>
+    </a>
+    <div class="dropdown-menu notification_list">
+    {% for notification in data %}
+       <div id="notification_{{notification.id}}" class="notification">
+          <div class="notification_icon">
+            <span class="fa fa-lg {{ notification.icon }}"></span>
+          </div>
+          <div class="notification_dismiss">
+              <a class="fa fa-times close" href="javascript:notifications.dismiss('{{ notification.dismiss_url}}', 'notification_{{notification.id }}');"></a>
+          </div>
+          <div class="notification_title"><strong>
+              {% if notification.show_and_dismiss_url %}
+              <a href="{{ notification.show_and_dismiss_url }}">{{ notification.title }}</a>
+              {% else %}
+                  {{ notification.title }}
+              {% endif %}
+              </strong>
+          </div>
+          <div class="notification_descr">
+            {{ notification.description }}
+            <span class="notification_date">
+              &mdash; {{ notification.date | relativeDate }}
+            </span>
+          </div>
+        </div>
+    {% endfor %}
+    </div>
+
+{% endif %}

@@ -125,12 +125,8 @@
 
     {% if user.is_authenticated %}
         <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown" id="notifications_container"{% if notifications_list|length == 0 %} style="display:none;"{% endif %}>
-            <a href="#" class="dropdown-notifications dropdown-toggle" data-toggle="dropdown" id="notifications_dropdown_button">
-                <span class="badge"><span class="fa fa-bell"> {{ notifications_list|length }}</span></span>
-            </a>
-            <div class="dropdown-menu notification_list" id="notifications_dropdown" onclick="event.stopPropagation();">
-            </div>
+            <li class="dropdown" id="notifications_container">
+                <!-- Content dynamically set -->
             </li>
 
             <li class="dropdown">
@@ -165,7 +161,8 @@
     {% if user.is_authenticated %}
         <script>
             $(document).ready(function() {
-                notifications_init_display("#notifications_container", "#notifications_button", "#notifications_dropdown_button", "#notifications_dropdown", "{% url 'notifications_api_list' %}");
+                notifications = app_notifications(ws_client);
+                notifications.init_display("#notifications_container", "{% url 'notifications_api_list' %}");
             });
         </script>
     {% endif %}

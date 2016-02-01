@@ -6599,18 +6599,6 @@ body {
   -webkit-box-shadow: 0 0px 14px 4px rgba(0, 0, 0, 0.3);
   box-shadow: 0 0px 14px 4px rgba(0, 0, 0, 0.3);
 }
-.navbar .dropdown-menu .notification_pagination, .navbar .notification_list .notification_pagination {
-  margin-top: -10px;
-  position: relative;
-}
-.navbar .dropdown-menu .notification_pagination .previous_page, .navbar .notification_list .notification_pagination .previous_page {
-  position: absolute;
-  left: 10px;
-}
-.navbar .dropdown-menu .notification_pagination .next_page, .navbar .notification_list .notification_pagination .next_page {
-  position: absolute;
-  right: 10px;
-}
 .navbar .navbar-right .avatar {
   position: relative;
   z-index: 1001;

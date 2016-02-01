@@ -1,136 +1,76 @@
-var notifications_timer_delay = 30000;
-var notifications_menu_button;
-var notifications_dropdown_button;
-var notifications_content_list;
-var notifications_content_url;
-var notifications_initial_content_url;
-var notifications_container;
-var notifications_vanilla_page_title;
-var notifications_previous_page = null;
-var notifications_fetch_failed = false;
-var notifications_template_button_checksum = null;
-var notifications_template_list_checksum = null;
+app_notifications = function (ws_client) {
+    var _timer_delay = 30;
+    var _ws_client = ws_client;
 
-var notifications_button_template = "notifications/button.html";
-var notifications_list_template = "notifications/list.html";
+    var _content_url;
+    var _template = "notifications/notifications.html";
 
-function notifications_safe_title(title){
-    return title.replace(/\((\d+)\)/g,'⟨$1⟩'); // Mind "⟨" != "("
-}
+    var _container_selector;
 
-function notifications_init_display(container, menu_button, dropdown_button, content_list, get_url) {
-    notifications_container = container;
-    notifications_menu_button = menu_button;
-    notifications_dropdown_button = dropdown_button;
-    notifications_content_list = content_list;
-    notifications_content_url = get_url;
-    notifications_initial_content_url = get_url;
-    notifications_vanilla_page_title = notifications_safe_title(document.title);
+    var _vanilla_title = document.title.replace(/\((\d+)\)/g,'⟨$1⟩'); // Mind "⟨" != "("
 
+    var app = this;
 
-    if ($(notifications_content_list)) {
-        setInterval(notifications_refresh_fallback, notifications_timer_delay);
-        notifications_refresh();
-        if (ws_client){
-            ws_client.register('notifications', 'on_connect', notifications_refresh);
-            ws_client.register('notifications', 'on_message', notifications_websocket_message_dispatch);
+    this.init_display = function (container, url) {
+        _container_selector = container;
+        _content_url = url;
+
+        // Register if available
+        if (_ws_client) {
+            ws_client.register('notifications', 'on_message', function(data) {
+                if (data.action == "update_counter") {
+                    app.refresh_content();
+                }
+            });
         }
+
+        setInterval(function () {
+            // If not connected, use fallback
+            if (!_ws_client || !_ws_client.isConnected()){
+                app.refresh_content();
+            }
+        }, _timer_delay * 1000);
+
+        this.refresh_content();
     };
-}
 
-function notifications_websocket_message_dispatch(data) {
-    switch(data.action) {
-        case 'update_counter':
-            notifications_refresh();
-            break;
+    this.refresh_content = function () {
+        $.get(_content_url, function(data) {
+            // Update content
+            var template_html = nunjucks.render(_template, {'data':data});
+            $(_container_selector).html(template_html);
+
+            // Disable click event to prevent dropdown closing
+            $(_container_selector).click(function(e) {e.stopPropagation(); });
+
+            // Allow to show notifications on mouse over
+            $(_container_selector).hover(function () {
+                // Only if navbar is not collapsed
+                if (!$(this).closest('.navbar-collapse').hasClass('in'))
+                    $(this).addClass('open');
+            }, function() {
+                if (!$(this).closest('.navbar-collapse').hasClass('in'))
+                    $(this).removeClass('open');
+            });
+
+            // Update title
+            if (data && data.length > 0)
+                document.title = "("+data.length+") "+_vanilla_title;
+            else
+                document.title = _vanilla_title;
+        }).error(function () {
+            contrib_message("danger", "Une erreur est survenue pendant le chargement des notifications.");
+            document.title = _vanilla_title;
+        });
+    };
+
+    this.dismiss = function(url, element) {
+        // Disable click event to prevent dropdown closing
+        $("#" + element + " a.close").addClass("fa-spinner fa-spin");
+        $.ajax({url: url, type: 'DELETE'}).done(function (data) {
+            app.refresh_content();
+        });
     }
-}
 
-
-function notifications_refresh_fallback() {
-    if (!ws_client || !ws_client.isConnected()){
-        notifications_refresh();
-    }
-}
-
-function notifications_refresh() {
-    $.get(notifications_content_url, function(data) {
-        notifications_previous_page = data.previous;
-
-        var template_list_html = nunjucks.render(notifications_list_template, data);
-        var template_button_html = nunjucks.render(notifications_button_template, data);
-        var list_checksum = string_checksum(template_list_html);
-        var button_checksum = string_checksum(template_button_html);
-
-        if (notifications_template_list_checksum != list_checksum){
-            $(notifications_content_list).html(template_list_html);
-            notification_initialize();
-            notifications_template_list_checksum = list_checksum;
-        }
-
-        if (notifications_template_button_checksum != button_checksum){
-            // Button has changed, so probably has the notification count
-            $(notifications_menu_button).html(template_button_html);
-            $(notifications_dropdown_button).html(template_button_html);
-
-            var prefix_title;
-            if (data.count == 0) {
-                $(notifications_container).hide();
-                prefix_title = '';
-            } else {
-                $(notifications_container).show();
-                prefix_title = '(' + data.count + ') ';
-            }
-            if (notifications_vanilla_page_title) {
-                document.title = prefix_title + notifications_vanilla_page_title;
-            }
-            notifications_template_button_checksum = button_checksum;
-        }
-    }).error(function(){
-        if (notifications_previous_page){ // We can not fetch the notifications, let's try to load the last previously known page
-            notifications_fetch_failed = true;
-            notifications_content_url = notifications_previous_page;
-            notifications_previous_page = null;
-            notifications_refresh();
-        } else if (notifications_fetch_failed) { // The last previous one failed, let's try the original url
-            notifications_fetch_failed = false; // avoid infinite loop
-            notifications_content_url = notifications_initial_content_url;
-            notifications_refresh();
-        } else { // We can really not load the notifications...
-            $(notifications_container).show();
-            $(notifications_dropdown_button).html(nunjucks.render(notifications_button_template, {'error': true}));
-            $(notifications_content_list).html(nunjucks.render(notifications_list_template, {'error': true}));
-            $(notifications_menu_button).html(nunjucks.render(notifications_button_template, {'error': true}));
-            if (notifications_vanilla_page_title) {
-                document.title = notifications_vanilla_page_title;
-            }
-            notifications_template_list_checksum = null;
-            notifications_template_button_checksum = null;
-        }
-    });
-}
-
-function notification_initialize() {
-    notifications_fetch_failed = false;
-    $(".notification_list .notification_dismiss a.close").click(function (e) {
-        e.stopPropagation(); // Prevent dropdown to close
-    });
-    $(".notification_pagination > div > a").click(function(e) {
-        e.stopPropagation(); // Prevent dropdown to close
-    });
-}
-
-function notification_dismiss(url, target) {
-    // Disable click propagation (to keep dropdown opened)
-    function done(data) {
-        // Dismiss target
-        notifications_refresh_fallback();
-    }
-    $("#"+target+" a.close").addClass("fa-spinner fa-spin");
-    $.ajax({url: url, type: 'DELETE'}).done(done);
-}
-
-function notifications_change_page(url){
-  notifications_content_url = url;
-  notifications_refresh();
-}
+    return this;
+};
