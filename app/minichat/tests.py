@@ -317,22 +317,6 @@ class MinichatBrowserTest(LexpageTestCase):
     def test_minichat_message(self):
         self.post_message()
 
-    @without_redis()
-    @logged_in_test()
-    def test_minichat_message_without_redis(self):
-        """Without redis, a message takes up to 30 seconds to get printed"""
-        text_message = 'Je suis un test'
-        text_message_xpath = '//div[@class="minichat-text"]/div[text()[contains(.,"%s")]]' % text_message
-        with self.assertRaises(NoSuchElementException):
-            self.selenium.find_element_by_xpath(text_message_xpath)
-        time.sleep(1)
-        Message(user=self.author, text=text_message).save()
-        time.sleep(15)
-        with self.assertRaises(NoSuchElementException):
-            self.selenium.find_element_by_xpath(text_message_xpath)
-        WebDriverWait(self.selenium, 20).until(
-            lambda driver: driver.find_element_by_xpath(text_message_xpath))
-
     @logged_in_test()
     def test_minichat_is_not_reloaded_with_websockets(self):
         """This test will ensure that the minichat is not reloaded with websockets

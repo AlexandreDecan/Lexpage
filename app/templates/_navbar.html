@@ -161,8 +161,8 @@
     {% if user.is_authenticated %}
         <script>
             $(document).ready(function() {
-                notifications = app_notifications(ws_client);
-                notifications.init_display("#notifications_container", "{% url 'notifications_api_list' %}");
+                app_notifications.init(ws_client);
+                app_notifications.init_display("#notifications_container", "{% url 'notifications_api_list' %}");
             });
         </script>
     {% endif %}

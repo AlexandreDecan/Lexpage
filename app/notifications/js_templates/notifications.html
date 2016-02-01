@@ -10,7 +10,7 @@
             <span class="fa fa-lg {{ notification.icon }}"></span>
           </div>
           <div class="notification_dismiss">
-              <a class="fa fa-times close" href="javascript:notifications.dismiss('{{ notification.dismiss_url}}', 'notification_{{notification.id }}');"></a>
+              <a class="fa fa-times close" href="javascript:app_notifications.dismiss('{{ notification.dismiss_url}}', 'notification_{{notification.id }}');"></a>
           </div>
           <div class="notification_title"><strong>
               {% if notification.show_and_dismiss_url %}

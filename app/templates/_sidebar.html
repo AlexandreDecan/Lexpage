@@ -38,52 +38,51 @@
                 <p class="text-muted text-center">
                     <span class="fa fa-spinner fa-spin"></span> Chargement...</p>
             </div>
-            {% if user.is_authenticated %}
 
-                <form action="{% url 'minichat_post' %}" class="form-inline" method="post" id="minichat_form">
-                    {% csrf_token %}
-                    <div class="input-group">
-                        <input name="text" maxlength="150" type="text" class="form-control" placeholder="Nouveau message"/>
+            <form action="{% url 'minichat_post' %}" class="form-inline{% if not user.is_authenticated %} hidden{% endif %}" method="post" id="minichat_form">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input name="text" maxlength="150" type="text" class="form-control" placeholder="Nouveau message"/>
 
-                        <span class="input-group-btn">
+                    <span class="input-group-btn">
 
-                        <button class="btn btn-default btn-circle" type="submit">
-                            <span class="fa fa-pencil"></span>
-                        </button>
-                        </span>
-                    </div>
-                    <div class="minichat-remainingChars">
-                        <span id="remainingChars"></span>
-                    </div>
+                    <button class="btn btn-default btn-circle" type="submit">
+                        <span class="fa fa-pencil"></span>
+                    </button>
+                    </span>
+                </div>
+                <div class="minichat-remainingChars">
+                    <span id="remainingChars"></span>
+                </div>
 
-                </form>
+            </form>
 
-                <script>
-                    $(document).ready(function () {
-                        $("#minichat_form input.form-control").autocomplete({
-                            serviceUrl: "{% url 'profile_api_list' %}",
-                            minChars: 3,
-                            autoSelectFirst:true,
-                            delimiter: " ",
-                            params: {'prefix': '@'},
-                            tabDisabled: true,
-                            onSearchStart: function (query) {
-                                if (query.query.toLowerCase().charAt(0)=="@") {
-                                    return true;
-                                } else {
-                                    return false;
-                                }
-                            },
-                        });
+            <script>
+                $(document).ready(function () {
+                    $("#minichat_form input.form-control").autocomplete({
+                        serviceUrl: "{% url 'profile_api_list' %}",
+                        minChars: 3,
+                        autoSelectFirst:true,
+                        delimiter: " ",
+                        params: {'prefix': '@'},
+                        tabDisabled: true,
+                        onSearchStart: function (query) {
+                            if (query.query.toLowerCase().charAt(0)=="@") {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        },
                     });
-                </script>
-            {% endif %}
+                });
+            </script>
+
         </div><!-- minichat_content -->
 
         <script>
             $(document).ready(function() {
-                minichat = app_minichat("{{ user.username }}", "{{ user.profile.last_visit|date:"c" }}", ws_client);
-                minichat.init_display("#minichat_content", "#minichat_form", "{% url 'minichat-api-latest-list' %}");
+                app_minichat.init("{{ user.username }}", "{{ user.profile.last_visit|date:"c" }}", ws_client);
+                app_minichat.init_display("#minichat_content", "#minichat_form", "{% url 'minichat-api-latest-list' %}");
             });
         </script>
     </div> <!-- panel -->
