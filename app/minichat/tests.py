@@ -159,24 +159,10 @@ class ApiTests(APITestCase):
         response = self.client.post(reverse('minichat_post'), {'text': 'Hello World!'})
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data['text'], 'Hello World!')
-        self.assertEqual(response.data['anchors'], [])
         self.assertEqual(Message.objects.last().text, 'Hello World!')
         response = self.client.post(reverse('minichat_post'), {'text': 's/World/John'})
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['anchors'], [])
         self.assertEqual(Message.objects.last().text, 'Hello John!')
-        self.client.logout()
-
-    def test_anchor(self):
-        Notification.objects.all().delete()
-        self.assertEqual(len(Notification.objects.all()), 0)
-        self.client.login(username='user1', password='user1')
-        response = self.client.post(reverse('minichat_post'), {'text': '@admin hello'})
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.data['text'], '@admin hello')
-        self.assertEqual(response.data['anchors'], ['admin'])
-        self.assertEqual(Message.objects.last().text, '@admin hello')
-        self.assertEqual(len(Notification.objects.all()), 1)
         self.client.logout()
 
     def test_anchor_not_recreated_after_updating_message(self):
@@ -191,7 +177,6 @@ class ApiTests(APITestCase):
         response = self.client.post(reverse('minichat_post'), {'text': 's/hello/world'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['text'], 's/hello/world')
-        self.assertEqual(response.data['anchors'], [])
         self.assertEqual(Message.objects.last().text, '@admin world')
         self.assertEqual(len(Notification.objects.all()), 0)
         self.client.logout()
@@ -206,7 +191,6 @@ class ApiTests(APITestCase):
         response = self.client.post(reverse('minichat_post'), {'text': 's/@admin/nobody'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['text'], 's/@admin/nobody')
-        self.assertEqual(response.data['anchors'], [])
         self.assertEqual(Message.objects.last().text, 'nobody hello')
         self.assertEqual(len(Notification.objects.all()), 0)
         self.client.logout()
@@ -220,7 +204,6 @@ class ApiTests(APITestCase):
         response = self.client.post(reverse('minichat_post'), {'text': 's/a/@a'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['text'], 's/a/@a')
-        self.assertEqual(response.data['anchors'], ['admin'])
         self.assertEqual(Message.objects.last().text, '@admin hello')
         self.assertEqual(len(Notification.objects.all()), 1)
         self.client.logout()
@@ -234,7 +217,6 @@ class ApiTests(APITestCase):
         response = self.client.post(reverse('minichat_post'), {'text': 's/hello/@user1 world'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['text'], 's/hello/@user1 world')
-        self.assertEqual(response.data['anchors'], ['user1'])
         self.assertEqual(Message.objects.last().text, '@admin @user1 world')
         self.assertEqual(len(Notification.objects.all()), 2)
         self.client.logout()
@@ -249,7 +231,6 @@ class ApiTests(APITestCase):
         response = self.client.post(reverse('minichat_post'), {'text': '@admin hello @user2 @user3'})
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data['text'], '@admin hello @user2 @user3')
-        self.assertEqual(response.data['anchors'], ['admin', 'user2', 'user3'])
         self.assertEqual(Message.objects.last().text, '@admin hello @user2 @user3')
         self.assertEqual(len(Notification.objects.all()), 3)
         self.client.logout()
@@ -259,7 +240,6 @@ class ApiTests(APITestCase):
         response = self.client.post(reverse('minichat_post'), {'text': 'Hello World!'})
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data['text'], 'Hello World!')
-        self.assertEqual(response.data['anchors'], [])
         self.assertEqual(Message.objects.last().text, 'Hello World!')
         self.client.logout()
 
@@ -277,39 +257,19 @@ class ApiTests(APITestCase):
 
         first_message = response.data['results'][0]
         # Striclty check the fields to avoir extra disclosure (field id is not sent)
-        self.assertEqual(list(first_message.keys()), ['user', 'text', 'date'])
+        self.assertEqual(set(first_message.keys()), {'user', 'text', 'date'})
 
         # Striclty check the fields to avoir extra disclosure (we should only send username
         # and profile, not password, email, ...)
-        self.assertEqual(list(first_message['user'].keys()), ['username', 'profile', 'get_absolute_url'])
+        self.assertEqual(set(first_message['user'].keys()), {'username', 'profile', 'get_absolute_url'})
 
 
         # Striclty check the fields to avoir extra disclosure (we should only send avatar,
         # not last_visit, ...)
-        self.assertEqual(list(first_message['user']['profile'].keys()), ['avatar'])
+        self.assertEqual(set(first_message['user']['profile'].keys()), {'avatar'})
 
         self.assertEqual(first_message['text'], 'Last message')
 
-    def test_smiley(self):
-        Message(user=self.author, text='je suis content :-)').save()
-
-        response = self.client.get(reverse('minichat-api-latest-list'), format='json')
-
-        self.assertEqual(response.status_code, 200)
-
-        first_message = response.data['results'][0]
-        self.assertEqual(first_message['text'], 'je suis content <img src="/static/images/smiley/smile.gif"/>')
-
-    def test_url(self):
-        Message(user=self.author, text='trop fort http://lexpage.net').save()
-
-        response = self.client.get(reverse('minichat-api-latest-list'), format='json')
-        formatted_url = '<a href="http://lexpage.net" title="http://lexpage.net" data-toggle="tooltip" data-placement="top" data-container="body" class="fa fa-external-link" rel="nofollow"></a>'
-
-        self.assertEqual(response.status_code, 200)
-
-        first_message = response.data['results'][0]
-        self.assertEqual(first_message['text'], 'trop fort %s' % formatted_url)
 
 
 class TemplateTestCase(LexpageTestCase):

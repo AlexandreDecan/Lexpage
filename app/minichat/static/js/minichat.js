@@ -113,8 +113,7 @@ function create_minichat(username, last_visit, ws_client) {
             .done(function(data) {
                 if (data.substituted) {
                     contrib_message("info", "Votre dernier message est devenu \"<em>"+ data.substituted.text +"</em>\".");
-                }
-                if (data.anchors.length > 0) {
+                } else if (data.anchors.length > 0) {
                     var beautified_users;
                     if (data.anchors.length > 1) {
                         var users = data.anchors.join(', à ');
