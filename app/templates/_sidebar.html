@@ -82,7 +82,7 @@
 
         <script>
             $(document).ready(function() {
-                minichat = app_minichat(USERNAME, LAST_VISIT, ws_client);
+                minichat = app_minichat("{{ user.username }}", "{{ user.profile.last_visit|date:"c" }}", ws_client);
                 minichat.init_display("#minichat_content", "#minichat_form", "{% url 'minichat-api-latest-list' %}");
             });
         </script>
