@@ -159,24 +159,10 @@ class ApiTests(APITestCase):
         response = self.client.post(reverse('minichat_post'), {'text': 'Hello World!'})
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data['text'], 'Hello World!')
-        self.assertEqual(response.data['anchors'], [])
         self.assertEqual(Message.objects.last().text, 'Hello World!')
         response = self.client.post(reverse('minichat_post'), {'text': 's/World/John'})
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['anchors'], [])
         self.assertEqual(Message.objects.last().text, 'Hello John!')
-        self.client.logout()
-
-    def test_anchor(self):
-        Notification.objects.all().delete()
-        self.assertEqual(len(Notification.objects.all()), 0)
-        self.client.login(username='user1', password='user1')
-        response = self.client.post(reverse('minichat_post'), {'text': '@admin hello'})
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.data['text'], '@admin hello')
-        self.assertEqual(response.data['anchors'], ['admin'])
-        self.assertEqual(Message.objects.last().text, '@admin hello')
-        self.assertEqual(len(Notification.objects.all()), 1)
         self.client.logout()
 
     def test_anchor_not_recreated_after_updating_message(self):
@@ -191,7 +177,6 @@ class ApiTests(APITestCase):
         response = self.client.post(reverse('minichat_post'), {'text': 's/hello/world'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['text'], 's/hello/world')
-        self.assertEqual(response.data['anchors'], [])
         self.assertEqual(Message.objects.last().text, '@admin world')
         self.assertEqual(len(Notification.objects.all()), 0)
         self.client.logout()
@@ -206,7 +191,6 @@ class ApiTests(APITestCase):
         response = self.client.post(reverse('minichat_post'), {'text': 's/@admin/nobody'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['text'], 's/@admin/nobody')
-        self.assertEqual(response.data['anchors'], [])
         self.assertEqual(Message.objects.last().text, 'nobody hello')
         self.assertEqual(len(Notification.objects.all()), 0)
         self.client.logout()
@@ -220,7 +204,6 @@ class ApiTests(APITestCase):
         response = self.client.post(reverse('minichat_post'), {'text': 's/a/@a'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['text'], 's/a/@a')
-        self.assertEqual(response.data['anchors'], ['admin'])
         self.assertEqual(Message.objects.last().text, '@admin hello')
         self.assertEqual(len(Notification.objects.all()), 1)
         self.client.logout()
@@ -234,7 +217,6 @@ class ApiTests(APITestCase):
         response = self.client.post(reverse('minichat_post'), {'text': 's/hello/@user1 world'})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['text'], 's/hello/@user1 world')
-        self.assertEqual(response.data['anchors'], ['user1'])
         self.assertEqual(Message.objects.last().text, '@admin @user1 world')
         self.assertEqual(len(Notification.objects.all()), 2)
         self.client.logout()
@@ -249,7 +231,6 @@ class ApiTests(APITestCase):
         response = self.client.post(reverse('minichat_post'), {'text': '@admin hello @user2 @user3'})
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data['text'], '@admin hello @user2 @user3')
-        self.assertEqual(response.data['anchors'], ['admin', 'user2', 'user3'])
         self.assertEqual(Message.objects.last().text, '@admin hello @user2 @user3')
         self.assertEqual(len(Notification.objects.all()), 3)
         self.client.logout()
@@ -259,7 +240,6 @@ class ApiTests(APITestCase):
         response = self.client.post(reverse('minichat_post'), {'text': 'Hello World!'})
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data['text'], 'Hello World!')
-        self.assertEqual(response.data['anchors'], [])
         self.assertEqual(Message.objects.last().text, 'Hello World!')
         self.client.logout()
 
@@ -277,39 +257,19 @@ class ApiTests(APITestCase):
 
         first_message = response.data['results'][0]
         # Striclty check the fields to avoir extra disclosure (field id is not sent)
-        self.assertEqual(list(first_message.keys()), ['user', 'text', 'date'])
+        self.assertEqual(set(first_message.keys()), {'user', 'text', 'date'})
 
         # Striclty check the fields to avoir extra disclosure (we should only send username
         # and profile, not password, email, ...)
-        self.assertEqual(list(first_message['user'].keys()), ['username', 'profile', 'get_absolute_url'])
+        self.assertEqual(set(first_message['user'].keys()), {'username', 'profile', 'get_absolute_url'})
 
 
         # Striclty check the fields to avoir extra disclosure (we should only send avatar,
         # not last_visit, ...)
-        self.assertEqual(list(first_message['user']['profile'].keys()), ['avatar'])
+        self.assertEqual(set(first_message['user']['profile'].keys()), {'avatar'})
 
         self.assertEqual(first_message['text'], 'Last message')
 
-    def test_smiley(self):
-        Message(user=self.author, text='je suis content :-)').save()
-
-        response = self.client.get(reverse('minichat-api-latest-list'), format='json')
-
-        self.assertEqual(response.status_code, 200)
-
-        first_message = response.data['results'][0]
-        self.assertEqual(first_message['text'], 'je suis content <img src="/static/images/smiley/smile.gif"/>')
-
-    def test_url(self):
-        Message(user=self.author, text='trop fort http://lexpage.net').save()
-
-        response = self.client.get(reverse('minichat-api-latest-list'), format='json')
-        formatted_url = '<a href="http://lexpage.net" title="http://lexpage.net" data-toggle="tooltip" data-placement="top" data-container="body" class="fa fa-external-link" rel="nofollow"></a>'
-
-        self.assertEqual(response.status_code, 200)
-
-        first_message = response.data['results'][0]
-        self.assertEqual(first_message['text'], 'trop fort %s' % formatted_url)
 
 
 class TemplateTestCase(LexpageTestCase):
@@ -432,23 +392,56 @@ class MinichatNunjucksTest(LexpageTestCase):
             for inner_message in inner_messages:
                 self.assertIn(group.pop(0), inner_message.text)
 
-    def verify_minichat_read(self, expected_read, expected_unread):
-        """This fonction tests that messages in the minichat are marked as read
-        or unread as expected
-        """
-        all_messages = self.selenium.find_elements_by_css_selector('.minichat-text div')
-        unread_messages = self.selenium.find_elements_by_css_selector('.minichat-text div.new')
-        unread_messages_text = [e.text for e in unread_messages]
-        read_messages_text = [e.text for e in all_messages if e.text not in unread_messages_text]
-        for expected_messages, actual_messages in ((expected_read, read_messages_text),
-                                                   (expected_unread, unread_messages_text),):
-            self.assertEqual(len(expected_messages), len(actual_messages))
-            all_messages_found = []
-            for e in expected_messages:
-                messages_found = [a for a in actual_messages if a.endswith(e)]
-                self.assertEqual(len(messages_found), 1)
-                all_messages_found += messages_found
-            self.assertEqual(len(all_messages_found), len(list(set(all_messages_found))))
+    @logged_in_test()
+    def test_highlight(self):
+        for input_text, number in [('coucou @user1', 1),
+                            ('@user1', 1),
+                            ('@user12', 0),
+                            ('x @user1 x', 1),
+                            ('@user1 coucou', 1),
+                            ('@user1 @user1', 2),
+                            ('@user1 @user2', 1),
+                            ('@ @user1', 1),
+                            ('@@user1', 1),
+                            ('@@user2', 0),
+                            ('@', 0),
+                            ('no no no no', 0),
+                            ('cool@user1.com', 1),
+                            ('cucou@user12.com', 0),
+                            ('coucou @user12', 0),
+                            ('coucou @user12 salut', 0),
+                            ('@user2', 0)]:
+            Message.objects.all().delete()
+            sqlite_sleep(.5)
+            Message(user=self.users[1], text=input_text).save()
+            time.sleep(1)
+            nb_notifications = len(Notification.objects.filter(recipient=self.users[0]))
+            if number > 0:
+                self.assertEqual(nb_notifications, 1, 'A notification is not created for %s' % input_text)
+            else:
+                self.assertEqual(nb_notifications, 0, 'A notification is created for %s' % input_text)
+
+            highlights = self.selenium.find_elements_by_css_selector('.minichat-text div strong')
+            self.assertEqual(len(highlights), number, 'Test failed with %s' % input_text)
+
+    def test_highlight_when_logged_out(self):
+        self.selenium.get(self.live_server_url)
+        for input_text, number in [('coucou @user1', 0),
+                            ('@user1', 0),
+                            ('@user1 @user1', 0),
+                            ('@ @user1', 0),
+                            ('@', 0),
+                            ('no no no no', 0),
+                            ('cucou@user12.com', 0),
+                            ('coucou @user12 salut', 0),
+                            ('@user2', 0)]:
+            Message.objects.all().delete()
+            sqlite_sleep(.5)
+            Message(user=self.users[1], text=input_text).save()
+            self.selenium.refresh()
+            time.sleep(1)
+            highlights = self.selenium.find_elements_by_css_selector('.minichat-text div strong')
+            self.assertEqual(len(highlights), number, 'Test failed with %s' % input_text)
 
     @logged_in_test()
     def test_one_message_class(self):
@@ -462,8 +455,8 @@ class MinichatNunjucksTest(LexpageTestCase):
         Message(user=self.users[0], text='Traduction: Bonjour').save()
         self.verify_minichat_groups([
             [
-                'Traduction: Bonjour',
                 'Hello World!',
+                'Traduction: Bonjour',
             ],
         ])
 
@@ -476,9 +469,9 @@ class MinichatNunjucksTest(LexpageTestCase):
         Message(user=self.users[0], text='(en Anglais)').save()
         self.verify_minichat_groups([
             [
-                '(en Anglais)',
-                'Traduction: Bonjour',
                 'Hello World!',
+                'Traduction: Bonjour',
+                '(en Anglais)',
             ],
         ])
 
@@ -495,7 +488,7 @@ class MinichatNunjucksTest(LexpageTestCase):
             [ 'Hello World!', ],
         ])
 
-    @logged_in_test(incognito=False)
+    @logged_in_test(incognito=True)
     def test_conversation(self):
         self.selenium.refresh()
         Message(user=self.users[0], text='Hello You').save()
@@ -503,55 +496,47 @@ class MinichatNunjucksTest(LexpageTestCase):
         self.verify_minichat_groups([
             ['Hello You'],
         ])
-        self.verify_minichat_read(['Hello You'], [])
         Message(user=self.users[1], text='Yes').save()
         sqlite_sleep(.5)
         self.verify_minichat_groups([
             ['Yes'],
             ['Hello You'],
         ])
-        self.verify_minichat_read(['Hello You'], ['Yes'])
         Message(user=self.users[1], text='Am here').save()
         sqlite_sleep(.5)
         self.verify_minichat_groups([
-            ['Am here', 'Yes'],
+            ['Yes', 'Am here'],
             ['Hello You'],
         ])
-        self.verify_minichat_read(['Hello You'], ['Yes', 'Am here'])
         self.selenium.refresh()
         self.verify_minichat_groups([
-            ['Am here', 'Yes'],
+            ['Yes', 'Am here'],
             ['Hello You'],
         ])
-        self.verify_minichat_read(['Hello You', 'Yes', 'Am here'], [])
         Message(user=self.users[0], text='It is original').save()
         sqlite_sleep(.5)
         self.verify_minichat_groups([
             ['It is original'],
-            ['Am here', 'Yes'],
+            ['Yes', 'Am here'],
             ['Hello You'],
         ])
-        self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original'], [])
         Message(user=self.users[1], text='Yup.').save()
         sqlite_sleep(.5)
         self.verify_minichat_groups([
             ['Yup.'],
             ['It is original'],
-            ['Am here', 'Yes'],
+            ['Yes', 'Am here'],
             ['Hello You'],
         ])
-        self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original'], ['Yup.'])
         Message(user=self.users[0], text='ok...').save()
         sqlite_sleep(.5)
         self.verify_minichat_groups([
             ['ok...'],
             ['Yup.'],
             ['It is original'],
-            ['Am here', 'Yes'],
+            ['Yes', 'Am here'],
             ['Hello You'],
         ])
-        self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original', 'Yup.',
-                                   'ok...'], [])
         Message(user=self.users[1], text='what ok?').save()
         sqlite_sleep(.5)
         self.verify_minichat_groups([
@@ -559,11 +544,9 @@ class MinichatNunjucksTest(LexpageTestCase):
             ['ok...'],
             ['Yup.'],
             ['It is original'],
-            ['Am here', 'Yes'],
+            ['Yes', 'Am here'],
             ['Hello You'],
         ])
-        self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original', 'Yup.',
-                                   'ok...'], ['what ok?'])
         Message(user=self.users[0], text='does not matter').save()
         sqlite_sleep(.5)
         self.verify_minichat_groups([
@@ -572,36 +555,30 @@ class MinichatNunjucksTest(LexpageTestCase):
             ['ok...'],
             ['Yup.'],
             ['It is original'],
-            ['Am here', 'Yes'],
+            ['Yes', 'Am here'],
             ['Hello You'],
         ])
-        self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original', 'Yup.',
-                                   'ok...', 'what ok?', 'does not matter'], [])
         Message(user=self.users[0], text='brb').save()
         sqlite_sleep(.5)
         self.verify_minichat_groups([
-            ['brb', 'does not matter'],
+            ['does not matter', 'brb'],
             ['what ok?'],
             ['ok...'],
             ['Yup.'],
             ['It is original'],
-            ['Am here', 'Yes'],
+            ['Yes', 'Am here'],
             ['Hello You'],
         ])
-        self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original', 'Yup.',
-                                   'ok...', 'what ok?', 'does not matter', 'brb'], [])
         Message(user=self.users[0], text='ZZz').save()
         self.verify_minichat_groups([
-            ['ZZz', 'brb', 'does not matter'],
+            ['does not matter', 'brb', 'ZZz'],
             ['what ok?'],
             ['ok...'],
             ['Yup.'],
             ['It is original'],
-            ['Am here', 'Yes'],
+            ['Yes', 'Am here'],
             ['Hello You'],
         ])
-        self.verify_minichat_read(['Hello You', 'Yes', 'Am here', 'It is original', 'Yup.',
-                                   'ok...', 'what ok?', 'does not matter', 'brb', 'ZZz'], [])
 
     @logged_in_test()
     def test_not_same_day(self):
@@ -626,4 +603,3 @@ class MinichatNunjucksTest(LexpageTestCase):
         self.verify_minichat_groups([
             [ 'No one is there', ],
         ])
-        self.verify_minichat_read([], [ 'No one is there', ])

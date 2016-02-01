@@ -1,103 +1,148 @@
-var minichat_timer_delay = 30000;
-var minichat_content;
-var minichat_content_url;
-var minichat_post_url;
+function create_minichat(username, last_visit, ws_client) {
+    var _timer_delay = 30;
+    var _split_delay = 5 * 60;
 
-var minichat_form = "#minichat_form";
-var minichat_button = "#minichat_form button[type='submit']";
-var minichat_input_text = "#minichat_form input[type='text']";
-var minichat_chars_output = "#minichat_form .minichat-remainingChars";
+    var _content_url;
+    var _post_url;
+    var _template_url = "minichat/latests.html";
 
-var minichat_template = "minichat/latests.html";
+    var _ws_client = ws_client;
+    var _username = username;
+    var _read_date = last_visit;
 
-function minichat_init_display(content, get_url) {
-    minichat_content = content
-    minichat_content_url = get_url;
+    var _replace_invalid_avatar = replace_invalid_avatar; // Need to be set outside!
+    var _activate_tooltips = activate_tooltips; // Need to be set outside!
+    var _contrib_message = contrib_message; // Need to be set outside!
 
-    if (minichat_content) {
-        setInterval(minichat_refresh_fallback, minichat_timer_delay);
-        minichat_refresh();
-        if (ws_client){
-            ws_client.register('minichat', 'on_connect', minichat_refresh);
-            ws_client.register('minichat', 'on_message', minichat_websocket_message_dispatch);
+    var _content_selector;
+    var _form_selector = "#minichat_form";
+    var _button_selector = "#minichat_form button[type='submit']";
+    var _input_text_selector = "#minichat_form input[type='text']";
+    var _remaining_chars_selector = "#minichat_form .minichat-remainingChars";
+
+    var minichat = this;
+
+
+    this.init_display = function(content_selector, content_url) {
+        _content_selector = content_selector;
+        _content_url = content_url;
+
+        if (_content_selector) {
+            setInterval(this.refresh_fallback, _timer_delay * 1000);
+            this.refresh();
+
+            if (_ws_client){
+                _ws_client.register('minichat', 'on_connect', this.refresh);
+                _ws_client.register('minichat', 'on_message', this.websocket_message_dispatch);
+            }
         }
     };
 
-}
+    this.init_post = function () {
+        _post_url = $(_form_selector).attr("action");
 
-function minichat_refresh_fallback() {
-    if (!ws_client || !ws_client.isConnected()){
-        minichat_refresh();
-    }
-}
+        $(_button_selector).click(
+            function(e) {
+                e.preventDefault();
+                $(_button_selector).find('span').addClass('fa-spinner fa-spin');
+                minichat.post_message();
+            }
+        );
 
-function minichat_websocket_message_dispatch(data) {
-    switch(data.action) {
-        case 'reload_minichat':
-            minichat_refresh();
-            break;
-    }
-}
+        this.update_chars_count();
+        $(_input_text_selector).change(this.update_chars_count);
+        $(_input_text_selector).keyup(this.update_chars_count);
+    };
 
-function minichat_refresh() {
-    $.get(minichat_content_url, function(data) {
-        data_with_username = $.extend({ 'user': USERNAME, 'last_visit': LAST_VISIT }, data);
-        $(minichat_content).html(nunjucks.render(minichat_template, data_with_username));
-        replace_invalid_avatar($(minichat_content));
-        activate_tooltips($(minichat_content));
-    });
-}
-
-function minichat_init_post() {
-    minichat_post_url = $(minichat_form).attr("action");
-
-    $(minichat_button).click(
-        function(e) {
-            e.preventDefault();
-            $(minichat_button).find('span').addClass('fa-spinner fa-spin');
-            minichat_post_message();
+    this.refresh_fallback = function () {
+        if (!_ws_client || !_ws_client.isConnected()){
+            this.refresh();
         }
-    );
-}
+    };
 
-function minichat_post_message() {
-    $.post(minichat_post_url, $(minichat_form).serialize())
-        .done(function(data) {
-            if (data.substituted) {
-                contrib_message("info", "Votre dernier message est devenu \"<em>"+ data.substituted.text +"</em>\".");
-            }
-            if (data.anchors.length > 0) {
-                var beautified_users;
-                if (data.anchors.length > 1) {
-                    var users = data.anchors.join(', à ');
-                    var comma = users.lastIndexOf(', à ');
-                    beautified_users = users.substr(0, comma) + ' et' + users.substr(comma+1)
-                } else {
-                    beautified_users = data.anchors[0];
-                }
-                contrib_message("info", "Une notification a été envoyée à " + beautified_users + ".")
-            }
-            $(minichat_button).find('span').removeClass('fa-spinner fa-spin fa-warning btn-warning');
-            $(minichat_input_text).val("");
-            minichat_update_chars_count();
-            minichat_refresh_fallback();
-        })
-        .fail(function(data) {
-            $(minichat_button).find('span').removeClass('fa-spinner fa-spin').addClass('fa-warning');
-            minichat_refresh_fallback();
+    this.websocket_message_dispatch = function (data) {
+        switch(data.action) {
+            case 'reload_minichat':
+                this.refresh();
+                break;
+        }
+    };
+
+    this.group_messages = function(messages) {
+        // Group by date
+        var date_groups = _.groupBy(messages, function (e) {
+            return moment(e.date).format("YYYY-MM-DD");
         });
-}
 
-function minichat_update_chars_count() {
-    var remaining = $(minichat_input_text).attr("maxlength") - $(minichat_input_text).val().length;
-    var plural = "";
-    if (remaining > 1) plural = "s";
-    $(minichat_input_text).parent().toggleClass("has-warning", remaining == 0);
-    $(minichat_chars_output).text(remaining + "  caractère"+plural+" restant"+plural);
-}
+        // Group by author inside each groups
+        return _.map(date_groups, function (messages, date) {
+            var last_message = null;
+            var groups = [];
+            var group;
+            for (var i = 0; i < messages.length; i++) {
+                var message = messages[i];
 
-function minichat_init_remaining_chars() {
-    minichat_update_chars_count();
-    $(minichat_input_text).change(minichat_update_chars_count);
-    $(minichat_input_text).keyup(minichat_update_chars_count);
-}
+                if (!last_message || (last_message.user.username != message.user.username) ||
+                    (moment(last_message.date).diff(moment(message.date), 'seconds') >= _split_delay)) {
+                    if (group)
+                        groups.push(group);
+                    group = {'user': message.user, 'messages': []};
+                }
+
+                last_message = message;
+                group.messages.push(message);
+            }
+            groups.push(group);
+            return {'date': date, 'groups': groups};
+        });
+    };
+
+    this.refresh = function () {
+        $.get(_content_url, function (data) {
+            var messages = minichat.group_messages(data.results);
+
+            var context = {dates: messages, 'current_username': _username, 'read_date': _read_date};
+            $(_content_selector).html(nunjucks.render(_template_url, context));
+            _replace_invalid_avatar($(_content_selector));
+            _activate_tooltips($(_content_selector));
+        });
+    };
+
+    this.post_message = function () {
+        $.post(_post_url, $(_form_selector).serialize())
+            .done(function(data) {
+                if (data.substituted) {
+                    contrib_message("info", "Votre dernier message est devenu \"<em>"+ data.substituted.text +"</em>\".");
+                } else if (data.anchors.length > 0) {
+                    var beautified_users;
+                    if (data.anchors.length > 1) {
+                        var users = data.anchors.join(', à ');
+                        var comma = users.lastIndexOf(', à ');
+                        beautified_users = users.substr(0, comma) + ' et' + users.substr(comma+1)
+                    } else {
+                        beautified_users = data.anchors[0];
+                    }
+                    _contrib_message("info", "Une notification a été envoyée à " + beautified_users + ".")
+                }
+                $(_button_selector).find('span').removeClass('fa-spinner fa-spin fa-warning btn-warning');
+                $(_input_text_selector).val("");
+                minichat.update_chars_count();
+                minichat.refresh_fallback();
+            })
+            .fail(function(data) {
+                $(_button_selector).find('span').removeClass('fa-spinner fa-spin').addClass('fa-warning');
+                minichat_refresh_fallback();
+            }
+        );
+    };
+
+    this.update_chars_count = function () {
+        var remaining = $(_input_text_selector).attr("maxlength") - $(_input_text_selector).val().length;
+        var plural = "";
+        if (remaining > 1) plural = "s";
+        $(_input_text_selector).parent().toggleClass("has-warning", remaining == 0);
+        $(_remaining_chars_selector).text(remaining + "  caractère"+plural+" restant"+plural);
+    };
+
+    return this;
+};

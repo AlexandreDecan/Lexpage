@@ -82,10 +82,10 @@
 
         <script>
             $(document).ready(function() {
-                minichat_init_display($("#minichat_content"), "{% url 'minichat-api-latest-list' %}");
+                minichat = create_minichat(USERNAME, LAST_VISIT, ws_client);
+                minichat.init_display($("#minichat_content"), "{% url 'minichat-api-latest-list' %}");
                 {% if user.is_authenticated %}
-                    minichat_init_post();
-                    minichat_init_remaining_chars();
+                    minichat.init_post();
                 {% endif %}
             });
         </script>
