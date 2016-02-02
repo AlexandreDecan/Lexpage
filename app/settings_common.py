@@ -31,7 +31,6 @@ INSTALLED_APPS = (
 
     'rest_framework',
     'captcha',
-    'ws4redis',
 
     'profile',
     'slogan',
@@ -141,14 +140,6 @@ ABSOLUTE_URL_OVERRIDES = {
 
 # Recaptcha
 RECAPTCHA_PUBLIC_KEY = '6LdAH_ASAAAAACAHEysPBjLekWJX94nYM0hI3hHy'
-
-
-# Websockets
-ENABLE_WEBSOCKET = True
-WEBSOCKET_URL = '/ws/'
-WS4REDIS_HEARTBEAT = 'bob?'
-from helpers.websockets import get_allowed_channels
-WS4REDIS_ALLOWED_CHANNELS = get_allowed_channels
 
 
 # Themes

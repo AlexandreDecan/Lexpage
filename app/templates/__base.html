@@ -36,19 +36,6 @@
         <script src="{% static "js/minichat.js" %}"></script>
         <script src="{% static "js/online.js" %}"></script>
         <script src="{% static "js/markup.js" %}"></script>
-        {% if user.is_authenticated and ENABLE_WEBSOCKET %}
-            <script src="{% static "js/websocket_client.js" %}"></script>
-            <script>
-            ws_client = new WebsocketClient({heartbeat_msg: {{ WS4REDIS_HEARTBEAT }}});
-            $(document).ready(function() {
-                ws_client.connect('{{ WEBSOCKET_URI }}lexpage?subscribe-broadcast&subscribe-user&echo');
-            });
-            </script>
-        {% else%}
-            <script>
-            ws_client = false;
-            </script>
-        {% endif %}
     {% endblock javascript %}
     {{ form.media }}
 

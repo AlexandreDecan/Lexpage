@@ -8,7 +8,6 @@ from ws4redis.redis_store import RedisMessage
 from redis.exceptions import ConnectionError
 
 from helpers.decorators import signal_ignore_fixture
-from helpers.redis import get_redis_publisher
 from notifications.models import Notification
 
 from .models import Message
@@ -74,19 +73,3 @@ def send_notifications_on_message_creation(sender, created, **kwargs):
         anchors = message.parse_anchors()
         for anchor in anchors:
             create_minichat_notification(anchor, message)
-
-
-@receiver(post_delete, sender=Message)
-@receiver(post_save, sender=Message)
-@signal_ignore_fixture
-def send_minichat_update_message(sender, **kwargs):
-    try:
-        RedisPublisher = get_redis_publisher()
-        redis_publisher = RedisPublisher(facility='lexpage', broadcast=True)
-        message = {'action': 'reload_minichat', 'app': 'minichat'}
-        redis_message = RedisMessage(json.dumps(message))
-        redis_publisher.publish_message(redis_message)
-    except ConnectionError:
-        logger = logging.getLogger()
-        logger.exception('Error when publishing a message to the websocket channel')
-

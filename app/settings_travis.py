@@ -15,7 +15,3 @@ DATABASES = {
 }
 
 
-# Websockets
-REDIS_PUBLISHER = None
-WS4REDIS_SUBSCRIBER = 'ws4redis.subscriber.RedisSubscriber'
-

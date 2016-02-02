@@ -11,6 +11,7 @@ from difflib import context_diff
 
 backup_file = lambda x: '%s.orig' % x
 
+
 class MarkupViewsTests(TestCase):
     fixtures = ['devel']
 

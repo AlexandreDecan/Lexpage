@@ -79,7 +79,7 @@ class MessagePostView(CreateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = PostedMessageSerializer
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         """Handles simple substitution and message posting"""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
