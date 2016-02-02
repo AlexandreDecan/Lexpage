@@ -43,8 +43,10 @@ var app_minichat = {
         $(app_minichat._input_text_selector).change(app_minichat.update_chars_count);
         $(app_minichat._input_text_selector).keyup(app_minichat.update_chars_count);
 
-        app_minichat.refresh();
-        setInterval(app_minichat.refresh, app_minichat.timer_delay * 1000);
+        (function loop(){
+            app_minichat.refresh();
+            setTimeout(loop, app_minichat.timer_delay * 1000);
+        })();
     },
 
     group_messages: function(messages) {

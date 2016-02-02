@@ -14,8 +14,10 @@ var app_notifications = {
         app_notifications.container_selector = container;
         app_notifications.content_url = url;
 
-        app_notifications.refresh();
-        setInterval(app_notifications.refresh, app_notifications.timer_delay * 1000);
+        (function loop(){
+            app_notifications.refresh();
+            setTimeout(loop, app_notifications.timer_delay * 1000);
+        })();
     },
 
     reset: function () {
