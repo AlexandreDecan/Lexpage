@@ -66,12 +66,17 @@ class MessageVisibilityTests(LexpageSeleniumTestCase):
 
         # If bool(timeout) is False, then force refresh
         if not bool(timeout):
+            self.selenium.execute_script('app_minichat.reset();')
+            WebDriverWait(self.selenium, self.timeout).until_not(
+                EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-text-content'))
+            )
             self.selenium.execute_script('app_minichat.refresh();')
-            timeout = 0
-
-        # Message should be visible
-        WebDriverWait(self.selenium, timeout).until(
-            lambda driver: driver.find_element_by_xpath(text_element))
+            WebDriverWait(self.selenium, self.timeout).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-text-content'))
+            )
+        else:
+            WebDriverWait(self.selenium, timeout).until(
+                lambda driver: driver.find_element_by_xpath(text_element))
 
     def test_post_message(self):
         """
@@ -256,7 +261,6 @@ class MessagesHighlightingTests(LexpageSeleniumTestCase):
             self.post_message(message)
             highlights = self.selenium.find_elements_by_css_selector('.minichat-text-content strong')
             self.assertEqual(len(highlights), 0, 'Failed with {}'.format(message))
-        self.logout()
 
     def test_highlight_for_user1(self):
         """
@@ -267,7 +271,6 @@ class MessagesHighlightingTests(LexpageSeleniumTestCase):
             self.post_message(message)
             highlights = self.selenium.find_elements_by_css_selector('.minichat-text-content strong')
             self.assertEqual(len(highlights), nb, 'Failed with {}'.format(message))
-        self.logout()
 
 #TODO: Test read/unread?
 #TODO: Tests for notification (can be seen, updated, can be removed)
