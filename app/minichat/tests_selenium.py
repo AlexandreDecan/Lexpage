@@ -44,12 +44,12 @@ class MessageVisibilityTests(LexpageSeleniumTestCase):
 
     def setUp(self):
         self.go()
-        WebDriverWait(self.selenium, 3).until(
+        WebDriverWait(self.selenium, self.timeout).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-content'))
         )
 
-        self.users = User.objects.all()
-        self.author = self.users[0]
+        self.author = User.objects.all()[0]
+        Message.objects.all().delete()
 
     def post_message(self, text_message='Hello World', timeout=0):
         """
@@ -57,21 +57,21 @@ class MessageVisibilityTests(LexpageSeleniumTestCase):
         """
 
         # Ensure message was not already visible
-        text_message_xpath = '//div[@class="minichat-text" and contains(.,"%s")]' % text_message
+        text_element = '//*[@class="minichat-text-content" and contains(.,"%s")]' % text_message
         with self.assertRaises(NoSuchElementException):
-            self.selenium.find_element_by_xpath(text_message_xpath)
+            self.selenium.find_element_by_xpath(text_element)
 
         # Create new message
         Message(user=self.author, text=text_message).save()
 
         # If bool(timeout) is False, then force refresh
         if not bool(timeout):
-            self.selenium.execute_script('app_minichat.refresh_content();')
+            self.selenium.execute_script('app_minichat.refresh();')
             timeout = 0
 
         # Message should be visible
-        WebDriverWait(self.selenium, timeout + 1).until(
-            lambda driver: driver.find_element_by_xpath(text_message_xpath))
+        WebDriverWait(self.selenium, timeout).until(
+            lambda driver: driver.find_element_by_xpath(text_element))
 
     def test_post_message(self):
         """
@@ -81,10 +81,19 @@ class MessageVisibilityTests(LexpageSeleniumTestCase):
 
     def test_post_message_delay(self):
         """
-        A message should be visible after maximum 10 seconds when posted.
+        A message should be visible after maximum 12 seconds when posted.
         :return:
         """
-        self.post_message('Message 2', timeout=10)
+        self.login()
+        self.post_message('Message 2', timeout=12)
+
+    def test_post_message_delay_unloggued(self):
+        """
+        Message delay is bigger for unloggued users.
+        """
+        self.logout()
+        with self.assertRaises(exceptions.TimeoutException):
+            self.post_message('Message 3', timeout=12)
 
 
 class MessagesGroupingTests(LexpageSeleniumTestCase):
@@ -102,7 +111,7 @@ class MessagesGroupingTests(LexpageSeleniumTestCase):
 
         # Wait for app_minichat to be loaded
         self.go()
-        WebDriverWait(self.selenium, 3).until(
+        WebDriverWait(self.selenium, self.timeout).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-content'))
         )
 
@@ -111,8 +120,14 @@ class MessagesGroupingTests(LexpageSeleniumTestCase):
         Check that messages are split correctly into groups.
         *groups* is a list of list of message text. Messages should be given in chronological order!
         """
-        self.selenium.execute_script('app_minichat.refresh_content();')
-        self.selenium.implicitly_wait(1)
+        self.selenium.execute_script('app_minichat.reset();')
+        WebDriverWait(self.selenium, self.timeout).until_not(
+            EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-group'))
+        )
+        self.selenium.execute_script('app_minichat.refresh();')
+        WebDriverWait(self.selenium, self.timeout).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-group'))
+        )
 
         displayed_groups = self.selenium.find_elements_by_css_selector('.minichat-group')
 
@@ -207,16 +222,19 @@ class MessagesHighlightingTests(LexpageSeleniumTestCase):
 
         # Wait for app_minichat to be loaded
         self.go()
-        WebDriverWait(self.selenium, 3).until(
+        WebDriverWait(self.selenium, self.timeout).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-content'))
         )
 
     def post_message(self, message):
         Message.objects.all().delete()
         Message(user=self.users[0], text=message).save()
-
-        self.selenium.execute_script('app_minichat.refresh_content();')
-        WebDriverWait(self.selenium, 1).until(
+        self.selenium.execute_script('app_minichat.reset();')
+        WebDriverWait(self.selenium, self.timeout).until_not(
+            EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-text-content'))
+        )
+        self.selenium.execute_script('app_minichat.refresh();')
+        WebDriverWait(self.selenium, self.timeout).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-text-content'))
         )
 
@@ -238,7 +256,6 @@ class MessagesHighlightingTests(LexpageSeleniumTestCase):
             self.post_message(message)
             highlights = self.selenium.find_elements_by_css_selector('.minichat-text-content strong')
             self.assertEqual(len(highlights), 0, 'Failed with {}'.format(message))
-
         self.logout()
 
     def test_highlight_for_user1(self):
@@ -248,9 +265,8 @@ class MessagesHighlightingTests(LexpageSeleniumTestCase):
         self.login('user1', 'user1')
         for message, nb in MessagesHighlightingTests.test_cases:
             self.post_message(message)
-            highlights = self.selenium.find_elements(By.CSS_SELECTOR, '.minichat-text-content strong')
+            highlights = self.selenium.find_elements_by_css_selector('.minichat-text-content strong')
             self.assertEqual(len(highlights), nb, 'Failed with {}'.format(message))
-
         self.logout()
 
 #TODO: Test read/unread?

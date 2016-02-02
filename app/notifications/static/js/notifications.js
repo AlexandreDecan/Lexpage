@@ -55,7 +55,6 @@ var app_notifications = {
                 app_notifications.refresh_content_with(data);
             }
         }).fail(function (data, textStatus, xhr) {
-            contrib_message("danger", "Une erreur est survenue pendant le chargement des notifications.");
             document.title = app_notifications.vanilla_title;
         });
     },
@@ -65,8 +64,6 @@ var app_notifications = {
 
         $.ajax({url: url, type: 'DELETE'}).success(function () {
             app_notifications.refresh();
-        }).error(function () {
-            contrib_message('danger', 'Une erreur est survenue pendant la suppression de la notification.');
         });
     }
 };

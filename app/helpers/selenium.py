@@ -1,21 +1,30 @@
+from unittest import skipIf
+
+from django.conf import settings
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 from time import sleep
-
-from selenium import webdriver
+from django.utils.module_loading import import_string
+from django.test import LiveServerTestCase
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.common import exceptions
 
-__all__ = ['LexpageSeleniumTestCase', 'WebDriverWait', 'EC', 'By']
+__all__ = ['LexpageSeleniumTestCase', 'WebDriverWait', 'EC', 'By', 'exceptions']
 
 
-class LexpageSeleniumTestCase(StaticLiveServerTestCase):
+@skipIf(not hasattr(settings, 'SELENIUM_WEBDRIVER'), 'Selenium webdriver is not defined')
+class LexpageSeleniumTestCase(LiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.selenium = webdriver.Firefox()
+        cls.selenium = import_string(settings.SELENIUM_WEBDRIVER)()
+        cls.timeout = 10
+
+        # Reset cache
+        cache.clear()
 
     @classmethod
     def tearDownClass(cls):
@@ -25,15 +34,17 @@ class LexpageSeleniumTestCase(StaticLiveServerTestCase):
     def sleep(self, duration):
         return sleep(duration)
 
-    def go(self, url='', delay=0.5):
+    def go(self, url=''):
         self.selenium.get(self.live_server_url + url)
-        self.sleep(delay)
+        WebDriverWait(self.selenium, 5).until(
+            lambda driver: driver.find_element_by_xpath('//body')
+        )
 
     def logout(self):
-        self.selenium.get('%s%s' % (self.live_server_url, reverse('auth_logout')))
+        self.go(reverse('auth_logout'))
 
     def login(self, username='user1', password='user1', incognito=False):
-        self.selenium.get('%s%s' % (self.live_server_url, reverse('auth_login')))
+        self.go(reverse('auth_login'))
         username_input = self.selenium.find_element_by_name("username")
         username_input.send_keys(username)
         password_input = self.selenium.find_element_by_name("password")
@@ -44,5 +55,5 @@ class LexpageSeleniumTestCase(StaticLiveServerTestCase):
 
         self.selenium.find_element_by_xpath('//button[text()="S\'identifier"]').click()
 
-        WebDriverWait(self.selenium, 1).until(
+        WebDriverWait(self.selenium, 5).until(
             lambda driver: driver.find_element_by_xpath('//div[contains(.,"Bienvenue %s")]' % username))
