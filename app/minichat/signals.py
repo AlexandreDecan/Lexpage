@@ -60,10 +60,27 @@ def change_notifications_on_message_edition(sender, **kwargs):
         old_message = Message.objects.get(pk=new_message.id)
         old_recipients = set(old_message.parse_anchors())
         new_recipients = set(new_message.parse_anchors())
+
+        # Delete notifications for recipients that were removed
         for recipient in old_recipients.difference(new_recipients):
-            Notification.objects.filter(app='minichat', key=old_message.id, recipient=recipient).delete()
+            try:
+                Notification.objects.get(app='minichat', key=old_message.id, recipient=recipient).delete()
+            except Notification.DoesNotExist:
+                pass
+
+        # Recreate notifications for recipients that still have the notification
+        #   because notification text must be adapted.
+        for recipient in new_recipients.intersection(old_recipients):
+            try:
+                Notification.objects.get(app='minichat', key=old_message.id, recipient=recipient).delete()
+                create_minichat_notification(recipient, new_message)
+            except Notification.DoesNotExist:
+                pass
+
+        # Create notifications for recipients that were added
         for recipient in new_recipients.difference(old_recipients):
             create_minichat_notification(recipient, new_message)
+
 
 
 @receiver(post_save, sender=Message)
