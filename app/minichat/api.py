@@ -68,7 +68,7 @@ class LatestMessagesPagination(PageNumberPagination):
 
 
 def _etag_func(request, *args, **kwargs):
-    return cache.get_or_set('etag-minichat', str(random.random()), 60)
+    return cache.get_or_set('etag-minichat', lambda: str(random.random()), 60)
 
 
 class LatestMessagesViewSet(ReadOnlyModelViewSet):

@@ -41,7 +41,6 @@ INSTALLED_APPS = (
     'messaging',
     'board',
     'notifications',
-    'online',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -52,7 +51,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'online.last_visit_middleware.SetLastVisitMiddleware',
+    'commons.last_visit_middleware.SetLastVisitMiddleware',
 )
 
 
@@ -81,8 +80,8 @@ TEMPLATES = [  # https://docs.djangoproject.com/en/1.9/ref/templates/upgrading/#
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'online.context_processors.online_settings',
-                'context_processors.global_settings',
+                'commons.context_processors.online_settings',
+                'commons.context_processors.global_settings',
                 'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.request',
                 'django.template.context_processors.debug',

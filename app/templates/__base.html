@@ -34,7 +34,6 @@
         <script src="{% static "js/scripts.js" %}"></script>
         <script src="{% static "js/notifications.js" %}"></script>
         <script src="{% static "js/minichat.js" %}"></script>
-        <script src="{% static "js/online.js" %}"></script>
         <script src="{% static "js/markup.js" %}"></script>
     {% endblock javascript %}
     {{ form.media }}
@@ -105,11 +104,6 @@
     <script src="{% static "libs/jquery.tagcloud.js" %}"></script>
     <script src="{% static "libs/jquery.bootstrap-autohidingnavbar.js" %}"></script>
     <script src="{% static "libs/modernizr.js" %}"></script>
-    {% if user.is_authenticated and not INCOGNITO %}
-    <script>
-        online_init_ping("{% url 'online_ping' %}", {{USER_IS_ONLINE_TIMEOUT}});
-    </script>
-    {% endif %}
 {% endblock %}
 
 

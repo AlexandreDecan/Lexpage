@@ -41,7 +41,7 @@ class NotificationApiView(DestroyAPIView):
 
 def _etag_func(request, *args, **kwargs):
     username = request.user.username
-    return cache.get_or_set('etag-notifications-{}'.format(username), str(random.random()), 60)
+    return cache.get_or_set('etag-notifications-{}'.format(username), lambda: str(random.random()), 60)
 
 
 class NotificationsListApiView(ListAPIView):
