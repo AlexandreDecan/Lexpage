@@ -10,11 +10,11 @@ To compile it, run "grunt".
         <div class="minichat-message {% if group.user.username == current_username %}self-author{% else %}other-author{% endif %}">
         <a class="minichat-user" href="{{ group.user.get_absolute_url }}">
             <img src="{{ group.user.profile.avatar }}" title="{{ group.user.username }}" class="avatar verysmallavatar"/></a>
-            <div class="minichat-text">
+            <div class="minichat-group">
             {%- for message in group.messages|reverse -%}
-                <div{% if group.user.username != current_username and message.date|isAfter(read_date) %} class="new"{% endif %}>
+                <div class="minichat-text{% if group.user.username != current_username and message.date|isAfter(read_date) %} new{% endif %}">
                   <span class="minichat-time">{{ message.date|time }}</span>
-                  {{ message.text|highlight(current_username) }}
+                  <span class="minichat-text-content">{{ message.text|highlight(current_username) }}</span>
                 </div>
             {%- endfor -%}
             </div>

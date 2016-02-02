@@ -45,7 +45,7 @@
       .avatar {
         float: right;
       }
-      .minichat-text {
+      .minichat-group {
         margin-right: 35px;
         border-right: 2px solid $brand-primary;
         border-radius: $border-radius-small 0 0 $border-radius-small;
@@ -56,7 +56,7 @@
       .avatar {
         float: left;
       }
-      .minichat-text {
+      .minichat-group {
         border-left: 0px;
         position: relative;
         margin-left: 35px;
@@ -85,8 +85,7 @@
     color: $text-muted;
   }
 
-  /* Actual text of the message */
-  .minichat-text {
+  .minichat-group {
     position: relative;
     margin-top: 3px;
     margin-bottom: 3px;

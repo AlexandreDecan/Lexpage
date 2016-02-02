@@ -1,7 +1,7 @@
 "use strict";
 
 var app_minichat = {
-    timer_delay: 10,
+    timer_delay: 10,  // Incremented if not loggued
     split_delay: 5 * 60,
 
     content_url: null,
@@ -19,6 +19,9 @@ var app_minichat = {
     _remaining_chars_selector: null,
 
     init: function (username, last_visit, container_selector, form_selector, content_url) {
+        if (!username || username == "")
+            app_minichat.timer_delay = 30;
+
         app_minichat.username = username;
         app_minichat.read_date = last_visit;
         app_minichat.container_selector = container_selector;

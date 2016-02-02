@@ -78,7 +78,7 @@ output += "\">\n            <img src=\"";
 output += runtime.suppressValue(runtime.memberLookup((runtime.memberLookup((runtime.memberLookup((t_8),"user")),"profile")),"avatar"), env.opts.autoescape);
 output += "\" title=\"";
 output += runtime.suppressValue(runtime.memberLookup((runtime.memberLookup((t_8),"user")),"username"), env.opts.autoescape);
-output += "\" class=\"avatar verysmallavatar\"/></a>\n            <div class=\"minichat-text\">";
+output += "\" class=\"avatar verysmallavatar\"/></a>\n            <div class=\"minichat-group\">";
 frame = frame.push();
 var t_11 = env.getFilter("reverse").call(context, runtime.memberLookup((t_8),"messages"));
 if(t_11) {var t_10 = t_11.length;
@@ -92,16 +92,16 @@ frame.set("loop.revindex0", t_10 - t_9 - 1);
 frame.set("loop.first", t_9 === 0);
 frame.set("loop.last", t_9 === t_10 - 1);
 frame.set("loop.length", t_10);
-output += "<div";
+output += "<div class=\"minichat-text";
 if(runtime.memberLookup((runtime.memberLookup((t_8),"user")),"username") != runtime.contextOrFrameLookup(context, frame, "current_username") && env.getFilter("isAfter").call(context, runtime.memberLookup((t_12),"date"),runtime.contextOrFrameLookup(context, frame, "read_date"))) {
-output += " class=\"new\"";
+output += " new";
 ;
 }
-output += ">\n                  <span class=\"minichat-time\">";
+output += "\">\n                  <span class=\"minichat-time\">";
 output += runtime.suppressValue(env.getFilter("time").call(context, runtime.memberLookup((t_12),"date")), env.opts.autoescape);
-output += "</span>\n                  ";
+output += "</span>\n                  <span class=\"minichat-text-content\">";
 output += runtime.suppressValue(env.getFilter("highlight").call(context, runtime.memberLookup((t_12),"text"),runtime.contextOrFrameLookup(context, frame, "current_username")), env.opts.autoescape);
-output += "\n                </div>";
+output += "</span>\n                </div>";
 ;
 }
 }

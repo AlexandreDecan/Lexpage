@@ -83,3 +83,5 @@ class NotificationTests(TestCase):
 
         _, created = Notification.objects.get_or_create(**notification)
         self.assertFalse(created)
+
+
