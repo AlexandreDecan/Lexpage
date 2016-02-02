@@ -1,4 +1,7 @@
 import datetime
+import random
+from django.utils.decorators import method_decorator
+from django.views.decorators.http import etag
 
 from rest_framework.serializers import ModelSerializer, ValidationError
 from rest_framework.viewsets import ReadOnlyModelViewSet
@@ -10,6 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import APIException
 from rest_framework import status
 
+from django.core.cache import cache
 from .models import Message
 
 from profile.api import UserSerializer
@@ -26,15 +30,6 @@ class BadSubstituteException(APIException):
 class MinichatTextField(CharField):
     def to_representation(self, value):
         return super().to_representation(smiley(urlize3(value)))
-
-
-class LatestMessagesPagination(PageNumberPagination):
-    """Custom pagination for the minichat.
-    We use that to maybe later have a "load more" button to the minichat to get more history without
-    going to the archives.
-    To achieve that, we will need to set "page_query_param" and "max_page_size".
-    """
-    page_size = 20
 
 
 class MessageSerializer(ModelSerializer):
@@ -63,11 +58,28 @@ class PostedMessageSerializer(MessageSerializer):
         fields = ('text',)
 
 
+class LatestMessagesPagination(PageNumberPagination):
+    """Custom pagination for the minichat.
+    We use that to maybe later have a "load more" button to the minichat to get more history without
+    going to the archives.
+    To achieve that, we will need to set "page_query_param" and "max_page_size".
+    """
+    page_size = 20
+
+
+def _etag_func(request, *args, **kwargs):
+    return cache.get_or_set('etag-minichat', str(random.random()), 60)
+
+
 class LatestMessagesViewSet(ReadOnlyModelViewSet):
-    """A viewset that returns the latest messages, 10 by 10."""
+    """A viewset that returns the latest messages."""
     queryset = Message.objects.order_by('-date')
     serializer_class = MessageSerializer
     pagination_class = LatestMessagesPagination
+
+    @method_decorator(etag(_etag_func))
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 class MessagePostView(CreateAPIView):

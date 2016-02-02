@@ -1,16 +1,20 @@
-import json
-import logging
+import random
 
 from django.db.models.signals import post_save, post_delete, pre_save, pre_delete
 from django.dispatch import receiver
-
-from ws4redis.redis_store import RedisMessage
-from redis.exceptions import ConnectionError
+from django.core.cache import cache
 
 from helpers.decorators import signal_ignore_fixture
 from notifications.models import Notification
 
 from .models import Message
+
+
+@receiver(post_delete, sender=Message)
+@receiver(post_save, sender=Message)
+@signal_ignore_fixture
+def update_cached_etag(*args, **kwargs):
+    cache.delete('etag-minichat')
 
 
 def create_minichat_notification(user, message):

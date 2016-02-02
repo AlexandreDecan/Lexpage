@@ -1,7 +1,7 @@
 "use strict";
 
 var app_minichat = {
-    timer_delay: 30,
+    timer_delay: 10,
     split_delay: 5 * 60,
 
     content_url: null,

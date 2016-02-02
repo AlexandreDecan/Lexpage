@@ -2,3 +2,4 @@
 gevent==1.1rc3
 psycopg2==2.6.1
 uwsgi==2.0.12 --no-use-wheel
+django-redis-cache==1.6.5

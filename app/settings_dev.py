@@ -21,6 +21,15 @@ DATABASES = {
 }
 
 
+# Cache
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'lexpage',
+    }
+}
+
+
 # Email & admin
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'admin.dev@fakemail.com'
