@@ -43,8 +43,8 @@ var app_minichat = {
         $(app_minichat._input_text_selector).change(app_minichat.update_chars_count);
         $(app_minichat._input_text_selector).keyup(app_minichat.update_chars_count);
 
-        app_minichat.refresh_content();
-        setInterval(app_minichat.refresh_content, app_minichat.timer_delay * 1000);
+        app_minichat.refresh();
+        setInterval(app_minichat.refresh, app_minichat.timer_delay * 1000);
     },
 
     group_messages: function(messages) {
@@ -76,14 +76,22 @@ var app_minichat = {
         });
     },
 
-    refresh_content: function () {
-        $.get(app_minichat.content_url, function (data) {
-            var messages = app_minichat.group_messages(data.results);
+    reset: function() {
+        app_minichat.refresh_content_with([]);
+    },
+
+    refresh_content_with: function(data) {
+        var messages = app_minichat.group_messages(data);
 
             var context = {dates: messages, 'current_username': app_minichat.username, 'read_date': app_minichat.read_date};
             $(app_minichat.container_selector).html(nunjucks.render(app_minichat.template_url, context));
             replace_invalid_avatar($(app_minichat.container_selector));
             activate_tooltips($(app_minichat.container_selector));
+    },
+
+    refresh: function () {
+        $.get(app_minichat.content_url, function (data) {
+            app_minichat.refresh_content_with(data.results)
         });
     },
 
@@ -106,11 +114,11 @@ var app_minichat = {
                 $(app_minichat._button_selector).find('span').removeClass('fa-spinner fa-spin fa-warning btn-warning');
                 $(app_minichat._input_text_selector).val("");
                 app_minichat.update_chars_count();
-                app_minichat.refresh_content();
+                app_minichat.refresh();
             })
             .fail(function() {
                     $(app_minichat._button_selector).find('span').removeClass('fa-spinner fa-spin').addClass('fa-warning');
-                    app_minichat.refresh_content();
+                    app_minichat.refresh();
                 }
             );
     },
