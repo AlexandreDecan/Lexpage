@@ -91,7 +91,6 @@ TEMPLATES = [  # https://docs.djangoproject.com/en/1.9/ref/templates/upgrading/#
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
-                'ws4redis.context_processors.default',
             ],
         },
     },
