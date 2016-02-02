@@ -6,7 +6,7 @@ from django.contrib.humanize.templatetags.humanize import naturalday
 from django.core.urlresolvers import reverse
 from helpers.selenium import *
 from selenium.common.exceptions import NoSuchElementException
-from .models import Message
+from minichat.models import Message
 
 
 class NaturalDayFilterTests(LexpageSeleniumTestCase):
