@@ -36,7 +36,7 @@ class NotificationApiView(DestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         response = super().destroy(request, *args, **kwargs)
         if response.status_code == 204:
-            response.status_code = 200
+            # Because of an old stupid bug in Firefox
             response.data = '1'
         return response
 

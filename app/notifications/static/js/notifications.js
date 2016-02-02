@@ -1,6 +1,7 @@
-app_notifications = {
-    timer_delay: 30,
-    ws_client: null,
+"use strict";
+
+var app_notifications = {
+    timer_delay: 10,
 
     content_url: null,
     template: "notifications/notifications.html",
@@ -8,30 +9,13 @@ app_notifications = {
     container_selector: null,
     vanilla_title: null,
 
-    init: function (ws_client) {
-        app_notifications.ws_client = ws_client;
+    init: function (container, url) {
         app_notifications.vanilla_title = document.title.replace(/\((\d+)\)/g,'⟨$1⟩'); // Mind "⟨" != "("
-    },
-
-    init_display: function (container, url) {
         app_notifications.container_selector = container;
         app_notifications.content_url = url;
 
-        // Register if available
-        if (app_notifications.ws_client) {
-            app_notifications.ws_client.register('notifications', 'on_message', function(data) {
-                app_notifications.refresh_content();
-            });
-        }
-
-        setInterval(function () {
-            // If not connected, use fallback
-            if (!app_notifications.ws_client || !app_notifications.ws_client.isConnected()){
-                app_notifications.refresh_content();
-            }
-        }, app_notifications.timer_delay * 1000);
-
         app_notifications.refresh_content();
+        setInterval(app_notifications.refresh_content, app_notifications.timer_delay * 1000);
     },
 
     refresh_content: function () {

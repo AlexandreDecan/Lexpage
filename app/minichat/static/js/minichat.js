@@ -1,65 +1,50 @@
-app_minichat = function (username, last_visit, ws_client) {
-    var _timer_delay = 30;
-    var _split_delay = 5 * 60;
+"use strict";
 
-    var _content_url;
-    var _template_url = "minichat/latests.html";
+var app_minichat = {
+    timer_delay: 30,
+    split_delay: 5 * 60,
 
-    var _ws_client = ws_client;
-    var _username = username;
-    var _read_date = last_visit;
+    content_url: null,
+    template_url: "minichat/latests.html",
 
-    var _replace_invalid_avatar = replace_invalid_avatar; // Need to be set outside!
-    var _activate_tooltips = activate_tooltips; // Need to be set outside!
-    var _contrib_message = contrib_message; // Need to be set outside!
+    username: null,
+    read_date: null,
 
-    var _container_selector;
-    var _form_selector;
-    var _button_selector;
-    var _input_text_selector;
-    var _remaining_chars_selector;
+    container_selector: null,
+    form_selector: null,
 
-    var app = this;
+    _form_selector: null,
+    _button_selector: null,
+    _input_text_selector: null,
+    _remaining_chars_selector: null,
 
+    init: function (username, last_visit, container_selector, form_selector, content_url) {
+        app_minichat.username = username;
+        app_minichat.read_date = last_visit;
+        app_minichat.container_selector = container_selector;
+        app_minichat.form_selector = form_selector;
+        app_minichat.content_url = content_url;
 
-    this.init_display = function(container_selector, form_selector, content_url) {
-        _container_selector = container_selector;
-        _content_url = content_url;
+        app_minichat._form_selector = form_selector;
+        app_minichat._button_selector = form_selector + " button[type='submit']";
+        app_minichat._input_text_selector = form_selector + " input[type='text']";
+        app_minichat._remaining_chars_selector = form_selector + " .minichat-remainingChars";
 
-        _form_selector = form_selector;
-        _button_selector = _form_selector + " button[type='submit']";
-        _input_text_selector = _form_selector + " input[type='text']";
-        _remaining_chars_selector = _form_selector + " .minichat-remainingChars";
-
-        // Register if available
-        if (_ws_client){
-            ws_client.register('minichat', 'on_message', function(data) {
-                if (data.action == "reload_minichat") {
-                    app.refresh_content();
-                }
-            });
-        }
-
-        setInterval(function () {
-            // If not connected, use fallback
-            if (!_ws_client || !_ws_client.isConnected()) {
-                app.refresh_content();
-            }
+        $(app_minichat._button_selector).click(function(e) {
+            e.preventDefault();
+            $(app_minichat._button_selector).find('span').addClass('fa-spinner fa-spin');
+            app_minichat.post_message();
         });
 
-        $(_button_selector).click(function(e) {
-                e.preventDefault();
-                $(_button_selector).find('span').addClass('fa-spinner fa-spin');
-                app.post_message();
-        });
-        this.update_chars_count();
-        $(_input_text_selector).change(this.update_chars_count);
-        $(_input_text_selector).keyup(this.update_chars_count);
+        app_minichat.update_chars_count();
+        $(app_minichat._input_text_selector).change(app_minichat.update_chars_count);
+        $(app_minichat._input_text_selector).keyup(app_minichat.update_chars_count);
 
-        this.refresh_content();
-    };
+        app_minichat.refresh_content();
+        setInterval(app_minichat.refresh_content, app_minichat.timer_delay * 1000);
+    },
 
-    this.group_messages = function(messages) {
+    group_messages: function(messages) {
         // Group by date
         var date_groups = _.groupBy(messages, function (e) {
             return moment(e.date).format("YYYY-MM-DD");
@@ -74,7 +59,7 @@ app_minichat = function (username, last_visit, ws_client) {
                 var message = messages[i];
 
                 if (!last_message || (last_message.user.username != message.user.username) ||
-                    (moment(last_message.date).diff(moment(message.date), 'seconds') >= _split_delay)) {
+                    (moment(last_message.date).diff(moment(message.date), 'seconds') >= app_minichat.split_delay)) {
                     if (group)
                         groups.push(group);
                     group = {'user': message.user, 'messages': []};
@@ -86,21 +71,21 @@ app_minichat = function (username, last_visit, ws_client) {
             groups.push(group);
             return {'date': date, 'groups': groups};
         });
-    };
+    },
 
-    this.refresh_content = function () {
-        $.get(_content_url, function (data) {
-            var messages = app.group_messages(data.results);
+    refresh_content: function () {
+        $.get(app_minichat.content_url, function (data) {
+            var messages = app_minichat.group_messages(data.results);
 
-            var context = {dates: messages, 'current_username': _username, 'read_date': _read_date};
-            $(_container_selector).html(nunjucks.render(_template_url, context));
-            _replace_invalid_avatar($(_container_selector));
-            _activate_tooltips($(_container_selector));
+            var context = {dates: messages, 'current_username': app_minichat.username, 'read_date': app_minichat.read_date};
+            $(app_minichat.container_selector).html(nunjucks.render(app_minichat.template_url, context));
+            replace_invalid_avatar($(app_minichat.container_selector));
+            activate_tooltips($(app_minichat.container_selector));
         });
-    };
+    },
 
-    this.post_message = function () {
-        $.post($(_form_selector).attr("action"), $(_form_selector).serialize())
+    post_message: function () {
+        $.post($(app_minichat.form_selector).attr("action"), $(app_minichat.form_selector).serialize())
             .done(function(data) {
                 if (data.substituted) {
                     contrib_message("info", "Votre dernier message est devenu \"<em>"+ data.substituted.text +"</em>\".");
@@ -113,28 +98,27 @@ app_minichat = function (username, last_visit, ws_client) {
                     } else {
                         beautified_users = data.anchors[0];
                     }
-                    _contrib_message("info", "Une notification a été envoyée à " + beautified_users + ".")
+                    contrib_message("info", "Une notification a été envoyée à " + beautified_users + ".")
                 }
-                $(_button_selector).find('span').removeClass('fa-spinner fa-spin fa-warning btn-warning');
-                $(_input_text_selector).val("");
-                app.update_chars_count();
-                app.refresh_content();
+                $(app_minichat._button_selector).find('span').removeClass('fa-spinner fa-spin fa-warning btn-warning');
+                $(app_minichat._input_text_selector).val("");
+                app_minichat.update_chars_count();
+                app_minichat.refresh_content();
             })
             .fail(function() {
-                $(_button_selector).find('span').removeClass('fa-spinner fa-spin').addClass('fa-warning');
-                app.refresh_content();
-            }
-        );
-    };
+                    $(app_minichat._button_selector).find('span').removeClass('fa-spinner fa-spin').addClass('fa-warning');
+                    app_minichat.refresh_content();
+                }
+            );
+    },
 
-    this.update_chars_count = function () {
-        var remaining = $(_input_text_selector).attr("maxlength") - $(_input_text_selector).val().length;
+    update_chars_count: function () {
+        var remaining = $(app_minichat._input_text_selector).attr("maxlength") - $(app_minichat._input_text_selector).val().length;
         var plural;
         if (remaining > 1) plural = "s"; else plural = "";
 
-        $(_input_text_selector).parent().toggleClass("has-warning", remaining == 0);
-        $(_remaining_chars_selector).text(remaining + "  caractère"+plural+" restant"+plural);
-    };
-
-    return this;
+        $(app_minichat._input_text_selector).parent().toggleClass("has-warning", remaining == 0);
+        $(app_minichat._remaining_chars_selector).text(remaining + "  caractère"+plural+" restant"+plural);
+    }
 };
+
