@@ -3,6 +3,7 @@ import time
 
 from django.contrib.auth.models import User
 from django.contrib.humanize.templatetags.humanize import naturalday
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from helpers.selenium import *
 from minichat.models import Message
@@ -39,7 +40,11 @@ class NaturalDayFilterTests(LexpageSeleniumTestCase):
 
 
 class MinichatSeleniumTests(LexpageSeleniumTestCase):
-    def wait_for_minichat_refresh(self):
+    def setUp(self):
+        # Reset cache
+        cache.clear()
+
+    def force_minichat_refresh(self):
         self.wait_for_minichat()
         self.selenium.execute_script('app_minichat.reset();')
         self.selenium.execute_script('app_minichat.refresh();')
@@ -57,6 +62,7 @@ class MessageVisibilityTests(MinichatSeleniumTests):
     fixtures = ['devel']
 
     def setUp(self):
+        super().setUp()
         self.author = User.objects.all()[0]
         Message.objects.all().delete()
         self.go()
@@ -75,7 +81,7 @@ class MessageVisibilityTests(MinichatSeleniumTests):
 
         # If bool(timeout) is False, then force refresh
         if not bool(timeout):
-            self.wait_for_minichat_refresh()
+            self.force_minichat_refresh()
         else:
             WebDriverWait(self.selenium, timeout).until(
                 lambda driver: driver.find_element_by_xpath(text_element))
@@ -96,11 +102,11 @@ class MessageVisibilityTests(MinichatSeleniumTests):
         self.wait_for_minichat()
 
         timeout = self.selenium.execute_script('return app_minichat.timer_delay;')
-        self.post_message('Message 2', timeout=timeout + 2)
+        self.post_message('Message 2', timeout=timeout + self.timeout)
 
     def test_post_message_delay_unloggued(self):
         """
-        Message delay is at least twice for unloggued users.
+        Message delay is longer for unloggued users.
         """
         self.login()
         timeout = self.selenium.execute_script('return app_minichat.timer_delay;')
@@ -108,11 +114,13 @@ class MessageVisibilityTests(MinichatSeleniumTests):
         self.wait_for_minichat()
 
         with self.assertRaises(exceptions.TimeoutException):
-            self.post_message('Message 3', timeout=2 * timeout + 2)
+            self.post_message('Message 3', timeout=timeout + self.timeout)
 
 
 class MessagesGroupingTests(MinichatSeleniumTests):
     def setUp(self):
+        super().setUp()
+
         # Running the tests just before midnight could cause failures
         if time.strftime("%H%M") in ['2358', '2359']:  # pragma: no cover
             self.sleep(125)
@@ -132,7 +140,7 @@ class MessagesGroupingTests(MinichatSeleniumTests):
         Check that messages are split correctly into groups.
         *groups* is a list of list of message text. Messages should be given in chronological order!
         """
-        self.wait_for_minichat_refresh()
+        self.force_minichat_refresh()
 
         displayed_groups = self.selenium.find_elements_by_css_selector('.minichat-group')
 
@@ -218,6 +226,8 @@ class MessagesHighlightingTests(MinichatSeleniumTests):
     ]
 
     def setUp(self):
+        super().setUp()
+
         self.users = [
             User.objects.create_user(username=username, email='%s@example.com' % username, password=username)
             for username in ('user1', 'user2', 'user3')
@@ -232,7 +242,7 @@ class MessagesHighlightingTests(MinichatSeleniumTests):
     def post_message(self, message):
         Message.objects.all().delete()
         Message(user=self.users[0], text=message).save()
-        self.wait_for_minichat_refresh()
+        self.force_minichat_refresh()
 
     def test_no_highlight_for_visitors(self):
         """
@@ -280,7 +290,7 @@ class ReadingStatusTests(MinichatSeleniumTests):
         Check that messages are either read or unread according to given lists of expected read/unread
         message contents.
         """
-        self.wait_for_minichat_refresh()
+        self.force_minichat_refresh()
 
         expected_read = set(m_read)
         expected_unread = set(m_unread)

@@ -6651,6 +6651,7 @@ body {
   border-top: 1px solid lightgray;
 }
 .notification .notification_title {
+  font-weight: bold;
   margin-left: 30px;
 }
 .notification .notification_icon {

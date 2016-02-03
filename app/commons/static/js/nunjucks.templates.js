@@ -164,7 +164,7 @@ output += "\"></span>\n          </div>\n          <div class=\"notification_dis
 output += runtime.suppressValue(runtime.memberLookup((t_4),"dismiss_url"), env.opts.autoescape);
 output += "', 'notification_";
 output += runtime.suppressValue(runtime.memberLookup((t_4),"id"), env.opts.autoescape);
-output += "');\"></a>\n          </div>\n          <div class=\"notification_title\"><strong>\n              ";
+output += "');\"></a>\n          </div>\n          <div class=\"notification_title\">\n              ";
 if(runtime.memberLookup((t_4),"show_and_dismiss_url")) {
 output += "\n              <a href=\"";
 output += runtime.suppressValue(runtime.memberLookup((t_4),"show_and_dismiss_url"), env.opts.autoescape);
@@ -179,7 +179,7 @@ output += runtime.suppressValue(runtime.memberLookup((t_4),"title"), env.opts.au
 output += "\n              ";
 ;
 }
-output += "\n              </strong>\n          </div>\n          <div class=\"notification_descr\">\n            ";
+output += "\n          </div>\n          <div class=\"notification_descr\">\n            ";
 output += runtime.suppressValue(runtime.memberLookup((t_4),"description"), env.opts.autoescape);
 output += "\n            <span class=\"notification_date\">\n              &mdash; ";
 output += runtime.suppressValue(env.getFilter("relativeDate").call(context, runtime.memberLookup((t_4),"date")), env.opts.autoescape);

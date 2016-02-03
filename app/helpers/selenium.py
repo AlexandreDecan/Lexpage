@@ -15,7 +15,7 @@ from selenium.common import exceptions
 __all__ = ['LexpageSeleniumTestCase', 'WebDriverWait', 'EC', 'By', 'exceptions']
 
 
-@skipIf(not hasattr(settings, 'SELENIUM_WEBDRIVER'), 'Selenium webdriver is not defined')
+@skipIf(not getattr(settings, 'SELENIUM_WEBDRIVER', None), 'Selenium webdriver is not defined')
 class LexpageSeleniumTestCase(LiveServerTestCase):
     @classmethod
     def setUpClass(cls):
@@ -56,4 +56,5 @@ class LexpageSeleniumTestCase(LiveServerTestCase):
         self.selenium.find_element_by_xpath('//button[text()="S\'identifier"]').click()
 
         WebDriverWait(self.selenium, self.timeout).until(
-            lambda driver: driver.find_element_by_xpath('//div[contains(.,"Bienvenue %s")]' % username))
+            EC.text_to_be_present_in_element((By.CSS_SELECTOR, '.contrib-messages .alert'), 'Bienvenue')
+        )
