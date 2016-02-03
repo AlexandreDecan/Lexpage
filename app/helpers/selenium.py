@@ -36,7 +36,7 @@ class LexpageSeleniumTestCase(LiveServerTestCase):
 
     def go(self, url=''):
         self.selenium.get(self.live_server_url + url)
-        WebDriverWait(self.selenium, 5).until(
+        WebDriverWait(self.selenium, self.timeout).until(
             lambda driver: driver.find_element_by_xpath('//body')
         )
 
@@ -55,5 +55,5 @@ class LexpageSeleniumTestCase(LiveServerTestCase):
 
         self.selenium.find_element_by_xpath('//button[text()="S\'identifier"]').click()
 
-        WebDriverWait(self.selenium, 5).until(
+        WebDriverWait(self.selenium, self.timeout).until(
             lambda driver: driver.find_element_by_xpath('//div[contains(.,"Bienvenue %s")]' % username))
