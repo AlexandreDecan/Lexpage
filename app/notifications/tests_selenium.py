@@ -27,8 +27,6 @@ class NotificationsDisplayTests(NotificationsSeleniumTests):
             User.objects.create_user(username=username, email='%s@example.com' % username, password=username)
             for username in ('user1', 'user2', 'user3')
         ]
-        for user in self.users:
-            user.save()
 
         Notification.objects.all().delete()
 
@@ -95,7 +93,6 @@ class NotificationsDismissTests(NotificationsSeleniumTests):
     def setUp(self):
         super().setUp()
         user = User.objects.create_user(username='user1', email='user1@example.com', password='user1')
-        user.save()
 
         # Create several notifications
         Notification.objects.all().delete()
@@ -125,11 +122,17 @@ class NotificationsDismissTests(NotificationsSeleniumTests):
         self.assertEqual(len(self.selenium.find_elements_by_css_selector('.notification_list .notification')), 3)
 
         # Dismiss all of them
-        self.selenium.find_element_by_css_selector('.notification_list .close').click()
-        self.force_notifications_refresh()
+        element = self.selenium.find_element_by_css_selector('.notification_list .close')
+        element.click()
+        WebDriverWait(self.selenium, self.timeout).until(
+            EC.staleness_of(element)
+        )
 
-        self.selenium.find_element_by_css_selector('.notification_list .close').click()
-        self.force_notifications_refresh()
+        element = self.selenium.find_element_by_css_selector('.notification_list .close')
+        element.click()
+        WebDriverWait(self.selenium, self.timeout).until(
+            EC.staleness_of(element)
+        )
 
         self.selenium.find_element_by_css_selector('.notification_list .close').click()
         WebDriverWait(self.selenium, self.timeout).until_not(

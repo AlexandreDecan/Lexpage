@@ -129,8 +129,6 @@ class MessagesGroupingTests(MinichatSeleniumTests):
             User.objects.create_user(username=username, email='%s@example.com' % username, password=username)
             for username in ('user1', 'user2', 'user3')
         ]
-        for user in self.users:
-            user.save()
 
         self.go()
         self.wait_for_minichat()
@@ -232,8 +230,6 @@ class MessagesHighlightingTests(MinichatSeleniumTests):
             User.objects.create_user(username=username, email='%s@example.com' % username, password=username)
             for username in ('user1', 'user2', 'user3')
         ]
-        for user in self.users:
-            user.save()
 
         # Wait for app_minichat to be loaded
         self.go()
@@ -282,8 +278,6 @@ class ReadingStatusTests(MinichatSeleniumTests):
             User.objects.create_user(username=username, email='%s@example.com' % username, password=username)
             for username in ('user1', 'user2', 'user3')
         ]
-        for user in self.users:
-            user.save()
 
         Message.objects.all().delete()
 

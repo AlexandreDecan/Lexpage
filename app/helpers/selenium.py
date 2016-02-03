@@ -36,10 +36,8 @@ class LexpageSeleniumTestCase(LiveServerTestCase):
         return sleep(duration)
 
     def go(self, url=''):
-        self.selenium.get(self.live_server_url + url)
-        WebDriverWait(self.selenium, self.timeout).until(
-            lambda driver: driver.find_element_by_xpath('//body')
-        )
+        with self.wait_for_page_load():
+            self.selenium.get(self.live_server_url + url)
 
     def logout(self):
         self.go(reverse('auth_logout'))
@@ -56,6 +54,12 @@ class LexpageSeleniumTestCase(LiveServerTestCase):
 
         with self.wait_for_page_load():
             self.selenium.find_element_by_xpath('//button[text()="S\'identifier"]').click()
+
+        try:
+            element = self.selenium.find_element_by_css_selector('.form .alert.alert-danger')
+            raise AssertionError('Cannot login: ' + element.text)
+        except exceptions.NoSuchElementException:
+            pass
 
         WebDriverWait(self.selenium, self.timeout).until(
             EC.text_to_be_present_in_element((By.CSS_SELECTOR, '.contrib-messages .alert'), 'Bienvenue')
