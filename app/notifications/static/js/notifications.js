@@ -2,6 +2,7 @@
 
 var app_notifications = {
     timer_delay: 10,
+    last_etag: null,
 
     content_url: null,
     template: "notifications/notifications.html",
@@ -21,6 +22,7 @@ var app_notifications = {
     },
 
     reset: function () {
+        app_notifications.last_etag = null;
         app_notifications.refresh_content_with(null);
     },
 
@@ -52,8 +54,12 @@ var app_notifications = {
     },
 
     refresh: function () {
-        $.get(app_notifications.content_url).success(function(data, textStatus, xhr) {
-                app_notifications.refresh_content_with(data);
+        $.get(app_notifications.content_url).success(function (data, textStatus, xhr) {
+            var etag = xhr.getResponseHeader('ETag');
+            if (app_notifications.last_etag != etag) {
+                app_notifications.last_etag = etag;
+                app_notifications.refresh_content_with(data)
+            }
         }).fail(function (data, textStatus, xhr) {
             document.title = app_notifications.vanilla_title;
         });

@@ -3,6 +3,7 @@
 var app_minichat = {
     timer_delay: 10,  // Incremented if not loggued
     split_delay: 5 * 60,
+    last_etag: null,
 
     content_url: null,
     template_url: "minichat/latests.html",
@@ -79,6 +80,7 @@ var app_minichat = {
     },
 
     reset: function() {
+        app_minichat.last_etag = null;
         app_minichat.refresh_content_with([]);
     },
 
@@ -93,7 +95,11 @@ var app_minichat = {
 
     refresh: function () {
         $.get(app_minichat.content_url).success(function (data, textStatus, xhr) {
-            app_minichat.refresh_content_with(data.results)
+            var etag = xhr.getResponseHeader('ETag');
+            if (app_minichat.last_etag != etag) {
+                app_minichat.last_etag = etag;
+                app_minichat.refresh_content_with(data.results)
+            }
         });
     },
 
