@@ -81,7 +81,12 @@
 
         <script>
             $(document).ready(function() {
-                app_minichat.init("{{ user.username }}", "{{ user.profile.last_visit|date:"c" }}", "#minichat_content", "#minichat_form", "{% url 'minichat-api-latest-list' %}");
+                {% if user.profile.last_visit %}
+                var last_visit = "{{ user.profile.last_visit|date:'c' }}";
+                {% else %}
+                var last_visit = "{% now 'c' %}";
+                {% endif %}
+                app_minichat.init("{{ user.username }}", last_visit, "#minichat_content", "#minichat_form", "{% url 'minichat-api-latest-list' %}");
             });
         </script>
     </div> <!-- panel -->

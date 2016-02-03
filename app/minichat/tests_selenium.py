@@ -39,23 +39,36 @@ class NaturalDayFilterTests(LexpageSeleniumTestCase):
                     self.assertEqual(filter_date, naturalday(d, 'l j b.'))
 
 
-class MessageVisibilityTests(LexpageSeleniumTestCase):
-    fixtures = ['devel']
+class MinichatSeleniumTests(LexpageSeleniumTestCase):
+    def wait_for_minichat_refresh(self):
+        self.selenium.execute_script('app_minichat.reset();')
+        WebDriverWait(self.selenium, self.timeout).until_not(
+            EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-group'))
+        )
+        self.selenium.execute_script('app_minichat.refresh();')
+        WebDriverWait(self.selenium, self.timeout).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-group'))
+        )
 
-    def setUp(self):
-        self.go()
+    def wait_for_minichat(self):
         WebDriverWait(self.selenium, self.timeout).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-content'))
         )
 
+
+class MessageVisibilityTests(MinichatSeleniumTests):
+    fixtures = ['devel']
+
+    def setUp(self):
         self.author = User.objects.all()[0]
         Message.objects.all().delete()
+        self.go()
+        self.wait_for_minichat()
 
     def post_message(self, text_message='Hello World', timeout=0):
         """
         Ensure that given message is visible after given delay.
         """
-
         # Ensure message was not already visible
         text_element = '//*[@class="minichat-text-content" and contains(.,"%s")]' % text_message
         with self.assertRaises(NoSuchElementException):
@@ -66,14 +79,7 @@ class MessageVisibilityTests(LexpageSeleniumTestCase):
 
         # If bool(timeout) is False, then force refresh
         if not bool(timeout):
-            self.selenium.execute_script('app_minichat.reset();')
-            WebDriverWait(self.selenium, self.timeout).until_not(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-text-content'))
-            )
-            self.selenium.execute_script('app_minichat.refresh();')
-            WebDriverWait(self.selenium, self.timeout).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-text-content'))
-            )
+            self.wait_for_minichat_refresh()
         else:
             WebDriverWait(self.selenium, timeout).until(
                 lambda driver: driver.find_element_by_xpath(text_element))
@@ -86,22 +92,25 @@ class MessageVisibilityTests(LexpageSeleniumTestCase):
 
     def test_post_message_delay(self):
         """
-        A message should be visible after maximum 12 seconds when posted.
+        A message should be visible after maximum x seconds when posted.
         :return:
         """
         self.login()
-        self.post_message('Message 2', timeout=12)
+        timeout = self.selenium.execute_script('return app_minichat.timer_delay;')
+        self.post_message('Message 2', timeout=timeout + 2)
 
     def test_post_message_delay_unloggued(self):
         """
-        Message delay is bigger for unloggued users.
+        Message delay is at least twice for unloggued users.
         """
+        self.login()
+        timeout = self.selenium.execute_script('return app_minichat.timer_delay;')
         self.logout()
         with self.assertRaises(exceptions.TimeoutException):
-            self.post_message('Message 3', timeout=12)
+            self.post_message('Message 3', timeout=2 * timeout + 2)
 
 
-class MessagesGroupingTests(LexpageSeleniumTestCase):
+class MessagesGroupingTests(MinichatSeleniumTests):
     def setUp(self):
         # Running the tests just before midnight could cause failures
         if time.strftime("%H%M") in ['2358', '2359']:  # pragma: no cover
@@ -114,25 +123,15 @@ class MessagesGroupingTests(LexpageSeleniumTestCase):
         for user in self.users:
             user.save()
 
-        # Wait for app_minichat to be loaded
         self.go()
-        WebDriverWait(self.selenium, self.timeout).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-content'))
-        )
+        self.wait_for_minichat()
 
     def check_groups(self, groups):
         """
         Check that messages are split correctly into groups.
         *groups* is a list of list of message text. Messages should be given in chronological order!
         """
-        self.selenium.execute_script('app_minichat.reset();')
-        WebDriverWait(self.selenium, self.timeout).until_not(
-            EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-group'))
-        )
-        self.selenium.execute_script('app_minichat.refresh();')
-        WebDriverWait(self.selenium, self.timeout).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-group'))
-        )
+        self.wait_for_minichat_refresh()
 
         displayed_groups = self.selenium.find_elements_by_css_selector('.minichat-group')
 
@@ -196,7 +195,7 @@ class MessagesGroupingTests(LexpageSeleniumTestCase):
         self.check_groups([['m1', 'm2'], ['m3', 'm4'], ['m5']])
 
 
-class MessagesHighlightingTests(LexpageSeleniumTestCase):
+class MessagesHighlightingTests(MinichatSeleniumTests):
     test_cases = [
         ('coucou @user1', 1),
         ('@user1', 1),
@@ -227,21 +226,12 @@ class MessagesHighlightingTests(LexpageSeleniumTestCase):
 
         # Wait for app_minichat to be loaded
         self.go()
-        WebDriverWait(self.selenium, self.timeout).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-content'))
-        )
+        self.wait_for_minichat()
 
     def post_message(self, message):
         Message.objects.all().delete()
         Message(user=self.users[0], text=message).save()
-        self.selenium.execute_script('app_minichat.reset();')
-        WebDriverWait(self.selenium, self.timeout).until_not(
-            EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-text-content'))
-        )
-        self.selenium.execute_script('app_minichat.refresh();')
-        WebDriverWait(self.selenium, self.timeout).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-text-content'))
-        )
+        self.wait_for_minichat_refresh()
 
     def test_no_highlight_for_visitors(self):
         """
@@ -272,5 +262,94 @@ class MessagesHighlightingTests(LexpageSeleniumTestCase):
             highlights = self.selenium.find_elements_by_css_selector('.minichat-text-content strong')
             self.assertEqual(len(highlights), nb, 'Failed with {}'.format(message))
 
-#TODO: Test read/unread?
-#TODO: Tests for notification (can be seen, updated, can be removed)
+
+class ReadingStatusTests(MinichatSeleniumTests):
+    def setUp(self):
+        self.users = [
+            User.objects.create_user(username=username, email='%s@example.com' % username, password=username)
+            for username in ('user1', 'user2', 'user3')
+        ]
+        for user in self.users:
+            user.save()
+
+        Message.objects.all().delete()
+
+    def check_read_and_unread_messages(self, m_read, m_unread):
+        """
+        Check that messages are either read or unread according to given lists of expected read/unread
+        message contents.
+        """
+        self.wait_for_minichat_refresh()
+
+        expected_read = set(m_read)
+        expected_unread = set(m_unread)
+
+        all_messages = self.selenium.find_elements_by_css_selector('.minichat-text')
+        unread_messages = self.selenium.find_elements_by_css_selector('.minichat-text.new')
+
+        read = set()
+        unread = set()
+        for message in unread_messages:
+            text = message.find_element_by_css_selector('.minichat-text-content').text
+            unread.add(text)
+        for message in all_messages:
+            text = message.find_element_by_css_selector('.minichat-text-content').text
+            if text not in unread:
+                read.add(text)
+
+        self.assertSetEqual(expected_read, read)
+        self.assertSetEqual(expected_unread, unread)
+
+    def test_messages_are_read(self):
+        Message(user=self.users[0], text='m1').save()
+        Message(user=self.users[1], text='m2').save()
+        Message(user=self.users[1], text='m3').save()
+        Message(user=self.users[2], text='m4').save()
+        Message(user=self.users[2], text='m5').save()
+
+        self.login()  # Login after to have last_visit = now()
+
+        self.check_read_and_unread_messages(['m1', 'm2', 'm3', 'm4', 'm5'], [])
+
+    def test_new_messages_are_unread(self):
+        self.login()  # Login before to have last_visit < message.date
+
+        Message(user=self.users[1], text='m1').save()
+        Message(user=self.users[1], text='m2').save()
+        Message(user=self.users[1], text='m3').save()
+
+        self.check_read_and_unread_messages([], ['m1', 'm2', 'm3'])
+
+    def test_messages_by_self_are_read(self):
+        self.login()  # Login before to have last_visit < message.date
+
+        Message(user=self.users[1], text='m1').save()
+        Message(user=self.users[0], text='m2').save()
+        Message(user=self.users[0], text='m3').save()
+        Message(user=self.users[1], text='m4').save()
+
+        self.check_read_and_unread_messages(['m2', 'm3'], ['m1', 'm4'])
+
+    def test_mixed_read_and_unread(self):
+        Message(user=self.users[1], text='m1').save()
+        Message(user=self.users[1], text='m2').save()
+        Message(user=self.users[2], text='m3').save()
+
+        self.login()  # Login between the two groups
+
+        Message(user=self.users[1], text='m4').save()
+        Message(user=self.users[1], text='m5').save()
+        Message(user=self.users[2], text='m6').save()
+
+        self.check_read_and_unread_messages(['m1', 'm2', 'm3'], ['m4', 'm5', 'm6'])
+
+    def test_read_unread_for_visitors(self):
+        Message(user=self.users[0], text='m1').save()
+        Message(user=self.users[1], text='m2').save()
+
+        self.go()
+
+        Message(user=self.users[1], text='m3').save()
+        Message(user=self.users[2], text='m4').save()
+
+        self.check_read_and_unread_messages(['m1', 'm2'], ['m3', 'm4'])
