@@ -44,6 +44,7 @@ class LexpageSeleniumTestCase(LiveServerTestCase):
         self.go(reverse('auth_logout'))
 
     def login(self, username='user1', password='user1', incognito=False):
+        self.go(reverse('auth_logout'))
         self.go(reverse('auth_login'))
         username_input = self.selenium.find_element_by_name("username")
         username_input.send_keys(username)
@@ -55,6 +56,8 @@ class LexpageSeleniumTestCase(LiveServerTestCase):
 
         self.selenium.find_element_by_xpath('//button[text()="S\'identifier"]').click()
 
-        WebDriverWait(self.selenium, 2 * self.timeout).until(
-            EC.text_to_be_present_in_element((By.CSS_SELECTOR, '.contrib-messages .alert'), 'Bienvenue')
+        WebDriverWait(self.selenium, self.timeout).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, '.contrib-messages .alert.alert-success'))
         )
+
+
