@@ -92,7 +92,7 @@ var app_minichat = {
     },
 
     refresh: function () {
-        $.get(app_minichat.content_url, function (data) {
+        $.get(app_minichat.content_url).success(function (data, textStatus, xhr) {
             app_minichat.refresh_content_with(data.results)
         });
     },
