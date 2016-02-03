@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.core.urlresolvers import reverse
 from helpers.selenium import *
-from selenium.common.exceptions import NoSuchElementException
 from minichat.models import Message
 
 
@@ -41,10 +40,8 @@ class NaturalDayFilterTests(LexpageSeleniumTestCase):
 
 class MinichatSeleniumTests(LexpageSeleniumTestCase):
     def wait_for_minichat_refresh(self):
+        self.wait_for_minichat()
         self.selenium.execute_script('app_minichat.reset();')
-        WebDriverWait(self.selenium, self.timeout).until_not(
-            EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-group'))
-        )
         self.selenium.execute_script('app_minichat.refresh();')
         WebDriverWait(self.selenium, self.timeout).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-group'))
@@ -63,7 +60,6 @@ class MessageVisibilityTests(MinichatSeleniumTests):
         self.author = User.objects.all()[0]
         Message.objects.all().delete()
         self.go()
-        self.wait_for_minichat()
 
     def post_message(self, text_message='Hello World', timeout=0):
         """
@@ -71,7 +67,7 @@ class MessageVisibilityTests(MinichatSeleniumTests):
         """
         # Ensure message was not already visible
         text_element = '//*[@class="minichat-text-content" and contains(.,"%s")]' % text_message
-        with self.assertRaises(NoSuchElementException):
+        with self.assertRaises(exceptions.NoSuchElementException):
             self.selenium.find_element_by_xpath(text_element)
 
         # Create new message
@@ -88,6 +84,7 @@ class MessageVisibilityTests(MinichatSeleniumTests):
         """
         A message should be visible if posted and minichat is refreshed.
         """
+        self.wait_for_minichat()
         self.post_message('Message 1')
 
     def test_post_message_delay(self):
@@ -96,6 +93,8 @@ class MessageVisibilityTests(MinichatSeleniumTests):
         :return:
         """
         self.login()
+        self.wait_for_minichat()
+
         timeout = self.selenium.execute_script('return app_minichat.timer_delay;')
         self.post_message('Message 2', timeout=timeout + 2)
 
@@ -106,6 +105,8 @@ class MessageVisibilityTests(MinichatSeleniumTests):
         self.login()
         timeout = self.selenium.execute_script('return app_minichat.timer_delay;')
         self.logout()
+        self.wait_for_minichat()
+
         with self.assertRaises(exceptions.TimeoutException):
             self.post_message('Message 3', timeout=2 * timeout + 2)
 
