@@ -77,7 +77,7 @@ class MessageVisibilityTests(MinichatSeleniumTests):
             self.selenium.find_element_by_xpath(text_element)
 
         # Create new message
-        Message(user=self.author, text=text_message).save()
+        Message.objects.create(user=self.author, text=text_message)
 
         # If bool(timeout) is False, then force refresh
         if not bool(timeout):
@@ -156,11 +156,11 @@ class MessagesGroupingTests(MinichatSeleniumTests):
         Alternating authors should not be grouped.
         """
         Message.objects.all().delete()
-        Message(user=self.users[0], text='m1').save()
-        Message(user=self.users[1], text='m2').save()
-        Message(user=self.users[0], text='m3').save()
-        Message(user=self.users[1], text='m4').save()
-        Message(user=self.users[0], text='m5').save()
+        Message.objects.create(user=self.users[0], text='m1')
+        Message.objects.create(user=self.users[1], text='m2')
+        Message.objects.create(user=self.users[0], text='m3')
+        Message.objects.create(user=self.users[1], text='m4')
+        Message.objects.create(user=self.users[0], text='m5')
 
         self.check_groups([['m1'], ['m2'], ['m3'], ['m4'], ['m5']])
 
@@ -169,13 +169,13 @@ class MessagesGroupingTests(MinichatSeleniumTests):
         Messages having the same author should be grouped if they are posted consecutively in a short period of time.
         """
         Message.objects.all().delete()
-        Message(user=self.users[0], text='m1').save()
-        Message(user=self.users[0], text='m2').save()
-        Message(user=self.users[0], text='m3').save()
+        Message.objects.create(user=self.users[0], text='m1')
+        Message.objects.create(user=self.users[0], text='m2')
+        Message.objects.create(user=self.users[0], text='m3')
 
-        Message(user=self.users[1], text='m4').save()
-        Message(user=self.users[1], text='m5').save()
-        Message(user=self.users[1], text='m6').save()
+        Message.objects.create(user=self.users[1], text='m4')
+        Message.objects.create(user=self.users[1], text='m5')
+        Message.objects.create(user=self.users[1], text='m6')
 
         self.check_groups([['m1', 'm2', 'm3'], ['m4', 'm5','m6']])
 
@@ -241,7 +241,7 @@ class MessagesHighlightingTests(MinichatSeleniumTests):
 
     def post_message(self, message):
         Message.objects.all().delete()
-        Message(user=self.users[0], text=message).save()
+        Message.objects.create(user=self.users[0], text=message)
         self.force_minichat_refresh()
 
     def test_no_highlight_for_visitors(self):
@@ -276,6 +276,8 @@ class MessagesHighlightingTests(MinichatSeleniumTests):
 
 class ReadingStatusTests(MinichatSeleniumTests):
     def setUp(self):
+        super().setUp()
+
         self.users = [
             User.objects.create_user(username=username, email='%s@example.com' % username, password=username)
             for username in ('user1', 'user2', 'user3')
@@ -312,11 +314,11 @@ class ReadingStatusTests(MinichatSeleniumTests):
         self.assertSetEqual(expected_unread, unread)
 
     def test_messages_are_read(self):
-        Message(user=self.users[0], text='m1').save()
-        Message(user=self.users[1], text='m2').save()
-        Message(user=self.users[1], text='m3').save()
-        Message(user=self.users[2], text='m4').save()
-        Message(user=self.users[2], text='m5').save()
+        Message.objects.create(user=self.users[0], text='m1')
+        Message.objects.create(user=self.users[1], text='m2')
+        Message.objects.create(user=self.users[1], text='m3')
+        Message.objects.create(user=self.users[2], text='m4')
+        Message.objects.create(user=self.users[2], text='m5')
 
         self.login()  # Login after to have last_visit = now()
 
@@ -325,42 +327,42 @@ class ReadingStatusTests(MinichatSeleniumTests):
     def test_new_messages_are_unread(self):
         self.login()  # Login before to have last_visit < message.date
 
-        Message(user=self.users[1], text='m1').save()
-        Message(user=self.users[1], text='m2').save()
-        Message(user=self.users[1], text='m3').save()
+        Message.objects.create(user=self.users[1], text='m1')
+        Message.objects.create(user=self.users[1], text='m2')
+        Message.objects.create(user=self.users[1], text='m3')
 
         self.check_read_and_unread_messages([], ['m1', 'm2', 'm3'])
 
     def test_messages_by_self_are_read(self):
         self.login()  # Login before to have last_visit < message.date
 
-        Message(user=self.users[1], text='m1').save()
-        Message(user=self.users[0], text='m2').save()
-        Message(user=self.users[0], text='m3').save()
-        Message(user=self.users[1], text='m4').save()
+        Message.objects.create(user=self.users[1], text='m1')
+        Message.objects.create(user=self.users[0], text='m2')
+        Message.objects.create(user=self.users[0], text='m3')
+        Message.objects.create(user=self.users[1], text='m4')
 
         self.check_read_and_unread_messages(['m2', 'm3'], ['m1', 'm4'])
 
     def test_mixed_read_and_unread(self):
-        Message(user=self.users[1], text='m1').save()
-        Message(user=self.users[1], text='m2').save()
-        Message(user=self.users[2], text='m3').save()
+        Message.objects.create(user=self.users[1], text='m1')
+        Message.objects.create(user=self.users[1], text='m2')
+        Message.objects.create(user=self.users[2], text='m3')
 
         self.login()  # Login between the two groups
 
-        Message(user=self.users[1], text='m4').save()
-        Message(user=self.users[1], text='m5').save()
-        Message(user=self.users[2], text='m6').save()
+        Message.objects.create(user=self.users[1], text='m4')
+        Message.objects.create(user=self.users[1], text='m5')
+        Message.objects.create(user=self.users[2], text='m6')
 
         self.check_read_and_unread_messages(['m1', 'm2', 'm3'], ['m4', 'm5', 'm6'])
 
     def test_read_unread_for_visitors(self):
-        Message(user=self.users[0], text='m1').save()
-        Message(user=self.users[1], text='m2').save()
+        Message.objects.create(user=self.users[0], text='m1')
+        Message.objects.create(user=self.users[1], text='m2')
 
         self.go()
 
-        Message(user=self.users[1], text='m3').save()
-        Message(user=self.users[2], text='m4').save()
+        Message.objects.create(user=self.users[1], text='m3')
+        Message.objects.create(user=self.users[2], text='m4')
 
         self.check_read_and_unread_messages(['m1', 'm2'], ['m3', 'm4'])
