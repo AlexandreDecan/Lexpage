@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.utils.lorem_ipsum import words
@@ -242,3 +243,69 @@ class ApiTests(APITestCase):
         self.assertEqual(set(first_message['user']['profile'].keys()), {'avatar'})
 
         self.assertEqual(first_message['text'], 'Last message')
+
+
+class MinichatCachingTests(APITestCase):
+    def setUp(self):
+        cache.clear()
+
+        self.url = reverse('minichat-api-latest-list')
+
+        # First response should return an etag
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.has_header('ETag'))
+        self.etag = response['ETag']
+
+    def test_missing_etag(self):
+        """
+        A request with a missing ETag should lead to a 200 with the same ETag.
+        """
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.etag, response['ETag'])
+
+    def test_invalid_etag(self):
+        """
+        A request with an invalid ETag should lead to a 200 with the same ETag.
+        """
+        response = self.client.get(self.url, HTTP_IF_NONE_MATCH='blablabla')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.etag, response['ETag'])
+
+    def test_valid_etag(self):
+        """
+        A request with a valid existing ETag should lead to a 304.
+        """
+        response = self.client.get(self.url, HTTP_IF_NONE_MATCH=self.etag)
+        self.assertEqual(response.status_code, 304)
+        self.assertEqual(self.etag, response['ETag'])
+
+    def test_etag_renewal(self):
+        """
+        An ETag should be invalidated if a new message is posted on the minichat, or edited, or deleted.
+        """
+        user = User.objects.create_user(username='user1', email='user1@example.com', password='user1')
+
+        # After new message
+        message = Message.objects.create(user=user, text='Hello world')
+        response = self.client.get(self.url, HTTP_IF_NONE_MATCH=self.etag)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(self.etag, response['ETag'])
+        new_etag = response['ETag']
+
+        # After modification
+        message.text = 'Hello universe'
+        message.save()
+        response = self.client.get(self.url, HTTP_IF_NONE_MATCH=self.etag)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(self.etag, response['ETag'])
+        self.assertNotEqual(new_etag, response['ETag'])
+        new_etag = response['ETag']
+
+        # After deletion
+        message.delete()
+        response = self.client.get(self.url, HTTP_IF_NONE_MATCH=self.etag)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(self.etag, response['ETag'])
+        self.assertNotEqual(new_etag, response['ETag'])

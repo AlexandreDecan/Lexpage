@@ -1,11 +1,12 @@
-from django.test import TestCase
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.utils.lorem_ipsum import words
 from notifications.models import Notification
+from rest_framework.test import APITestCase
 
 
-class NotificationTests(TestCase):
+class NotificationTests(APITestCase):
     fixtures = ['devel']
 
     def test_dismiss_notification_logged_out(self):
@@ -85,3 +86,69 @@ class NotificationTests(TestCase):
         self.assertFalse(created)
 
 
+class NotificationCachingTests(APITestCase):
+    def setUp(self):
+        cache.clear()
+
+        self.url = reverse('notifications_api_list')
+
+        # Log in
+        self.user = User.objects.create_user(username='user1', email='user1@example.com', password='user1')
+        self.client.login(username='user1', password='user1')
+
+        # First response should return an etag
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.has_header('ETag'))
+        self.etag = response['ETag']
+
+    def test_missing_etag(self):
+        """
+        A request with a missing ETag should lead to a 200 with the same ETag.
+        """
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.etag, response['ETag'])
+
+    def test_invalid_etag(self):
+        """
+        A request with an invalid ETag should lead to a 200 with the same ETag.
+        """
+        response = self.client.get(self.url, HTTP_IF_NONE_MATCH='blablabla')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.etag, response['ETag'])
+
+    def test_valid_etag(self):
+        """
+        A request with a valid existing ETag should lead to a 304.
+        """
+        response = self.client.get(self.url, HTTP_IF_NONE_MATCH=self.etag)
+        self.assertEqual(response.status_code, 304)
+        self.assertEqual(self.etag, response['ETag'])
+
+    def test_etag_renewal(self):
+        """
+        An ETag should be invalidated if a new notification is posted, or edited, or deleted.
+        """
+        # After new notification
+        notification, _ = Notification.objects.get_or_create(recipient=self.user, app='test', key='1', title='Hello World')
+        response = self.client.get(self.url, HTTP_IF_NONE_MATCH=self.etag)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(self.etag, response['ETag'])
+        new_etag = response['ETag']
+
+        # After modification
+        notification.title = 'Hello universe'
+        notification.save()
+        response = self.client.get(self.url, HTTP_IF_NONE_MATCH=self.etag)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(self.etag, response['ETag'])
+        self.assertNotEqual(new_etag, response['ETag'])
+        new_etag = response['ETag']
+
+        # After deletion
+        notification.delete()
+        response = self.client.get(self.url, HTTP_IF_NONE_MATCH=self.etag)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(self.etag, response['ETag'])
+        self.assertNotEqual(new_etag, response['ETag'])
