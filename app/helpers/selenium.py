@@ -55,6 +55,6 @@ class LexpageSeleniumTestCase(LiveServerTestCase):
 
         self.selenium.find_element_by_xpath('//button[text()="S\'identifier"]').click()
 
-        WebDriverWait(self.selenium, self.timeout).until(
+        WebDriverWait(self.selenium, 2 * self.timeout).until(
             EC.text_to_be_present_in_element((By.CSS_SELECTOR, '.contrib-messages .alert'), 'Bienvenue')
         )
