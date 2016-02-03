@@ -280,6 +280,7 @@ class ReadingStatusTests(MinichatSeleniumTests):
         ]
 
         Message.objects.all().delete()
+        self.go()
 
     def check_read_and_unread_messages(self, m_read, m_unread):
         """

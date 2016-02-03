@@ -36,8 +36,7 @@ class LexpageSeleniumTestCase(LiveServerTestCase):
         return sleep(duration)
 
     def go(self, url=''):
-        with self.wait_for_page_load():
-            self.selenium.get(self.live_server_url + url)
+        self.selenium.get(self.live_server_url + url)
 
     def logout(self):
         self.go(reverse('auth_logout'))
