@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from unittest import skipIf
 
 from django.conf import settings
@@ -53,13 +54,17 @@ class LexpageSeleniumTestCase(LiveServerTestCase):
         if incognito:
             self.selenium.find_element_by_name('incognito').click()
 
-        self.selenium.find_element_by_xpath('//button[text()="S\'identifier"]').click()
+        with self.wait_for_page_load():
+            self.selenium.find_element_by_xpath('//button[text()="S\'identifier"]').click()
 
-        try:
-            WebDriverWait(self.selenium, self.timeout).until(
-                EC.text_to_be_present_in_element((By.CSS_SELECTOR, '.contrib-messages .alert'), 'Bienvenue')
-            )
-        except exceptions.TimeoutException:
-            print(self.selenium.page_source)
-            raise
+        WebDriverWait(self.selenium, self.timeout).until(
+            EC.text_to_be_present_in_element((By.CSS_SELECTOR, '.contrib-messages .alert'), 'Bienvenue')
+        )
 
+    @contextmanager
+    def wait_for_page_load(self, timeout=None):
+        old_page = self.selenium.find_element_by_tag_name('html')
+        yield
+        WebDriverWait(self.selenium, timeout or self.timeout).until(
+            EC.staleness_of(old_page)
+        )
