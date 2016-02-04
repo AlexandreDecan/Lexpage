@@ -22,6 +22,9 @@ class LexpageSeleniumTestCase(LiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.selenium = import_string(settings.SELENIUM_WEBDRIVER)()
+        cls.selenium.implicitly_wait(1)
+        cls.selenium.set_window_size(1024, 768)
+
         cls.timeout = 10
 
         # Reset cache
