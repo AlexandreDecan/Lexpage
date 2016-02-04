@@ -3,7 +3,7 @@ function Minichat(username, last_visit, container_selector, form_selector, conte
 
     this.timer_delay = (username && username != "") ? 10 : 30;
     this.split_delay = 5 * 60;
-    this._timeout_id = null;
+    this.timeout_id = null;
     this.last_etag = null;
 
     this.username = username;
@@ -75,9 +75,9 @@ function Minichat(username, last_visit, container_selector, form_selector, conte
     this.stop_timer = function() {
         var _this = this;
 
-        if (_this._timeout_id) {
-            clearTimeout(_this._timeout_id);
-            _this._timeout_id = null;
+        if (_this.timeout_id) {
+            clearTimeout(_this.timeout_id);
+            _this.timeout_id = null;
         }
     };
 
@@ -85,7 +85,7 @@ function Minichat(username, last_visit, container_selector, form_selector, conte
         var _this = this;
 
         _this.stop_timer();
-        _this._timeout_id = setTimeout(function() { _this.refresh(); }, _this.timer_delay * 1000);
+        _this.timeout_id = setTimeout(function() { _this.refresh(); }, _this.timer_delay * 1000);
     };
 
     this.reset = function() {

@@ -7,6 +7,7 @@ from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from helpers.selenium import *
 from minichat.models import Message
+from selenium.webdriver.common.keys import Keys
 
 
 class NaturalDayFilterTests(LexpageSeleniumTestCase):
@@ -58,6 +59,75 @@ class MinichatSeleniumTests(LexpageSeleniumTestCase):
         )
 
 
+class RemainingChars(MinichatSeleniumTests):
+    fixtures = ['devel']
+
+    def setUp(self):
+        super().setUp()
+        self.login()
+        self.wait_for_minichat()
+
+        self.input_element = self.selenium.find_element_by_css_selector(
+            self.selenium.execute_script('return app_minichat._input_text_selector;')
+        )
+
+        self.remaining_element = self.selenium.find_element_by_css_selector(
+            self.selenium.execute_script('return app_minichat._remaining_chars_selector;')
+        )
+
+        self.button_element = self.selenium.find_element_by_css_selector(
+            self.selenium.execute_script('return app_minichat._button_selector;')
+        )
+
+        self.initial = self.get_remaining_chars()
+
+    def get_remaining_chars(self):
+        return int(self.remaining_element.text.split()[0])
+
+    def test_starts_with_150(self):
+        self.assertEqual(self.initial, 150)
+
+    def test_decreases_when_typing(self):
+        for i, char in enumerate('Hello! How are you? Did you known that the minichat is currently working?'):
+            self.input_element.send_keys(char)
+            self.assertEqual(self.get_remaining_chars(), self.initial - i - 1)
+
+    def test_increases_when_backspacing(self):
+        text = 'Hello World!'
+        self.input_element.send_keys(text)
+        self.assertEqual(self.get_remaining_chars(), self.initial - len(text))
+
+        for i in range(len(text)):
+            self.input_element.send_keys(Keys.BACK_SPACE)
+            self.assertEqual(self.get_remaining_chars(), self.initial - len(text) + i + 1)
+
+    def test_cannot_go_below_0(self):
+        while self.get_remaining_chars() > 0:
+            self.input_element.send_keys('Hello World!')
+
+        self.assertEqual(self.get_remaining_chars(), 0)
+        self.input_element.send_keys('Hello World!')
+
+        self.assertEqual(self.get_remaining_chars(), 0)
+        self.input_element.send_keys(Keys.CONTROL + 'a')
+        self.input_element.send_keys(Keys.DELETE)
+
+        self.assertEqual(self.get_remaining_chars(), self.initial)
+
+    def test_reset_after_post(self):
+        self.input_element.send_keys('Hello world! This is a test!')
+
+        # Reset to dismiss existing .minichat-text-content
+        self.selenium.execute_script('app_minichat.reset();')
+
+        self.button_element.click()
+        WebDriverWait(self.selenium, self.timeout).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, '.minichat-text-content'))
+        )
+        message = self.selenium.find_element_by_css_selector('.minichat-text-content')
+        self.assertIn('Hello world! This is a test!', message.text)
+
+
 class MessageVisibilityTests(MinichatSeleniumTests):
     fixtures = ['devel']
 
@@ -104,9 +174,9 @@ class MessageVisibilityTests(MinichatSeleniumTests):
         timeout = self.selenium.execute_script('return app_minichat.timer_delay;')
         self.post_message('Message 2', timeout=timeout + self.timeout)
 
-    def test_post_message_delay_unloggued(self):
+    def test_post_message_delay_logged_out(self):
         """
-        Message delay is longer for unloggued users.
+        Message delay is longer for logged out users.
         """
         self.login()
         timeout = self.selenium.execute_script('return app_minichat.timer_delay;')

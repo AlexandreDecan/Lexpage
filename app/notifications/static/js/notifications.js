@@ -2,7 +2,7 @@ function Notifications(container, url) {
     "use strict";
 
     this.timer_delay = 10;
-    this._timeout_id = null;
+    this.timeout_id = null;
     this.last_etag = null;
 
     this.content_url = url;
@@ -20,9 +20,9 @@ function Notifications(container, url) {
     this.stop_timer = function() {
         var _this = this;
 
-        if (_this._timeout_id) {
-            clearTimeout(_this._timeout_id);
-            _this._timeout_id = null;
+        if (_this.timeout_id) {
+            clearTimeout(_this.timeout_id);
+            _this.timeout_id = null;
         }
     };
 
@@ -30,7 +30,7 @@ function Notifications(container, url) {
         var _this = this;
 
         _this.stop_timer();
-        _this._timeout_id = setTimeout(function() { _this.refresh(); }, _this.timer_delay * 1000);
+        _this.timeout_id = setTimeout(function() { _this.refresh(); }, _this.timer_delay * 1000);
     };
 
     this.reset = function () {
