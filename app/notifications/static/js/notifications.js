@@ -2,6 +2,7 @@ function Notifications(container, url) {
     "use strict";
 
     this.timer_delay = 10;
+    this._timeout_id = null;
     this.last_etag = null;
 
     this.content_url = url;
@@ -10,18 +11,32 @@ function Notifications(container, url) {
     this.container_selector = container;
     this.vanilla_title = document.title.replace(/\((\d+)\)/g,'⟨$1⟩'); // Mind "⟨" != "(";
 
-    this.start = function() {
+    this.init = function() {
         var _this = this;
 
-        (function loop(){
-            _this.refresh();
-            setTimeout(loop, _this.timer_delay * 1000);
-        })();
+        _this.refresh();
+    };
+
+    this.stop_timer = function() {
+        var _this = this;
+
+        if (_this._timeout_id) {
+            clearTimeout(_this._timeout_id);
+            _this._timeout_id = null;
+        }
+    };
+
+    this.start_timer = function() {
+        var _this = this;
+
+        _this.stop_timer();
+        _this._timeout_id = setTimeout(function() { _this.refresh(); }, _this.timer_delay * 1000);
     };
 
     this.reset = function () {
         var _this = this;
 
+        _this.start_timer();
         _this.last_etag = null;
         _this.refresh_content_with(null);
     };
@@ -58,23 +73,37 @@ function Notifications(container, url) {
     this.refresh = function () {
         var _this = this;
 
+        // Prevent race condition
+        _this.stop_timer();
+
         $.get(_this.content_url).success(function (data, textStatus, xhr) {
             var etag = xhr.getResponseHeader('ETag');
             if (_this.last_etag != etag) {
                 _this.last_etag = etag;
                 _this.refresh_content_with(data)
             }
-        }).fail(function (data, textStatus, xhr) {
+            _this.start_timer();
+        }).fail(function (data, textStatus) {
             document.title = _this.vanilla_title;
+            contrib_message('danger', 'Une erreur est survenue pendant le chargement des notifications. Veuillez rafraichir la page.');
+            console.log(data);
+            console.log(textStatus);
         });
     };
 
     this.dismiss = function(url, element) {
         var _this = this;
 
-        $("#" + element + " a.close").addClass("fa-spinner fa-spin");
+        // Prevent race condition
+        _this.stop_timer();
 
+        $("#" + element + " a.close").addClass("fa-spinner fa-spin");
         $.ajax({url: url, type: 'DELETE'}).success(function () {
+            _this.refresh();
+        }).fail(function (data, textStatus) {
+            contrib_message('danger', 'Une erreur est survenue pendant la suppression de la notification.');
+            console.log(data);
+            console.log(textStatus);
             _this.refresh();
         });
     };

@@ -88,7 +88,7 @@
                 {% endif %}
 
                 app_minichat = new Minichat("{{ user.username }}", last_visit, "#minichat_content", "#minichat_form", "{% url 'minichat-api-latest-list' %}");
-                app_minichat.start();
+                app_minichat.init();
             });
         </script>
     </div> <!-- panel -->

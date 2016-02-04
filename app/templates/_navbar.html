@@ -162,7 +162,7 @@
         <script>
             $(document).ready(function() {
                 app_notifications = new Notifications("#notifications_container", "{% url 'notifications_api_list' %}");
-                app_notifications.start();
+                app_notifications.init();
             });
         </script>
     {% endif %}
