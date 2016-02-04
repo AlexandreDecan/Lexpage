@@ -1,43 +1,45 @@
-"use strict";
+function Notifications(container, url) {
+    "use strict";
 
-var app_notifications = {
-    timer_delay: 10,
-    last_etag: null,
+    this.timer_delay = 10;
+    this.last_etag = null;
 
-    content_url: null,
-    template: "notifications/notifications.html",
+    this.content_url = url;
+    this.template = "notifications/notifications.html";
 
-    container_selector: null,
-    vanilla_title: null,
+    this.container_selector = container;
+    this.vanilla_title = document.title.replace(/\((\d+)\)/g,'⟨$1⟩'); // Mind "⟨" != "(";
 
-    init: function (container, url) {
-        app_notifications.vanilla_title = document.title.replace(/\((\d+)\)/g,'⟨$1⟩'); // Mind "⟨" != "("
-        app_notifications.container_selector = container;
-        app_notifications.content_url = url;
+    this.start = function() {
+        var _this = this;
 
         (function loop(){
-            app_notifications.refresh();
-            setTimeout(loop, app_notifications.timer_delay * 1000);
+            _this.refresh();
+            setTimeout(loop, _this.timer_delay * 1000);
         })();
-    },
+    };
 
-    reset: function () {
-        app_notifications.last_etag = null;
-        app_notifications.refresh_content_with(null);
-    },
+    this.reset = function () {
+        var _this = this;
 
-    refresh_content_with: function (data) {
+        _this.last_etag = null;
+        _this.refresh_content_with(null);
+    };
+
+    this.refresh_content_with = function (data) {
+        var _this = this;
+
         // Update content
-        var template_html = nunjucks.render(app_notifications.template, {'data': data});
-        $(app_notifications.container_selector).html(template_html);
+        var template_html = nunjucks.render(_this.template, {'data': data});
+        $(_this.container_selector).html(template_html);
 
         // Disable click event to prevent dropdown closing
-        $(app_notifications.container_selector).click(function (e) {
+        $(_this.container_selector).click(function (e) {
             e.stopPropagation();
         });
 
         // Allow to show notifications on mouse over
-        $(app_notifications.container_selector).hover(function () {
+        $(_this.container_selector).hover(function () {
             // Only if navbar is not collapsed
             if (!$(this).closest('.navbar-collapse').hasClass('in'))
                 $(this).addClass('open');
@@ -48,28 +50,32 @@ var app_notifications = {
 
         // Update title
         if (data && data.length > 0)
-            document.title = "(" + data.length + ") " + app_notifications.vanilla_title;
+            document.title = "(" + data.length + ") " + _this.vanilla_title;
         else
-            document.title = app_notifications.vanilla_title;
-    },
+            document.title = _this.vanilla_title;
+    };
 
-    refresh: function () {
-        $.get(app_notifications.content_url).success(function (data, textStatus, xhr) {
+    this.refresh = function () {
+        var _this = this;
+
+        $.get(_this.content_url).success(function (data, textStatus, xhr) {
             var etag = xhr.getResponseHeader('ETag');
-            if (app_notifications.last_etag != etag) {
-                app_notifications.last_etag = etag;
-                app_notifications.refresh_content_with(data)
+            if (_this.last_etag != etag) {
+                _this.last_etag = etag;
+                _this.refresh_content_with(data)
             }
         }).fail(function (data, textStatus, xhr) {
-            document.title = app_notifications.vanilla_title;
+            document.title = _this.vanilla_title;
         });
-    },
+    };
 
-    dismiss: function(url, element) {
+    this.dismiss = function(url, element) {
+        var _this = this;
+
         $("#" + element + " a.close").addClass("fa-spinner fa-spin");
 
         $.ajax({url: url, type: 'DELETE'}).success(function () {
-            app_notifications.refresh();
+            _this.refresh();
         });
-    }
-};
+    };
+}
