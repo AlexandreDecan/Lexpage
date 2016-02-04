@@ -6704,6 +6704,11 @@ body {
   border-top: 2px dotted #3e5d71;
 }
 
+/* For archives */
+.minichat-text:target {
+  background-color: #f2dede;
+}
+
 /* Full minichat, internal div */
 .minichat-content {
   font-size: 12px;
@@ -6735,10 +6740,10 @@ body {
   margin-left: 35px;
   border-radius: 0 3px 3px 0;
 }
-.minichat-content .minichat-message.other-author .minichat-group div {
+.minichat-content .minichat-message.other-author .minichat-group .minichat-text {
   border-left: 2px solid #3e5d71;
 }
-.minichat-content .minichat-message.other-author .minichat-group div.new {
+.minichat-content .minichat-message.other-author .minichat-group .minichat-text.new {
   border-left-color: #de6764;
 }
 .minichat-content .minichat-time {

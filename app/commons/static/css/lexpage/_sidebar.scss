@@ -27,6 +27,11 @@
   border-top: 2px dotted $brand-primary;
 }
 
+/* For archives */
+.minichat-text:target {
+  background-color: $alert-danger-bg;
+}
+
 /* Full minichat, internal div */
 .minichat-content {
   font-size: $font-size-small;
@@ -61,7 +66,7 @@
         position: relative;
         margin-left: 35px;
         border-radius: 0 $border-radius-small $border-radius-small 0;
-        div {
+        .minichat-text {
           border-left: 2px solid $brand-primary;
           &.new{
             border-left-color: lighten($brand-danger, 5%);
