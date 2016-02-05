@@ -55,7 +55,7 @@
 
                     <div class="minichat-text" id="m{{ message.pk }}">
                         <span class="minichat-time">{{ message.date|time }}</span>
-                        <span class="minichat-text-content">{{ message.text }}</span>
+                        <span class="minichat-text-content">{{ message.text|urlize3|smiley|highlight_anchor:user.username }}</span>
                     </div>
                     {% if forloop.last %}{% comment %} Close minichat-group and minichat-message {% endcomment %}
                         </div></div>

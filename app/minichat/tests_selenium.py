@@ -7,6 +7,7 @@ from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from helpers.selenium import *
 from minichat.models import Message
+from minichat.templatetags.minichat import highlight_anchor
 from selenium.webdriver.common.keys import Keys
 
 
@@ -316,7 +317,7 @@ class MessagesHighlightingTests(MinichatSeleniumTests):
         """
         for message, nb in MessagesHighlightingTests.test_cases:
             self.post_message(message)
-            highlights = self.selenium.find_elements_by_css_selector('.minichat-text-content strong')
+            highlights = self.selenium.find_elements_by_css_selector('.minichat-text-content .highlight')
             self.assertEqual(len(highlights), 0, 'Failed with {}'.format(message))
 
     def test_no_highlight_for_user3(self):
@@ -326,7 +327,7 @@ class MessagesHighlightingTests(MinichatSeleniumTests):
         self.login('user3', 'user3')
         for message, nb in MessagesHighlightingTests.test_cases:
             self.post_message(message)
-            highlights = self.selenium.find_elements_by_css_selector('.minichat-text-content strong')
+            highlights = self.selenium.find_elements_by_css_selector('.minichat-text-content .highlight')
             self.assertEqual(len(highlights), 0, 'Failed with {}'.format(message))
 
     def test_highlight_for_user1(self):
@@ -336,8 +337,16 @@ class MessagesHighlightingTests(MinichatSeleniumTests):
         self.login('user1', 'user1')
         for message, nb in MessagesHighlightingTests.test_cases:
             self.post_message(message)
-            highlights = self.selenium.find_elements_by_css_selector('.minichat-text-content strong')
+
+            highlights = self.selenium.find_elements_by_css_selector('.minichat-text-content .highlight')
             self.assertEqual(len(highlights), nb, 'Failed with {}'.format(message))
+
+    def test_feature_parity(self):
+        for message, nb in MessagesHighlightingTests.test_cases:
+            js_result = self.selenium.execute_script('return env.getFilter("highlightAnchor")("{}", "{}");'.format(message, 'user1'))
+            django_result = highlight_anchor(message, 'user1')
+            # Feature parity
+            self.assertEqual(js_result, django_result)
 
 
 class ReadingStatusTests(MinichatSeleniumTests):

@@ -12,14 +12,12 @@ env.addFilter('isAfter', function(val, ref) {
     return moment(val).isAfter(ref);
 }, true);
 
-// We can not the RegExp objects directly in the remplates. This is why we
-// defined a filter for it.
-env.addFilter('highlight', function(val, user) {
+env.addFilter('highlightAnchor', function(val, user) {
     if (user == ""){ // anonymous user
         return val;
     } else {
         var user_regexp = new RegExp("(@" + user + ")(\\b)", "g");
-        return val.replace(user_regexp, "<strong>$1</strong>");
+        return val.replace(user_regexp, "<span class=\"highlight\">$1</span>");
     };
 }, true);
 
