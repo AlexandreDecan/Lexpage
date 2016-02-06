@@ -1,8 +1,7 @@
-import django
-import random
+import time
+
+from django.http import HttpResponseNotModified
 from django.core.cache import cache
-from django.utils.decorators import method_decorator
-from django.views.decorators.http import etag
 
 from rest_framework.serializers import ModelSerializer
 from rest_framework.generics import ListAPIView, DestroyAPIView
@@ -39,11 +38,6 @@ class NotificationApiView(DestroyAPIView):
         return response
 
 
-def _etag_func(request, *args, **kwargs):
-    username = request.user.username
-    return cache.get_or_set('etag-notifications-{}'.format(username), lambda: str(random.random()), 60)
-
-
 class NotificationsListApiView(ListAPIView):
     model = Notification
     serializer_class = NotificationSerializer
@@ -52,6 +46,14 @@ class NotificationsListApiView(ListAPIView):
     def get_queryset(self):
         return Notification.objects.filter(recipient=self.request.user)
 
-    @method_decorator(etag(_etag_func))
     def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+        cached_hash = cache.get_or_set('cache-notifications-{}'.format(request.user.username), str(hash(time.time())), 60)
+        if request.query_params.get('hash', None) == cached_hash:
+            return HttpResponseNotModified()
+        else:
+            response = super().list(request, *args, **kwargs)
+            response.data = {
+                'results': response.data,
+                'hash': cached_hash
+            }
+            return response

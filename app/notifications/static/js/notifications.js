@@ -3,7 +3,7 @@ function Notifications(container, url) {
 
     this.timer_delay = 10;
     this.timeout_id = null;
-    this.last_etag = null;
+    this.last_hash = null;
 
     this.content_url = url;
     this.template = "notifications/notifications.html";
@@ -37,7 +37,7 @@ function Notifications(container, url) {
         var _this = this;
 
         _this.start_timer();
-        _this.last_etag = null;
+        _this.last_hash = null;
         _this.refresh_content_with(null);
     };
 
@@ -76,11 +76,11 @@ function Notifications(container, url) {
         // Prevent race condition
         _this.stop_timer();
 
-        $.get(_this.content_url).success(function (data, textStatus, xhr) {
-            var etag = xhr.getResponseHeader('ETag');
-            if (!etag || _this.last_etag != etag) {
-                _this.last_etag = etag;
-                _this.refresh_content_with(data)
+        $.get(_this.content_url + "?hash=" + _this.last_hash).success(function (data, textStatus, xhr) {
+            var hash = data.hash;
+            if (!_this.last_hash || _this.last_hash != hash) {
+                _this.last_hash = hash;
+                _this.refresh_content_with(data.results)
             }
             _this.start_timer();
         }).fail(function (data, textStatus) {

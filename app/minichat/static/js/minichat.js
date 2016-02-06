@@ -4,7 +4,7 @@ function Minichat(username, last_visit, container_selector, form_selector, conte
     this.timer_delay = (username && username != "") ? 10 : 30;
     this.split_delay = 5 * 60;
     this.timeout_id = null;
-    this.last_etag = null;
+    this.last_hash = null;
 
     this.username = username;
     this.read_date = last_visit;
@@ -92,7 +92,7 @@ function Minichat(username, last_visit, container_selector, form_selector, conte
         var _this = this;
 
         _this.start_timer();
-        _this.last_etag = null;
+        _this.last_hash = null;
         _this.refresh_content_with([]);
         _this.update_chars_count();
     };
@@ -114,10 +114,10 @@ function Minichat(username, last_visit, container_selector, form_selector, conte
         // Prevent race condition
         _this.stop_timer();
 
-        $.get(_this.content_url).success(function (data, textStatus, xhr) {
-            var etag = xhr.getResponseHeader('ETag');
-            if (!etag || _this.last_etag != etag) {
-                _this.last_etag = etag;
+        $.get(_this.content_url + "?hash=" + _this.last_hash).success(function (data, textStatus, xhr) {
+            var hash = data.hash;
+            if (!_this.last_hash || _this.last_hash != hash) {
+                _this.last_hash = hash;
                 _this.refresh_content_with(data.results)
             }
             _this.start_timer();

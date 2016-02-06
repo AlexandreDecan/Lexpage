@@ -1,3 +1,4 @@
+import time
 from datetime import timedelta
 
 from django.contrib.auth.models import User
@@ -223,10 +224,9 @@ class ApiTests(APITestCase):
             Message(user=self.author, text=words(5, False)).save()
         Message(user=self.author, text='Last message').save()
 
-        response = self.client.get(reverse('minichat-api-latest-list'), format='json')
+        response = self.client.get(reverse('minichat_latest_view'), format='json')
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['count'], 58)
         self.assertEqual(len(response.data['results']), 20)
 
         first_message = response.data['results'][0]
@@ -249,63 +249,61 @@ class MinichatCachingTests(APITestCase):
     def setUp(self):
         cache.clear()
 
-        self.url = reverse('minichat-api-latest-list')
+        self.url = reverse('minichat_latest_view')
 
-        # First response should return an etag
+        # First response should return an hash
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.has_header('ETag'))
-        self.etag = response['ETag']
+        self.last_hash = response.data['hash']
 
-    def test_missing_etag(self):
+    def test_missing_hash(self):
         """
-        A request with a missing ETag should lead to a 200 with the same ETag.
+        A request with a missing hash should lead to a 200 with the same hash.
         """
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(self.etag, response['ETag'])
+        self.assertEqual(self.last_hash, response.data['hash'])
 
-    def test_invalid_etag(self):
+    def test_invalid_hash(self):
         """
-        A request with an invalid ETag should lead to a 200 with the same ETag.
+        A request with an invalid hash should lead to a 200 with the same hash.
         """
-        response = self.client.get(self.url, HTTP_IF_NONE_MATCH='blablabla')
+        response = self.client.get(self.url + '?hash=blablabla')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(self.etag, response['ETag'])
+        self.assertEqual(self.last_hash, response.data['hash'])
 
-    def test_valid_etag(self):
+    def test_valid_hash(self):
         """
-        A request with a valid existing ETag should lead to a 304.
+        A request with a valid existing hash should lead to a 304.
         """
-        response = self.client.get(self.url, HTTP_IF_NONE_MATCH=self.etag)
+        response = self.client.get(self.url + '?hash=' + self.last_hash)
         self.assertEqual(response.status_code, 304)
-        self.assertEqual(self.etag, response['ETag'])
 
     def test_etag_renewal(self):
         """
-        An ETag should be invalidated if a new message is posted on the minichat, or edited, or deleted.
+        An hash should be invalidated if a new message is posted on the minichat, or edited, or deleted.
         """
         user = User.objects.create_user(username='user1', email='user1@example.com', password='user1')
 
         # After new message
         message = Message.objects.create(user=user, text='Hello world')
-        response = self.client.get(self.url, HTTP_IF_NONE_MATCH=self.etag)
+        response = self.client.get(self.url + '?hash=' + self.last_hash)
         self.assertEqual(response.status_code, 200)
-        self.assertNotEqual(self.etag, response['ETag'])
-        new_etag = response['ETag']
+        self.assertNotEqual(self.last_hash, response.data['hash'])
+        last_hash = response.data['hash']
 
         # After modification
         message.text = 'Hello universe'
         message.save()
-        response = self.client.get(self.url, HTTP_IF_NONE_MATCH=self.etag)
+        response = self.client.get(self.url + '?hash=' + self.last_hash)
         self.assertEqual(response.status_code, 200)
-        self.assertNotEqual(self.etag, response['ETag'])
-        self.assertNotEqual(new_etag, response['ETag'])
-        new_etag = response['ETag']
+        self.assertNotEqual(self.last_hash, response.data['hash'])
+        self.assertNotEqual(last_hash, response.data['hash'])
+        last_hash = response.data['hash']
 
         # After deletion
         message.delete()
-        response = self.client.get(self.url, HTTP_IF_NONE_MATCH=self.etag)
+        response = self.client.get(self.url + '?hash=' + self.last_hash)
         self.assertEqual(response.status_code, 200)
-        self.assertNotEqual(self.etag, response['ETag'])
-        self.assertNotEqual(new_etag, response['ETag'])
+        self.assertNotEqual(self.last_hash, response.data['hash'])
+        self.assertNotEqual(last_hash, response.data['hash'])

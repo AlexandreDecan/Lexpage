@@ -13,4 +13,4 @@ from notifications.models import Notification
 @signal_ignore_fixture
 def update_cached_etag(*args, **kwargs):
     username = kwargs['instance'].recipient.username
-    cache.delete('etag-notifications-{}'.format(username))
+    cache.delete('cache-notifications-{}'.format(username))

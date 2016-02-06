@@ -1,13 +1,10 @@
+import time
 import datetime
-import random
-from django.utils.decorators import method_decorator
-from django.views.decorators.http import etag
 
+from django.http import HttpResponseNotModified
 from rest_framework.serializers import ModelSerializer, ValidationError
-from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView
 from rest_framework.response import Response
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.fields import CharField
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import APIException
@@ -58,31 +55,27 @@ class PostedMessageSerializer(MessageSerializer):
         fields = ('text',)
 
 
-class LatestMessagesPagination(PageNumberPagination):
-    """Custom pagination for the minichat.
-    We use that to maybe later have a "load more" button to the minichat to get more history without
-    going to the archives.
-    To achieve that, we will need to set "page_query_param" and "max_page_size".
-    """
-    page_size = 20
-
-
-def _etag_func(request, *args, **kwargs):
-    return cache.get_or_set('etag-minichat', lambda: str(random.random()), 60)
-
-
-class LatestMessagesViewSet(ReadOnlyModelViewSet):
-    """A viewset that returns the latest messages."""
-    queryset = Message.objects.order_by('-date')
+class MinichatLatestMessagesView(ListAPIView):
+    model = Message
     serializer_class = MessageSerializer
-    pagination_class = LatestMessagesPagination
 
-    @method_decorator(etag(_etag_func))
+    def get_queryset(self):
+        return Message.objects.order_by('-date')[:20]
+
     def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+        cached_hash = cache.get_or_set('cache-minichat', str(hash(time.time())), 60)
+        if request.query_params.get('hash', None) == cached_hash:
+            return HttpResponseNotModified()
+        else:
+            response = super().list(request, *args, **kwargs)
+            response.data = {
+                'results': response.data,
+                'hash': cached_hash
+            }
+            return response
 
 
-class MessagePostView(CreateAPIView):
+class MinichatMessagePostView(CreateAPIView):
     """
     Handle message submission.
     We need CreateAPIView because there is ONE method we do not overwrite: get_success_headers

@@ -14,7 +14,7 @@ from .models import Message
 @receiver(post_save, sender=Message)
 @signal_ignore_fixture
 def update_cached_etag(*args, **kwargs):
-    cache.delete('etag-minichat')
+    cache.delete('cache-minichat')
 
 
 def create_minichat_notification(user, message):
