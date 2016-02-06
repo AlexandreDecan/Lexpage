@@ -1,14 +1,13 @@
 import time
 import datetime
 
-from django.http import HttpResponseNotModified
+from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.serializers import ModelSerializer, ValidationError
 from rest_framework.generics import CreateAPIView, ListAPIView
-from rest_framework.response import Response
 from rest_framework.fields import CharField
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import APIException
-from rest_framework import status
 
 from django.core.cache import cache
 from .models import Message
@@ -65,14 +64,15 @@ class MinichatLatestMessagesView(ListAPIView):
     def list(self, request, *args, **kwargs):
         cached_hash = cache.get_or_set('cache-minichat', str(hash(time.time())), 60)
         if request.query_params.get('hash', None) == cached_hash:
-            return HttpResponseNotModified()
+            # Manually set the response with content to prevent a bug in Firefox
+            response = Response('1', content_type='text/html', status=status.HTTP_304_NOT_MODIFIED)
         else:
             response = super().list(request, *args, **kwargs)
             response.data = {
                 'results': response.data,
                 'hash': cached_hash
             }
-            return response
+        return response
 
 
 class MinichatMessagePostView(CreateAPIView):

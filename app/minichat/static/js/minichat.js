@@ -115,9 +115,8 @@ function Minichat(username, last_visit, container_selector, form_selector, conte
         _this.stop_timer();
 
         $.get(_this.content_url + "?hash=" + _this.last_hash).success(function (data, textStatus, xhr) {
-            var hash = data.hash;
-            if (!_this.last_hash || _this.last_hash != hash) {
-                _this.last_hash = hash;
+            if (data && (!_this.last_hash || _this.last_hash != data.hash)) {
+                _this.last_hash = data.hash;
                 _this.refresh_content_with(data.results)
             }
             _this.start_timer();

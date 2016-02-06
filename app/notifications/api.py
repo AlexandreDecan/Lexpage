@@ -1,8 +1,10 @@
 import time
 
-from django.http import HttpResponseNotModified
+
 from django.core.cache import cache
 
+from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.serializers import ModelSerializer
 from rest_framework.generics import ListAPIView, DestroyAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -49,11 +51,12 @@ class NotificationsListApiView(ListAPIView):
     def list(self, request, *args, **kwargs):
         cached_hash = cache.get_or_set('cache-notifications-{}'.format(request.user.username), str(hash(time.time())), 60)
         if request.query_params.get('hash', None) == cached_hash:
-            return HttpResponseNotModified()
+            # Manually set the response with content to prevent a bug in Firefox
+            response = Response('1', content_type='text/html', status=status.HTTP_304_NOT_MODIFIED)
         else:
             response = super().list(request, *args, **kwargs)
             response.data = {
                 'results': response.data,
                 'hash': cached_hash
             }
-            return response
+        return response

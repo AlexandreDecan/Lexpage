@@ -1,0 +1,5 @@
+{% if data|length > 0 %}
+    <span class="badge"><span class="fa fa-bell"></span> {{ data|length }}</span>
+{% else %}
+    <span class="fa fa-navicon"></span>
+{% endif %}

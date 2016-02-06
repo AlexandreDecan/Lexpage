@@ -1,4 +1,4 @@
-function Notifications(container, url) {
+function Notifications(container, button_container, url) {
     "use strict";
 
     this.timer_delay = 10;
@@ -7,8 +7,10 @@ function Notifications(container, url) {
 
     this.content_url = url;
     this.template = "notifications/notifications.html";
+    this.template_button = "notifications/button.html";
 
     this.container_selector = container;
+    this.button_container_selector = button_container;
     this.vanilla_title = document.title.replace(/\((\d+)\)/g,'⟨$1⟩'); // Mind "⟨" != "(";
 
     this.init = function() {
@@ -48,26 +50,33 @@ function Notifications(container, url) {
         var template_html = nunjucks.render(_this.template, {'data': data});
         $(_this.container_selector).html(template_html);
 
-        // Disable click event to prevent dropdown closing
-        $(_this.container_selector).click(function (e) {
-            e.stopPropagation();
-        });
+        var template_button_html = nunjucks.render(_this.template_button, {'data': data});
+        $(_this.button_container_selector).html(template_button_html);
 
-        // Allow to show notifications on mouse over
-        $(_this.container_selector).hover(function () {
-            // Only if navbar is not collapsed
-            if (!$(this).closest('.navbar-collapse').hasClass('in'))
-                $(this).addClass('open');
-        }, function () {
-            if (!$(this).closest('.navbar-collapse').hasClass('in'))
-                $(this).removeClass('open');
-        });
-
-        // Update title
-        if (data && data.length > 0)
+        if (data && data.length > 0) {
+            // Update title
             document.title = "(" + data.length + ") " + _this.vanilla_title;
-        else
+
+            // Re-enable dropdown
+            $(_this.container_selector + ' .dropdown-toggle').dropdown();
+
+            // Disable click event to prevent dropdown closing
+            $(_this.container_selector).click(function (e) {
+                e.stopPropagation();
+            });
+
+            // Allow to show notifications on mouse over
+            $(_this.container_selector).hover(function () {
+                // Only if navbar is not collapsed
+                if (!$(this).closest('.navbar-collapse').hasClass('in'))
+                    $(this).addClass('open');
+            }, function () {
+                if (!$(this).closest('.navbar-collapse').hasClass('in'))
+                    $(this).removeClass('open');
+            });
+        } else {
             document.title = _this.vanilla_title;
+        }
     };
 
     this.refresh = function () {
@@ -77,9 +86,8 @@ function Notifications(container, url) {
         _this.stop_timer();
 
         $.get(_this.content_url + "?hash=" + _this.last_hash).success(function (data, textStatus, xhr) {
-            var hash = data.hash;
-            if (!_this.last_hash || _this.last_hash != hash) {
-                _this.last_hash = hash;
+            if (data && (!_this.last_hash || _this.last_hash != data.hash)) {
+                _this.last_hash = data.hash;
                 _this.refresh_content_with(data.results)
             }
             _this.start_timer();
