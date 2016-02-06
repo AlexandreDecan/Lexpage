@@ -16,6 +16,21 @@ function Notifications(container, button_container, url) {
     this.init = function() {
         var _this = this;
 
+        // Disable click event to prevent dropdown closing
+        $(_this.container_selector).click(function (e) {
+            e.stopPropagation();
+        });
+
+        // Allow to show notifications on mouse over
+        $(_this.container_selector).hover(function () {
+            // Only if navbar is not collapsed
+            if (!$(this).closest('.navbar-collapse').hasClass('in'))
+                $(this).addClass('open');
+        }, function () {
+            if (!$(this).closest('.navbar-collapse').hasClass('in'))
+                $(this).removeClass('open');
+        });
+
         _this.refresh();
     };
 
@@ -56,24 +71,6 @@ function Notifications(container, button_container, url) {
         if (data && data.length > 0) {
             // Update title
             document.title = "(" + data.length + ") " + _this.vanilla_title;
-
-            // Re-enable dropdown
-            $(_this.container_selector + ' .dropdown-toggle').dropdown();
-
-            // Disable click event to prevent dropdown closing
-            $(_this.container_selector).click(function (e) {
-                e.stopPropagation();
-            });
-
-            // Allow to show notifications on mouse over
-            $(_this.container_selector).hover(function () {
-                // Only if navbar is not collapsed
-                if (!$(this).closest('.navbar-collapse').hasClass('in'))
-                    $(this).addClass('open');
-            }, function () {
-                if (!$(this).closest('.navbar-collapse').hasClass('in'))
-                    $(this).removeClass('open');
-            });
         } else {
             document.title = _this.vanilla_title;
         }

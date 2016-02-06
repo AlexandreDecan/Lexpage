@@ -3,6 +3,7 @@ from django.core.cache import cache
 from helpers.selenium import *
 
 from notifications.models import Notification
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 class NotificationsSeleniumTests(LexpageSeleniumTestCase):
@@ -13,10 +14,13 @@ class NotificationsSeleniumTests(LexpageSeleniumTestCase):
     def force_notifications_refresh(self):
         self.selenium.execute_script('app_notifications.reset();')
         self.selenium.execute_script('app_notifications.refresh();')
+
         WebDriverWait(self.selenium, self.timeout).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, '.notification_list .notification'))
         )
-        self.selenium.find_element_by_css_selector('#notifications_container .dropdown-toggle').click()
+        element = self.selenium.find_element_by_css_selector('#notifications_container .dropdown-toggle')
+        other_element = self.selenium.find_element_by_css_selector('h2')
+        ActionChains(self.selenium).move_to_element(other_element).move_to_element(element).perform()
 
 
 class NotificationsDisplayTests(NotificationsSeleniumTests):

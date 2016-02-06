@@ -172,14 +172,10 @@ var colno = null;
 var output = "";
 try {
 var parentTemplate = null;
-output += "<a href=\"#\" class=\"dropdown-toggle";
-if(env.getFilter("length").call(context, runtime.contextOrFrameLookup(context, frame, "data")) == 0) {
-output += " hidden";
-;
-}
-output += "\" data-toggle=\"dropdown\">\n    <span class=\"badge\"><span class=\"fa fa-bell\"> ";
+if(env.getFilter("length").call(context, runtime.contextOrFrameLookup(context, frame, "data")) > 0) {
+output += "\n    <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">\n        <span class=\"badge\"><span class=\"fa fa-bell\"> ";
 output += runtime.suppressValue(env.getFilter("length").call(context, runtime.contextOrFrameLookup(context, frame, "data")), env.opts.autoescape);
-output += "</span></span>\n</a>\n<div class=\"dropdown-menu notification_list\">\n";
+output += "</span></span>\n    </a>\n    <div class=\"dropdown-menu notification_list\">\n    ";
 frame = frame.push();
 var t_3 = runtime.contextOrFrameLookup(context, frame, "data");
 if(t_3) {var t_2 = t_3.length;
@@ -193,39 +189,42 @@ frame.set("loop.revindex0", t_2 - t_1 - 1);
 frame.set("loop.first", t_1 === 0);
 frame.set("loop.last", t_1 === t_2 - 1);
 frame.set("loop.length", t_2);
-output += "\n   <div id=\"notification_";
+output += "\n       <div id=\"notification_";
 output += runtime.suppressValue(runtime.memberLookup((t_4),"id"), env.opts.autoescape);
-output += "\" class=\"notification\">\n      <div class=\"notification_icon\">\n        <span class=\"fa fa-lg ";
+output += "\" class=\"notification\">\n          <div class=\"notification_icon\">\n            <span class=\"fa fa-lg ";
 output += runtime.suppressValue(runtime.memberLookup((t_4),"icon"), env.opts.autoescape);
-output += "\"></span>\n      </div>\n      <div class=\"notification_dismiss\">\n          <a class=\"fa fa-times close\" href=\"javascript:app_notifications.dismiss('";
+output += "\"></span>\n          </div>\n          <div class=\"notification_dismiss\">\n              <a class=\"fa fa-times close\" href=\"javascript:app_notifications.dismiss('";
 output += runtime.suppressValue(runtime.memberLookup((t_4),"dismiss_url"), env.opts.autoescape);
 output += "', 'notification_";
 output += runtime.suppressValue(runtime.memberLookup((t_4),"id"), env.opts.autoescape);
-output += "');\"></a>\n      </div>\n      <div class=\"notification_title\">\n          ";
+output += "');\"></a>\n          </div>\n          <div class=\"notification_title\">\n              ";
 if(runtime.memberLookup((t_4),"show_and_dismiss_url")) {
-output += "\n          <a href=\"";
+output += "\n              <a href=\"";
 output += runtime.suppressValue(runtime.memberLookup((t_4),"show_and_dismiss_url"), env.opts.autoescape);
 output += "\">";
 output += runtime.suppressValue(runtime.memberLookup((t_4),"title"), env.opts.autoescape);
-output += "</a>\n          ";
+output += "</a>\n              ";
 ;
 }
 else {
-output += "\n              ";
+output += "\n                  ";
 output += runtime.suppressValue(runtime.memberLookup((t_4),"title"), env.opts.autoescape);
-output += "\n          ";
+output += "\n              ";
 ;
 }
-output += "\n      </div>\n      <div class=\"notification_descr\">\n        ";
+output += "\n          </div>\n          <div class=\"notification_descr\">\n            ";
 output += runtime.suppressValue(runtime.memberLookup((t_4),"description"), env.opts.autoescape);
-output += "\n        <span class=\"notification_date\">\n          &mdash; ";
+output += "\n            <span class=\"notification_date\">\n              &mdash; ";
 output += runtime.suppressValue(env.getFilter("relativeDate").call(context, runtime.memberLookup((t_4),"date")), env.opts.autoescape);
-output += "\n        </span>\n      </div>\n    </div>\n";
+output += "\n            </span>\n          </div>\n        </div>\n    ";
 ;
 }
 }
 frame = frame.pop();
-output += "\n</div>\n\n";
+output += "\n    </div>\n";
+;
+}
+output += "\n";
 if(parentTemplate) {
 parentTemplate.rootRenderFunc(env, context, frame, runtime, cb);
 } else {
