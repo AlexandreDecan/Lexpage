@@ -19,7 +19,6 @@ urlpatterns = [
     url(r'^messaging/', include('messaging.urls')),
     url(r'^board/', include('board.urls')),
     url(r'^notifications/', include('notifications.urls')),
-    url(r'^online/', include('online.urls')),
 
     # Specific URLs
     url(r'^$', homepage, name='homepage'),

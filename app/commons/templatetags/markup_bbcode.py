@@ -106,8 +106,11 @@ def replace_smiley(value):
 
     online_smiley_dir = os.path.join(settings.STATIC_URL, 'images', 'smiley')
 
-    smiley_other = [(x[:-4],x[-3:]) for x in os.listdir(local_smiley_dir) \
+    try:
+        smiley_other = [(x[:-4],x[-3:]) for x in os.listdir(local_smiley_dir) \
                         if x[-3:] == 'gif']
+    except FileNotFoundError:
+        smiley_other = []
 
     # Convert special smiley's
     for s,name in smiley_list:

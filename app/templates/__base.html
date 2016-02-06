@@ -23,39 +23,18 @@
     {% block javascript %}
         <script>
             var URL_PREFIX = ""; // markup.js, script.js
-            var USERNAME = "{{ user.username }}";
-            var LAST_VISIT = "{{ user.profile.last_visit|date:"c" }}";
         </script>
         <script src="{% static "libs/jquery/dist/jquery.js" %}"></script>
         <script src="{% static "libs/underscore.js" %}"></script>
         <script src="{% static "libs/moment/moment.js" %}"></script>
         <script src="{% static "libs/nunjucks/nunjucks-slim.js" %}"></script>
         <script src="{% static "js/moment.fr.js" %}"></script>
-        {% if user.is_authenticated and ENABLE_WEBSOCKET %}
-            <script src="{% static "js/websocket_client.js" %}"></script>
-            <script>
-            // define the websocket client so other apps can register
-            ws_client = new WebsocketClient({heartbeat_msg: {{ WS4REDIS_HEARTBEAT }}});
-            </script>
-        {% else%}
-            <script>
-            ws_client = false;
-            </script>
-        {% endif %}
         <script src="{% static "js/nunjucks.templates.js" %}"></script>
         <script src="{% static "js/nunjucks.js" %}"></script>
         <script src="{% static "js/scripts.js" %}"></script>
         <script src="{% static "js/notifications.js" %}"></script>
         <script src="{% static "js/minichat.js" %}"></script>
-        <script src="{% static "js/online.js" %}"></script>
         <script src="{% static "js/markup.js" %}"></script>
-        {% if user.is_authenticated and ENABLE_WEBSOCKET %}
-        <script>
-            $(document).ready(function() {
-                ws_client.connect('{{ WEBSOCKET_URI }}lexpage?subscribe-broadcast&subscribe-user&echo');
-            });
-        </script>
-    {% endif %}
     {% endblock javascript %}
     {{ form.media }}
 
@@ -125,11 +104,6 @@
     <script src="{% static "libs/jquery.tagcloud.js" %}"></script>
     <script src="{% static "libs/jquery.bootstrap-autohidingnavbar.js" %}"></script>
     <script src="{% static "libs/modernizr.js" %}"></script>
-    {% if user.is_authenticated and not INCOGNITO %}
-    <script>
-        online_init_ping("{% url 'online_ping' %}", {{USER_IS_ONLINE_TIMEOUT}});
-    </script>
-    {% endif %}
 {% endblock %}
 
 

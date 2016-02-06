@@ -1,74 +1,49 @@
-function create_minichat(username, last_visit, ws_client) {
-    var _timer_delay = 30;
-    var _split_delay = 5 * 60;
+function Minichat(username, last_visit, container_selector, form_selector, content_url) {
+    "use strict";
 
-    var _content_url;
-    var _post_url;
-    var _template_url = "minichat/latests.html";
+    this.timer_delay = (username && username != "") ? 10 : 30;
+    this.split_delay = 5 * 60;
+    this.timeout_id = null;
+    this.last_etag = null;
 
-    var _ws_client = ws_client;
-    var _username = username;
-    var _read_date = last_visit;
+    this.username = username;
+    this.read_date = last_visit;
 
-    var _replace_invalid_avatar = replace_invalid_avatar; // Need to be set outside!
-    var _activate_tooltips = activate_tooltips; // Need to be set outside!
-    var _contrib_message = contrib_message; // Need to be set outside!
+    this.content_url = content_url;
+    this.template = "minichat/latests.html"
 
-    var _content_selector;
-    var _form_selector = "#minichat_form";
-    var _button_selector = "#minichat_form button[type='submit']";
-    var _input_text_selector = "#minichat_form input[type='text']";
-    var _remaining_chars_selector = "#minichat_form .minichat-remainingChars";
+    this.container_selector = container_selector;
+    this.form_selector = form_selector;
 
-    var minichat = this;
+    this._button_selector = null;
+    this._input_text_selector = null;
+    this._remaining_chars_selector = null;
+
+    this.init = function() {
+        var _this = this;
+
+        _this._button_selector = _this.form_selector + " button[type='submit']";
+        _this._input_text_selector = _this.form_selector + " input[type='text']";
+        _this._remaining_chars_selector = _this.form_selector + " .minichat-remainingChars";
+
+        $(_this._button_selector).click(function(e) {
+            e.preventDefault();
+            $(_this._button_selector).find('span').addClass('fa-spinner fa-spin');
+            _this.post_message();
+        });
 
 
-    this.init_display = function(content_selector, content_url) {
-        _content_selector = content_selector;
-        _content_url = content_url;
+        $(_this._input_text_selector).change(function() { _this.update_chars_count(); });
+        $(_this._input_text_selector).keyup(function() { _this.update_chars_count(); });
+        _this.update_chars_count();
 
-        if (_content_selector) {
-            setInterval(this.refresh_fallback, _timer_delay * 1000);
-            this.refresh();
-
-            if (_ws_client){
-                _ws_client.register('minichat', 'on_connect', this.refresh);
-                _ws_client.register('minichat', 'on_message', this.websocket_message_dispatch);
-            }
-        }
+        _this.refresh();
     };
 
-    this.init_post = function () {
-        _post_url = $(_form_selector).attr("action");
-
-        $(_button_selector).click(
-            function(e) {
-                e.preventDefault();
-                $(_button_selector).find('span').addClass('fa-spinner fa-spin');
-                minichat.post_message();
-            }
-        );
-
-        this.update_chars_count();
-        $(_input_text_selector).change(this.update_chars_count);
-        $(_input_text_selector).keyup(this.update_chars_count);
-    };
-
-    this.refresh_fallback = function () {
-        if (!_ws_client || !_ws_client.isConnected()){
-            this.refresh();
-        }
-    };
-
-    this.websocket_message_dispatch = function (data) {
-        switch(data.action) {
-            case 'reload_minichat':
-                this.refresh();
-                break;
-        }
-    };
 
     this.group_messages = function(messages) {
+        var _this = this;
+
         // Group by date
         var date_groups = _.groupBy(messages, function (e) {
             return moment(e.date).format("YYYY-MM-DD");
@@ -83,7 +58,7 @@ function create_minichat(username, last_visit, ws_client) {
                 var message = messages[i];
 
                 if (!last_message || (last_message.user.username != message.user.username) ||
-                    (moment(last_message.date).diff(moment(message.date), 'seconds') >= _split_delay)) {
+                    (moment(last_message.date).diff(moment(message.date), 'seconds') >= app_minichat.split_delay)) {
                     if (group)
                         groups.push(group);
                     group = {'user': message.user, 'messages': []};
@@ -97,52 +72,103 @@ function create_minichat(username, last_visit, ws_client) {
         });
     };
 
-    this.refresh = function () {
-        $.get(_content_url, function (data) {
-            var messages = minichat.group_messages(data.results);
+    this.stop_timer = function() {
+        var _this = this;
 
-            var context = {dates: messages, 'current_username': _username, 'read_date': _read_date};
-            $(_content_selector).html(nunjucks.render(_template_url, context));
-            _replace_invalid_avatar($(_content_selector));
-            _activate_tooltips($(_content_selector));
+        if (_this.timeout_id) {
+            clearTimeout(_this.timeout_id);
+            _this.timeout_id = null;
+        }
+    };
+
+    this.start_timer = function() {
+        var _this = this;
+
+        _this.stop_timer();
+        _this.timeout_id = setTimeout(function() { _this.refresh(); }, _this.timer_delay * 1000);
+    };
+
+    this.reset = function() {
+        var _this = this;
+
+        _this.start_timer();
+        _this.last_etag = null;
+        _this.refresh_content_with([]);
+        _this.update_chars_count();
+    };
+
+    this.refresh_content_with = function(data) {
+        var _this = this;
+
+        var messages = _this.group_messages(data);
+
+            var context = {dates: messages, 'current_username': _this.username, 'read_date': _this.read_date};
+            $(_this.container_selector).html(nunjucks.render(_this.template, context));
+            replace_invalid_avatar($(_this.container_selector));
+            activate_tooltips($(_this.container_selector));
+    };
+
+    this.refresh = function () {
+        var _this = this;
+
+        // Prevent race condition
+        _this.stop_timer();
+
+        $.get(_this.content_url).success(function (data, textStatus, xhr) {
+            var etag = xhr.getResponseHeader('ETag');
+            if (_this.last_etag != etag) {
+                _this.last_etag = etag;
+                _this.refresh_content_with(data.results)
+            }
+            _this.start_timer();
+        }).fail(function (data, textStatus) {
+            contrib_message('danger', 'Une erreur est survenue pendant le chargement du minichat. Veuillez rafraichir la page.');
+            console.log(data);
+            console.log(textStatus);
         });
     };
 
     this.post_message = function () {
-        $.post(_post_url, $(_form_selector).serialize())
-            .done(function(data) {
-                if (data.substituted) {
-                    contrib_message("info", "Votre dernier message est devenu \"<em>"+ data.substituted.text +"</em>\".");
-                } else if (data.anchors.length > 0) {
-                    var beautified_users;
-                    if (data.anchors.length > 1) {
-                        var users = data.anchors.join(', à ');
-                        var comma = users.lastIndexOf(', à ');
-                        beautified_users = users.substr(0, comma) + ' et' + users.substr(comma+1)
-                    } else {
-                        beautified_users = data.anchors[0];
-                    }
-                    _contrib_message("info", "Une notification a été envoyée à " + beautified_users + ".")
+        var _this = this;
+
+        // Prevent race condition
+        _this.stop_timer();
+
+        $.post($(_this.form_selector).attr("action"), $(_this.form_selector).serialize()).done(function(data) {
+            if (data.substituted) {
+                contrib_message("info", "Votre dernier message est devenu \"<em>"+ data.substituted.text +"</em>\".");
+            } else if (data.anchors.length > 0) {
+                var beautified_users;
+                if (data.anchors.length > 1) {
+                    var users = data.anchors.join(', à ');
+                    var comma = users.lastIndexOf(', à ');
+                    beautified_users = users.substr(0, comma) + ' et' + users.substr(comma+1)
+                } else {
+                    beautified_users = data.anchors[0];
                 }
-                $(_button_selector).find('span').removeClass('fa-spinner fa-spin fa-warning btn-warning');
-                $(_input_text_selector).val("");
-                minichat.update_chars_count();
-                minichat.refresh_fallback();
-            })
-            .fail(function(data) {
-                $(_button_selector).find('span').removeClass('fa-spinner fa-spin').addClass('fa-warning');
-                minichat_refresh_fallback();
+                contrib_message("info", "Une notification a été envoyée à " + beautified_users + ".")
             }
-        );
+            $(_this._button_selector).find('span').removeClass('fa-spinner fa-spin fa-warning btn-warning');
+            $(_this._input_text_selector).val("");
+            _this.update_chars_count();
+            _this.refresh();
+        }).fail(function(data, textStatus) {
+            $(_this._button_selector).find('span').removeClass('fa-spinner fa-spin').addClass('fa-warning');
+            console.log(data);
+            console.log(textStatus);
+            _this.refresh();
+        });
     };
 
     this.update_chars_count = function () {
-        var remaining = $(_input_text_selector).attr("maxlength") - $(_input_text_selector).val().length;
-        var plural = "";
-        if (remaining > 1) plural = "s";
-        $(_input_text_selector).parent().toggleClass("has-warning", remaining == 0);
-        $(_remaining_chars_selector).text(remaining + "  caractère"+plural+" restant"+plural);
-    };
+        var _this = this;
 
-    return this;
-};
+        var remaining = $(_this._input_text_selector).attr("maxlength") - $(_this._input_text_selector).val().length;
+        var plural;
+        if (remaining > 1) plural = "s"; else plural = "";
+
+        $(_this._input_text_selector).parent().toggleClass("has-warning", remaining == 0);
+        $(_this._remaining_chars_selector).text(remaining + "  caractère"+plural+" restant"+plural);
+    };
+}
+

@@ -1,17 +1,20 @@
-import json
-import logging
+import random
 
 from django.db.models.signals import post_save, post_delete, pre_save, pre_delete
 from django.dispatch import receiver
-
-from ws4redis.redis_store import RedisMessage
-from redis.exceptions import ConnectionError
+from django.core.cache import cache
 
 from helpers.decorators import signal_ignore_fixture
-from helpers.redis import get_redis_publisher
 from notifications.models import Notification
 
 from .models import Message
+
+
+@receiver(post_delete, sender=Message)
+@receiver(post_save, sender=Message)
+@signal_ignore_fixture
+def update_cached_etag(*args, **kwargs):
+    cache.delete('etag-minichat')
 
 
 def create_minichat_notification(user, message):
@@ -57,10 +60,27 @@ def change_notifications_on_message_edition(sender, **kwargs):
         old_message = Message.objects.get(pk=new_message.id)
         old_recipients = set(old_message.parse_anchors())
         new_recipients = set(new_message.parse_anchors())
+
+        # Delete notifications for recipients that were removed
         for recipient in old_recipients.difference(new_recipients):
-            Notification.objects.filter(app='minichat', key=old_message.id, recipient=recipient).delete()
+            try:
+                Notification.objects.get(app='minichat', key=old_message.id, recipient=recipient).delete()
+            except Notification.DoesNotExist:
+                pass
+
+        # Recreate notifications for recipients that still have the notification
+        #   because notification text must be adapted.
+        for recipient in new_recipients.intersection(old_recipients):
+            try:
+                Notification.objects.get(app='minichat', key=old_message.id, recipient=recipient).delete()
+                create_minichat_notification(recipient, new_message)
+            except Notification.DoesNotExist:
+                pass
+
+        # Create notifications for recipients that were added
         for recipient in new_recipients.difference(old_recipients):
             create_minichat_notification(recipient, new_message)
+
 
 
 @receiver(post_save, sender=Message)
@@ -74,19 +94,3 @@ def send_notifications_on_message_creation(sender, created, **kwargs):
         anchors = message.parse_anchors()
         for anchor in anchors:
             create_minichat_notification(anchor, message)
-
-
-@receiver(post_delete, sender=Message)
-@receiver(post_save, sender=Message)
-@signal_ignore_fixture
-def send_minichat_update_message(sender, **kwargs):
-    try:
-        RedisPublisher = get_redis_publisher()
-        redis_publisher = RedisPublisher(facility='lexpage', broadcast=True)
-        message = {'action': 'reload_minichat', 'app': 'minichat'}
-        redis_message = RedisMessage(json.dumps(message))
-        redis_publisher.publish_message(redis_message)
-    except ConnectionError:
-        logger = logging.getLogger()
-        logger.exception('Error when publishing a message to the websocket channel')
-

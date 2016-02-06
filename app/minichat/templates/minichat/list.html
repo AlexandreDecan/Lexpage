@@ -33,33 +33,45 @@
     <hr/>
 
     {% if message_list %}
-        <table class="table table-striped table-condensed">
-        <tbody>
-        {% for message in message_list %}
-            <tr>
-                <td class="col-md-1">
-                    <img src="{{ message.user.profile.avatar }}" title="{{ message.user.username }}" class="avatar smallavatar" />
-                </td>
-                <td class="col-md-2">
-                    <a href="{% url 'profile_show' message.user %}">{{ message.user.username }}</a>
-                </td>
-                <td class="col-md-3">
-                    <a name="m{{ message.pk }}"></a>{{ message.date|naturalday:'l d' }} à {{ message.date|time }}
-                </td>
-                <td>
-                    {{ message.text|urlize3|smiley }}
-                </td>
-            </tr>
+        <div class="row">
+        <div class="col-md-3"></div>
+        <div class="minichat-content col-md-6">
+        {% regroup message_list by date|naturalday:'l j F Y' as message_groups %}
+        {% for group in message_groups %}
+            <div class="minichat-date">
+                {{ group.grouper|capfirst }}
+            </div>
+            {% for message in group.list %}
+                {% with current_author=message.user %}
+                    {% ifchanged current_author %}
+                        {% if not forloop.first %}{% comment %} Close minichat-group and minichat-message {% endcomment %}
+                            </div></div>
+                        {% endif %}
+                        <div class="minichat-message {% if message.user == user %}self-author{% else %}other-author{% endif %}">
+                            <a class="minichat-user" href="{{ message.user.get_absolute_url }}">
+                            <img src="{{ message.user.profile.avatar }}" title="{{ message.user.username }}" class="avatar verysmallavatar"/></a>
+                            <div class="minichat-group">
+                    {% endifchanged %}
+
+                    <div class="minichat-text" id="m{{ message.pk }}">
+                        <span class="minichat-time">{{ message.date|time }}</span>
+                        <span class="minichat-text-content">{{ message.text|urlize3|smiley|highlight_anchor:user.username }}</span>
+                    </div>
+                    {% if forloop.last %}{% comment %} Close minichat-group and minichat-message {% endcomment %}
+                        </div></div>
+                    {% endif %}
+                {% endwith %}
+            {% endfor %}
         {% endfor %}
-        </tbody>
-        </table>
+        </div>
+        <div class="cold-md-3"></div>
+        </div>
+
     {% else %}
         <em>Aucun message pour la période choisie.</em>
     {% endif %}
 
-
     <hr/>
-
 
     <div class="pull-left">
         {% if previous_month %}

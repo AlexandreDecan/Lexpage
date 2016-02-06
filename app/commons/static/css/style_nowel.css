@@ -6599,18 +6599,6 @@ body {
   -webkit-box-shadow: 0 0px 14px 4px rgba(0, 0, 0, 0.3);
   box-shadow: 0 0px 14px 4px rgba(0, 0, 0, 0.3);
 }
-.navbar .dropdown-menu .notification_pagination, .navbar .notification_list .notification_pagination {
-  margin-top: -10px;
-  position: relative;
-}
-.navbar .dropdown-menu .notification_pagination .previous_page, .navbar .notification_list .notification_pagination .previous_page {
-  position: absolute;
-  left: 10px;
-}
-.navbar .dropdown-menu .notification_pagination .next_page, .navbar .notification_list .notification_pagination .next_page {
-  position: absolute;
-  right: 10px;
-}
 .navbar .navbar-right .avatar {
   position: relative;
   z-index: 1001;
@@ -6663,6 +6651,7 @@ body {
   border-top: 1px solid lightgray;
 }
 .notification .notification_title {
+  font-weight: bold;
   margin-left: 30px;
 }
 .notification .notification_icon {
@@ -6722,51 +6711,22 @@ body {
   font-size: 12px;
   padding: 1px 5px;
   /* Full message (time, text, user, ...) */
-  /* Time (HH:MM) */
-  /* Actual text of the message */
-}
-.minichat-content .minichat-message {
-  margin-bottom: 14px;
-}
-.minichat-content .minichat-message .avatar {
-  margin-top: -4px;
-  vertical-align: top;
-}
-.minichat-content .minichat-message.self-author .avatar {
-  float: right;
-}
-.minichat-content .minichat-message.self-author .minichat-text {
-  margin-right: 35px;
-  border-right: 2px solid #9e0707;
-  border-radius: 3px 0 0 3px;
-}
-.minichat-content .minichat-message.other-author .avatar {
-  float: left;
-}
-.minichat-content .minichat-message.other-author .minichat-text {
-  border-left: 0px;
-  position: relative;
-  margin-left: 35px;
-  border-radius: 0 3px 3px 0;
-}
-.minichat-content .minichat-message.other-author .minichat-text div {
-  border-left: 2px solid #9e0707;
-}
-.minichat-content .minichat-message.other-author .minichat-text div.new {
-  border-left-color: #d43f3a;
-}
-.minichat-content .minichat-time {
-  display: inline-block;
-  padding-right: 5px;
-  font-size: 80%;
-  color: #777777;
 }
 .minichat-content .minichat-date {
   text-align: center;
   margin-top: 3px;
   color: #777777;
 }
-.minichat-content .minichat-text {
+.minichat-content .minichat-message {
+  margin-bottom: 14px;
+  /* For archives */
+  /* Time (HH:MM) */
+}
+.minichat-content .minichat-message .avatar {
+  margin-top: -4px;
+  vertical-align: top;
+}
+.minichat-content .minichat-message .minichat-group {
   position: relative;
   margin-top: 3px;
   margin-bottom: 3px;
@@ -6774,16 +6734,51 @@ body {
   -webkit-box-shadow: 0 0px 5px 1px rgba(0, 0, 0, 0.3);
   box-shadow: 0 0px 5px 1px rgba(0, 0, 0, 0.3);
 }
-.minichat-content .minichat-text div {
+.minichat-content .minichat-message .minichat-group:hover {
+  -webkit-box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.3);
+}
+.minichat-content .minichat-message .minichat-text {
   padding: 1px 5px;
 }
-.minichat-content .minichat-text div:not(:first-child) {
+.minichat-content .minichat-message .minichat-text:not(:first-child) {
   /* We use box shadow because having borders of the same size causes disruption in the right line*/
   box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.1) inset;
 }
-.minichat-content .minichat-text:hover {
-  -webkit-box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.3);
+.minichat-content .minichat-message.self-author .avatar {
+  float: right;
+}
+.minichat-content .minichat-message.self-author .minichat-group {
+  margin-right: 35px;
+  border-right: 2px solid #9e0707;
+  border-radius: 3px 0 0 3px;
+}
+.minichat-content .minichat-message.other-author .avatar {
+  float: left;
+}
+.minichat-content .minichat-message.other-author .minichat-group {
+  border-left: 0px;
+  position: relative;
+  margin-left: 35px;
+  border-radius: 0 3px 3px 0;
+}
+.minichat-content .minichat-message.other-author .minichat-text {
+  border-left: 2px solid #9e0707;
+}
+.minichat-content .minichat-message.other-author .minichat-text.new {
+  border-left-color: #d43f3a;
+}
+.minichat-content .minichat-message .highlight {
+  font-weight: bold;
+}
+.minichat-content .minichat-message .minichat-text:target {
+  background-color: #f2dede;
+}
+.minichat-content .minichat-message .minichat-time {
+  display: inline-block;
+  padding-right: 5px;
+  font-size: 80%;
+  color: #777777;
 }
 
 .minichat-remainingChars {

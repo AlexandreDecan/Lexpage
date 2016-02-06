@@ -1,136 +1,110 @@
-var notifications_timer_delay = 30000;
-var notifications_menu_button;
-var notifications_dropdown_button;
-var notifications_content_list;
-var notifications_content_url;
-var notifications_initial_content_url;
-var notifications_container;
-var notifications_vanilla_page_title;
-var notifications_previous_page = null;
-var notifications_fetch_failed = false;
-var notifications_template_button_checksum = null;
-var notifications_template_list_checksum = null;
+function Notifications(container, url) {
+    "use strict";
 
-var notifications_button_template = "notifications/button.html";
-var notifications_list_template = "notifications/list.html";
+    this.timer_delay = 10;
+    this.timeout_id = null;
+    this.last_etag = null;
 
-function notifications_safe_title(title){
-    return title.replace(/\((\d+)\)/g,'⟨$1⟩'); // Mind "⟨" != "("
-}
+    this.content_url = url;
+    this.template = "notifications/notifications.html";
 
-function notifications_init_display(container, menu_button, dropdown_button, content_list, get_url) {
-    notifications_container = container;
-    notifications_menu_button = menu_button;
-    notifications_dropdown_button = dropdown_button;
-    notifications_content_list = content_list;
-    notifications_content_url = get_url;
-    notifications_initial_content_url = get_url;
-    notifications_vanilla_page_title = notifications_safe_title(document.title);
+    this.container_selector = container;
+    this.vanilla_title = document.title.replace(/\((\d+)\)/g,'⟨$1⟩'); // Mind "⟨" != "(";
 
+    this.init = function() {
+        var _this = this;
 
-    if ($(notifications_content_list)) {
-        setInterval(notifications_refresh_fallback, notifications_timer_delay);
-        notifications_refresh();
-        if (ws_client){
-            ws_client.register('notifications', 'on_connect', notifications_refresh);
-            ws_client.register('notifications', 'on_message', notifications_websocket_message_dispatch);
+        _this.refresh();
+    };
+
+    this.stop_timer = function() {
+        var _this = this;
+
+        if (_this.timeout_id) {
+            clearTimeout(_this.timeout_id);
+            _this.timeout_id = null;
         }
     };
-}
 
-function notifications_websocket_message_dispatch(data) {
-    switch(data.action) {
-        case 'update_counter':
-            notifications_refresh();
-            break;
-    }
-}
+    this.start_timer = function() {
+        var _this = this;
 
+        _this.stop_timer();
+        _this.timeout_id = setTimeout(function() { _this.refresh(); }, _this.timer_delay * 1000);
+    };
 
-function notifications_refresh_fallback() {
-    if (!ws_client || !ws_client.isConnected()){
-        notifications_refresh();
-    }
-}
+    this.reset = function () {
+        var _this = this;
 
-function notifications_refresh() {
-    $.get(notifications_content_url, function(data) {
-        notifications_previous_page = data.previous;
+        _this.start_timer();
+        _this.last_etag = null;
+        _this.refresh_content_with(null);
+    };
 
-        var template_list_html = nunjucks.render(notifications_list_template, data);
-        var template_button_html = nunjucks.render(notifications_button_template, data);
-        var list_checksum = string_checksum(template_list_html);
-        var button_checksum = string_checksum(template_button_html);
+    this.refresh_content_with = function (data) {
+        var _this = this;
 
-        if (notifications_template_list_checksum != list_checksum){
-            $(notifications_content_list).html(template_list_html);
-            notification_initialize();
-            notifications_template_list_checksum = list_checksum;
-        }
+        // Update content
+        var template_html = nunjucks.render(_this.template, {'data': data});
+        $(_this.container_selector).html(template_html);
 
-        if (notifications_template_button_checksum != button_checksum){
-            // Button has changed, so probably has the notification count
-            $(notifications_menu_button).html(template_button_html);
-            $(notifications_dropdown_button).html(template_button_html);
+        // Disable click event to prevent dropdown closing
+        $(_this.container_selector).click(function (e) {
+            e.stopPropagation();
+        });
 
-            var prefix_title;
-            if (data.count == 0) {
-                $(notifications_container).hide();
-                prefix_title = '';
-            } else {
-                $(notifications_container).show();
-                prefix_title = '(' + data.count + ') ';
+        // Allow to show notifications on mouse over
+        $(_this.container_selector).hover(function () {
+            // Only if navbar is not collapsed
+            if (!$(this).closest('.navbar-collapse').hasClass('in'))
+                $(this).addClass('open');
+        }, function () {
+            if (!$(this).closest('.navbar-collapse').hasClass('in'))
+                $(this).removeClass('open');
+        });
+
+        // Update title
+        if (data && data.length > 0)
+            document.title = "(" + data.length + ") " + _this.vanilla_title;
+        else
+            document.title = _this.vanilla_title;
+    };
+
+    this.refresh = function () {
+        var _this = this;
+
+        // Prevent race condition
+        _this.stop_timer();
+
+        $.get(_this.content_url).success(function (data, textStatus, xhr) {
+            var etag = xhr.getResponseHeader('ETag');
+            if (_this.last_etag != etag) {
+                _this.last_etag = etag;
+                _this.refresh_content_with(data)
             }
-            if (notifications_vanilla_page_title) {
-                document.title = prefix_title + notifications_vanilla_page_title;
-            }
-            notifications_template_button_checksum = button_checksum;
-        }
-    }).error(function(){
-        if (notifications_previous_page){ // We can not fetch the notifications, let's try to load the last previously known page
-            notifications_fetch_failed = true;
-            notifications_content_url = notifications_previous_page;
-            notifications_previous_page = null;
-            notifications_refresh();
-        } else if (notifications_fetch_failed) { // The last previous one failed, let's try the original url
-            notifications_fetch_failed = false; // avoid infinite loop
-            notifications_content_url = notifications_initial_content_url;
-            notifications_refresh();
-        } else { // We can really not load the notifications...
-            $(notifications_container).show();
-            $(notifications_dropdown_button).html(nunjucks.render(notifications_button_template, {'error': true}));
-            $(notifications_content_list).html(nunjucks.render(notifications_list_template, {'error': true}));
-            $(notifications_menu_button).html(nunjucks.render(notifications_button_template, {'error': true}));
-            if (notifications_vanilla_page_title) {
-                document.title = notifications_vanilla_page_title;
-            }
-            notifications_template_list_checksum = null;
-            notifications_template_button_checksum = null;
-        }
-    });
-}
+            _this.start_timer();
+        }).fail(function (data, textStatus) {
+            document.title = _this.vanilla_title;
+            contrib_message('danger', 'Une erreur est survenue pendant le chargement des notifications. Veuillez rafraichir la page.');
+            console.log(data);
+            console.log(textStatus);
+        });
+    };
 
-function notification_initialize() {
-    notifications_fetch_failed = false;
-    $(".notification_list .notification_dismiss a.close").click(function (e) {
-        e.stopPropagation(); // Prevent dropdown to close
-    });
-    $(".notification_pagination > div > a").click(function(e) {
-        e.stopPropagation(); // Prevent dropdown to close
-    });
-}
+    this.dismiss = function(url, element) {
+        var _this = this;
 
-function notification_dismiss(url, target) {
-    // Disable click propagation (to keep dropdown opened)
-    function done(data) {
-        // Dismiss target
-        notifications_refresh_fallback();
-    }
-    $("#"+target+" a.close").addClass("fa-spinner fa-spin");
-    $.ajax({url: url, type: 'DELETE'}).done(done);
-}
+        // Prevent race condition
+        _this.stop_timer();
 
-function notifications_change_page(url){
-  notifications_content_url = url;
-  notifications_refresh();
+        $("#" + element + " a.close").addClass("fa-spinner fa-spin");
+        $.ajax({url: url, type: 'DELETE'}).success(function () {
+            _this.refresh();
+        }).fail(function (data, textStatus) {
+            contrib_message('danger', 'Une erreur est survenue pendant la suppression de la notification.');
+            console.log(data);
+            console.log(textStatus);
+            _this.refresh();
+        });
+    };
 }

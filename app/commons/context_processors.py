@@ -1,6 +1,13 @@
 from django.conf import settings
 from django.contrib.sites.models import Site
+from helpers.request import is_incognito
 
+
+def online_settings(request):
+    return {
+        'USER_IS_ONLINE_TIMEOUT': settings.USER_IS_ONLINE_TIMEOUT,
+        'INCOGNITO': is_incognito(request),
+    }
 
 
 def global_settings(request):
@@ -11,5 +18,4 @@ def global_settings(request):
         'ANALYTICS': settings.ANALYTICS,
         'SITENAME': settings.SITENAME,
         'DEMONYM': settings.DEMONYM,
-        'ENABLE_WEBSOCKET': settings.ENABLE_WEBSOCKET,
     }

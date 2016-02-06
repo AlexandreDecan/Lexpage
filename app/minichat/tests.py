@@ -1,18 +1,13 @@
-import time
+from datetime import timedelta
+
+from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from minichat.models import Message
-from django.contrib.auth.models import User
-from rest_framework.test import APITestCase
 from django.utils.lorem_ipsum import words
-from helpers.tests import LexpageTestCase, logged_in_test, SELENIUM_AVAILABLE, without_redis, sqlite_sleep
-from datetime import date, timedelta
-from django.contrib.humanize.templatetags.humanize import naturalday
+from minichat.models import Message
 from notifications.models import Notification
-
-if SELENIUM_AVAILABLE:
-    from selenium.webdriver.support.wait import WebDriverWait
-    from selenium.common.exceptions import NoSuchElementException
+from rest_framework.test import APITestCase
 
 
 class ViewsTests(TestCase):
@@ -165,63 +160,42 @@ class ApiTests(APITestCase):
         self.assertEqual(Message.objects.last().text, 'Hello John!')
         self.client.logout()
 
-    def test_anchor_not_recreated_after_updating_message(self):
-        Notification.objects.all().delete()
-        self.assertEqual(len(Notification.objects.all()), 0)
+    def test_notifications_after_message_update(self):
+        users = [
+            User.objects.create_user(username=username, email='%s@example.com' % username, password=username)
+            for username in ('fake1', 'fake2', 'fake3')
+        ]
+        for user in users:
+            user.save()
         self.client.login(username='user1', password='user1')
-        response = self.client.post(reverse('minichat_post'), {'text': '@admin hello'})
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(len(Notification.objects.all()), 1)
         Notification.objects.all().delete()
-        self.assertEqual(len(Notification.objects.all()), 0)
+
+        response = self.client.post(reverse('minichat_post'), {'text': 'hello @fake1 @fake2'})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(Notification.objects.all()), 2)
+
         response = self.client.post(reverse('minichat_post'), {'text': 's/hello/world'})
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['text'], 's/hello/world')
-        self.assertEqual(Message.objects.last().text, '@admin world')
-        self.assertEqual(len(Notification.objects.all()), 0)
-        self.client.logout()
-
-    def test_anchor_deleted_after_updating_message(self):
-        Notification.objects.all().delete()
-        self.assertEqual(len(Notification.objects.all()), 0)
-        self.client.login(username='user1', password='user1')
-        response = self.client.post(reverse('minichat_post'), {'text': '@admin hello'})
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(len(Notification.objects.all()), 1)
-        response = self.client.post(reverse('minichat_post'), {'text': 's/@admin/nobody'})
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['text'], 's/@admin/nobody')
-        self.assertEqual(Message.objects.last().text, 'nobody hello')
-        self.assertEqual(len(Notification.objects.all()), 0)
-        self.client.logout()
-
-    def test_anchor_created_after_updating_message(self):
-        Notification.objects.all().delete()
-        self.assertEqual(len(Notification.objects.all()), 0)
-        self.client.login(username='user1', password='user1')
-        response = self.client.post(reverse('minichat_post'), {'text': 'admin hello'})
-        self.assertEqual(response.status_code, 201)
-        response = self.client.post(reverse('minichat_post'), {'text': 's/a/@a'})
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['text'], 's/a/@a')
-        self.assertEqual(Message.objects.last().text, '@admin hello')
-        self.assertEqual(len(Notification.objects.all()), 1)
-        self.client.logout()
-
-    def test_anchor_updated_after_updating_message(self):
-        Notification.objects.all().delete()
-        self.assertEqual(len(Notification.objects.all()), 0)
-        self.client.login(username='user1', password='user1')
-        response = self.client.post(reverse('minichat_post'), {'text': '@admin hello'})
-        self.assertEqual(response.status_code, 201)
-        response = self.client.post(reverse('minichat_post'), {'text': 's/hello/@user1 world'})
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['text'], 's/hello/@user1 world')
-        self.assertEqual(Message.objects.last().text, '@admin @user1 world')
         self.assertEqual(len(Notification.objects.all()), 2)
-        self.client.logout()
 
-    def test_multiple_anchors(self):
+        # Check that fake1 and fake2 have a notification with NEW text
+        self.assertIn('world', Notification.objects.get(recipient=users[0]).description)
+        self.assertIn('world', Notification.objects.get(recipient=users[1]).description)
+
+        response = self.client.post(reverse('minichat_post'), {'text': 's/@fake1/@fake3'})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(Notification.objects.all()), 2)
+
+        # Check that fake1 has no notification
+        self.assertEqual(len(Notification.objects.filter(recipient=users[0])), 0)
+
+        # Check that fake2 has a notification with NEW text
+        self.assertIn('world', Notification.objects.get(recipient=users[1]).description)
+
+        # Check that fake3 has a notification
+        self.assertIn('world', Notification.objects.get(recipient=users[2]).description)
+
+    def test_multiple_notifications(self):
         for username in ('user2', 'user3'):
             User.objects.create_user(
                 username=username, email='%s@example.com' % username, password='top_secret')
@@ -271,335 +245,67 @@ class ApiTests(APITestCase):
         self.assertEqual(first_message['text'], 'Last message')
 
 
-
-class TemplateTestCase(LexpageTestCase):
-
-    def test_natural_date_invalid_date(self):
-        self.selenium.get(self.live_server_url)
-        filter_invalid_date = self.selenium.execute_script('return env.getFilter("naturalDay")("foo");');
-        self.assertEqual(filter_invalid_date, 'Invalid date')
-
-    def test_natural_date_on_home_page(self):
-        self.natural_date_django_equivalent(self.live_server_url)
-
-    def test_natural_date_on_search_page(self):
-        self.natural_date_django_equivalent('%s%s' % (self.live_server_url, reverse('search')))
-
-    def natural_date_django_equivalent(self, url):
-        self.selenium.get(url)
-        # One year and 30 days
-        for i in range(0, 365+30):
-            time.sleep(0.1)
-            d = date.today() - timedelta(days=i)
-            formatted_date = d.isoformat()
-            filter_date = self.selenium.execute_script('return env.getFilter("naturalDay")("%s");' % formatted_date);
-            self.assertEqual(filter_date, naturalday(d, 'l j b.'))
-
-
-class MinichatBrowserTest(LexpageTestCase):
-    fixtures = ['devel']
-
+class MinichatCachingTests(APITestCase):
     def setUp(self):
-        self.users = User.objects.all()
-        self.author = self.users[0]
-        super().setUp()
+        cache.clear()
 
-    def post_message(self, timeout=5, text_message='Hello World'):
-        text_message_xpath = '//div[@class="minichat-text"]/div[text()[contains(.,"%s")]]' % text_message
-        with self.assertRaises(NoSuchElementException):
-            self.selenium.find_element_by_xpath(text_message_xpath)
-        time.sleep(1)
-        Message(user=self.author, text=text_message).save()
-        WebDriverWait(self.selenium, timeout).until(
-            lambda driver: driver.find_element_by_xpath(text_message_xpath))
+        self.url = reverse('minichat-api-latest-list')
 
-    @logged_in_test()
-    def test_minichat_message(self):
-        self.post_message()
+        # First response should return an etag
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.has_header('ETag'))
+        self.etag = response['ETag']
 
-    @without_redis()
-    @logged_in_test()
-    def test_minichat_message_without_redis(self):
-        """Without redis, a message takes up to 30 seconds to get printed"""
-        text_message = 'Je suis un test'
-        text_message_xpath = '//div[@class="minichat-text"]/div[text()[contains(.,"%s")]]' % text_message
-        with self.assertRaises(NoSuchElementException):
-            self.selenium.find_element_by_xpath(text_message_xpath)
-        time.sleep(1)
-        Message(user=self.author, text=text_message).save()
-        time.sleep(15)
-        with self.assertRaises(NoSuchElementException):
-            self.selenium.find_element_by_xpath(text_message_xpath)
-        WebDriverWait(self.selenium, 20).until(
-            lambda driver: driver.find_element_by_xpath(text_message_xpath))
-
-    @logged_in_test()
-    def test_minichat_is_not_reloaded_with_websockets(self):
-        """This test will ensure that the minichat is not reloaded with websockets
-        if there are no new messages"""
-        self.post_message()
-        # At this point the minichat should not be updated anymore
-        # We will replace it with something else and wait.
-        placeholder = '<h2>Bob! T\'as mis ou le minichat?</h2>'
-        self.selenium.execute_script('$(minichat_content).html("%s");' % placeholder);
-        minichat_html = lambda: self.selenium.execute_script('return $(minichat_content).html();')
-        self.assertEqual(minichat_html(), placeholder)
-        time.sleep(3*30+1) # Wait 3 refresh interval + 1s
-        self.assertEqual(minichat_html(), placeholder)
-
-    @without_redis()
-    @logged_in_test()
-    def test_minichat_is_reloaded_without_websockets(self):
-        """This test will ensure that the minichat is reloaded without websockets
-        even if there are no new messages"""
-        time.sleep(1)
-        # At this point the minichat should be updated every 30 seconds
-        # because redis is not started
-        placeholder = '<h2>Bob! T\'as mis ou le minichat?</h2>'
-        self.selenium.execute_script('$(minichat_content).html("%s");' % placeholder);
-        minichat_html = lambda: self.selenium.execute_script('return $(minichat_content).html();')
-        self.assertEqual(minichat_html(), placeholder)
-        time.sleep(2*30+1) # Wait 2 refresh interval + 1s
-        self.assertNotEqual(minichat_html(), placeholder)
-
-class MinichatNunjucksTest(LexpageTestCase):
-
-    def setUp(self):
-        # Running the tests just before midnight could cause failures
-        if time.strftime("%H%M") in ['2358', '2359']: # pragma: no cover
-            time.sleep(125)
-        self.users = []
-        for username in ('user1', 'user2', 'user3'):
-            user = User.objects.create_user(
-                username=username, email='%s@example.com' % username, password=username)
-            user.save()
-            sqlite_sleep(.5)
-            self.users.append(user)
-
-    def verify_minichat_groups(self, groups):
-        """This fonction tests that messages in the minichat are splitted correctly between the
-        groups in the current page.
-
-        groups (list of a list): Content of the messages, as they should be shown on the page.
+    def test_missing_etag(self):
         """
-        time.sleep(2)
-        messages = self.selenium.find_elements_by_css_selector('.minichat-text')
-        self.assertEqual(len(groups), len(messages))
-        for message_group in messages:
-            inner_messages = message_group.find_elements_by_xpath('./div')
-            group = groups.pop(0)
-            self.assertEqual(len(group), len(inner_messages))
-            for inner_message in inner_messages:
-                self.assertIn(group.pop(0), inner_message.text)
+        A request with a missing ETag should lead to a 200 with the same ETag.
+        """
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.etag, response['ETag'])
 
-    @logged_in_test()
-    def test_highlight(self):
-        for input_text, number in [('coucou @user1', 1),
-                            ('@user1', 1),
-                            ('@user12', 0),
-                            ('x @user1 x', 1),
-                            ('@user1 coucou', 1),
-                            ('@user1 @user1', 2),
-                            ('@user1 @user2', 1),
-                            ('@ @user1', 1),
-                            ('@@user1', 1),
-                            ('@@user2', 0),
-                            ('@', 0),
-                            ('no no no no', 0),
-                            ('cool@user1.com', 1),
-                            ('cucou@user12.com', 0),
-                            ('coucou @user12', 0),
-                            ('coucou @user12 salut', 0),
-                            ('@user2', 0)]:
-            Message.objects.all().delete()
-            sqlite_sleep(.5)
-            Message(user=self.users[1], text=input_text).save()
-            time.sleep(1)
-            nb_notifications = len(Notification.objects.filter(recipient=self.users[0]))
-            if number > 0:
-                self.assertEqual(nb_notifications, 1, 'A notification is not created for %s' % input_text)
-            else:
-                self.assertEqual(nb_notifications, 0, 'A notification is created for %s' % input_text)
+    def test_invalid_etag(self):
+        """
+        A request with an invalid ETag should lead to a 200 with the same ETag.
+        """
+        response = self.client.get(self.url, HTTP_IF_NONE_MATCH='blablabla')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.etag, response['ETag'])
 
-            highlights = self.selenium.find_elements_by_css_selector('.minichat-text div strong')
-            self.assertEqual(len(highlights), number, 'Test failed with %s' % input_text)
+    def test_valid_etag(self):
+        """
+        A request with a valid existing ETag should lead to a 304.
+        """
+        response = self.client.get(self.url, HTTP_IF_NONE_MATCH=self.etag)
+        self.assertEqual(response.status_code, 304)
+        self.assertEqual(self.etag, response['ETag'])
 
-    def test_highlight_when_logged_out(self):
-        self.selenium.get(self.live_server_url)
-        for input_text, number in [('coucou @user1', 0),
-                            ('@user1', 0),
-                            ('@user1 @user1', 0),
-                            ('@ @user1', 0),
-                            ('@', 0),
-                            ('no no no no', 0),
-                            ('cucou@user12.com', 0),
-                            ('coucou @user12 salut', 0),
-                            ('@user2', 0)]:
-            Message.objects.all().delete()
-            sqlite_sleep(.5)
-            Message(user=self.users[1], text=input_text).save()
-            self.selenium.refresh()
-            time.sleep(1)
-            highlights = self.selenium.find_elements_by_css_selector('.minichat-text div strong')
-            self.assertEqual(len(highlights), number, 'Test failed with %s' % input_text)
+    def test_etag_renewal(self):
+        """
+        An ETag should be invalidated if a new message is posted on the minichat, or edited, or deleted.
+        """
+        user = User.objects.create_user(username='user1', email='user1@example.com', password='user1')
 
-    @logged_in_test()
-    def test_one_message_class(self):
-        Message(user=self.users[0], text='Hello World!').save()
-        self.verify_minichat_groups([['Hello World!']])
+        # After new message
+        message = Message.objects.create(user=user, text='Hello world')
+        response = self.client.get(self.url, HTTP_IF_NONE_MATCH=self.etag)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(self.etag, response['ETag'])
+        new_etag = response['ETag']
 
-    @logged_in_test()
-    def test_two_messages_class(self):
-        Message(user=self.users[0], text='Hello World!').save()
-        sqlite_sleep(.5)
-        Message(user=self.users[0], text='Traduction: Bonjour').save()
-        self.verify_minichat_groups([
-            [
-                'Hello World!',
-                'Traduction: Bonjour',
-            ],
-        ])
-
-    @logged_in_test()
-    def test_three_messages_class(self):
-        Message(user=self.users[0], text='Hello World!').save()
-        sqlite_sleep(.5)
-        Message(user=self.users[0], text='Traduction: Bonjour').save()
-        sqlite_sleep(.5)
-        Message(user=self.users[0], text='(en Anglais)').save()
-        self.verify_minichat_groups([
-            [
-                'Hello World!',
-                'Traduction: Bonjour',
-                '(en Anglais)',
-            ],
-        ])
-
-    @logged_in_test()
-    def test_three_messages_different_users(self):
-        Message(user=self.users[0], text='Hello World!').save()
-        sqlite_sleep(.5)
-        Message(user=self.users[1], text='Traduction: Bonjour').save()
-        sqlite_sleep(.5)
-        Message(user=self.users[2], text='(en Anglais)').save()
-        self.verify_minichat_groups([
-            [ '(en Anglais)', ],
-            [ 'Traduction: Bonjour', ],
-            [ 'Hello World!', ],
-        ])
-
-    @logged_in_test(incognito=True)
-    def test_conversation(self):
-        self.selenium.refresh()
-        Message(user=self.users[0], text='Hello You').save()
-        sqlite_sleep(.5)
-        self.verify_minichat_groups([
-            ['Hello You'],
-        ])
-        Message(user=self.users[1], text='Yes').save()
-        sqlite_sleep(.5)
-        self.verify_minichat_groups([
-            ['Yes'],
-            ['Hello You'],
-        ])
-        Message(user=self.users[1], text='Am here').save()
-        sqlite_sleep(.5)
-        self.verify_minichat_groups([
-            ['Yes', 'Am here'],
-            ['Hello You'],
-        ])
-        self.selenium.refresh()
-        self.verify_minichat_groups([
-            ['Yes', 'Am here'],
-            ['Hello You'],
-        ])
-        Message(user=self.users[0], text='It is original').save()
-        sqlite_sleep(.5)
-        self.verify_minichat_groups([
-            ['It is original'],
-            ['Yes', 'Am here'],
-            ['Hello You'],
-        ])
-        Message(user=self.users[1], text='Yup.').save()
-        sqlite_sleep(.5)
-        self.verify_minichat_groups([
-            ['Yup.'],
-            ['It is original'],
-            ['Yes', 'Am here'],
-            ['Hello You'],
-        ])
-        Message(user=self.users[0], text='ok...').save()
-        sqlite_sleep(.5)
-        self.verify_minichat_groups([
-            ['ok...'],
-            ['Yup.'],
-            ['It is original'],
-            ['Yes', 'Am here'],
-            ['Hello You'],
-        ])
-        Message(user=self.users[1], text='what ok?').save()
-        sqlite_sleep(.5)
-        self.verify_minichat_groups([
-            ['what ok?'],
-            ['ok...'],
-            ['Yup.'],
-            ['It is original'],
-            ['Yes', 'Am here'],
-            ['Hello You'],
-        ])
-        Message(user=self.users[0], text='does not matter').save()
-        sqlite_sleep(.5)
-        self.verify_minichat_groups([
-            ['does not matter'],
-            ['what ok?'],
-            ['ok...'],
-            ['Yup.'],
-            ['It is original'],
-            ['Yes', 'Am here'],
-            ['Hello You'],
-        ])
-        Message(user=self.users[0], text='brb').save()
-        sqlite_sleep(.5)
-        self.verify_minichat_groups([
-            ['does not matter', 'brb'],
-            ['what ok?'],
-            ['ok...'],
-            ['Yup.'],
-            ['It is original'],
-            ['Yes', 'Am here'],
-            ['Hello You'],
-        ])
-        Message(user=self.users[0], text='ZZz').save()
-        self.verify_minichat_groups([
-            ['does not matter', 'brb', 'ZZz'],
-            ['what ok?'],
-            ['ok...'],
-            ['Yup.'],
-            ['It is original'],
-            ['Yes', 'Am here'],
-            ['Hello You'],
-        ])
-
-    @logged_in_test()
-    def test_not_same_day(self):
-        Message(user=self.users[0], text='All my troubles..').save()
-        sqlite_sleep(.5)
-        message = Message.objects.latest()
-        message.date = message.date - timedelta(1)
+        # After modification
+        message.text = 'Hello universe'
         message.save()
-        sqlite_sleep(.5)
-        Message(user=self.users[0], text='Hello World!').save()
-        groups = [
-            [ 'Hello World!', ],
-            [ 'All my troubles..' ],
-        ]
-        self.verify_minichat_groups(groups)
+        response = self.client.get(self.url, HTTP_IF_NONE_MATCH=self.etag)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(self.etag, response['ETag'])
+        self.assertNotEqual(new_etag, response['ETag'])
+        new_etag = response['ETag']
 
-    def test_message_before_login(self):
-        self.login('user1', 'user1', False)
-        self.logout()
-        Message(user=self.users[2], text='No one is there').save()
-        self.login('user1', 'user1', False)
-        self.verify_minichat_groups([
-            [ 'No one is there', ],
-        ])
+        # After deletion
+        message.delete()
+        response = self.client.get(self.url, HTTP_IF_NONE_MATCH=self.etag)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(self.etag, response['ETag'])
+        self.assertNotEqual(new_etag, response['ETag'])

@@ -10,8 +10,6 @@ services:
 env:
   global:
   - DJANGO_SETTINGS_MODULE=settings_travis
-  - START_REDIS_COMMAND="sudo service redis-server start"
-  - STOP_REDIS_COMMAND="sudo service redis-server stop"
   - RUN_NPM_TESTS="yes"
   matrix:
   - SELENIUM_WEBDRIVER=selenium.webdriver.chrome.webdriver.WebDriver
@@ -23,16 +21,17 @@ before_install:
 - travis_retry npm install grunt-cli -g
 - sudo apt-get update # For compass, see #141
 - sudo apt-get install -y ruby-dev
+- sudo apt-get install -y firefox
 install:
 - pip install -r requirements_dev.txt # Testing libs
 - pip install -r requirements_prod.txt # Postgresql
 - travis_retry npm install
 - travis_retry bundle install
 before_script:
+- psql -c 'create database appdb;' -U postgres
 - "export DISPLAY=:99.0"
 - "sh -e /etc/init.d/xvfb start"
 - sleep 3 # give xvfb some time to start
-- psql -c 'create database appdb;' -U postgres
 script:
 - coverage run    --source app/ --omit */migrations/* --omit */management/* app/manage.py collectstatic --noinput
 - coverage run -a --source app/ --omit */migrations/* --omit */management/* app/manage.py test -v 3

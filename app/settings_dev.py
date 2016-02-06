@@ -7,9 +7,6 @@ SECRET_KEY = 'SecretKeyForDevelopmentEnvironment'
 SITENAME = 'Lexpage-test'
 DEMONYM = 'Lexpagiens'
 
-# Configuration
-WSGI_APPLICATION = 'ws4redis.django_runserver.application' # Needed for builtin runserver
-
 
 # Static
 MINIFY_JS = MINIFY_CSS = False
@@ -20,6 +17,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db'),
+    }
+}
+
+
+# Cache
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'lexpage',
     }
 }
 
@@ -56,13 +62,7 @@ LOGGING = {
     },
 }
 
-# Websockets
-REDIS_PUBLISHER = 'helpers.redis.FakeRedisPublisher'
-WS4REDIS_SUBSCRIBER = 'helpers.redis.FakeRedisSubscriber'
-
 
 # Tests
 SELENIUM_WEBDRIVER = os.environ.get('SELENIUM_WEBDRIVER', None)
-START_REDIS_COMMAND = os.environ.get('START_REDIS_COMMAND', None)
-STOP_REDIS_COMMAND = os.environ.get('STOP_REDIS_COMMAND', None)
 RUN_NPM_TESTS = os.environ.get('RUN_NPM_TESTS', False)

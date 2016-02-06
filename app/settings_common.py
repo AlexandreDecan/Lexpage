@@ -31,7 +31,6 @@ INSTALLED_APPS = (
 
     'rest_framework',
     'captcha',
-    'ws4redis',
 
     'profile',
     'slogan',
@@ -42,7 +41,6 @@ INSTALLED_APPS = (
     'messaging',
     'board',
     'notifications',
-    'online',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -53,7 +51,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'online.last_visit_middleware.SetLastVisitMiddleware',
+    'commons.last_visit_middleware.SetLastVisitMiddleware',
 )
 
 
@@ -82,8 +80,8 @@ TEMPLATES = [  # https://docs.djangoproject.com/en/1.9/ref/templates/upgrading/#
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'online.context_processors.online_settings',
-                'context_processors.global_settings',
+                'commons.context_processors.online_settings',
+                'commons.context_processors.global_settings',
                 'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.request',
                 'django.template.context_processors.debug',
@@ -92,7 +90,6 @@ TEMPLATES = [  # https://docs.djangoproject.com/en/1.9/ref/templates/upgrading/#
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
-                'ws4redis.context_processors.default',
             ],
         },
     },
@@ -141,14 +138,6 @@ ABSOLUTE_URL_OVERRIDES = {
 
 # Recaptcha
 RECAPTCHA_PUBLIC_KEY = '6LdAH_ASAAAAACAHEysPBjLekWJX94nYM0hI3hHy'
-
-
-# Websockets
-ENABLE_WEBSOCKET = True
-WEBSOCKET_URL = '/ws/'
-WS4REDIS_HEARTBEAT = 'bob?'
-from helpers.websockets import get_allowed_channels
-WS4REDIS_ALLOWED_CHANNELS = get_allowed_channels
 
 
 # Themes

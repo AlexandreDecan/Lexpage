@@ -10,7 +10,7 @@ class MessageListView(MonthArchiveView):
     """
     Display all the messages by month.
     """
-    queryset = Message.objects.all()
+    queryset = Message.objects.all().reverse()
     date_field = 'date'
     make_object_list = True
     allow_future = False # Not really useful...
@@ -23,14 +23,4 @@ class MessageListView(MonthArchiveView):
         context['date_list'] = Message.objects.dates('date', 'month')
         context['date_current'] = date(int(self.get_year()), int(self.get_month()), 1)
         return context
-
-
-class LatestsView(ListView):
-    """
-    Display the 20 latest messages.
-    """
-    queryset = Message.objects.order_by('-date')[:20]
-    template_name = 'minichat/latests.html'
-    context_object_name = 'message_list'
-
 

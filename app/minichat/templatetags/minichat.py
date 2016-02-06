@@ -18,6 +18,16 @@ def lazy_simple_url_re():
 
 
 @stringfilter
+def highlight_anchor(string, arg, autoescape=True):
+    string = conditional_escape(string) if autoescape else string
+    if arg:
+        result = re.sub('(@{})(\\b)'.format(arg), r'<span class="highlight">\1</span>\2', string)
+    else:
+        result = string
+    return mark_safe(result)
+
+
+@stringfilter
 def urlize2(value, arg, autoescape=True):
     """
     Look into value for url (http://....) and replace 
@@ -46,5 +56,7 @@ def urlize3(value, autoescape=True):
     return mark_safe(lazy_simple_url_re().sub(substitute, value))
 
 
+register.filter('highlight_anchor', highlight_anchor, needs_autoescape=True)
 register.filter('urlize2', urlize2, needs_autoescape=True)
 register.filter('urlize3', urlize3, needs_autoescape=True)
+

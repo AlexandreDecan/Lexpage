@@ -27,10 +27,17 @@
   border-top: 2px dotted $brand-primary;
 }
 
+
 /* Full minichat, internal div */
 .minichat-content {
   font-size: $font-size-small;
   padding: $padding-xs-vertical $padding-xs-horizontal;
+
+  .minichat-date {
+    text-align: center;
+    margin-top: 3px;
+    color: $text-muted;
+  }
 
   /* Full message (time, text, user, ...) */
   .minichat-message {
@@ -41,11 +48,32 @@
       vertical-align: top;
     }
 
+
+    .minichat-group {
+      position: relative;
+      margin-top: 3px;
+      margin-bottom: 3px;
+      padding: 0px;
+
+      @include z-depth(1);
+      &:hover {
+        @include z-depth(0);
+      }
+    }
+
+    .minichat-text {
+        padding: $padding-xs-vertical $padding-xs-horizontal;
+        &:not(:first-child){
+            /* We use box shadow because having borders of the same size causes disruption in the right line*/
+            box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.1) inset;
+        }
+    }
+
     &.self-author {
       .avatar {
         float: right;
       }
-      .minichat-text {
+      .minichat-group {
         margin-right: 35px;
         border-right: 2px solid $brand-primary;
         border-radius: $border-radius-small 0 0 $border-radius-small;
@@ -56,54 +84,37 @@
       .avatar {
         float: left;
       }
-      .minichat-text {
+      .minichat-group {
         border-left: 0px;
         position: relative;
         margin-left: 35px;
         border-radius: 0 $border-radius-small $border-radius-small 0;
-        div {
-          border-left: 2px solid $brand-primary;
-          &.new{
-            border-left-color: lighten($brand-danger, 5%);
-          }
+      }
+      .minichat-text {
+        border-left: 2px solid $brand-primary;
+        &.new{
+          border-left-color: lighten($brand-danger, 5%);
         }
       }
     }
-  }
 
-  /* Time (HH:MM) */
-  .minichat-time {
-    display: inline-block;
-    padding-right: $padding-small-horizontal / 2;
-    font-size: 80%;
-    color: $text-muted;
-  }
-
-  .minichat-date {
-    text-align: center;
-    margin-top: 3px;
-    color: $text-muted;
-  }
-
-  /* Actual text of the message */
-  .minichat-text {
-    position: relative;
-    margin-top: 3px;
-    margin-bottom: 3px;
-    padding: 0px;
-
-    div {
-        padding: $padding-xs-vertical $padding-xs-horizontal;
-        &:not(:first-child){
-            /* We use box shadow because having borders of the same size causes disruption in the right line*/
-            box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.1) inset;
-        }
+    .highlight {
+      font-weight: bold;
     }
 
-    @include z-depth(1);
-    &:hover {
-      @include z-depth(0);
+    /* For archives */
+    .minichat-text:target {
+      background-color: $alert-danger-bg;
     }
+
+    /* Time (HH:MM) */
+    .minichat-time {
+      display: inline-block;
+      padding-right: $padding-small-horizontal / 2;
+      font-size: 80%;
+      color: $text-muted;
+    }
+
   }
 }
 
