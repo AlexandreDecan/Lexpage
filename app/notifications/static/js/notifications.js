@@ -21,6 +21,9 @@ function Notifications(container, button_container, url) {
             e.stopPropagation();
         });
 
+        // Enable dropdown
+        $(_this.container_selector + " .dropdown-toggle").dropdown();
+
         // Allow to show notifications on mouse over
         $(_this.container_selector).hover(function () {
             // Only if navbar is not collapsed
