@@ -140,7 +140,7 @@ class NotificationsDismissTests(NotificationsSeleniumTests):
 
         self.selenium.find_element_by_css_selector('.notification_list .close').click()
         WebDriverWait(self.selenium, self.timeout).until_not(
-            EC.presence_of_element_located((By.CSS_SELECTOR, '.notification_list'))
+            EC.presence_of_element_located((By.CSS_SELECTOR, '.notification_list .notification'))
         )
 
 
