@@ -62,7 +62,7 @@ class MinichatLatestMessagesView(ListAPIView):
         return Message.objects.order_by('-date')[:20]
 
     def list(self, request, *args, **kwargs):
-        cached_hash = cache.get_or_set('cache-minichat', str(hash(time.time())), 60)
+        cached_hash = cache.get_or_set('cache-minichat', lambda: str(hash(time.time())), 60)
         if request.query_params.get('hash', None) == cached_hash:
             # Manually set the response with content to prevent a bug in Firefox
             response = Response('1', content_type='text/html', status=status.HTTP_304_NOT_MODIFIED)

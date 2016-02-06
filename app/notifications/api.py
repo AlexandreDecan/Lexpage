@@ -49,7 +49,7 @@ class NotificationsListApiView(ListAPIView):
         return Notification.objects.filter(recipient=self.request.user)
 
     def list(self, request, *args, **kwargs):
-        cached_hash = cache.get_or_set('cache-notifications-{}'.format(request.user.username), str(hash(time.time())), 60)
+        cached_hash = cache.get_or_set('cache-notifications-{}'.format(request.user.username), lambda: str(hash(time.time())), 60)
         if request.query_params.get('hash', None) == cached_hash:
             # Manually set the response with content to prevent a bug in Firefox
             response = Response('1', content_type='text/html', status=status.HTTP_304_NOT_MODIFIED)
