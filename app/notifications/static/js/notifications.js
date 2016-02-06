@@ -78,7 +78,7 @@ function Notifications(container, url) {
 
         $.get(_this.content_url).success(function (data, textStatus, xhr) {
             var etag = xhr.getResponseHeader('ETag');
-            if (etag && _this.last_etag != etag) {
+            if (!etag && _this.last_etag != etag) {
                 _this.last_etag = etag;
                 _this.refresh_content_with(data)
             }
