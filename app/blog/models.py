@@ -106,7 +106,7 @@ class PostManager(models.Manager):
                 count[tag] = count.setdefault(tag, 0) + 1
 
         if relative:
-            max_value = len(posts)
+            max_value = max(count.values())
             count = {k: round(100.0 * v / max_value) for k, v in count.items()}
 
         return sorted(count.items(), key=sort_func)
