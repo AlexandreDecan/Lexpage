@@ -8,7 +8,7 @@ import os
 
 register = template.Library()
 
-BASE_URL_RE = r'(?:ftp)|(?:https?)://[^\s\(\)\[\]]*?'
+BASE_URL_RE = r'(?:ftp)|(?:https?)://[^\s\(\)\[\]]{3,}?'
 
 # tagname : (regex, html, clean)
 tag = [
