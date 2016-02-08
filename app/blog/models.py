@@ -107,7 +107,7 @@ class PostManager(models.Manager):
 
         if relative:
             max_value = max(count.values())
-            count = {k: round(100 * v / max_value) for k, v in count.items()}
+            count = {k: math.log10(100 * v / max_value) for k, v in count.items()}
 
         return sorted(count.items(), key=sort_func)
 
