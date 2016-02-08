@@ -133,6 +133,7 @@ def smiley(value):
 @register.filter
 def bbcode(value, replace_smiley=True):
     value = htmlentities(value)
+    value = value.replace('\r\n', '\n')  # Limit spacing
 
     simple_tags, advanced_tags = prepare_regex()
 
@@ -151,8 +152,6 @@ def bbcode(value, replace_smiley=True):
     if replace_smiley:
         value = smiley(value)
 
-    # Spaces and carriage returns
-    value = value.replace('\r\n', '\n')  # Limit spacing
     value = value.replace('\n', '<br/>')
 
     return mark_safe(value)
