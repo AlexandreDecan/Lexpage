@@ -82,21 +82,21 @@ class PostManager(models.Manager):
     def get_queryset(self):
         return super(PostManager, self).get_queryset().filter(status=self._status).order_by(*self._ordering)
 
-    def get_tags_list(self, sort_name=False, relative=True):
+    def get_tags_list(self, by_number=False, relative=True):
         """
         Return a list of every tag that occured in at least one post.
         This list is composed of couples (tag_name, number_of_posts).
 
-        :param sort_name: If True, the list is sorted by the number of posts
+        :param by_number: If True, the list is sorted by the number of posts instead of by names
         :param relative: If True, the number of posts will be a percentage wrt.
         biggest value occuring in the list.
         :return: A list of (tag_name, number_of_posts)
         """
 
-        if not sort_name:
-            sort_name = lambda x: -x[1]
+        if by_number:
+            sort_func = lambda x: -x[1]
         else:
-            sort_name = lambda x: x[0]
+            sort_func = lambda x: x[0]
 
         posts = self.all()
         count = {}
@@ -106,12 +106,10 @@ class PostManager(models.Manager):
                 count[tag] = count.setdefault(tag, 0) + 1
 
         if relative:
-            for k,v in list(count.items()):
-                count[k] = int(100 * math.log10(v))
+            max_value = len(posts)
+            count = {k: round(100.0 * v / max_value) for k, v in count.items()}
 
-        ordered_count = list(count.items())
-        ordered_count.sort(key=sort_name)
-        return ordered_count
+        return sorted(count.items(), key=sort_func)
 
 
 class BlogPost(models.Model):

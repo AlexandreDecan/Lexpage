@@ -11,7 +11,7 @@
 
     <p id="tag_list" class="text-center">
     {% for tag in tag_list %}
-        {% if tag.1 > 30 %}
+        {% if tag.1 >= 1 %}
         <a href="#" rel="{{ tag.1 }}" data-tag="{{ tag.0 }}">{{ tag.0 }}</a>
         {% endif %}
     {% endfor %}

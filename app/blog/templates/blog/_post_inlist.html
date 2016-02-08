@@ -32,15 +32,7 @@
 
         <div class="post-date">
             <span class="fa fa-clock-o"></span>
-            {{ post.date_published|naturalday:'l d/m'|capfirst }} à {{ post.date_published|time }}
-        </div>
-
-        <div class="post-comment">
-            <a href="{% url 'blog_post_comments' post.pk %}">
-                <span class="fa fa-comments"></span>
-                {% with post.blogboardlink.thread.number as count %}
-                    {{ count|default:0 }}</a>
-                {% endwith %}
+            {{ post.date_published|naturalday:'l d F Y'|capfirst }} à {{ post.date_published|time }}
         </div>
 
         <div class="post-tags">

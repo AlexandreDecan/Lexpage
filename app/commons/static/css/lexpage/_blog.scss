@@ -19,7 +19,7 @@
     float: right;
   }
 
-  .post-date, .post-comment, .post-tags, .post-share {
+  .post-date, .post-tags, .post-share {
     display: inline;
     color: $text-muted;
     font-size: $font-size-small;
@@ -30,7 +30,7 @@
     }
   }
 
-  .post-date, .post-comment, .post-share {
+  .post-date, .post-share {
     white-space: nowrap;
   }
 

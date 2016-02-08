@@ -344,7 +344,7 @@ class TagListView(ListView):
         context = ListView.get_context_data(self, **kwargs)
         # context now has a key 'post_list' with the right queryset
 
-        context['tag_list'] = BlogPost.published.get_tags_list(sort_name=True, relative=True)
+        context['tag_list'] = BlogPost.published.get_tags_list(relative=True)
         context['post_number'] = sum([x[1] for x in context['tag_list']])
         context['searched_tags'] = self.searched_tags
         context['searched_tags_raw'] = '+'.join(self.searched_tags)

@@ -5886,9 +5886,8 @@ button.close {
 .post-list .post-avatar {
   float: right;
 }
-.post-show .post-date, .post-show .post-comment, .post-show .post-tags, .post-show .post-share,
+.post-show .post-date, .post-show .post-tags, .post-show .post-share,
 .post-list .post-date,
-.post-list .post-comment,
 .post-list .post-tags,
 .post-list .post-share {
   display: inline;
@@ -5896,17 +5895,15 @@ button.close {
   font-size: 12px;
   margin-right: 10px;
 }
-.post-show .post-date a, .post-show .post-comment a, .post-show .post-tags a, .post-show .post-share a,
+.post-show .post-date a, .post-show .post-tags a, .post-show .post-share a,
 .post-list .post-date a,
-.post-list .post-comment a,
 .post-list .post-tags a,
 .post-list .post-share a {
   text-decoration: none;
   color: #777777;
 }
-.post-show .post-date, .post-show .post-comment, .post-show .post-share,
+.post-show .post-date, .post-show .post-share,
 .post-list .post-date,
-.post-list .post-comment,
 .post-list .post-share {
   white-space: nowrap;
 }
