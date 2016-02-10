@@ -73,6 +73,8 @@ function Notifications(container, button_container, url) {
             document.title = "(" + data.length + ") " + _this.vanilla_title;
         } else {
             document.title = _this.vanilla_title;
+            // Close container, if needed
+            $(_this.container_selector).removeClass('open');
         }
     };
 
