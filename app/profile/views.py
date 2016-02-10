@@ -56,7 +56,9 @@ class ProfileChangeView(FormView):
             for chunk in image_file.chunks():
                 new_file.write(chunk)
             new_file.close()
-            profile.avatar = 'http://' + settings.ALLOWED_HOSTS[0] + os.path.join(settings.STATIC_URL, file_relative_path)
+            profile.avatar = '{scheme}://{domain}{filepath}'.format(scheme=settings.SITE_SCHEME,
+                                                                     domain=settings.SITE_DOMAIN,
+                                                                     filepath=os.path.join(settings.STATIC_URL, file_relative_path))
 
         user.save()
         profile.save()

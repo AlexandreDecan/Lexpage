@@ -1,10 +1,10 @@
 {% load humanize %}
 Bonjour {{ user.username }}, 
 
-Vous avez {{ notifications|length }} notification{{ notifications|pluralize }} en attente sur {{SITENAME}} :
+Vous avez {{ notifications|length }} notification{{ notifications|pluralize }} en attente sur {{ SITE_NAME }} :
 {% for notification in notifications %}
  - {{ notification.date|date:'d/m' }} : {{ notification.title }}
 {% endfor %}
 
-Rendez-vous sur http://{{ site.domain }} pour plus de détails !
+Rendez-vous sur {{ SITE_SCHEME }}://{{ SITE_DOMAIN }} pour plus de détails !
 

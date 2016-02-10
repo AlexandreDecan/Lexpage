@@ -1,1 +1,1 @@
-Notifications en attente sur {{SITENAME}}
+Notifications en attente sur {{ SITE_NAME }}

@@ -19,7 +19,7 @@
         {% endif %}
 
       </button>
-      <a href="{% url 'homepage' %}" class="navbar-brand">{{SITENAME}}</a>
+      <a href="{% url 'homepage' %}" class="navbar-brand">{{SITE_NAME}}</a>
     </div><!-- header -->
 
     <div class="collapse navbar-collapse" id="navbarA-collapse">
@@ -72,7 +72,7 @@
 
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <span class="fa fa-users"></span> {{DEMONYM}}
+            <span class="fa fa-users"></span> {{ SITE_DEMONYM }}
           </a>
           <ul class="dropdown-menu">
             <li class="dropdown-header">Profils</li>
@@ -137,7 +137,7 @@
                     <li class="dropdown-header">Ma messagerie</li>
                     <li><a href="{% url 'messaging_create' %}"><span class="fa fa-fw fa-quote-right"></span> Nouvelle conversation</a></li>
                     <li><a href="{% url 'messaging_inbox' %}"><span class="fa fa-fw fa-inbox"></span> Boîte de réception</a></li>
-                    <li class="dropdown-header">Mon {{SITENAME}}</li>
+                    <li class="dropdown-header">Mon {{ SITE_NAME }}</li>
                     <li><a href="{% url 'profile_show' user %}"><span class="fa fa-fw fa-user"></span> Voir mon profil</a></li>
                     <li><a href="{% url 'profile_edit' %}"><span class="fa fa-fw fa-gear"></span> Éditer mon profil</a></li>
                     <li class="dropdown-header">Mon compte</li>

@@ -1,3 +1,4 @@
+from commons.context_processors import global_settings
 from django.core.management.base import NoArgsCommand
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -28,14 +29,16 @@ class Command(NoArgsCommand):
 
         # Render the mail template
         context = {'user': user, 
-                    'notifications': notifications }
+                    'notifications': notifications}
+        context.update(global_settings())
+
         subject = render_to_string('notifications/mail_subject.txt', context)
         text = render_to_string('notifications/mail_content.txt', context)
 
         # Send it!
         # print 'user: %s\nsubject: %s\ntext: %s' % (user.username, subject, text)
         if user.email:
-          user.email_user(subject, text, settings.DEFAULT_FROM_MAIL)
+          user.email_user(subject, text, settings.DEFAULT_FROM_EMAIL)
           print('Mail sent to %s (%s)' % (user.username, user.email))
 
     def handle_noargs(self, **options):
@@ -45,8 +48,8 @@ class Command(NoArgsCommand):
 
         print('Task: notifications by mail.')
         
-        min_date = datetime.datetime.now() - datetime.timedelta(seconds = Command.min_delay)
-        max_date = datetime.datetime.now() - datetime.timedelta(seconds = Command.max_delay)
+        min_date = datetime.datetime.now() - datetime.timedelta(seconds=Command.min_delay)
+        max_date = datetime.datetime.now() - datetime.timedelta(seconds=Command.max_delay)
 
         # Retrieve the list of pending notifications
         notifications = Notification.objects.filter(date__gte=max_date, date__lt=min_date)

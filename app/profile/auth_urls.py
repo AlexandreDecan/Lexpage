@@ -1,3 +1,4 @@
+from commons.context_processors import global_settings
 from django.conf.urls import url
 
 from django.core.urlresolvers import reverse_lazy
@@ -32,7 +33,8 @@ urlpatterns = [
                      'post_reset_redirect': reverse_lazy('auth_login'),
                      'extra_context': {'password_reset':True},
                      'email_template_name': 'profile/password_reset_email.txt',
-                     'subject_template_name': 'profile/password_reset_subject.txt'},
+                     'subject_template_name': 'profile/password_reset_subject.txt',
+                     'extra_email_context': global_settings()},
                     name='auth_password_reset'),
                 url(r'^password/reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
                     auth_views.password_reset_confirm,

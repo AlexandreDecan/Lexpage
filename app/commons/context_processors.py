@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib.sites.models import Site
 from helpers.request import is_incognito
 
 
@@ -10,12 +9,14 @@ def online_settings(request):
     }
 
 
-def global_settings(request):
+def global_settings(request=None):
     # return any necessary values
     return {
-        'site': Site.objects.get_current(),
+        'SITE_NAME': settings.SITE_NAME,
+        'SITE_DEMONYM': settings.SITE_DEMONYM,
+        'SITE_SCHEME': settings.SITE_SCHEME,
+        'SITE_DOMAIN': settings.SITE_DOMAIN,
+
         'THEMES': settings.THEMES,
         'ANALYTICS': settings.ANALYTICS,
-        'SITENAME': settings.SITENAME,
-        'DEMONYM': settings.DEMONYM,
     }

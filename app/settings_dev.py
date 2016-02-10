@@ -4,8 +4,8 @@ import os
 # General
 DEBUG = True
 SECRET_KEY = 'SecretKeyForDevelopmentEnvironment'
-SITENAME = 'Lexpage-test'
-DEMONYM = 'Lexpagiens'
+SITE_NAME = 'Lexpage-devel'
+SITE_DEMONYM = 'Lexpagiens'
 
 
 # Static

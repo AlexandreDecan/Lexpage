@@ -1,11 +1,11 @@
 Bonjour, 
 
-Pour compléter votre inscription sur le site http://{{ site.domain }}, vous 
+Pour compléter votre inscription sur {{ SITE_NAME }}, vous
 devez activer votre compte. Vous disposez de {{ expiration_days }} jours 
 pour activer votre compte. 
 
 La procédure d'activation est très simple : il suffit de vous rendre à l'adresse
-http://{{ site.domain }}{% url "registration_activate" %} et d'y entrer la clé
+{{ SITE_SCHEME }}://{{ SITE_DOMAIN }}{% url "registration_activate" %} et d'y entrer la clé
 d'activation suivante : 
 {{ activation_key }}
 

@@ -386,19 +386,19 @@ function get_smiley_tag(smiley) {
 SMILEY_LIST = ['angel', 'angel2', 'angry', 'angry2', 'angry3', 'applause', 'approve', 'asleep', 'bad', 'bat', 'bawling', 'bawling2', 'bigsmile', 'bigsmile2', 'blind', 'blush', 'boolay', 'brave', 'broken', 'bunny', 'clown', 'confused', 'dark', 'devil', 'disgust', 'door', 'door2', 'evil', 'fail', 'frightened', 'fuck', 'fuckbroken', 'fucklaugh', 'fucktongue', 'heart', 'hello', 'help', 'innocent', 'innocent2', 'innocent3', 'jap', 'juggler', 'kc', 'kc2', 'kiss', 'kiss2', 'kiss3', 'kiss4', 'kiss5', 'lol', 'lol2', 'love', 'mad', 'mad2', 'mad3', 'masturbator', 'metal', 'moaner', 'mocker', 'no', 'odd', 'old', 'old2', 'pirate', 'pompomgirl', 'poppet', 'puke', 'quiet', 'reproving', 'sad', 'sad2', 'satisfy', 'sex', 'showoff', 'showoff2', 'slave', 'smile', 'stupid', 'surprised', 'tired', 'tongue', 'tongue2', 'tongue3', 'up', 'upset', 'wall', 'wink', 'yes', 'yes2', 'yes3', 'yes4', 'yum'];
 
 
-SMILEY_URL = URL_PREFIX + "/static/images/smiley/";
+SMILEY_URL = "/static/images/smiley/";
 
 BBCODE_name = "bbcode";
 MARKDOWN_name = 'markdown';
 
 MARKUP_URL = {
     'preview': {
-        'bbcode': URL_PREFIX + "/markup/bbcode/preview/",
-        'markdown': URL_PREFIX + "/markup/markdown/preview/"
+        'bbcode': "/markup/bbcode/preview/",
+        'markdown': "/markup/markdown/preview/"
     },
     'help': {
-        'bbcode': URL_PREFIX + "/markup/bbcode/",
-        'markdown': URL_PREFIX + "/markup/markdown/"
+        'bbcode': "/markup/bbcode/",
+        'markdown': "/markup/markdown/"
     }
 }
 

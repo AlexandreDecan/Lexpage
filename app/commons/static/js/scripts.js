@@ -14,7 +14,7 @@ function refresh_oembed(target) {
     target.find('span.embedly').each(function (i, e) {
         e = $(e);
         var README = "Please, do NOT use this API key. You can get one too for free on http://embed.ly !";
-        var url = "http://api.embed.ly/1/extract?key=396f02e230724c218db720b2dd2daed0&url="+e.attr('data-url');
+        var url = "https://api.embed.ly/1/extract?key=396f02e230724c218db720b2dd2daed0&url="+e.attr('data-url');
         $.ajax(url).done(function (r) {
             if (r['images'] && r['images'][0] && r['images'][0]['url']) {
                 e.append('<a href="'+ e.attr('data-url')+ '"><img src="'+r['images'][0]['url']+'"/></a>');
@@ -36,10 +36,10 @@ function activate_tooltips(target) {
 function replace_invalid_avatar(inside) {
     // Replace non-existent or empty avatars
     $(inside).find("img.avatar[src='']").each(function() {
-      $(this).attr("src", URL_PREFIX + "/static/images/avatars/default.png");
+      $(this).attr("src", "/static/images/avatars/default.png");
     });
     $(inside).find("img.avatar").error(function () {
-     $(this).unbind("error").attr("src", URL_PREFIX + "/static/images/avatars/erreur404.png"); });
+     $(this).unbind("error").attr("src", "/static/images/avatars/erreur404.png"); });
 }
 
 function getCookie(name) {

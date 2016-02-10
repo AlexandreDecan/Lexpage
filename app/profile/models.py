@@ -1,11 +1,10 @@
+from commons.context_processors import global_settings
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User, UserManager
 from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
 
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 import datetime
 import hashlib
@@ -110,6 +109,8 @@ class ActivationKey(models.Model):
         context = {'user': self.user,
                    'activation_key': self.key,
                    'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS}
+        context.update(global_settings())
+
         subject = render_to_string('profile/activation_email_subject.txt', context)
         subject = ''.join(subject.splitlines())
         message = render_to_string('profile/activation_email.txt', context)
