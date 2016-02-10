@@ -10,9 +10,9 @@ class Command(NoArgsCommand):
     help = "Send a mail notification for (unread) pending notifications."
 
     # A mail will be sent only if there exists a pending notification
-    # that is older than min_delay and younger than max_delay (in seconds).
-    min_delay = 86400
-    max_delay = 172800
+    # that is older than min_delay and younger than max_delay
+    min_delay = datetime.timedelta(days=2)
+    max_delay = datetime.timedelta(days=3)
 
     # We assume that cron calls this task only once per hour, on a 
     # fixed basis. task_hours stores the hours at which a mail could be 
@@ -48,8 +48,8 @@ class Command(NoArgsCommand):
 
         print('Task: notifications by mail.')
         
-        min_date = datetime.datetime.now() - datetime.timedelta(seconds=Command.min_delay)
-        max_date = datetime.datetime.now() - datetime.timedelta(seconds=Command.max_delay)
+        min_date = datetime.datetime.now() - Command.min_delay
+        max_date = datetime.datetime.now() - Command.max_delay
 
         # Retrieve the list of pending notifications
         notifications = Notification.objects.filter(date__gte=max_date, date__lt=min_date)
