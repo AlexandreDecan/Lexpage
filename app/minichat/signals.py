@@ -1,8 +1,7 @@
-import random
-
 from django.db.models.signals import post_save, post_delete, pre_save, pre_delete
 from django.dispatch import receiver
 from django.core.cache import cache
+from django.template.defaultfilters import force_escape
 
 from helpers.decorators import signal_ignore_fixture
 from notifications.models import Notification
@@ -30,7 +29,7 @@ def create_minichat_notification(user, message):
     Notification.objects.get_or_create(
             recipient=user,
             title='Minichat',
-            description='%s vous a adressé un message : <br/><em>%s</em>' % (message.user, text),
+            description='%s vous a adressé un message : <br/><em>%s</em>' % (message.user, force_escape(text)),
             action=message.get_absolute_url(),
             app='minichat',
             key=message.pk
