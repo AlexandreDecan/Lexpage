@@ -1,7 +1,9 @@
+from django.contrib.auth.models import Group
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from blog.models import BlogPost
 from blog.forms import UserCreatePostForm
+from notifications.models import Notification
 from profile.models import ActiveUser
 import datetime
 
@@ -84,8 +86,13 @@ class StatusTests(TestCase):
     fixtures = ['devel']
 
     def setUp(self):
-        self.client.login(username='admin', password='admin')
-        self.user = ActiveUser.objects.filter(username='admin')[0]
+        Notification.objects.all().delete()
+        admin = ActiveUser.objects.get(username='admin')
+        group, _ = Group.objects.get_or_create(name='BlogTeam')
+        group.user_set.add(admin)
+
+        self.client.login(username='user1', password='user1')
+        self.user = ActiveUser.objects.filter(username='user1')[0]
         self.post = BlogPost(title='Hello World!',
                              author=self.user,
                              tags='hello world',
@@ -100,7 +107,8 @@ class StatusTests(TestCase):
             'abstract': self.post.abstract,
             'tags': self.post.tags,
             'text': self.post.text,
-            'priority': self.post.priority
+            'priority': self.post.priority,
+            'action': UserCreatePostForm.ACTION_DRAFT,
         }
 
     def test_draft(self):
@@ -108,34 +116,42 @@ class StatusTests(TestCase):
         response = self.client.post(self.url, self.form, follow=True)
         self.post.refresh_from_db()
         self.assertEqual(response.status_code, 200)
-        self.assertLessEqual((datetime.datetime.now() - self.post.date_modified).total_seconds(), 10)
+        self.assertEqual(len(Notification.objects.all()), 0)
 
-    def test_submitted(self):
-        self.post.status = BlogPost.STATUS_DRAFT
-        self.post.save()
-
+    def test_submit(self):
         self.form['action'] = UserCreatePostForm.ACTION_SUBMIT
         response = self.client.post(self.url, self.form, follow=True)
         self.assertEqual(response.status_code, 200)
+        Notification.objects.get(recipient__username='admin')
 
-    def test_approved(self):
+        self.client.login(username='admin', password='admin')
         self.form['action'] = UserCreatePostForm.ACTION_APPROVE
         response = self.client.post(self.url, self.form, follow=True)
-        self.post.refresh_from_db()
         self.assertEqual(response.status_code, 200)
-        self.assertLessEqual((datetime.datetime.now() - self.post.date_approved).total_seconds(), 10)
+        Notification.objects.get(recipient__username='user1')
+        with self.assertRaises(Notification.DoesNotExist):
+            Notification.objects.get(recipient__username='admin')
 
     def test_published(self):
         self.form['action'] = UserCreatePostForm.ACTION_PUBLISH
         response = self.client.post(self.url, self.form, follow=True)
         self.post.refresh_from_db()
         self.assertEqual(response.status_code, 200)
-        self.assertLessEqual((datetime.datetime.now() - self.post.date_published).total_seconds(), 10)
+        self.assertEqual(len(Notification.objects.all()), 0)
 
     def test_reject(self):
+        self.form['action'] = UserCreatePostForm.ACTION_SUBMIT
+        response = self.client.post(self.url, self.form, follow=True)
+        self.assertEqual(response.status_code, 200)
+        Notification.objects.get(recipient__username='admin')
+
+        self.client.login(username='admin', password='admin')
         self.form['action'] = UserCreatePostForm.ACTION_DELETE
         response = self.client.post(self.url, self.form, follow=True)
         self.assertEqual(response.status_code, 200)
+        Notification.objects.get(recipient__username='user1')
+        with self.assertRaises(Notification.DoesNotExist):
+            Notification.objects.get(recipient__username='admin')
 
 
 class PendingTests(TestCase):
