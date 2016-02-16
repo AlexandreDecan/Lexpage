@@ -173,8 +173,11 @@ def _handle_status(request, post, action):
     elif action == UserCreatePostForm.ACTION_APPROVE:
         # Only notify if the post wasn't yet accepted
         if post.status != BlogPost.STATUS_APPROVED:
+            # Change status before doing the notification so that "pk" is always available
+            post.change_status(request.user, BlogPost.STATUS_APPROVED)
             notify_pending_approve(request.user, post)
-        post.change_status(request.user, BlogPost.STATUS_APPROVED)
+        else:
+            post.change_status(request.user, BlogPost.STATUS_APPROVED)
         messages.success(request, 'Le billet a été approuvé pour la publication.')
     elif action == UserCreatePostForm.ACTION_PUBLISH:
         post.change_status(request.user, BlogPost.STATUS_PUBLISHED)
