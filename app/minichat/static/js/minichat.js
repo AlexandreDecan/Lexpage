@@ -121,7 +121,7 @@ function Minichat(username, last_visit, container_selector, form_selector, conte
             }
             _this.start_timer();
         }).fail(function (data, textStatus) {
-            contrib_message('danger', 'Une erreur est survenue pendant le chargement du minichat. Veuillez rafraichir la page.');
+            // contrib_message('danger', 'Une erreur est survenue pendant le chargement du minichat. Veuillez rafraichir la page.');
             console.log(data);
             console.log(textStatus);
         });

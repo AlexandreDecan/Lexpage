@@ -55,22 +55,22 @@ function Notifications(container, button_container, url) {
 
         _this.start_timer();
         _this.last_hash = null;
-        _this.refresh_content_with(null);
+        _this.refresh_content_with({data: null});
     };
 
-    this.refresh_content_with = function (data) {
+    this.refresh_content_with = function (content) {
         var _this = this;
 
         // Update content
-        var template_html = nunjucks.render(_this.template, {'data': data});
+        var template_html = nunjucks.render(_this.template, content);
         $(_this.container_selector).html(template_html);
 
-        var template_button_html = nunjucks.render(_this.template_button, {'data': data});
+        var template_button_html = nunjucks.render(_this.template_button, content);
         $(_this.button_container_selector).html(template_button_html);
 
-        if (data && data.length > 0) {
+        if (content && content.data && content.data.length > 0) {
             // Update title
-            document.title = "(" + data.length + ") " + _this.vanilla_title;
+            document.title = "(" + content.data.length + ") " + _this.vanilla_title;
         } else {
             document.title = _this.vanilla_title;
             // Close container, if needed
@@ -87,12 +87,13 @@ function Notifications(container, button_container, url) {
         $.get(_this.content_url + "?hash=" + _this.last_hash).success(function (data, textStatus, xhr) {
             if (data && (!_this.last_hash || _this.last_hash != data.hash)) {
                 _this.last_hash = data.hash;
-                _this.refresh_content_with(data.results)
+                _this.refresh_content_with({data: data.results})
             }
             _this.start_timer();
         }).fail(function (data, textStatus) {
             document.title = _this.vanilla_title;
-            contrib_message('danger', 'Une erreur est survenue pendant le chargement des notifications. Veuillez rafraichir la page.');
+            _this.refresh_content_with({data: null, error: true});
+            // contrib_message('danger', 'Une erreur est survenue pendant le chargement des notifications. Veuillez rafraichir la page.');
             console.log(data);
             console.log(textStatus);
         });
