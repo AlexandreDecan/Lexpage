@@ -11,9 +11,8 @@
     permettant d'entrer un nouveau mot de passe. </p>
 {% endif %}
 
-<form class="form" method="post" action="{% url 'auth_login' %}">
+<form class="form" method="post" action="{% url 'auth_login' %}?next={{ next }}">
 {% csrf_token %}
-<input type="hidden" name="next" value="{{ next }}"/>
 {% include "_form_errors.html" %}
 {% for field in form %}
     {% include "_form_field.html" with field=field %}
