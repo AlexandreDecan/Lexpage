@@ -153,6 +153,9 @@ function Minichat(username, last_visit, container_selector, form_selector, conte
             _this.refresh();
         }).fail(function(data, textStatus) {
             $(_this._button_selector).find('span').removeClass('fa-spinner fa-spin').addClass('fa-warning');
+            if (data.responseText) {
+                contrib_message("danger", data.responseText);
+            }
             console.log(data);
             console.log(textStatus);
             _this.refresh();
