@@ -1,7 +1,7 @@
 {% load humanize %}
 Bonjour {{ user.username }}, 
 
-Vous avez {{ notifications|length }} notification{{ notifications|pluralize }} non-lues sur {{ SITE_NAME }} :
+Vous avez {{ notifications|length }} notification{{ notifications|pluralize }} non-lue{{ notifications|pluralize }} sur {{ SITE_NAME }} :
 {% for notification in notifications %}
  - ({{ notification.date|date:'d/m' }}) {{ notification.title }} - {{ notification.description|striptags }}
 {% endfor %}
