@@ -94,13 +94,23 @@
         margin-top: 8px;
       }
     }
+  } // end of message-side
+
+
+  &.message-unread .message-content {
+    border-color: lighten($brand-danger, 5%);
+  }
+  &.message-read .message-content {
+    border-color: $brand-primary;
   }
 
   .message-content {
-    position:relative;
+    position: relative;
     margin-top: 15px;
     margin-bottom: 25px;
     padding: $padding-base-vertical $padding-base-horizontal;
+    border-style: solid;
+    border-width: 0px;
 
     @include z-depth(1);
 
@@ -114,6 +124,8 @@
 
     @media (max-width: $screen-sm) {
       clear: both;
+      border-left-width: 4px;
+
       .message-text {
         min-height: 30px;
       }
@@ -126,7 +138,7 @@
       .message-content {
         margin-left: 10px;
         margin-right: 100px;
-        border-right: 4px solid $brand-primary;
+        border-right-width: 4px;
         border-radius: $border-radius-base 0 0 $border-radius-base;
       }
 
@@ -139,14 +151,11 @@
       .message-content {
         margin-left: 100px;
         margin-right: 10px;
-        border-left: 4px solid $brand-primary;
+        border-left-width: 4px;
         border-radius: 0 $border-radius-small $border-radius-small 0;
       }
     }
 
-    &.message-unread .message-content {
-      border-color: lighten($brand-danger, 5%);
-    }
   } // end of large screen
 
   .message-date {

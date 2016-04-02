@@ -6180,11 +6180,19 @@ button.close {
     margin-top: 8px;
   }
 }
+.board-message.message-unread .message-content, .message-unread.messaging-message .message-content {
+  border-color: #de6764;
+}
+.board-message.message-read .message-content, .message-read.messaging-message .message-content {
+  border-color: #3e5d71;
+}
 .board-message .message-content, .messaging-message .message-content {
   position: relative;
   margin-top: 15px;
   margin-bottom: 25px;
   padding: 6px 12px;
+  border-style: solid;
+  border-width: 0px;
   -webkit-box-shadow: 0 0px 5px 1px rgba(0, 0, 0, 0.3);
   box-shadow: 0 0px 5px 1px rgba(0, 0, 0, 0.3);
 }
@@ -6198,6 +6206,7 @@ button.close {
 @media (max-width: 768px) {
   .board-message .message-content, .messaging-message .message-content {
     clear: both;
+    border-left-width: 4px;
   }
   .board-message .message-content .message-text, .messaging-message .message-content .message-text {
     min-height: 30px;
@@ -6207,7 +6216,7 @@ button.close {
   .board-message.self-author .message-content, .self-author.messaging-message .message-content {
     margin-left: 10px;
     margin-right: 100px;
-    border-right: 4px solid #3e5d71;
+    border-right-width: 4px;
     border-radius: 5px 0 0 5px;
   }
   .board-message.self-author .message-side, .self-author.messaging-message .message-side {
@@ -6216,11 +6225,8 @@ button.close {
   .board-message.other-author .message-content, .other-author.messaging-message .message-content {
     margin-left: 100px;
     margin-right: 10px;
-    border-left: 4px solid #3e5d71;
+    border-left-width: 4px;
     border-radius: 0 3px 3px 0;
-  }
-  .board-message.message-unread .message-content, .message-unread.messaging-message .message-content {
-    border-color: #de6764;
   }
 }
 .board-message .message-date, .messaging-message .message-date {
