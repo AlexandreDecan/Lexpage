@@ -143,6 +143,10 @@
         border-radius: 0 $border-radius-small $border-radius-small 0;
       }
     }
+
+    &.message-unread .message-content {
+      border-color: lighten($brand-danger, 5%);
+    }
   } // end of large screen
 
   .message-date {

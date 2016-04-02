@@ -6220,6 +6220,9 @@ button.close {
     border-left: 4px solid #9e0707;
     border-radius: 0 3px 3px 0;
   }
+  .board-message.message-unread .message-content, .message-unread.messaging-message .message-content {
+    border-color: #d43f3a;
+  }
 }
 .board-message .message-date, .messaging-message .message-date {
   float: right;
