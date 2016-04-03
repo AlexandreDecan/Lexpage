@@ -2,7 +2,7 @@
 {% load markup_bbcode %}
 
 
-<div class="board-message {% if message.author == user %}self-author{% else %}other-author{% endif %} {% if user.is_authenticated and thread.flag.message.date >= message.date %}message-read{% else %}message-unread{% endif %}" id="msg-{{ message.pk }}">
+<div class="board-message {% if message.author == user %}self-author{% else %}other-author{% endif %} {% if user.is_authenticated and thread.flag.message.date < message.date %}message-unread{% else %}message-read{% endif %}" id="msg-{{ message.pk }}">
     <div class="message-side">
         <a href="{% url 'profile_show' message.author %}">
         <img src="{{ message.author.profile.avatar }}" class="avatar" title="{{ message.author.username }}"/>
