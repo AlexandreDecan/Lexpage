@@ -2,7 +2,7 @@
 {% load markup_bbcode %}
 
 
-<div class="messaging-message {% if message.author == user %}self-author{% else %}other-author{% endif %}" id="msg-{{ message.pk }}">
+<div class="messaging-message {% if message.author == user %}self-author{% else %}other-author{% endif %} {% if date_read < message.date %}message-unread{% else %}message-read{% endif %}"" id="msg-{{ message.pk }}">
     <div class="message-side">
         <a href="{% url 'profile_show' message.author %}">
         <img src="{{ message.author.profile.avatar }}" class="avatar" title="{{ message.author.username }}"/>
@@ -16,16 +16,6 @@
                 {{ message.date|naturalday }} à {{ message.date|time:'H:i' }}
             </span>
         </div>
-        <div class="message-flag">
-            <span>
-            {% if message.date > date_read %}
-                <span data-toggle="tooltip" class="btn btn-danger btn-xs btn-circle" title="Message non-lu">
-                    <span class="fa fa-eye-slash"></span>
-                </span>
-            {% endif %}
-            </span>
-        </div>
-
         <div class="message-text">
             {{ message.text|urlize|smiley|linebreaksbr }}
         </div>
