@@ -48,7 +48,7 @@ class ReplyView(FormView):
                 key='thread-%d' % thread.pk)
 
         messages.success(self.request, "Message enregistré.")
-        return redirect(reverse_lazy('messaging_show', kwargs={'thread': self.kwargs['thread']}))
+        return redirect(reverse_lazy('messaging_show', kwargs={'thread': self.kwargs['thread']}) + '#last')
 
     def form_invalid(self, form):
         messages.error(self.request, '\n'.join(form.text.errors))
