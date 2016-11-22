@@ -7,7 +7,7 @@ class Command(NoArgsCommand):
     help = "Publish the first available blog entry. "
 
     # (min available, nb per day)
-    number_per_day = [(8, 2), (1, 1), (0, 0)]
+    number_per_day = [(12, 2), (1, 1), (0, 0)]
     # number_per_day = [(1, 2), ]
 
     def handle_noargs(self, **options):
