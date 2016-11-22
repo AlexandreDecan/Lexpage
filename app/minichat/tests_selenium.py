@@ -128,6 +128,17 @@ class RemainingChars(MinichatSeleniumTests):
         message = self.selenium.find_element_by_css_selector('.minichat-text-content')
         self.assertIn('Hello world! This is a test!', message.text)
 
+    def test_post_empty_message(self):
+        """
+        Empty message should display a proper error message.
+        See https://github.com/AlexandreDecan/Lexpage/issues/176
+        """
+        self.button_element.click()
+
+        message = self.selenium.find_element_by_css_selector('.contrib-messages .alert-danger')
+        self.assertNotIn('{"text":["Ce champ ne peut être vide."]}', message.text)
+        self.assertIn('Ce champ ne peut être vide.', message.text)
+
 
 class MessageVisibilityTests(MinichatSeleniumTests):
     fixtures = ['devel']
