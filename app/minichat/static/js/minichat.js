@@ -153,11 +153,13 @@ function Minichat(username, last_visit, container_selector, form_selector, conte
             _this.refresh();
         }).fail(function(data, textStatus) {
             $(_this._button_selector).find('span').removeClass('fa-spinner fa-spin').addClass('fa-warning');
-            if (data.responseText) {
-                contrib_message("danger", data.responseText);
+            if (data.responseJSON) {
+                contrib_message("danger", data.responseJSON['text'].join(' '));
+            } else {
+                contrib_message("danger", "Erreur lors de l'envoi du message, veuillez contacter le webmaster.")
             }
             console.log(data);
-            console.log(textStatus);
+            console.log(data.responseText);
             _this.refresh();
         });
     };
