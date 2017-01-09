@@ -1,0 +1,8 @@
+//
+// Brand colors, to be overwritten by themes
+// --------------------------------------------------
+
+$brand-primary:         lighten(#056d05, 10%);
+$brand-primary-alt:     darken(#15c015, 10%);
+$brand-info:            lighten($brand-primary, 40%);
+
