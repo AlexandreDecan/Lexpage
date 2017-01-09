@@ -1,0 +1,28 @@
+@import url("//fonts.googleapis.com/css?family=Lily+Script+One");
+h2 {
+  border-bottom: none;
+  font-family: 'Lily Script One', cursive;
+  font-size: $font-size-h2 * 1.1;
+}
+
+.navbar {
+  .navbar-brand {
+    font-family: 'Lily Script One', cursive;
+
+    &:after, &:before {
+      content: " ☘";
+      font-weight: normal;
+    }
+  }
+}
+
+.post-list-flat .post-content {
+  &.post-item-large {
+    .post-metadata {
+      border-bottom: 1px solid $brand-primary;
+    }
+  }
+}
+
+
+
