@@ -42,10 +42,6 @@ class NaturalDayFilterTests(LexpageSeleniumTestCase):
 
 
 class MinichatSeleniumTests(LexpageSeleniumTestCase):
-    def setUp(self):
-        # Reset cache
-        cache.clear()
-
     def force_minichat_refresh(self):
         self.wait_for_minichat()
         self.selenium.execute_script('app_minichat.reset();')

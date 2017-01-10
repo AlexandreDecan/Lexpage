@@ -7,10 +7,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 
 class NotificationsSeleniumTests(LexpageSeleniumTestCase):
-    def setUp(self):
-        # Reset cache
-        cache.clear()
-
     def force_notifications_refresh(self):
         self.selenium.execute_script('app_notifications.reset();')
         self.selenium.execute_script('app_notifications.refresh();')
