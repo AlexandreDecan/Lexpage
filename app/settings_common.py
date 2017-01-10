@@ -149,5 +149,5 @@ THEMES = {
         ('style_nowel', 'Nowel'),
         ('style_st_patrick', 'Saint-Patrick'),
     ),
-    'DEFAULT': 'style'
+    'DEFAULT': 'style_st_patrick'
 }
