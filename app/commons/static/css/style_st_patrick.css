@@ -6402,8 +6402,12 @@ input[type="file"] {
 }
 
 body {
+  background: url("/static/images/st-patrick/beer.svg") no-repeat bottom right, url(/static/images/st-patrick/clovers.png);
   background-color: #033c03;
-  background-image: url("/static/images/st-patrick/clovers.png");
+}
+
+.footer .container p:first-child:after {
+  content: " — bière arrière plan: CC-BY-SA 3.0 by Ocatecir";
 }
 
 /* ************* Markup **/
