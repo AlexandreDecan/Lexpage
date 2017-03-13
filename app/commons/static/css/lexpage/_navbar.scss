@@ -128,5 +128,9 @@
   .notification_dismiss {
     float: right;
     font-size: $font-size-base;
+    a {
+      padding: $padding-small-horizontal;
+      margin: -$padding-small-horizontal;
+    }
   }
 }

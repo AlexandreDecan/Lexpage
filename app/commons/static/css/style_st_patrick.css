@@ -6688,6 +6688,10 @@ body {
   float: right;
   font-size: 14px;
 }
+.notification .notification_dismiss a {
+  padding: 10px;
+  margin: -10px;
+}
 
 /*********** Minichat */
 .sidebar-online {
