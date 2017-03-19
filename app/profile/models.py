@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import User, UserManager
 from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
-
+from django.core.validators import URLValidator
 
 import datetime
 import hashlib
@@ -406,16 +406,17 @@ class Profile(models.Model):
                                     help_text='Cela peut être une page Facebook, un compte Twitter ou votre site personnel.')
     website_url = models.URLField(blank=True,
                                   verbose_name='Adresse du site web',
-                                  help_text='L\'adresse doit débuter par http://')
+                                  help_text='L\'adresse doit débuter par http:// ou https://')
     birthdate = models.DateField(blank=True, null=True,
                                  verbose_name='Date de naissance',
                                  help_text='Visible uniquement par les utilisateurs connectés.')
     avatar = models.URLField(blank=True,
-                             verbose_name='Adresse de l\'avatar',
-                             help_text='Des exemples d\'avatars sont disponibles sur <a href="http://www.avatarsdb.com">AvatarsDB</a>. '+
-                                       'Vous pouvez également utiliser <a href="http://www.gravatar.com">Gravatar</a> pour '+
+                             verbose_name='Adresse de l\'avatar, débutant par https://',
+                             help_text='Des exemples d\'avatars sont disponibles sur <a href="https://www.avatarsdb.com">AvatarsDB</a>. '+
+                                       'Vous pouvez également utiliser <a href="https://www.gravatar.com">Gravatar</a> pour '+
                                        'héberger et centraliser votre avatar. Vous pouvez également envoyer un avatar '+
-                                       'depuis votre disque en utilisant le champ ci-dessous.')
+                                       'depuis votre disque en utilisant le champ ci-dessous.',
+                             validators=[URLValidator(schemes=[settings.SITE_SCHEME, 'https'])])
     last_visit = models.DateTimeField(blank=True, null=True,
                                       verbose_name='Dernière visite')
     theme = models.CharField(max_length=16,
