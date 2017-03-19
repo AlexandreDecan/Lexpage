@@ -103,14 +103,14 @@
 
             <li class="dropdown-header">À propos</li>
             <li><a href="{% url 'about' %}"><span class="fa fa-fw fa-info"></span> À propos/contact</a></li>
-            <li><a href="http://www.github.com/AlexandreDecan/Lexpage"><span class="fa fa-fw fa-code"></span> Code source</a></li>
+            <li><a href="https://www.github.com/AlexandreDecan/Lexpage"><span class="fa fa-fw fa-code"></span> Code source</a></li>
             <li><a href="{% url 'slogan_list' %}"><span class="fa fa-fw fa-quote-right"></span> Liste des slogans</a></li>
 
             {% if user.is_staff %}
               <li class="dropdown-header">Administrer</li>
               <li><a href="{% url 'admin:index' %}"><span class="fa fa-fw fa-gears"></span> Administration</a></li>
               {% if ANALYTICS %}
-                <li><a href="http://analytics.lexpage.net/"><span class="fa fa-fw fa-bar-chart-o"></span> Statistiques</a></li>
+                <li><a href="https://analytics.lexpage.net/"><span class="fa fa-fw fa-bar-chart-o"></span> Statistiques</a></li>
               {% endif %}
             {% endif %}
           </ul><!-- menu -->
