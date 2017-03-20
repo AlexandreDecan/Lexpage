@@ -8,7 +8,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SITE_ID = 1
 INTERNAL_IPS = ('127.0.0.1',)
 ALLOWED_HOSTS = ['127.0.0.1']
-ANALYTICS = False  # Overridden in prod
+ANALYTICS = False
 SITE_SCHEME = 'http'
 SITE_DOMAIN = ALLOWED_HOSTS[0]
 SITE_NAME = 'Roxpage'
@@ -129,7 +129,7 @@ REST_FRAMEWORK = {
 }
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-USER_IS_ONLINE_TIMEOUT = 5 # in minutes
+USER_IS_ONLINE_TIMEOUT = 5  # in minutes
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 SESSION_COOKIE_AGE = 7257600  # 3 months
 
@@ -149,5 +149,6 @@ THEMES = {
         ('style_nowel', 'Nowel'),
         ('style_st_patrick', 'Saint-Patrick'),
     ),
-    'DEFAULT': 'style'
+    'DEFAULT': 'style',
+    'FORCED': None,
 }
