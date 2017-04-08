@@ -45,7 +45,7 @@ class Notification(models.Model):
     title = models.CharField(verbose_name='Titre', max_length=100)
     description = models.CharField(verbose_name='Description', max_length=255, blank=True, default='')
     action = models.CharField(verbose_name='Action', max_length=255, blank=True, default='')
-    recipient = models.ForeignKey(User, verbose_name='Destinataire')
+    recipient = models.ForeignKey(User, verbose_name='Destinataire', on_delete=models.CASCADE)
     app = models.CharField(verbose_name='Application', max_length=50)
     key = models.CharField(verbose_name='Clé', max_length=100)
     date = models.DateTimeField(verbose_name='Date', auto_now_add=True)

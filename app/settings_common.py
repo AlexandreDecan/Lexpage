@@ -1,5 +1,6 @@
 import os
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -45,7 +46,7 @@ INSTALLED_APPS = (
     'notifications',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

@@ -26,8 +26,9 @@ class OEmbedExtension(markdown.Extension):
 
 @register.filter(name='markdown', is_safe=True)
 def __markdown(value):
-    extensions = ['def_list', 'fenced_code', 'footnotes', 'tables', 'nl2br',
-                  'smart_strong', 'sane_lists', OEmbedExtension()]
+    extensions = ['markdown.extensions.{}'.format(e) for e in
+                  ('def_list', 'fenced_code', 'footnotes', 'tables', 'nl2br', 'smart_strong', 'sane_lists')]
+    extensions.append(OEmbedExtension())
 
     value = markdown.markdown(value, safe_mode='escape', output_format='html5', lazy_ol=False, extensions=extensions)
 

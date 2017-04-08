@@ -8,4 +8,4 @@ def random_slogan():
     slogan = Slogan.visible.get_random()
     return slogan
 
-register.assignment_tag(random_slogan)
+register.simple_tag(random_slogan)

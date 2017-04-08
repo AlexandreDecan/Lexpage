@@ -62,7 +62,7 @@ class ThreadView(ListView):
         Flag.objects.read(self.request.user, context['message_list'][last_index])
 
         # Display form if needed
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             context['form'] = MessageForm()
 
         return context

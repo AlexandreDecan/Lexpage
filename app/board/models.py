@@ -38,7 +38,7 @@ class Thread(models.Model):
         :param user: Related user
         :return: None
         """
-        if not user.is_authenticated():
+        if not user.is_authenticated:
             return
         try:
             self.flag = Flag.objects.all().get(thread=self, user=user)
@@ -69,8 +69,8 @@ class Thread(models.Model):
 
 
 class Message(models.Model):
-    author = models.ForeignKey(User, verbose_name='Auteur', related_name='board_post')
-    thread = models.ForeignKey(Thread, verbose_name='Sujet')
+    author = models.ForeignKey(User, verbose_name='Auteur', related_name='board_post', on_delete=models.CASCADE)
+    thread = models.ForeignKey(Thread, verbose_name='Sujet', on_delete=models.CASCADE)
     text = models.TextField(verbose_name='Message', help_text='Mis en page avec le BBCode.')
     moderated = models.BooleanField(verbose_name='Message modéré ?', default=False,
                                     help_text='Si le message est modéré, son auteur ne pourra plus le modifier.')
@@ -155,8 +155,8 @@ class Message(models.Model):
 
 
 class MessageHistory(models.Model):
-    message = models.ForeignKey(Message, verbose_name='Message', related_name='history')
-    edited_by = models.ForeignKey(User, verbose_name='Auteur de la modification', related_name='+')
+    message = models.ForeignKey(Message, verbose_name='Message', related_name='history', on_delete=models.CASCADE)
+    edited_by = models.ForeignKey(User, verbose_name='Auteur de la modification', related_name='+', on_delete=models.CASCADE)
     date = models.DateTimeField(verbose_name='Date', auto_now_add=True)
     text = models.TextField(verbose_name='Historique')
 
@@ -173,7 +173,7 @@ class FlagManager(models.Manager):
         Look for a Flag and create if needed. Update the message if newer, or
         if force is True. Return the flag.
         """
-        if not user.is_authenticated():
+        if not user.is_authenticated:
             return
         flag, created = self.get_or_create(user=user, thread=message.thread, defaults={'message': message})
         # Only update if needed or wanted
@@ -205,9 +205,9 @@ class FlagManager(models.Manager):
 
 
 class Flag(models.Model):
-    user = models.ForeignKey(User, verbose_name='Auteur', related_name='+')
-    thread = models.ForeignKey(Thread, verbose_name='Sujet')
-    message = models.ForeignKey(Message, verbose_name='Dernier message lu')
+    user = models.ForeignKey(User, verbose_name='Auteur', related_name='+', on_delete=models.CASCADE)
+    thread = models.ForeignKey(Thread, verbose_name='Sujet', on_delete=models.CASCADE)
+    message = models.ForeignKey(Message, verbose_name='Dernier message lu', on_delete=models.CASCADE)
 
     objects = FlagManager()
 
@@ -222,5 +222,5 @@ class BlogBoardLink(models.Model):
     This class is used to make a direct link when a Thread is created
     for a BlogPost.
     """
-    thread = models.OneToOneField(Thread)
-    post = models.OneToOneField(BlogPost)
+    thread = models.OneToOneField(Thread, on_delete=models.CASCADE)
+    post = models.OneToOneField(BlogPost, on_delete=models.CASCADE)

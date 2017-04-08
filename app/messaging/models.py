@@ -43,7 +43,7 @@ class ThreadManager(models.Manager):
 
 class Thread(models.Model):
     title = models.CharField(verbose_name='Titre', max_length=60)
-    last_message = models.ForeignKey('Message', verbose_name='Dernier message', related_name='+', db_constraint=False, default=-1)
+    last_message = models.ForeignKey('Message', verbose_name='Dernier message', related_name='+', db_constraint=False, default=-1, on_delete=models.CASCADE)
 
     objects = ThreadManager()
 
@@ -103,8 +103,8 @@ class Thread(models.Model):
 
 
 class Message(models.Model):
-    author = models.ForeignKey(User, verbose_name='Auteur', related_name='+')
-    thread = models.ForeignKey(Thread, verbose_name='Conversation')
+    author = models.ForeignKey(User, verbose_name='Auteur', related_name='+', on_delete=models.CASCADE)
+    thread = models.ForeignKey(Thread, verbose_name='Conversation', on_delete=models.CASCADE)
     text = models.TextField(verbose_name='Message')
     date = models.DateTimeField(verbose_name='Date', auto_now_add=True)
 
@@ -139,8 +139,8 @@ class MessageBox(models.Model):
         (STATUS_DELETED, 'Supprimée'),
     )
 
-    user = models.ForeignKey(User, verbose_name='Propriétaire')
-    thread = models.ForeignKey(Thread, verbose_name='Conversation')
+    user = models.ForeignKey(User, verbose_name='Propriétaire', on_delete=models.CASCADE)
+    thread = models.ForeignKey(Thread, verbose_name='Conversation', on_delete=models.CASCADE)
     date_read = models.DateTimeField(verbose_name='Dernière lecture', default=DEFAULT_UNREAD_DATE)
     is_starred = models.BooleanField(verbose_name='Favorites ?', default=False)
     status = models.SmallIntegerField(verbose_name='État', choices=STATUS_CHOICES, default=STATUS_NORMAL)

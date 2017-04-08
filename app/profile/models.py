@@ -85,7 +85,7 @@ class ActivationKeyManager(models.Manager):
 
 
 class ActivationKey(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     key = models.CharField('activation_key', max_length=40)
 
     objects = ActivationKeyManager()
@@ -388,7 +388,7 @@ class Profile(models.Model):
         (256, 'Zimbabwe')
     )
 
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     gender = models.CharField(max_length=1,
                               choices=GENDER_CHOICES,
                               blank=True,

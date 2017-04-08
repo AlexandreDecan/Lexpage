@@ -24,4 +24,4 @@ def birthday():
     
     return list(u_yesterday) + list(u_today) + list(u_tomorrow)
 
-register.assignment_tag(birthday)
+register.simple_tag(birthday)

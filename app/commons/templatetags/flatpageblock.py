@@ -18,4 +18,4 @@ def flatpageblock(flatpage):
     except FlatPage.DoesNotExist:
         return None
 
-register.assignment_tag(flatpageblock)    
+register.simple_tag(flatpageblock)

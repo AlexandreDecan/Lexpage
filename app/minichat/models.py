@@ -7,7 +7,7 @@ from profile.models import ActiveUser
 
 
 class Message(models.Model):
-    user = models.ForeignKey(User, related_name='+')
+    user = models.ForeignKey(User, related_name='+', on_delete=models.CASCADE)
     text = models.CharField(max_length=180, verbose_name='Message')
     date = models.DateTimeField(verbose_name='Heure', auto_now_add=True)
 

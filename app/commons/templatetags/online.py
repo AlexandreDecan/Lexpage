@@ -12,4 +12,4 @@ def who_is_online():
     users = ActiveUser.objects.filter(is_active=True, profile__last_visit__gt=absolute_timeout)
     return users
 
-register.assignment_tag(who_is_online)
+register.simple_tag(who_is_online)
