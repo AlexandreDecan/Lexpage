@@ -1,16 +1,16 @@
-from django.core.management.base import NoArgsCommand
+from django.core.management.base import BaseCommand
 from blog.models import BlogPost
 import datetime
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     help = "Publish the first available blog entry. "
 
     # (min available, nb per day)
     number_per_day = [(12, 2), (1, 1), (0, 0)]
     # number_per_day = [(1, 2), ]
 
-    def handle_noargs(self, **options):
+    def handle(self, *args, **options):
         today = datetime.date.today()
 
         # Do not publish on sunday and in public holiday

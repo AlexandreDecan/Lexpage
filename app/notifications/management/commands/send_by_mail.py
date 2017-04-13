@@ -1,12 +1,12 @@
 from commons.context_processors import global_settings
-from django.core.management.base import NoArgsCommand
+from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.template.loader import render_to_string
 from notifications.models import Notification
 import datetime
 
 
-class Command(NoArgsCommand):
+class Command(BaseCommand):
     help = "Send a mail notification for (unread) pending notifications."
 
     # A mail will be sent only if there exists a pending notification
@@ -41,7 +41,7 @@ class Command(NoArgsCommand):
           user.email_user(subject, text, settings.DEFAULT_FROM_EMAIL)
           print('Mail sent to %s (%s)' % (user.username, user.email))
 
-    def handle_noargs(self, **options):
+    def handle(self, *args, **options):
         # Check if current hour is in task_hours. If not, stop. 
         if not (datetime.datetime.now().hour in Command.task_hours):
             return
