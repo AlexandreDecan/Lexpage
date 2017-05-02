@@ -8,6 +8,7 @@ from yuicompressor import run
 
 import logging
 
+
 @deconstructible
 class MinifyStatic(StaticFilesStorage):
     supported_suffixes = ('js', 'css',)
@@ -24,7 +25,7 @@ class MinifyStatic(StaticFilesStorage):
         if not any((name.startswith(prefix) for prefix in self._ignored_prefixes)):
             for suffix in self.supported_suffixes:
                 if self.minify_enabled(suffix) and name.endswith('.%s' % suffix) \
-                and not name.endswith('.min.%s' % suffix):
+                        and not name.endswith('.min.%s' % suffix):
                     try:
                         full_content = NamedTemporaryFile(suffix='.%s' % suffix)
                         full_content.write(original_file.read())
@@ -34,7 +35,7 @@ class MinifyStatic(StaticFilesStorage):
                         assert yuicompress == 0, 'YUI Compressor failed on %s' % name
                         new_content = minified_content.read()
                         file = ContentFile(new_content)
-                    except Exception: # pragma: no cover
+                    except Exception:  # pragma: no cover
                         logging.exception('Minify %s error for %s' % (suffix, name))
                         file = original_file
         return super()._save(name, file)

@@ -26,16 +26,17 @@
     <link rel="icon" type="image/png" href="{% static "images/favicon.png" %}" />
     {% block javascript %}
         <script src="{% static "libs/jquery/dist/jquery.js" %}"></script>
-        <script src="{% static "libs/underscore.js" %}"></script>
+        <script src="{% static "libs/lodash.js" %}"></script>
         <script src="{% static "libs/moment/moment.js" %}"></script>
-        <script src="{% static "libs/nunjucks/nunjucks-slim.js" %}"></script>
-        <script src="{% static "js/moment.fr.js" %}"></script>
+        <script src="{% static "libs/moment/moment.fr.js" %}"></script>
         <script src="{% static "js/nunjucks.templates.js" %}"></script>
-        <script src="{% static "js/nunjucks.js" %}"></script>
+        <script src="{% static "libs/nunjucks/nunjucks-slim.js" %}"></script>
+        <script src="{% static "libs/nunjucks/nunjucks.js" %}"></script>
         <script src="{% static "js/scripts.js" %}"></script>
         <script src="{% static "js/notifications.js" %}"></script>
         <script src="{% static "js/minichat.js" %}"></script>
         <script src="{% static "js/markup.js" %}"></script>
+
     {% endblock javascript %}
     {{ form.media }}
 

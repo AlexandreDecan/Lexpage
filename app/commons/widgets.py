@@ -20,10 +20,10 @@ class DateTimePicker(DateTimeInput):
     class Media:
         class JsFiles(object):
             def __iter__(self):
-                yield 'libs/moment-datepicker/moment-datepicker.min.js'
+                yield 'libs/moment/moment-datepicker.min.js'
 
         js = JsFiles()
-        css = {'all': ('libs/moment-datepicker/datepicker.css',), }
+        css = {'all': ('libs/moment/datepicker.css',), }
 
     # http://momentjs.com/docs/#/parsing/string-format/
     # http://docs.python.org/2/library/datetime.html#strftime-strptime-behavior
