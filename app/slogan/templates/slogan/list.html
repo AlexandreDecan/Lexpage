@@ -22,7 +22,7 @@
         <div class="input-group">
         <input type="text" class="form-control" 
             placeholder="Texte du slogan"
-            value="{{ form.slogan.initial }}"
+            value="{{ form.slogan.initial|default_if_none:'' }}"
             name="{{ form.slogan.name }}"/>
             <span class="input-group-btn">
                 <button class="btn btn-primary" type="submit">Proposer</button>

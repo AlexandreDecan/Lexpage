@@ -17,7 +17,7 @@ class SloganListView(ListView):
     paginate_orphans = 6
 
     def get_context_data(self, **kwargs):
-        kwargs['form'] = SloganAddForm
+        kwargs['form'] = SloganAddForm()
         return super(SloganListView, self).get_context_data(**kwargs)
 
 
