@@ -1,5 +1,6 @@
 {% extends "board/__base_thread.html" %}
 {% load humanize %}
+{% load misc %}
 
 
 {% block title %}{{ thread.title }} | {{ block.super }}{% endblock %}
@@ -57,8 +58,8 @@
         {% for field in form %}
             {% include "_form_field.html" with field=field %}
         {% endfor %}
-        {% with "Envoyer Publier Poster Z'yva Yes! Troller Wesh +1 Plusun! Ping Flooder" as txt %}
-            <button class="btn btn-primary" type="submit">{{ txt.split|random }}</button>
+        {% with "Envoyer;Publier;Poster;Z'yva;Yes!;Troller;Wesh;+1;Plusun!;Ping;Flooder;Ça c'est sûr !"|split:';' as txt %}
+            <button class="btn btn-primary" type="submit">{{ txt|random }}</button>
         {% endwith %}
         </form>  
 
