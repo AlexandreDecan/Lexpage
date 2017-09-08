@@ -5,6 +5,7 @@ sudo: true
 dist: trusty
 addons:
   postgresql: "9.4"
+  firefox: "latest"
 services:
 - redis-server
 env:
@@ -24,7 +25,6 @@ before_install:
 - travis_retry npm install grunt-cli -g
 - sudo apt-get update # For compass, see #141
 - sudo apt-get install -y ruby-dev
-- sudo apt-get install -y firefox
 install:
 - pip install -r requirements_dev.txt # Testing libs
 - pip install -r requirements_prod.txt # Postgresql
