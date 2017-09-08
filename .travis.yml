@@ -5,7 +5,7 @@ sudo: true
 dist: trusty
 addons:
   postgresql: "9.4"
-  firefox: "52"
+  firefox: "latest"
 services:
 - redis-server
 env:
