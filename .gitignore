@@ -30,3 +30,4 @@ gunicorn.pid
 
 # Static files
 app/static_pub/*
+vendor/
