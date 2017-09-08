@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-from django.core.cache import cache
 from helpers.selenium import *
 
 from notifications.models import Notification
