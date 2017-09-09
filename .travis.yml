@@ -40,6 +40,3 @@ script:
 - coverage run -a --source app/ --omit */migrations/* --omit */management/* app/manage.py test -v 3
 after_success:
 - coveralls
-matrix:
-  allow_failures:
-  - env: SELENIUM_WEBDRIVER=selenium.webdriver.firefox.webdriver.WebDriver

@@ -10,12 +10,15 @@ class NotificationsSeleniumTests(LexpageSeleniumTestCase):
         self.selenium.execute_script('app_notifications.reset();')
         self.selenium.execute_script('app_notifications.refresh();')
 
+        self.open_notifications_dropdown()
+
+    def open_notifications_dropdown(self):
         WebDriverWait(self.selenium, self.timeout).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, '.notification_list .notification'))
         )
-        element = self.selenium.find_element_by_css_selector('#notifications_container .dropdown-toggle')
+        dropdown = self.selenium.find_element_by_css_selector('#notifications_container .dropdown-toggle')
         other_element = self.selenium.find_element_by_css_selector('h2')
-        ActionChains(self.selenium).move_to_element(other_element).move_to_element(element).perform()
+        ActionChains(self.selenium).move_to_element(other_element).move_to_element(dropdown).perform()
 
 
 class NotificationsDisplayTests(NotificationsSeleniumTests):
@@ -49,9 +52,12 @@ class NotificationsDisplayTests(NotificationsSeleniumTests):
         WebDriverWait(self.selenium, self.timeout).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, '.notification_list .notification'))
         )
-        self.selenium.find_element_by_css_selector('#notifications_container .dropdown-toggle').click()
+        self.open_notifications_dropdown()
 
         notifications = self.selenium.find_elements_by_css_selector('.notification_title')
+        self.assertEqual(len(notifications), 1)
+        self.assertEqual(notifications[-1].text, 'salut')
+
         self.assertEqual(len(notifications), 1)
         self.assertEqual(notifications[-1].text, 'salut')
 
@@ -107,6 +113,7 @@ class NotificationsDismissTests(NotificationsSeleniumTests):
         Notifications list shouldn't list dismissed notifications.
         """
         self.assertEqual(len(self.selenium.find_elements_by_css_selector('.notification_list .notification')), 3)
+        self.open_notifications_dropdown()
 
         # Dismiss one of them
         self.selenium.find_element_by_css_selector('.notification_list .notification .close').click()
@@ -119,6 +126,7 @@ class NotificationsDismissTests(NotificationsSeleniumTests):
         Notifications list should disappear if we dismiss all notifications.
         """
         self.assertEqual(len(self.selenium.find_elements_by_css_selector('.notification_list .notification')), 3)
+        self.open_notifications_dropdown()
 
         # Dismiss all of them
         element = self.selenium.find_element_by_css_selector('.notification_list .close')
@@ -127,12 +135,14 @@ class NotificationsDismissTests(NotificationsSeleniumTests):
             EC.staleness_of(element)
         )
 
+        self.open_notifications_dropdown()
         element = self.selenium.find_element_by_css_selector('.notification_list .close')
         element.click()
         WebDriverWait(self.selenium, self.timeout).until(
             EC.staleness_of(element)
         )
 
+        self.open_notifications_dropdown()
         self.selenium.find_element_by_css_selector('.notification_list .close').click()
         WebDriverWait(self.selenium, self.timeout).until_not(
             EC.presence_of_element_located((By.CSS_SELECTOR, '.notification_list .notification'))
