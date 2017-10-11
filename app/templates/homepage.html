@@ -101,6 +101,12 @@ __base.html, so you HAVE to do the job here... #}
               <span class="fa fa-pencil"></span></a>
     {% endif %}
     <a class="btn"
+            href="{% url 'board_latests' %}"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Discussions récentes">
+          <span class="fa fa-clock-o"></span></a>
+    <a class="btn"
             href="{% url 'board_archives' %}"
             data-toggle="tooltip"
             data-placement="top"
@@ -114,24 +120,13 @@ __base.html, so you HAVE to do the job here... #}
           <span class="fa fa-rss"></span></a>          
     </div></h2>
 
-    {% if thread_list %}
-        {% for thread in thread_list %}
-            {% include "board/_thread_inlist.html" with thread=thread action=False %}
-        {% endfor %}
-    {% else %}
-        <em>Aucun discussion récente.</em>
-    {% endif %}
+
+    {% for thread in thread_list %}
+        {% include "board/_thread_inlist.html" with thread=thread action=False %}
+    {% endfor %}
+
 
 {% endblock page %}
 
 {% block sidebar_context %}
-<!--     <div class="panel panel-primary">
-        <div class="panel-body">
-        Défilement rapide
-        <ul>
-            <li><a href="#posts">Derniers billets</a></li>
-            <li><a href="#forum">Sur le forum</a></li>
-        </ul>
-        </div>
-    </div> -->
 {% endblock %}

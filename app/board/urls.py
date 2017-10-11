@@ -81,6 +81,10 @@ followed_patterns = [
 urlpatterns = [
                 url(r'^$',
                     BoardLatestsView.as_view(),
+                    {'page': 1},
+                    name='board_latests'),
+                url(r'^(?P<page>\d+)/$',
+                    BoardLatestsView.as_view(),
                     name='board_latests'),
                 url(r'^archives/$',
                     BoardArchivesView.as_view(),

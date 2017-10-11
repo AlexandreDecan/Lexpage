@@ -1,18 +1,21 @@
 {% extends "board/__base_board.html" %}
 
-{% block title %}Discussions actives | {{ block.super }}{% endblock %}
+{% block title %}Discussions récentes | {{ block.super }}{% endblock %}
 
 {% block content %}
 
-    <h3>Discussions actives <small>({{ thread_list|length }})</small></h3>
+    <h3>Discussions récentes <small>({{ page_obj.paginator.count }})</small></h3>
 
+    <div align="center">
+    {% include "_pagination.html" with page_obj=page_obj page_url='board_latests' %}
+    </div>
 
-    {% if thread_list %}
-        {% for thread in thread_list %}
-            {% include "board/_thread_inlist.html" with thread=thread action=True %}
-        {% endfor %}
-    {% else %}
-        <em>Aucune discussion active pour l'instant.</em>
-    {% endif %}
+    {% for thread in thread_list %}
+        {% include "board/_thread_inlist.html" with thread=thread action=True %}
+    {% endfor %}
+
+    <div align="center">
+    {% include "_pagination.html" with page_obj=page_obj page_url='board_latests' %}
+    </div>
 
 {% endblock %}

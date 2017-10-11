@@ -8,8 +8,10 @@ from board.models import Thread
 import datetime
 
 
-HOMEPAGE_POST_NUMBER = 10    # Maximum number of posts to display
-HOMEPAGE_THREAD_DELAY = 5   # Number of days before expiration
+HOMEPAGE_POST_NUMBER = 10  # Maximum number of posts to display
+HOMEPAGE_THREAD_DELAY = 5  # Maximal delay since last message for a thread to be considered as active
+HOMEPAGE_THREAD_NUMBER = 12  # Minimum number of threads to display
+HOMEPAGE_THREAD_MAX_NUMBER = 30  # Maximum number of threads to display
 
 
 def homepage(request):
@@ -19,17 +21,22 @@ def homepage(request):
     """
     context = {}
 
-    # Last posts to display
+    # Latest posts
     context['post_list'] = BlogPost.published.all().reverse()[:HOMEPAGE_POST_NUMBER]
 
-    # Last threads to display
+    # Latest threads
     date_limit = datetime.date.today() - datetime.timedelta(HOMEPAGE_THREAD_DELAY)
-    date_limit = datetime.datetime(date_limit.year, date_limit.month, date_limit.day)
-    threads = Thread.objects.all().filter(last_message__date__gte=date_limit).order_by('-date_created')
 
-    # Annotate with flags
-    for thread in threads:
+    threads = []
+    for i, thread in enumerate(Thread.objects.order_by('-last_message__date')[:HOMEPAGE_THREAD_MAX_NUMBER]):
+        # Stop if minimum number of threads is reached and there is no other active threads
+        if i >= HOMEPAGE_THREAD_NUMBER and thread.last_message.date.date() <= date_limit:
+            break
+
+        # Annotate with flags
         thread.annotate_flag(request.user)
+        threads.append(thread)
+
     context['thread_list'] = threads
 
     return render(request, 'homepage.html', context)

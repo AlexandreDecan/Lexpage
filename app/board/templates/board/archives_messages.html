@@ -20,20 +20,17 @@
     </thead>
     <tbody>
 
-    {% if message_list %}
-        {% for message in message_list %}
-            <tr>
-                <td>
-                    <a href="{% url 'board_message_show' message.pk %}">{{ message.text|striptags|truncatewords:12|truncatechars:70 }}</a><br/>
-                    <span class="small text-muted">Dans <em>{{ message.thread.title }}</em>.</span>
-                </td>
-                <td><a href="{% url 'profile_show' message.author %}">{{ message.author.username }}</a></td>
-                <td>{{ message.date|naturalday:'d/m/y' }} à {{ message.date|time }}</td>
-            </tr>
-        {% endfor %}
-    {% else %}
-        <tr><td><em>Aucun message pour la période choisie.</em></td><td></td><td></td></tr>
-    {% endif %}
+    {% for message in message_list %}
+        <tr>
+            <td>
+                <a href="{% url 'board_message_show' message.pk %}">{{ message.text|striptags|truncatewords:12|truncatechars:70 }}</a><br/>
+                <span class="small text-muted">Dans <em>{{ message.thread.title }}</em>.</span>
+            </td>
+            <td><a href="{% url 'profile_show' message.author %}">{{ message.author.username }}</a></td>
+            <td>{{ message.date|naturalday:'d/m/y' }} à {{ message.date|time }}</td>
+        </tr>
+    {% endfor %}
+
     </tbody>
     </table>
 

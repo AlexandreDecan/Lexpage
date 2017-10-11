@@ -24,7 +24,6 @@ import datetime
 
 
 MESSAGES_PER_THREADPAGE = 10
-LATESTS_IN_DAYS = 10
 THREADS_PER_PAGE = 20
 MESSAGES_PER_PAGE = 50  # archives
 
@@ -390,28 +389,29 @@ class MessageMarkUnreadView(RedirectView):
 
 class BoardLatestsView(ListView):
     """
-    List of latest threads (by message date).
+    List of threads ordered by last message date.
     """
     template_name = 'board/latests.html'
     context_object_name = 'thread_list'
-    queryset = None
+    allow_empty = False
+    queryset = Thread.objects.all().order_by('-last_message__date')
+    paginate_by = THREADS_PER_PAGE
+    paginate_orphans = THREADS_PER_PAGE // 5
 
-    def get_queryset(self):
-        date_limit = datetime.date.today() - datetime.timedelta(LATESTS_IN_DAYS)
-        date_limit = datetime.datetime(date_limit.year, date_limit.month, date_limit.day)
-        threads = Thread.objects.all().filter(last_message__date__gte=date_limit).order_by('-date_created')
-        for thread in threads:
+    def paginate_queryset(self, queryset, page_size):
+        (paginator, page, object_list, is_paginated) = ListView.paginate_queryset(self, queryset, page_size)
+        for thread in object_list:
             thread.annotate_flag(self.request.user)
-        return threads
+        return paginator, page, object_list, is_paginated
 
 
 class BoardArchivesView(ListView):
     """
-    Full list of threads.
+    List of threads ordered by first message date.
     """
     template_name = 'board/archives.html'
     context_object_name = 'thread_list'
-    allow_empty = True
+    allow_empty = False
     queryset = Thread.objects.all()
     paginate_by = THREADS_PER_PAGE
     paginate_orphans = THREADS_PER_PAGE // 5
@@ -429,7 +429,7 @@ class BoardArchivesMessagesView(ListView):
     """
     template_name = 'board/archives_messages.html'
     context_object_name = 'message_list'
-    allow_empty = True
+    allow_empty = False
     queryset = Message.objects.all()
     paginate_by = MESSAGES_PER_PAGE
     paginate_orphans = MESSAGES_PER_PAGE // 5
