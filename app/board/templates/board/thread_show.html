@@ -58,7 +58,7 @@
         {% for field in form %}
             {% include "_form_field.html" with field=field %}
         {% endfor %}
-        {% with "Envoyer;Publier;Poster;Z'yva;Yes!;Troller;Wesh;+1;Plusun!;Ping;Flooder;Ça c'est sûr !"|split:';' as txt %}
+        {% with "Envoyer;Publier;Poster;Z'y va;Yes!;Troller;Wesh;+1;Plusun!;Ping;Flooder;Ça c'est sûr !;Détourner"|split:';' as txt %}
             <button class="btn btn-primary" type="submit">{{ txt|random }}</button>
         {% endwith %}
         </form>  
