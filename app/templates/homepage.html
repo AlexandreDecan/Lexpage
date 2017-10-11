@@ -60,32 +60,20 @@ __base.html, so you HAVE to do the job here... #}
 
     <div class="container-fluid post-list-flat">
         <div class="row">
-            <div class="col-xs-12 col-sm-8">
-                <div class="row">
-
-                    <div class="col-sm-12 col-md-12">
-                        {% include 'blog/_post_inlist_flat.html' with post=post_list.0 style="post-item-large" embed=True %}
-                    </div>
-                    <div class="clearfix visible-block-md"></div>
-                    <div class="col-sm-12 col-md-6">
-                        {% include 'blog/_post_inlist_flat.html' with post=post_list.1 style="post-item-large" %}
-                    </div>
-                    <div class="col-sm-12 col-md-6">
-                        {% include 'blog/_post_inlist_flat.html' with post=post_list.2 style="post-item-large" %}
-                    </div>
-
-                </div>
+            <div class="col-xs-12 col-sm-6">
+                {% include 'blog/_post_inlist_flat.html' with post=post_list.0 style="post-item-large" embed=True %}
             </div>
-
-            <div class="hidden-xs col-sm-4">
-                {% for post in post_list|slice:"3:6" %}
-                    {% ifchanged post.date_published|naturalday:'l' %}
-                        <div class="post-date-divider">{{ post.date_published|naturalday:'l'|capfirst }}</div>
-                    {% endifchanged %}
+            <div class="col-xs-12 col-sm-6">
+                {% include 'blog/_post_inlist_flat.html' with post=post_list.1 style="post-item-large" embed=True %}
+            </div>
+        </div>
+        <div class="clearfix visible-block-md"></div>
+        <div class="row">
+            {% for post in post_list|slice:"2:5" %}
+                <div class="col-xs-12 col-sm-4">
                     {% include 'blog/_post_inlist_flat.html' with post=post style="post-item-small" %}
-                {% endfor %}
-
-            </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
 

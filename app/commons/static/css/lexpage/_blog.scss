@@ -89,11 +89,7 @@
 
 
 .post-list-flat {
-  // Post item in short list
-  .post-date-divider {
-    text-align: center;
-    color: $text-muted;
-  }
+
   .post-embed {
     display: none;
   }
@@ -162,17 +158,18 @@
     min-height: 120px;
 
     .post-embed {
-      @media (max-width: $screen-sm) {
-        display: none;
-      }
-      @media (min-width: $screen-sm) {
-        display: block;
-        float: left;
-        a {
-          margin-right: $padding-base-horizontal;
-          img {
-            max-width: 220px;
-            max-height: 120px;
+      display: block;
+      float: left;
+      a {
+        margin-right: $padding-base-horizontal;
+        img {
+          @media (max-width: $screen-sm) {
+            max-width: 12em;
+            max-height: 6em;
+          }
+          @media (min-width: $screen-sm) {
+            max-width: 16em;
+            max-height: 8em;
           }
         }
       }
