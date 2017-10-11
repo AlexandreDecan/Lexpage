@@ -7,7 +7,7 @@
   padding-bottom: 6px;
   border-top: none;
 
-  + .post_list {
+  + .post-list {
     border-top: 1px dotted $mutedColor;
   }
 
@@ -19,7 +19,7 @@
     float: right;
   }
 
-  .post-date, .post-tags, .post-share {
+  .post-date, .post-tags, .post-share, .post-comment {
     display: inline;
     color: $text-muted;
     font-size: $font-size-small;

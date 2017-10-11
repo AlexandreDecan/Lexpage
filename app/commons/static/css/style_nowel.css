@@ -5875,8 +5875,8 @@ button.close {
   padding-bottom: 6px;
   border-top: none;
 }
-.post-show + .post_list,
-.post-list + .post_list {
+.post-show + .post-list,
+.post-list + .post-list {
   border-top: 1px dotted lightgray;
 }
 .post-show .post-title,
@@ -5887,19 +5887,21 @@ button.close {
 .post-list .post-avatar {
   float: right;
 }
-.post-show .post-date, .post-show .post-tags, .post-show .post-share,
+.post-show .post-date, .post-show .post-tags, .post-show .post-share, .post-show .post-comment,
 .post-list .post-date,
 .post-list .post-tags,
-.post-list .post-share {
+.post-list .post-share,
+.post-list .post-comment {
   display: inline;
   color: #777777;
   font-size: 12px;
   margin-right: 10px;
 }
-.post-show .post-date a, .post-show .post-tags a, .post-show .post-share a,
+.post-show .post-date a, .post-show .post-tags a, .post-show .post-share a, .post-show .post-comment a,
 .post-list .post-date a,
 .post-list .post-tags a,
-.post-list .post-share a {
+.post-list .post-share a,
+.post-list .post-comment a {
   text-decoration: none;
   color: #777777;
 }

@@ -30,7 +30,7 @@
         </div>
 
         <div class="post-comment">
-            <a class="fa fa-comments" href="{% url 'blog_post_comments' post.pk %}">
+            <i class="fa fa-comments"></i><a href="{% url 'blog_post_comments' post.pk %}">
                 {% with post.blogboardlink.thread.number as count %}
                     {{ count|default:0 }} commentaire{{ count|pluralize }}</a>
                 {% endwith %}
