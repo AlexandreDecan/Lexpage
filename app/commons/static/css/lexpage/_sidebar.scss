@@ -13,12 +13,12 @@
 
 /* Full minichat, external div */
 #minichat_content {
-  max-height:380px;
+  max-height:30em;
   overflow:auto;
   margin-bottom: $padding-large-vertical;
 
   @media (max-width: $screen-sm) {
-    max-height: 280px;
+    max-height: 20em;
   }
 }
 

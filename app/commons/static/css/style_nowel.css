@@ -6700,13 +6700,13 @@ body {
 
 /* Full minichat, external div */
 #minichat_content {
-  max-height: 380px;
+  max-height: 30em;
   overflow: auto;
   margin-bottom: 10px;
 }
 @media (max-width: 768px) {
   #minichat_content {
-    max-height: 280px;
+    max-height: 20em;
   }
 }
 
