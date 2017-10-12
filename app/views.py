@@ -1,17 +1,14 @@
 #!/usr/bin/python
 
 from django.shortcuts import render
+from django.core.paginator import Paginator
 
 from blog.models import BlogPost
 from board.models import Thread
-
-import datetime
+from board.views import BoardLatestsView
 
 
 HOMEPAGE_POST_NUMBER = 10  # Maximum number of posts to display
-HOMEPAGE_THREAD_DELAY = 5  # Maximal delay since last message for a thread to be considered as active
-HOMEPAGE_THREAD_NUMBER = 12  # Minimum number of threads to display
-HOMEPAGE_THREAD_MAX_NUMBER = 30  # Maximum number of threads to display
 
 
 def homepage(request):
@@ -25,18 +22,17 @@ def homepage(request):
     context['post_list'] = BlogPost.published.all().reverse()[:HOMEPAGE_POST_NUMBER]
 
     # Latest threads
-    date_limit = datetime.date.today() - datetime.timedelta(HOMEPAGE_THREAD_DELAY)
+    threads_paginator = Paginator(
+        object_list=Thread.objects.order_by('-last_message__date'),
+        per_page=BoardLatestsView.paginate_by,
+        orphans=BoardLatestsView.paginate_orphans,
+        allow_empty_first_page=True,
+    )
+    threads = threads_paginator.page(1)
 
-    threads = []
-    for i, thread in enumerate(Thread.objects.order_by('-last_message__date')[:HOMEPAGE_THREAD_MAX_NUMBER]):
-        # Stop if minimum number of threads is reached and there is no other active threads
-        if i >= HOMEPAGE_THREAD_NUMBER and thread.last_message.date.date() <= date_limit:
-            break
-
-        # Annotate with flags
+    for thread in threads.object_list:
         thread.annotate_flag(request.user)
-        threads.append(thread)
 
-    context['thread_list'] = threads
+    context['threads'] = threads
 
     return render(request, 'homepage.html', context)
