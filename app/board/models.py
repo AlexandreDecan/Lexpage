@@ -74,13 +74,18 @@ class Thread(models.Model):
         """
         Return an ordered list of the N first most active authors.
         """
-        return (
+        most_active = (
             User
-            .objects
-            .filter(board_post__thread=self)
-            .annotate(msg=models.Count('board_post'), first_msg=models.Min('board_post__date'))
-            .order_by('-msg', 'first_msg')[:n]
+                .objects
+                .filter(board_post__thread=self)
+                .annotate(msg=models.Count('board_post'), first_msg=models.Min('board_post__date'))
+                .order_by('-msg', 'first_msg')[:n]
         )
+
+        first = Message.objects.filter(thread=self).first().author
+
+        return ([first] + [x for x in most_active if x != first])[:n]
+
 
 
 class Message(models.Model):
