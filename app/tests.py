@@ -34,7 +34,7 @@ class ViewsTests(TestCase):
 
         response = self.client.get(reverse('homepage'))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context['thread_list']), 0)
+        self.assertEqual(len(response.context['threads'].object_list), 0)
 
     def test_recent_thread(self):
         # Remove existing threads
@@ -45,4 +45,4 @@ class ViewsTests(TestCase):
 
         response = self.client.get(reverse('homepage'))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context['thread_list']), 1)
+        self.assertEqual(len(response.context['threads'].object_list), 1)
