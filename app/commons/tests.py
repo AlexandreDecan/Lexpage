@@ -3,11 +3,14 @@ import subprocess
 import os
 import filecmp
 import glob
+import datetime
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from .search import SEARCH
 from difflib import context_diff
+from .templatetags import misc
+
 
 backup_file = lambda x: '%s.orig' % x
 
@@ -123,3 +126,39 @@ class StaticFileTests(TestCase):
             self.compare_with_backup(filename)
 
 
+class ShortTimeSinceTests(TestCase):
+    def setUp(self):
+        # Because "now()" could change during the execution, let's save an arbitrary date
+        self.date = datetime.datetime(year=2017, month=10, day=13)
+
+    def test_values(self):
+        delta = [
+            (0, '<1m'),
+            (1, '<1m'),
+            (30, '<1m'),
+            (59, '<1m'),
+            (60, '1m'),
+            (61, '1m'),
+            (120, '2m'),
+            (121, '2m'),
+            (3559, '59m'),
+            (3600, '1h'),
+            (3600 * 6, '6h'),
+            (3600 * 24 - 1, '23h'),
+            (3600 * 24, '1j'),
+            (3600 * 24 * 15, '15j'),
+            (3600 * 24 * 15 - 1, '14j'),
+            (3600 * 24 * 15 + 1, '15j'),
+            (3600 * 24 * 30 - 1, '29j'),
+            (3600 * 24 * 30, '13 sep'),
+            (3600 * 24 * 34, '9 sep'),
+            (3600 * 24 * 30 * 6, '16 avr'),
+            (3600 * 24 * 30 * 12, '18 oct'),
+            (3600 * 24 * 30 * 18, 'avr 2016'),
+            (3600 * 24 * 30 * 20, 'fév 2016'),  # Check for locale
+        ]
+
+        for value, expected in delta:
+            with self.subTest():
+                result = misc.shorttimesince(self.date - datetime.timedelta(seconds=value), self.date)
+                self.assertEqual(result, expected, msg='Testing {} seconds'.format(value))
