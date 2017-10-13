@@ -34,4 +34,4 @@ def shorttimesince(date, other_date=None):
 
 @register.filter(name='scaled')
 def scaled(value, max=100):
-    return int(value / max * 100)
+    return int(min(value, max) / max * 100)
