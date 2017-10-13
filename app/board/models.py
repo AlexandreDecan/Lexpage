@@ -15,6 +15,11 @@ USE_DIFF_FOR_HISTORY = True
 
 
 class Thread(models.Model):
+    STATUS_NONE = 0
+    STATUS_UNREAD = 1
+    STATUS_READ = 2
+    STATUS_UPDATED = 3
+
     title = models.CharField(verbose_name='Titre', max_length=80)
     slug = models.SlugField(max_length=90, unique=False)
     number = models.IntegerField(verbose_name='Nombre de messages', default=0)
@@ -34,16 +39,28 @@ class Thread(models.Model):
     def annotate_flag(self, user):
         """
         Annotate the current Thread by adding the related Flag object (if it
-        exists for given user) as a `flag` attribute.
+        exists for given user) as a `flag` attribute. Also add a ``status`` attribute
+        which is set to:
+         - STATUS_NONE: if user is not authenticated;
+         - STATUS_UNREAD: if thread has never been read;
+         - STATUS_READ: if thread is followed but has no new message;
+         - STATUS_UPDATED: if thread is followed and has new message(s)
+
         :param user: Related user
         :return: None
         """
         if not user.is_authenticated:
+            self.status = Thread.STATUS_NONE
             return
+
         try:
             self.flag = Flag.objects.all().get(thread=self, user=user)
+            if self.flag.message == self.last_message:
+                self.status = Thread.STATUS_READ
+            else:
+                self.status = Thread.STATUS_UPDATED
         except Flag.DoesNotExist:
-            pass
+            self.status = Thread.STATUS_UNREAD
 
     def save(self, *args, **kwargs):
         # Slug handler
@@ -53,7 +70,7 @@ class Thread(models.Model):
     def __str__(self):
         return self.title
 
-    def most_active_authors(self, N=5):
+    def most_active_authors(self, n=6):
         """
         Return an ordered list of the N first most active authors.
         """
@@ -62,22 +79,8 @@ class Thread(models.Model):
             .objects
             .filter(board_post__thread=self)
             .annotate(msg=models.Count('board_post'), first_msg=models.Min('board_post__date'))
-            .order_by('-msg', 'first_msg')[:N]
+            .order_by('-msg', 'first_msg')[:n]
         )
-
-    def authors(self, N=None):
-        """
-        Return an ordered list of N first authors.
-        """
-        authors = Message.objects.all().filter(thread=self).order_by('date').values_list('author')
-        tmp_set = set()
-        # http://stackoverflow.com/questions/6197409/ordered-sets-python-2-7
-        output = [User.objects.all().get(pk=x[0]) for x in authors
-                  if x[0] not in tmp_set and not tmp_set.add(x[0])]
-        if N is None:
-            return output
-        else:
-            return output[:N]
 
 
 class Message(models.Model):

@@ -3,6 +3,11 @@
 .board-threadlist {
   padding-top: $padding-base-vertical;
   padding-bottom: $padding-base-vertical;
+
+  margin-left: $padding-base-horizontal;
+  border-left: 0.4em solid transparent;
+  margin-bottom: 1px;
+
   border-top: none;
   clear: both;
 
@@ -10,20 +15,30 @@
     border-top: 1px dotted $mutedColor;
   }
 
-  .board-threadlist-flag {
-    float: left;
-    height: 100%;
-    margin-top: 6px;
-    margin-left: 5px;
+  .badge {
+    margin-top: -3px;
+  }
+
+  &.board-threadlist-read {
+    border-left-color: $btn-info-bg;
+  }
+
+  &.board-threadlist-unread {
+    /* border-left-color: $alert-danger-bg; */
+  }
+
+  &.board-threadlist-updated {
+    border-left-color: $btn-danger-bg;
   }
 
   .board-threadlist-metadata {
     color: $text-muted;
+    font-size: $font-size-small;
   }
 
   .board-threadlist-title,
   .board-threadlist-metadata {
-    margin-left: 50px;
+    margin-left: $padding-base-horizontal;
   }
 
   .board-threadlist-avatar {

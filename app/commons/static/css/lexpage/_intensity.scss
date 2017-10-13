@@ -1,0 +1,44 @@
+@mixin intensity-x {
+
+  $s: 0; $n: 20;
+  @for $i from 0 through $n {
+      .intensity-#{$s + $i}-bg {
+        background-color: mix($btn-info-bg, #c0c0c0, 100% * $i / $n);
+      }
+      .intensity-#{$s + $i} {
+        color: mix($alert-info-text, $gray-light, 100% * $i / $n);
+      }
+  }
+
+  $s: $s + $n; $n: 20;
+  @for $i from 1 through $n {
+      .intensity-#{$s + $i}-bg {
+        background-color: mix($btn-success-bg, $btn-info-bg, 100% * $i / $n);
+      }
+      .intensity-#{$s + $i} {
+        color: mix($alert-success-text, $alert-info-text, 100% * $i / $n);
+      }
+  }
+
+  $s: $s + $n; $n: 30;
+  @for $i from 1 through $n {
+      .intensity-#{$s + $i}-bg {
+        background-color: mix($btn-warning-bg, $btn-success-bg, 100% * $i / $n);
+      }
+      .intensity-#{$s + $i} {
+        color: mix($alert-warning-text, $alert-success-text, 100% * $i / $n);
+      }
+  }
+
+  $s: $s + $n; $n: 30;
+  @for $i from 1 through $n {
+      .intensity-#{$s + $i}-bg {
+        background-color: mix($btn-danger-bg, $btn-warning-bg, 100% * $i / $n);
+      }
+      .intensity-#{$s + $i} {
+        color: mix($alert-danger-text, $alert-warning-text, 100% * $i / $n);
+      }
+  }
+}
+
+@include intensity-x;

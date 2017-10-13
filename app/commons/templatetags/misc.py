@@ -30,3 +30,8 @@ def shorttimesince(date, other_date=None):
         return _date(date, 'j b')
     else:
         return _date(date, 'b Y')
+
+
+@register.filter(name='scaled')
+def scaled(value, max=100):
+    return int(value / max * 100)
