@@ -40,7 +40,7 @@
 
 
     <div class="board-threadlist-avatar">
-        {% for user in thread.authors %}
+        {% for user in thread.most_active_authors %}
             <a href="{% url 'profile_show' user.username %}"><img src="{{ user.profile.avatar }}" title="{{ user.username }}" class="avatar verysmallavatar"/></a>
         {% endfor %}
     </div>    

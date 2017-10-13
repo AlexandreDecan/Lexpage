@@ -53,6 +53,18 @@ class Thread(models.Model):
     def __str__(self):
         return self.title
 
+    def most_active_authors(self, N=5):
+        """
+        Return an ordered list of the N first most active authors.
+        """
+        return (
+            User
+            .objects
+            .filter(board_post__thread=self)
+            .annotate(msg=models.Count('board_post'), first_msg=models.Min('board_post__date'))
+            .order_by('-msg', 'first_msg')[:N]
+        )
+
     def authors(self, N=None):
         """
         Return an ordered list of N first authors.
