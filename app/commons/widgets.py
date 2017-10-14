@@ -6,14 +6,9 @@ from django.utils.html import conditional_escape
 
 # From https://github.com/nkunihiko/django-bootstrap3-datetimepicker
 # Options: http://eonasdan.github.io/bootstrap-datetimepicker/
-try:
-    import json
-except ImportError:
-    from django.utils import simplejson as json
-try:
-    from django.utils.encoding import force_unicode as force_text
-except ImportError:  # python3
-    from django.utils.encoding import force_text
+
+import json
+from django.utils.encoding import force_text
 
 
 class DateTimePicker(DateTimeInput):
@@ -91,10 +86,13 @@ class DateTimePicker(DateTimeInput):
             if format and not self.options.get('format') and not self.attrs.get('date-format'):
                 self.options['format'] = self.conv_datetime_format_py2js(format)
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         if value is None:
             value = ''
-        input_attrs = self.build_attrs(attrs, type=self.input_type, name=name)
+        base_attrs = {'name': name}
+        if 'class' in self.attrs:
+            base_attrs['class'] = self.attrs['class']
+        input_attrs = self.build_attrs(attrs, base_attrs)
         if value != '':
             # Only add the 'value' attribute if a value is non-empty.
             input_attrs['value'] = self.div_attrs['data-date'] = force_text(self.format_value(value))

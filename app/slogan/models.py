@@ -27,3 +27,4 @@ class Slogan(models.Model):
 
     class Meta:
         permissions = (('can_set_visible', 'Peut rendre visible'), )
+        ordering = ['date']
