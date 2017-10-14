@@ -35,15 +35,16 @@ INSTALLED_APPS = (
     'rest_framework',
     'captcha',
 
-    'profile',
-    'slogan',
     'widget_tweaks',
     'commons',
-    'minichat',
-    'blog',
-    'messaging',
-    'board',
-    'notifications',
+
+    'profile.apps.Config',
+    'slogan.apps.Config',
+    'minichat.apps.Config',
+    'blog.apps.Config',
+    'messaging.apps.Config',
+    'board.apps.Config',
+    'notifications.apps.Config',
 )
 
 MIDDLEWARE = (

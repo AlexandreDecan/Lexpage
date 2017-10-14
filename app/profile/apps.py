@@ -1,6 +1,7 @@
 from django.apps import AppConfig
 
-class ProfileConfig(AppConfig):
+
+class Config(AppConfig):
     name = 'profile'
     verbose_name = 'Profils'
 

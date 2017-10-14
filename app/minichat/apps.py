@@ -1,6 +1,7 @@
 from django.apps import AppConfig
 
-class MinichatConfig(AppConfig):
+
+class Config(AppConfig):
     name = 'minichat'
     verbose_name = 'Minichat'
 

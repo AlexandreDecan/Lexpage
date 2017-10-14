@@ -1,6 +1,7 @@
 from django.apps import AppConfig
 
-class SloganConfig(AppConfig):
+
+class Config(AppConfig):
     name = 'slogan'
     verbose_name = 'Slogans'
 
