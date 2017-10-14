@@ -111,12 +111,19 @@ __base.html, so you HAVE to do the job here... #}
     </div></h2>
 
 
-    {% for thread in threads.object_list %}
+
+    {% comment %}The use of a sliced list is motivated by site responsiveness{% endcomment %}
+    {% for thread in threads.object_list|slice:':10' %}
         {% include "board/_thread_inlist.html" with thread=thread action=False %}
     {% endfor %}
+    <div class="hidden-xs">
+        {% for thread in threads.object_list|slice:'10:' %}
+            {% include "board/_thread_inlist.html" with thread=thread action=False %}
+        {% endfor %}
 
-    <div align="center">
-        {% include "_pagination.html" with page_obj=threads page_url='board_latests' %}
+        <div align="center">
+            {% include "_pagination.html" with page_obj=threads page_url='board_latests' %}
+        </div>
     </div>
 
 {% endblock page %}
