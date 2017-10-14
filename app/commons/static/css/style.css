@@ -6538,11 +6538,6 @@ button.close {
 .board-threadlist .board-threadlist-avatar .avatar {
   margin-bottom: 2px;
 }
-@media (max-width: 768px) {
-  .board-threadlist .board-threadlist-avatar {
-    display: none;
-  }
-}
 .board-threadlist .board-threadlist-actions {
   float: right;
   margin-top: 6px;
