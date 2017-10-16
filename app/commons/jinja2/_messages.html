@@ -1,0 +1,29 @@
+{% block messages %}
+
+{% with announcement = flatpageblock('/announcement/') %}
+    <div class="contrib-messages">
+    {% if announcement.content %}
+        <div class="{{ announcement.title }}">
+        {{ announcement.content }}
+        </div>
+    {% endif %}
+{% endwith %}
+
+{% if messages %}
+    <script language="javascript">
+    $(document).ready(function() {
+        {% for message in messages %}
+            {% if message.tags == "error" %}
+                contrib_message("danger", "{{ message|escape }}");
+            {% elif message.tags == 'success' or message.tags == 'warning' or message.tags == 'error' %}
+                contrib_message("{{ message.tags|escape }}", "{{ message|escape }}");
+            {% else %}
+                contrib_message("info", "{{ message|escape }}");
+            {% endif %}
+        {% endfor %}
+    });
+    </script>
+{% endif %}
+</div>
+
+{% endblock messages %}

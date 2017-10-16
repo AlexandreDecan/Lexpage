@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+    {% block meta_tags %}{% endblock %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0">
+    <title>{% block title %}{{ SITE_NAME }}{% endblock %}</title>
+
+
+    {% block stylesheets %}
+        {%  if THEMES.FORCED %}
+            <link href="{{ static("css/" + THEMES.FORCED + ".css") }}" rel="stylesheet"/>
+        {% else %}
+            {% with theme=user.profile.get_theme()|default(THEMES.DEFAULT) %}
+                <link href="{{ static("css/" + theme + ".css") }}" rel="stylesheet"/>
+            {% endwith %}
+        {% endif %}
+        <link href="{{ static("libs/font-awesome/css/font-awesome.css") }}" rel="stylesheet"/>
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    {% endblock stylesheets %}
+    <link rel="icon" type="image/png" href="{{ static("images/favicon.png") }}" />
+    {% block javascript %}
+        <script src="{{ static("libs/jquery/dist/jquery.js") }}"></script>
+        <script src="{{ static("libs/lodash.js") }}"></script>
+        <script src="{{ static("libs/moment/moment.js") }}"></script>
+        <script src="{{ static("libs/moment/moment.fr.js") }}"></script>
+        <script src="{{ static("js/nunjucks.templates.js") }}"></script>
+        <script src="{{ static("libs/nunjucks/nunjucks-slim.js") }}"></script>
+        <script src="{{ static("libs/nunjucks/nunjucks.js") }}"></script>
+        <script src="{{ static("js/scripts.js") }}"></script>
+        <script src="{{ static("js/notifications.js") }}"></script>
+        <script src="{{ static("js/minichat.js") }}"></script>
+        <script src="{{ static("js/markup.js") }}"></script>
+
+    {% endblock javascript %}
+    {% if form %}{{ form.media }}{% endif %}
+
+</head>
+<body>
+
+<div class="container" id="wrap">
+    <div class="row">
+        <div class="col-md-12">
+            {% block navbar %}
+                {% include "_navbar.html" %}
+            {% endblock navbar %}
+        </div>
+    </div>
+
+    <div class="row subheader">
+        <div class="col-md-12">
+            {% block slogan %}
+                {% include "_slogan.html" %}
+            {% endblock slogan %}
+        </div> <!-- slogan -->
+    </div> <!-- row -->
+
+    <div class="row">
+        <div class="col-md-9">
+            <div class="page">
+                {% block messages %}
+                    {% include "_messages.html" %}
+                {% endblock messages %}
+
+                <div class="pagecontent">
+                    {% block page %}{% endblock page %}
+                    <div class="clearfix"></div>
+                </div>
+            </div><!-- page -->
+        </div>
+        <div class="col-md-3">
+            <div class="sidebar">
+                {% include "_sidebar.html" %}
+            </div><!-- sidebar -->
+        </div>
+    </div><!-- row -->
+</div><!-- container -->
+
+{% include "_footer.html" %}
+
+
+<div class="modal fade" id="confirm-action" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Êtes-vous sûr ?</h4>
+            </div>
+            <div class="modal-body" align="center">
+                <a id="confirm-action-yes" class="btn btn-primary">Oui</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+            </div>
+        </div>
+    </div>
+</div> <!-- modal -->
+
+{% block javascript_bottom %}
+    <script src="{{ static("libs/bootstrap/js/bootstrap.js") }}"></script>
+    <script src="{{ static("libs/autocomplete.js") }}"></script>
+    <script src="{{ static("libs/jquery.oembed.js") }}"></script>
+    <script src="{{ static("libs/jquery.tagcloud.js") }}"></script>
+    <script src="{{ static("libs/jquery.bootstrap-autohidingnavbar.js") }}"></script>
+    <script src="{{ static("libs/modernizr.js") }}"></script>
+{% endblock %}
+
+
+{% include "_analytics.html" %}
+
+</body>
+</html>
+

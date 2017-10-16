@@ -1,0 +1,122 @@
+{% block sidebar_context %}
+{% endblock sidebar_context %}
+
+{% block sidebar_minichat %}
+    <div style="clearfix"></div>
+    <div id="minichat" class="sidebar-block">
+        <h2>Minichat
+            <div class="pull-right">
+                <a class="btn"
+                   href="{{ url('minichat_archives') }}"
+                   data-toggle="tooltip"
+                   data-placement="top"
+                   title="Archives">
+                    <span class="fa fa-folder-open"></span>
+                </a>
+            </div>
+        </h2>
+
+        <div id="minichat_wrapper">
+            {% if user.is_authenticated() %}
+
+                {% with online_users = who_is_online() %}
+                {% if online_users %}
+                    <div class="sidebar-online" data-toggle="tooltip" data-placement="left" title="Actuellement en ligne">
+                        {% for user in online_users %}
+                            <a href="{{ url('profile_show', user) }}">
+                                <img src="{{ user.profile.avatar }}" title="{{ user.username }}" class="avatar smallavatar"/></a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% endwith %}
+            {% endif %}
+
+            <div id="minichat_content">
+                <p class="text-muted text-center">
+                    <span class="fa fa-spinner fa-spin"></span> Chargement...</p>
+            </div>
+
+            <form action="{{ url('minichat_post') }}" class="form-inline{% if not user.is_authenticated() %} hidden{% endif %}" method="post" id="minichat_form">
+                {{ csrf_input }}
+                <div class="input-group">
+                    <input name="text" maxlength="150" type="text" class="form-control" placeholder="Nouveau message"/>
+
+                    <span class="input-group-btn">
+
+                    <button class="btn btn-default btn-circle" type="submit">
+                        <span class="fa fa-pencil"></span>
+                    </button>
+                    </span>
+                </div>
+                <div class="minichat-remainingChars">
+                    <span id="remainingChars"></span>
+                </div>
+
+            </form>
+
+            <script>
+                $(document).ready(function () {
+                    $("#minichat_form input.form-control").autocomplete({
+                        serviceUrl: "{{ url('profile_api_list') }}",
+                        minChars: 3,
+                        autoSelectFirst:true,
+                        delimiter: " ",
+                        params: {'prefix': '@'},
+                        tabDisabled: true,
+                        onSearchStart: function (query) {
+                            if (query.query.toLowerCase().charAt(0)=="@") {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        },
+                    });
+                });
+            </script>
+
+        </div><!-- minichat_content -->
+
+        <script>
+            $(document).ready(function() {
+                {% if user.profile.last_visit %}
+                    var last_visit = "{{ user.profile.last_visit|date('c') }}";
+                {% else %}
+                    var last_visit = "{{ now('c') }}";
+                {% endif %}
+
+                app_minichat = new Minichat("{{ user.username }}", last_visit, "#minichat_content", "#minichat_form", "{{ url('minichat_latest_view') }}");
+                app_minichat.init();
+            });
+        </script>
+    </div> <!-- panel -->
+{% endblock sidebar_minichat %}
+
+
+
+
+{% block sidebar_events %}
+    {% if user.is_authenticated() %}
+
+        {% with birtday_users = birthday() %}
+        {% if birthday_users|length > 0 %}
+            <div class="birthday sidebar-block">
+                <h2>Anniversaires</h2>
+
+                {% for user in birthday_users %}
+                    <div class="birthday_avatar">
+                        <a href="{{ url('profile_show', user) }}">
+                            <img src="{{ user.profile.avatar }}" title="{{ user.username }}" class="avatar verysmallavatar"/></a>
+                    </div>
+                    <a class="birtday_user" href="{{ url('profile_show', user) }}">
+                        {{ user.username }}</a>
+                    <span class="birthday_date">
+                {{ user.profile.get_birthdate|naturalday|capitalize }}
+                ({{ user.profile.birthdate }})
+            </span>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+
+    {% endif %}
+{% endblock sidebar_events %}

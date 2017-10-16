@@ -82,6 +82,16 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'environment': 'commons.jinja2.environment',
+            'context_processors': [
+                'commons.context_processors.online_settings',
+                'commons.context_processors.global_settings',
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.request',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.contrib.messages.context_processors.messages',
+            ]
         },
     },
     {

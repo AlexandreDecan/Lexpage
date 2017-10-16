@@ -1,0 +1,44 @@
+{% if page_obj.paginator.num_pages > 1 %}
+
+{# Receive page_obj and page_url page_param1 page_param2 #}
+
+    {% load sliced_pagination %}
+    <div class="pagination pagination-sm">
+        <li><a href="{% url page_url page_param1 page_param2 1 %}"><span class="fa fa-fast-backward"/></a></li>
+        {% if page_obj.has_previous %}
+            <li><a href="{% url page_url page_param1 page_param2 page_obj.previous_page_number %}"><span class="fa fa-backward"/></a></li>
+        {% else %}
+            <li class="disabled"><a href="#"><span class="fa fa-backward"/></a></li>
+        {% endif %}
+
+
+        {% sliced_pagination page_obj 9 as sliced_paginator %}
+
+        {% if sliced_paginator.hidden_prev_pages %}
+            <li class="disabled hidden-xs"><a href="#">...</a></li>
+        {% endif %}
+        {% for page_n in sliced_paginator.prev_pages %}
+            <li class="hidden-xs"><a href="{% url page_url page_param1 page_param2 page_n %}">{{ page_n }}</a></li>
+        {% endfor %}
+
+        <li class="active hidden-xs"><a href="{% url page_url page_param1 page_param2 page_obj.number %}">{{ page_obj.number }}</a></li>
+        <li class="visible-xs-inline"><a href="{% url page_url page_param1 page_param2 page_obj.number %}">page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}</a></li>
+
+        {% for page_n in sliced_paginator.next_pages %}
+            <li class="hidden-xs"><a href="{% url page_url page_param1 page_param2 page_n %}">{{ page_n }}</a></li>
+        {% endfor %}
+        {% if sliced_paginator.hidden_next_pages %}
+            <li class="disabled hidden-xs"><a href="#">...</a></li>
+        {% endif %}
+
+
+
+        {% if page_obj.has_next %}
+            <li><a href="{% url page_url page_param1 page_param2 page_obj.next_page_number %}"><span class="fa fa-forward"></span></a></li>
+        {% else %}
+            <li class="disabled"><a href="#"><span class="fa fa-forward"></span></a></li>
+        {% endif %}
+        <li><a href="{% url page_url page_param1 page_param2 page_obj.paginator.num_pages %}"><span class="fa fa-fast-forward"></span></a></li>
+    </div>
+{% endif %}
+

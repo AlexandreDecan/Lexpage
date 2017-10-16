@@ -1,0 +1,37 @@
+{% load widget_tweaks %}
+
+{% if field.is_hidden %}
+    {{ field }}
+{% else %}
+
+    <div class="form-group {{ field.css_classes }}{% if field.errors %} has-error{% endif %}">
+        {% if field|widget_type == 'checkboxinput' %}
+            <div class="checkbox {{ field.css_classes }}">
+                <label class="control-label {% if field.field.required %}required-field{% endif %}" 
+                    for="{{ field.id_for_label }}">
+                {{ field }} {{ field.label }}</label>
+            </div>
+        {% else %}
+            <label class="control-label {% if field.field.required %}required-field{% endif %}" 
+                    for="{{ field.id_for_label }}">
+                {{ field.label }}{% if field.field.required %} *{% endif %}
+            </label>
+
+            {{ field|add_class:"form-control" }}            
+        {% endif %}
+        
+        {% if field.errors %}
+            {% for error in field.errors %}
+                <span class="label label-danger">
+                    {{ error }}
+                </span>
+            {% endfor %}
+        {% endif %}
+
+        {% if field.help_text %}
+            <p class="help-block">{{ field.help_text|safe|linebreaksbr }}</p>
+        {% endif %}
+
+    </div>
+
+{% endif %} {# hidden #}

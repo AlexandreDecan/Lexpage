@@ -1,0 +1,9 @@
+{% with slogan = random_slogan() %}
+<div id="slogan">
+    <span class="fa fa-quote-left"></span>
+    &nbsp; <em>{{ slogan.slogan }}</em> &nbsp;
+    <span class="fa fa-quote-right"></span>
+    &nbsp;&mdash;&nbsp;
+    <cite>{{ slogan.author }}</cite>
+</div>
+{% endwith %}

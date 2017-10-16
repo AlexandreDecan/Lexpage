@@ -1,0 +1,17 @@
+{% extends "__base.html" %}
+{% block title %}404 | {{ super() }}{% endblock title %}
+
+{% block page %}
+    <h2>Erreur 404</h2>
+    {% block content %}
+
+
+    <p><em>Et merde, Bob, tu l'as planquée où cette page !?</em></p>
+
+
+    <p>La page demandée est introuvable !
+    Si le problème persiste et vous semble anormal, n'hésitez pas à 
+    contacter un administrateur du site.</p>
+    
+    {% endblock content %}
+{% endblock page %}
