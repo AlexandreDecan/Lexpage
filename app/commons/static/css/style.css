@@ -6539,7 +6539,7 @@ button.close {
   margin-bottom: 2px;
 }
 .board-threadlist .board-threadlist-avatar .board-threadlist-avatar-extra {
-  font-weight: bold;
+  margin-right: 5px;
 }
 .board-threadlist .board-threadlist-actions {
   float: right;
