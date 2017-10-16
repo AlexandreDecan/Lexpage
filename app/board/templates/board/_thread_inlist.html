@@ -20,18 +20,18 @@
 
     <div class="board-threadlist-avatar">
         {% with thread.most_active_authors as most_active %}
-            {% if most_active|length > 1 %}
-                <span class="board-threadlist-avatar-extra visible-xs-inline">{{ most_active|length|add:-1 }} +</span>
-                {% if most_active|length > 6 %}
-                    <span class="board-threadlist-avatar-extra hidden-xs">{{ most_active|length|add:-6 }} +</span>
-                {% endif %}
-            {% endif %}
             {% with most_active.0 as user %}
                 <a href="{% url 'profile_show' user.username %}"><img src="{{ user.profile.avatar }}" title="{{ user.username }}" class="avatar verysmallavatar"/></a>
             {% endwith %}
             {% for user in most_active|slice:'1:6' %}
                 <a class="hidden-xs" href="{% url 'profile_show' user.username %}"><img src="{{ user.profile.avatar }}" title="{{ user.username }}" class="avatar verysmallavatar"/></a>
             {% endfor %}
+            {% if most_active|length > 1 %}
+                <span class="board-threadlist-avatar-extra visible-xs-inline-block">+{{ most_active|length|add:-1 }}</span>
+                {% if most_active|length > 6 %}
+                    <span class="board-threadlist-avatar-extra hidden-xs" data-toggle="tooltip" title="{% for user in most_active|slice:'6:' %}{{ user.username }} {% endfor %}">+{{ most_active|length|add:-6 }}</span>
+                {% endif %}
+            {% endif %}
         {% endwith %}
     </div>
 

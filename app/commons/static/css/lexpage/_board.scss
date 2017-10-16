@@ -48,13 +48,16 @@
     margin-top: 6px;
     margin-right: 5px;
     text-align: right;
+
     .avatar {
-      margin-bottom: 2px;
+
     }
 
     .board-threadlist-avatar-extra {
-
-      margin-right: 5px;
+      display: inline-block;
+      width: 30px;
+      text-align: center;
+      color: $text-muted;
     }
   }
 

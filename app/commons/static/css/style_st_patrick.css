@@ -6537,11 +6537,11 @@ button.close {
   margin-right: 5px;
   text-align: right;
 }
-.board-threadlist .board-threadlist-avatar .avatar {
-  margin-bottom: 2px;
-}
 .board-threadlist .board-threadlist-avatar .board-threadlist-avatar-extra {
-  margin-right: 5px;
+  display: inline-block;
+  width: 30px;
+  text-align: center;
+  color: #777777;
 }
 .board-threadlist .board-threadlist-actions {
   float: right;
