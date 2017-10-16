@@ -75,11 +75,19 @@ MINIFY_CSS = True
 MINIFY_IGNORED_PATHS = ['admin/', 'images/', 'libs/jquery/src', 'rest_framework/']  # List of path prefixes
 
 # Templates
-TEMPLATES = [  # https://docs.djangoproject.com/en/1.9/ref/templates/upgrading/#the-templates-settings
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': [os.path.join(BASE_DIR, 'commons', 'jinja2')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'environment': 'commons.jinja2.environment',
+        },
+    },
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'commons', 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
