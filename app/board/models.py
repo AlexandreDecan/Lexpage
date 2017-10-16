@@ -70,7 +70,7 @@ class Thread(models.Model):
     def __str__(self):
         return self.title
 
-    def most_active_authors(self, n=6):
+    def most_active_authors(self, n=None):
         """
         Return an ordered list of the N first most active authors.
         """
@@ -79,11 +79,12 @@ class Thread(models.Model):
                 .objects
                 .filter(board_post__thread=self)
                 .annotate(msg=models.Count('board_post'), first_msg=models.Min('board_post__date'))
-                .order_by('-msg', 'first_msg')[:n]
+                .order_by('-msg', 'first_msg')
         )
 
         first = Message.objects.filter(thread=self).first().author
 
+        n = len(most_active) if n is None else n
         return ([first] + [x for x in most_active if x != first])[:n]
 
 

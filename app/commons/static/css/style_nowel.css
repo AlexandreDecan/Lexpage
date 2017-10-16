@@ -6509,9 +6509,6 @@ button.close {
 .board-threadlist + .board-threadlist {
   border-top: 1px dotted lightgray;
 }
-.board-threadlist .badge {
-  margin-top: -3px;
-}
 .board-threadlist.board-threadlist-read {
   border-left-color: #f97878;
 }
@@ -6521,12 +6518,15 @@ button.close {
 .board-threadlist.board-threadlist-updated {
   border-left-color: #c9302c;
 }
+.board-threadlist .board-threadlist-title {
+  margin-left: 12px;
+}
+.board-threadlist .board-threadlist-title .badge {
+  margin-top: -3px;
+}
 .board-threadlist .board-threadlist-metadata {
   color: #777777;
   font-size: 12px;
-}
-.board-threadlist .board-threadlist-title,
-.board-threadlist .board-threadlist-metadata {
   margin-left: 12px;
 }
 .board-threadlist .board-threadlist-avatar {
@@ -6538,6 +6538,9 @@ button.close {
 }
 .board-threadlist .board-threadlist-avatar .avatar {
   margin-bottom: 2px;
+}
+.board-threadlist .board-threadlist-avatar .board-threadlist-avatar-extra {
+  font-weight: bold;
 }
 .board-threadlist .board-threadlist-actions {
   float: right;
