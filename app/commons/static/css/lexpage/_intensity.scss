@@ -1,19 +1,19 @@
 @mixin intensity-x {
 
-  $s: 0; $n: 35;
+  $s: 0; $n: 100;
   @for $i from 0 through $n {
       .intensity-#{$s + $i}-bg {
         background-color: mix($btn-info-bg, $alert-info-bg, 100% * $i / $n);
       }
   }
 
-  $s: $s + $n; $n: 65;
-  @for $i from 1 through $n {
-      .intensity-#{$s + $i}-bg {
-        background-color: mix($btn-success-bg, $btn-info-bg, 100% * $i / $n);
-      }
-  }
 
+  // $s: $s + $n; $n: 65;
+  // @for $i from 1 through $n {
+  //     .intensity-#{$s + $i}-bg {
+  //       background-color: mix($btn-success-bg, $btn-info-bg, 100% * $i / $n);
+  //     }
+  // }
 }
 
 @include intensity-x;
