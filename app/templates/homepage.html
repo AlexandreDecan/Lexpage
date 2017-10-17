@@ -116,15 +116,15 @@ __base.html, so you HAVE to do the job here... #}
     {% for thread in threads.object_list|slice:':10' %}
         {% include "board/_thread_inlist.html" with thread=thread action=False %}
     {% endfor %}
-    <div class="hidden-xs">
-        {% for thread in threads.object_list|slice:'10:' %}
-            {% include "board/_thread_inlist.html" with thread=thread action=False %}
-        {% endfor %}
 
-        <div align="center">
-            {% include "_pagination.html" with page_obj=threads page_url='board_latests' %}
-        </div>
+    {% for thread in threads.object_list|slice:'10:' %}
+        {% include "board/_thread_inlist.html" with thread=thread action=False css_extra="hidden-xs" %}
+    {% endfor %}
+
+    <div class="hidden-xs" align="center">
+        {% include "_pagination.html" with page_obj=threads page_url='board_latests' %}
     </div>
+
 
 {% endblock page %}
 

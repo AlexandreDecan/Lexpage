@@ -2,7 +2,7 @@
 {% load humanize %}
 {% load misc %}
 
-<div class="board-threadlist {% if thread.status == thread.STATUS_READ %}board-threadlist-read{% elif thread.status == thread.STATUS_UNREAD %}board-threadlist-unread{% elif thread.status == thread.STATUS_UPDATED %}board-threadlist-updated{% endif %}">
+<div class="board-threadlist {{ css_extra }} {% if thread.status == thread.STATUS_READ %}board-threadlist-read{% elif thread.status == thread.STATUS_UNREAD %}board-threadlist-unread{% elif thread.status == thread.STATUS_UPDATED %}board-threadlist-updated{% endif %}">
 
     {% if action and user.is_authenticated %}
         <div class="board-threadlist-actions">
