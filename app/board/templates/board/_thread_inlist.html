@@ -36,7 +36,7 @@
     </div>
 
    <div class="board-threadlist-title">
-        <span class="badge intensity-{{ thread.number|scaled:50 }}-bg" data-toggle="tooltip" title="Nombre de messages">{{ thread.number }}</span>
+        <span class="badge intensity-{{ thread.number|scaled:50 }}-bg" data-toggle="tooltip" title="{{ thread.number }} message{{ thread.number|pluralize }}">{{ thread.number }}</span>
 
         {% if thread.status == thread.STATUS_READ %}
             <a href="{% url 'board_thread_show_last' thread.pk thread.slug %}#last">{{ thread.title }}</a>
