@@ -3,7 +3,9 @@ from django.db import models
 from django.contrib.auth.models import User
 
 import re
+
 from profile.models import ActiveUser
+from helpers.regex import RE_ATUSER
 
 
 class Message(models.Model):
@@ -17,7 +19,7 @@ class Message(models.Model):
         valid user that are targeted by such anchors.
         :return: List of users
         """
-        candidates = [x[0] for x in re.findall(r'@([\w\-_]+)(\b|\W)', self.text)]
+        candidates = [x for x in re.findall(RE_ATUSER, self.text)]
 
         # Filter valid candidates
         valid_candidates = set()

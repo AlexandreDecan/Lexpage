@@ -3,12 +3,14 @@ from django.utils.safestring import mark_safe
 from html.entities import codepoint2name
 from django.conf import settings
 
+from helpers.regex import RE_URL
+
 import re
 import os
 
 register = template.Library()
 
-BASE_URL_RE = r'(?:ftp)|(?:https?)://[^\s\(\)\[\]]{3,}?'
+BASE_URL_RE = RE_URL
 
 # tagname : (regex, html, clean)
 tag = [

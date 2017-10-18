@@ -7,6 +7,8 @@ from django.utils.timezone import now
 from django.core.urlresolvers import reverse
 from django.utils.text import slugify
 
+from helpers.regex import RE_URL
+
 
 POST_ICONS = {
     'achat': 'fa-shopping-cart',
@@ -166,11 +168,11 @@ class BlogPost(models.Model):
 
     def main_link(self):
         """
-        Return the first link in the abstract, or a link to the full post.
+        Return the first link in the abstract.
         """
-        matches = re.search(r'\[.+?\]\((https?:\/\/.+?)\)', self.abstract)
+        matches = re.search(RE_URL, self.abstract)
         if matches:
-            return matches.group(1)
+            return matches.group(0)
         else:
             return None
 
