@@ -15,7 +15,7 @@ from .models import Message
 from profile.api import UserSerializer
 
 from minichat.templatetags.minichat import urlize3
-from commons.templatetags.markup_bbcode import smiley
+from commons.templatetags.smiley import smiley
 
 
 class BadSubstituteException(APIException):

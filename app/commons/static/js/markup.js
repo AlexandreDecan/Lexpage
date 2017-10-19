@@ -639,7 +639,7 @@ MARKUP =  {
         },
         'url': {
             'desc': 'Insérer un lien',
-            'syntaxe': '[texte](http://), ou simplement <http://>',
+            'syntaxe': '[texte](http://), ou simplement http://',
             'icon': 'fa-link',
             'before': '[',
             'after': ']()',

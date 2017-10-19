@@ -1,19 +1,18 @@
 from django import template
 from django.utils.safestring import mark_safe
 from html.entities import codepoint2name
-from django.conf import settings
 
 from helpers.regex import RE_URL
 
 import re
-import os
+
 
 register = template.Library()
 
 BASE_URL_RE = RE_URL
 
 # tagname : (regex, html, clean)
-tag = [
+_simple_tags = [
     # b
     (r'\[b\](.*?)\[/b\]', r'<b>\1</b>', r'\1'),
     # u
@@ -47,7 +46,7 @@ tag = [
     (r'\[spoiler\](.*?)\[/spoiler\]', '<span class="spoiler" onclick="$(this).toggleClass(\'spoiler-show\');"><span>\\1</span></span>', r'\1'),
 ]
 
-advancedtag = [
+_advanced_tags = [
     # code
     (r'\[code\]([^\n]*?)\[/code\]', r'<code>\1</code>', r'\1'),
     (r'(?:\n)*\[code\](?:\n)?(.*?)(?:\n)?\[/code\](?:\n)*', r'<pre><code>\1</code></pre>', r'\1'),
@@ -59,62 +58,6 @@ advancedtag = [
     # sign=
     (r'\[sign=(.*?)\](.*?)\[/sign\]', r'<div class="sign sign-base"><div class="text">\2</div><div class="smiley">\1</div></div>', r'\2'),
 ]
-
-smiley_list = [
-    (':-)', 'smile'),
-    (';-)', 'wink'),
-    (':-p', 'tongue'),
-    (':-D', 'bigsmile'),
-    (':-((', 'angry2'),
-    (':-(', 'angry'),
-    (':\'((', 'bawling'),
-    (':\'(', 'sad'),
-    (':-/', 'upset'),
-    ('o.O', 'odd'),
-    ('o_O', 'odd'),
-    (':o)', 'blush'),
-    (':-x', 'kiss'),
-    (':-X', 'kiss2'),
-    ('8-)', 'showoff'),
-]
-
-
-_simple_tags = None
-_advanced_tags = None
-
-def prepare_regex():
-    global _simple_tags
-    global _advanced_tags
-
-    # Prepare regex
-    if _simple_tags is None:
-        _simple_tags = [(re.compile(x, re.MULTILINE|re.DOTALL), y, z) for x, y, z in tag]
-    if _advanced_tags is None:
-        _advanced_tags = [(re.compile(x, re.MULTILINE|re.DOTALL), y, z) for x, y, z in advancedtag]
-
-    return _simple_tags, _advanced_tags
-
-
-def replace_smiley(value):
-    # List of available smileys in smileys directory
-    local_smiley_dir = os.path.join(settings.STATIC_ROOT, 'images', 'smiley')
-
-    online_smiley_dir = os.path.join(settings.STATIC_URL, 'images', 'smiley')
-
-    try:
-        smiley_other = [(x[:-4],x[-3:]) for x in os.listdir(local_smiley_dir) if x[-3:] == 'gif']
-    except FileNotFoundError:
-        smiley_other = []
-
-    # Convert special smiley's
-    for s, name in smiley_list:
-        value = value.replace(s, '<img src="%s"/>' % os.path.join(online_smiley_dir, name+".gif"))
-
-    # Convert other smiley's
-    for name, ext in smiley_other:
-        value = value.replace(':%s:' % name, '<img src="%s"/>' % os.path.join(online_smiley_dir, name+'.'+ext))
-
-    return value
 
 
 def htmlentities(value):
@@ -128,31 +71,20 @@ def htmlentities(value):
 
 
 @register.filter
-def smiley(value):
-    return mark_safe(replace_smiley(value))
-
-
-@register.filter
-def bbcode(value, replace_smiley=True):
+def bbcode(value):
     value = htmlentities(value)
     value = value.replace('\r\n', '\n')  # Limit spacing
 
-    simple_tags, advanced_tags = prepare_regex()
-
     # Convert BBcode to html
-    for reg, rep, _ in simple_tags:
-        value = reg.sub(rep, value)
+    for reg, rep, _ in _simple_tags:
+        value = re.sub(reg, rep, value)
 
     # Convert special tags
-    for reg, rep, _ in advanced_tags:
+    for reg, rep, _ in _advanced_tags:
         temp = ''
         while temp != value:
             temp = value
-            value = reg.sub(rep, value)
-
-    # Smileys
-    if replace_smiley:
-        value = smiley(value)
+            value = re.sub(reg, rep, value)
 
     value = value.replace('\n', '<br/>')
 
@@ -163,17 +95,15 @@ def bbcode(value, replace_smiley=True):
 def stripbbcode(value):
     value = htmlentities(value)
 
-    simple_tags, advanced_tags = prepare_regex()
-
     # Convert BBcode to nothing
-    for reg, _, rep in simple_tags:
-        value = reg.sub(rep, value)
+    for reg, _, rep in _simple_tags:
+        value = re.sub(reg, rep, value)
 
     # Convert special tags
-    for reg, _, rep in advanced_tags:
+    for reg, _, rep in _advanced_tags:
         temp = ''
         while temp != value:
             temp = value
-            value = reg.sub(rep, value)
+            value = re.sub(reg, rep, value)
 
     return mark_safe(value) 

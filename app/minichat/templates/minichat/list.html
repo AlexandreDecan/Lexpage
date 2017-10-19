@@ -1,7 +1,7 @@
 {% extends "minichat/__base_minichat.html" %}
 {% load humanize %}
 {% load minichat %}
-{% load markup_bbcode %}
+{% load smiley %}
 
 {% block content %}
     <h3>Archives de {{ date_current|date:'F Y' }} <small>({{ message_list|length }})</small></h3>

@@ -1,5 +1,6 @@
 {% load humanize %}
 {% load markup_bbcode %}
+{% load smiley %}
 
 
 <div class="board-message {% if message.author == user %}self-author{% else %}other-author{% endif %} {% if user.is_authenticated and thread.flag.message.date < message.date %}message-unread{% else %}message-read{% endif %}" id="msg-{{ message.pk }}">
@@ -93,7 +94,7 @@
             {% endif %}
 
             <div class="bbcode">
-                {{ message.text|bbcode }}
+                {{ message.text|bbcode|smiley }}
             </div>
             {% with last_modified=message.last_modified %}
             {% if last_modified %}

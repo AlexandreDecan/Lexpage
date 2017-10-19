@@ -5,7 +5,8 @@
     </div>
 {% elif markup == "bbcode" %}
     {% load markup_bbcode %}
+    {% load smiley %}
     <div class="bbcode">
-    {{ content|bbcode }}
+    {{ content|bbcode|smiley }}
     </div>
 {% endif %}

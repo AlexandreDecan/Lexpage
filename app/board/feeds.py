@@ -4,9 +4,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.template.defaultfilters import linebreaksbr
 
 from commons.templatetags.markup_bbcode import stripbbcode
-from .models import Thread, Message
-
-import datetime
+from .models import Message
 
 
 class LatestsFeed(Feed):
