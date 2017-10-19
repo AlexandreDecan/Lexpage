@@ -38,11 +38,18 @@ def replace_smiley(value):
 
     # Convert special smiley's
     for s, name in smiley_list:
-        value = value.replace(s, '<img src="%s"/>' % os.path.join(online_smiley_dir, name+".gif"))
+        value = value.replace(s, '<img alt="{code}" src="{path}"/>'.format(
+            code=s,
+            name=name,
+            path=os.path.join(online_smiley_dir, name + ".gif")
+        ))
 
     # Convert other smiley's
     for name, ext in smiley_other:
-        value = value.replace(':%s:' % name, '<img src="%s"/>' % os.path.join(online_smiley_dir, name+'.'+ext))
+        value = value.replace(':%s:' % name, '<img alt=":{name}:" src="{path}"/>'.format(
+            name=name,
+            path=os.path.join(online_smiley_dir, name + '.' + ext)
+        ))
 
     return value
 
