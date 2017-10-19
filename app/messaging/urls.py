@@ -1,8 +1,6 @@
 from django.conf.urls import include
 from django.conf.urls import url
 
-from .models import MessageBox
-
 from .views import MessageListView, ThreadListView, ReplyView, MarkThreadView, NewThreadView
 
 thread_patterns = [

@@ -1,9 +1,6 @@
 from django.contrib.syndication.views import Feed
 from django.core.urlresolvers import reverse_lazy
 
-from django.template.defaultfilters import linebreaksbr
-
-from commons.templatetags.markup_bbcode import stripbbcode
 from .models import Message
 
 
@@ -22,8 +19,7 @@ class LatestsFeed(Feed):
         return item.date
 
     def item_description(self, item):
-        message = linebreaksbr(stripbbcode(item.text))
-        return 'Message par %s:<br/><br/>%s' % (item.author.username, message)
+        return 'Message par {}:\n\n{}'.format(item.author.username, item.text)
 
     def item_link(self, item):
         return item.get_absolute_url()

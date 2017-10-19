@@ -90,20 +90,3 @@ def bbcode(value):
 
     return mark_safe(value)
 
-
-@register.filter
-def stripbbcode(value):
-    value = htmlentities(value)
-
-    # Convert BBcode to nothing
-    for reg, _, rep in _simple_tags:
-        value = re.sub(reg, rep, value)
-
-    # Convert special tags
-    for reg, _, rep in _advanced_tags:
-        temp = ''
-        while temp != value:
-            temp = value
-            value = re.sub(reg, rep, value)
-
-    return mark_safe(value) 

@@ -1,6 +1,6 @@
 {% load humanize %}
 {% load markup_bbcode %}
-
+{% load smiley %}
 
 <div class="messaging-message {% if message.author == user %}self-author{% else %}other-author{% endif %} {% if date_read < message.date %}message-unread{% else %}message-read{% endif %}"" id="msg-{{ message.pk }}">
     <div class="message-side">
