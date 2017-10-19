@@ -1,59 +1,59 @@
 from django.template.defaultfilters import truncatechars
 
 import markdown
+import re
 
 from helpers.regex import RE_URL
 
 
-DEFAULT_EXTENSIONS = ['markdown.extensions.{}'.format(e) for e in ('nl2br', 'smart_strong', 'sane_lists')]
+def shorten_link(link):
+    return truncatechars(''.join(link.split('://')[1:]), 25)
 
 
 class EmbedExtension(markdown.Extension):
+    """
+    Support for [!embed](link)
+    """
     class EmbedPattern(markdown.inlinepatterns.LinkPattern):
         def handleMatch(self, m):
-            el = markdown.util.etree.Element('a')
-            link = markdown.util.AtomicString(m.group(2))
+            link = m.group(2)
+            text = shorten_link(link)
 
-            el.text = link
-            el.set('href', self.sanitize_url(self.unescape(link)))
+            el = markdown.util.etree.Element('a')
+            el.text = markdown.util.AtomicString(text)
+            el.set('href', self.unescape(link))
             el.set('class', 'oembed')
 
             return el
 
-    def __init__(self, new_style=True, *args, **kwargs):
-        """
-        Create an Embed extension for Markdown. Parameter ``new_style``which defaults to true
-        means that we capture [[URL]] instead of [!embed](url).
-        """
-        super().__init__(*args, **kwargs)
-        self._re = r'\[\[(.*)\]\]' if new_style else r'\[!embed\]\((.*)\)'
-
     def extendMarkdown(self, md, md_globals):
         """ Modify inline patterns. """
-        md.inlinePatterns.add('embed', EmbedExtension.EmbedPattern(self._re, md), '<link')
+        md.inlinePatterns.add('embed', EmbedExtension.EmbedPattern(r'\[!embed\]\((' + RE_URL + ')\)', md), '<link')
 
 
 class InlineURLExtension(markdown.Extension):
     class InlineURLPattern(markdown.inlinepatterns.LinkPattern):
         def handleMatch(self, m):
             link = m.group(2)
-            text = truncatechars(
-                ''.join(link.split('://')[1:]),
-                25,
-            )
+            text = shorten_link(link)
 
             el = markdown.util.etree.Element('a')
             el.text = markdown.util.AtomicString(text)
-            el.set('href', self.sanitize_url(self.unescape(link)))
+            el.set('href', self.unescape(link))
             el.set('class', 'inline-url')
 
             return el
 
     def extendMarkdown(self, md, md_globals):
-        md.inlinePatterns.add('inlineurl', InlineURLExtension.InlineURLPattern('({})'.format(RE_URL), md), '<autolink')
+        md.inlinePatterns.add('inlineurl', InlineURLExtension.InlineURLPattern('({})'.format(RE_URL), md), '_end')
 
 
 class SpoilerExtension(markdown.Extension):
+    """
+    E.g.: $$hidden text$$
+
+    """
+
     class SpoilerPattern(markdown.inlinepatterns.Pattern):
         def handleMatch(self, m):
             el = markdown.util.etree.Element('span')
@@ -66,9 +66,28 @@ class SpoilerExtension(markdown.Extension):
             return el
 
     def extendMarkdown(self, md, md_globals):
-        md.inlinePatterns.add('spoiler', SpoilerExtension.SpoilerPattern(r'\$\$(.*)\$\$', md), '<strong')
+        md.inlinePatterns.add('spoiler', SpoilerExtension.SpoilerPattern(r'\$\$(.*)\$\$', md), '_end')
 
 
 class BBCodeQuoteExtension(markdown.Extension):
-    pass
+    """
+    Support for [quote]text[/quote] and [quote=author]text[/quote]
+
+    """
+    class BBCodeQuotePostProcessor(markdown.postprocessors.Postprocessor):
+        def run(self, text):
+            RE_QUOTE = (r'(?:\n)*\[quote\](?:\n)?(.*?)(?:\n)?\[/quote\](?:\n)*', r'<blockquote>\1</blockquote>')
+            RE_QUOTE_AUTHOR = (r'(?:\n)*\[quote=(.*?)\](?:\n)?(.*?)(?:\n)?\[/quote\](?:\n)*',
+                               r'<blockquote><cite>\1</cite>\2</blockquote>')
+
+            for reg, rep in [RE_QUOTE, RE_QUOTE_AUTHOR]:
+                temp = ''
+                while temp != text:
+                    temp = text
+                    text = re.sub(reg, rep, text, flags=re.DOTALL)
+
+            return text
+
+    def extendMarkdown(self, md, md_globals):
+        md.postprocessors.add('BBCodeQuote', BBCodeQuoteExtension.BBCodeQuotePostProcessor(), '_end')
 
