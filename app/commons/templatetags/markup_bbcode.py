@@ -9,7 +9,6 @@ import re
 
 register = template.Library()
 
-BASE_URL_RE = RE_URL
 
 # tagname : (regex, html, clean)
 _simple_tags = [
@@ -32,15 +31,15 @@ _simple_tags = [
     (r'\[align=(.*?)\](.*?)\[/align\]', r'<div align="\1">\2</div>', r'\2'),
 
     # url
-    (r'(^|\s|\(|\[)('+BASE_URL_RE+')($|\s|\)|\])', r'\1<a href="\2">\2</a>\3', r'\1\2\3'),
-    (r'\[url\]('+BASE_URL_RE+')\[/url\]', r'<a href="\1">\1</a>', r'\1'),
-    (r'\[url=('+BASE_URL_RE+')\](.*?)\[/url\]', r'<a href="\1">\2</a>', r'\2'),
+    (r'(^|\s|\(|\[)('+RE_URL+')($|\s|\)|\])', r'\1<a href="\2">\2</a>\3', r'\1\2\3'),
+    (r'\[url\]('+RE_URL+')\[/url\]', r'<a href="\1">\1</a>', r'\1'),
+    (r'\[url=('+RE_URL+')\](.*?)\[/url\]', r'<a href="\1">\2</a>', r'\2'),
 
     # img
-    (r'\[img\]('+BASE_URL_RE+')\[/img\]', r'<img src="\1"/>', r'\1'),
+    (r'\[img\]('+RE_URL+')\[/img\]', r'<img src="\1"/>', r'\1'),
 
     # embed
-    (r'\[embed\]('+BASE_URL_RE+')\[/embed\]', r'<a class="oembed" href="\1">\1</a>', r'\1'),
+    (r'\[embed\]('+RE_URL+')\[/embed\]', r'<a class="oembed" href="\1">\1</a>', r'\1'),
 
     # spoiler
     (r'\[spoiler\](.*?)\[/spoiler\]', '<span class="spoiler" onclick="$(this).toggleClass(\'spoiler-show\');"><span>\\1</span></span>', r'\1'),
@@ -56,7 +55,7 @@ _advanced_tags = [
     (r'(?:\n)*\[quote=(.*?)\](?:\n)?(.*?)(?:\n)?\[/quote\](?:\n)*', r'<blockquote><cite>\1</cite>\2</blockquote>', r' \1: \2 '),
  
     # sign=
-    (r'\[sign=(.*?)\](.*?)\[/sign\]', r'<div class="sign sign-base"><div class="text">\2</div><div class="smiley">\1</div></div>', r'\2'),
+    (r'\[sign=(.*?)\](.*?)\[/sign\]', r'<div class="smiley-sign"><div class="smiley-sign-text">\2</div><div class="smiley-sign-smiley">\1</div></div>', r'\2'),
 ]
 
 
@@ -84,7 +83,7 @@ def bbcode(value):
         temp = ''
         while temp != value:
             temp = value
-            value = re.sub(reg, rep, value)
+            value = re.sub(reg, rep, value, flags=re.DOTALL)
 
     value = value.replace('\n', '<br/>')
 

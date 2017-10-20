@@ -2,11 +2,11 @@
 // Initialize toolbars
 $(document).ready(function (){
     var i, target;
-    target = $("textarea.markup-markdown");
+    target = $("textarea.markup-input.markup-input-markdown");
     for (i = 0; i<target.length ; i++) {
         attach_toolbar($(target[i]), MARKDOWN_name);
     }
-    target = $("textarea.markup-bbcode");
+    target = $("textarea.markup-input.markup-input-bbcode");
     for (i = 0; i<target.length ; i++) {
         attach_toolbar($(target[i]), BBCODE_name);
     }

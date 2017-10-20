@@ -5,7 +5,7 @@ from .models import Message, Thread
 class MessageForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(MessageForm, self).__init__(*args, **kwargs)
-        self.fields['text'].widget.attrs.update({'class': 'markup-bbcode'})
+        self.fields['text'].widget.attrs.update({'class': 'markup-input markup-input-bbcode'})
 
     class Meta:
         model = Message
@@ -21,7 +21,7 @@ class MessageModerateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(MessageModerateForm, self).__init__(*args, **kwargs)
-        self.fields['text'].widget.attrs.update({'class': 'markup-bbcode'})
+        self.fields['text'].widget.attrs.update({'class': 'markup-input markup-input-bbcode'})
         # self.fields['moderated'].widget = forms.HiddenInput()
 
     def clean_moderated(self):
@@ -40,7 +40,7 @@ class ThreadForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ThreadForm, self).__init__(*args, **kwargs)
-        self.fields['text'].widget.attrs.update({'class': 'markup-bbcode'})
+        self.fields['text'].widget.attrs.update({'class': 'markup-input markup-input-bbcode'})
 
     class Meta:
         model = Message

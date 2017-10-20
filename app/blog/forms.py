@@ -59,8 +59,8 @@ class UserCreatePostForm(forms.ModelForm):
         forms.ModelForm.__init__(self, *args, **kwargs)
         self.fields['tags'].widget.attrs.update({'class': 'tags_complete'})
         self.fields['abstract'].widget.attrs.update({'rows': 2})
-        self.fields['abstract'].widget.attrs.update({'class': 'markup-markdown'})
-        self.fields['text'].widget.attrs.update({'class': 'markup-markdown'})
+        self.fields['abstract'].widget.attrs.update({'class': 'markup-input markup-input-markdown'})
+        self.fields['text'].widget.attrs.update({'class': 'markup-input markup-input-markdown'})
 
     def clean_tags(self):
         tags = clean_tags(self.cleaned_data['tags'])

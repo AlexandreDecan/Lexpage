@@ -6815,6 +6815,12 @@ body {
 }
 
 /* ************* Markup **/
+@media (max-width: 768px) {
+  form textarea.markup-input {
+    height: 8em;
+  }
+}
+
 .markup-preview {
   border: 1px solid lightgray;
   padding: 6px 12px;
@@ -6824,14 +6830,12 @@ body {
 .markup-toolbar {
   margin-bottom: 10px;
 }
-
 .markup-toolbar .btn {
   background-color: #ffffff;
   color: gray;
   border: 1px solid lightgray;
   margin-bottom: 10px;
 }
-
 .markup-toolbar .btn:hover {
   color: #3e5d71;
   background-color: lightgray;
@@ -6851,6 +6855,18 @@ body {
   margin-top: -250px;
   text-align: center;
   z-index: 9999;
+}
+
+.markdown blockquote, .bbcode blockquote {
+  padding: 6px 12px;
+  margin: 10px 10px 10px 10px;
+  line-height: 12pt;
+  font-size: 11pt;
+  border-color: #5E7EA2;
+}
+.markdown img, .markdown iframe, .bbcode img, .bbcode iframe {
+  max-width: 100%;
+  max-height: auto;
 }
 
 .markdown h1, .markdown h2, .markdown h3, .markdown h4, .markdown h5, .markdown h6 {
@@ -6877,78 +6893,52 @@ body {
   font-size: 0.7em;
 }
 
-.markdown blockquote,
-.bbcode blockquote {
-  padding: 6px 12px;
-  margin: 10px 10px 10px 10px;
-  line-height: 12pt;
-  font-size: 11pt;
-  border-color: #5E7EA2;
-}
-
 .bbcode blockquote {
   border-top: 1px solid lightgray;
   border-right: 1px solid lightgray;
   border-bottom: 1px solid lightgray;
   -webkit-box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 3px;
   box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 3px;
-}
-
-.bbcode blockquote {
   margin-top: 25px;
   margin-bottom: 10px;
   background-color: rgba(94, 132, 171, 0.1);
 }
-
 .bbcode blockquote cite {
   margin-left: 15px;
   margin-bottom: 5px;
   display: block;
   font-weight: bold;
 }
-
-.markdown img,
-.markdown iframe,
-.bbcode img,
-.bbcode iframe {
-  max-width: 100%;
-  max-height: auto;
-}
-
 .bbcode .spoiler {
   cursor: pointer;
 }
-
-.bbcode .spoiler span,
-.bbcode .spoiler a {
+.bbcode .spoiler span, .bbcode .spoiler a {
   text-shadow: 0px 0px 8px black;
   text-shadow: 0px 0px 8px 0.5px black;
   /* for ie */
   color: transparent;
 }
-
 .bbcode .spoiler img {
   visibility: hidden;
 }
-
-.bbcode .spoiler:hover span,
-.bbcode .spoiler:hover a {
+.bbcode .spoiler:hover span, .bbcode .spoiler:hover a {
   text-shadow: none;
   color: inherit;
 }
-
 .bbcode .spoiler:hover img {
   visibility: visible;
 }
-
-.bbcode .sign {
+.bbcode .smiley-sign {
   display: inline-block;
   min-width: 25px;
   max-width: 180px;
   vertical-align: text-top;
+  position: relative;
+  background-image: url("../images/sign/sign-base.png");
+  background-position: center bottom;
+  background-repeat: no-repeat;
 }
-
-.bbcode .sign .text {
+.bbcode .smiley-sign .smiley-sign-text {
   padding: 0.2em 0.5em 0.2em 0.5em;
   margin: 0;
   border: 1px solid black;
@@ -6959,15 +6949,7 @@ body {
   background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, white), color-stop(100%, #e5e5e5));
   text-align: center;
 }
-
-.bbcode .sign-base {
-  position: relative;
-  background-image: url("../images/sign/sign-base.png");
-  background-position: center bottom;
-  background-repeat: no-repeat;
-}
-
-.bbcode .sign .smiley {
+.bbcode .smiley-sign .smiley-sign-smiley {
   margin-top: 1px;
   margin-bottom: -1px;
   margin-left: 50%;
