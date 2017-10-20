@@ -6,8 +6,8 @@ import re
 from helpers.regex import RE_URL
 
 
-def shorten_link(link):
-    return truncatechars(''.join(link.split('://')[1:]), 25)
+def shorten_link(link, length=25):
+    return truncatechars(''.join(link.split('://')[1:]), length)
 
 
 class EmbedExtension(markdown.Extension):

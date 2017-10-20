@@ -3,6 +3,7 @@ from django.utils.safestring import mark_safe
 from html.entities import codepoint2name
 
 from helpers.regex import RE_URL
+from ..markdown_extensions import shorten_link
 
 import re
 
@@ -31,8 +32,9 @@ _simple_tags = [
     (r'\[align=(.*?)\](.*?)\[/align\]', r'<div align="\1">\2</div>', r'\2'),
 
     # url
-    (r'(^|\s|\(|\[)('+RE_URL+')($|\s|\)|\])', r'\1<a href="\2">\2</a>\3', r'\1\2\3'),
-    (r'\[url\]('+RE_URL+')\[/url\]', r'<a href="\1">\1</a>', r'\1'),
+
+    (r'(^|\s|\(|\[)('+RE_URL+')($|\s|\)|\])', (lambda m: '{1}<a href="{2}">{0}</a>{3}'.format(shorten_link(m.group(2)), *m.groups())), r'\1\2\3'),
+    (r'\[url\]('+RE_URL+')\[/url\]', (lambda m: '<a href="{1}">{0}</a>'.format(shorten_link(m.group(1)), *m.groups())), r'\1'),
     (r'\[url=('+RE_URL+')\](.*?)\[/url\]', r'<a href="\1">\2</a>', r'\2'),
 
     # img
