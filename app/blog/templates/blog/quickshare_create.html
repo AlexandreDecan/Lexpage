@@ -1,0 +1,27 @@
+{% extends "blog/__base_blog.html" %}
+
+{% block title %}Partage rapide | {{ block.super }}{% endblock %}
+
+
+{% block content %}
+    <h3>Partage rapide</h3>
+
+    <p>
+        Les partages rapides permettent de référencer du contenu externe et de le publier rapidement.
+        Copiez l'adresse à partager dans le texte, et limitez ce dernier à une ou deux lignes maximum.
+        Le Markdown, les hashtags et les smiley sont automatiquement convertis.
+    </p>
+
+    <form method="post" class="form" action="{% url 'blog_quickshare_create' %}">
+    {% csrf_token %}
+    {% include "_form_errors.html" %}
+    {% for field in form %}
+        {% include "_form_field.html" with field=field %}
+    {% endfor %}
+
+    <button class="btn btn-primary" type="submit">Enregistrer</button>
+    <a class="btn btn-default" href="{% url 'homepage' %}">Annuler</a>
+    </form>
+
+
+{% endblock content %}

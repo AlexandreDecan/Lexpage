@@ -61,6 +61,7 @@ POST_ICONS = {
     'pc': 'fa-desktop',
     'people': 'fa-group',
     'photo': 'fa-camera',
+    'quickshare': 'fa-share-alt',
     'réseau': 'fa-signal',
     'sciences': 'fa-flask',
     'smartphone': 'fa-mobile',
@@ -212,9 +213,15 @@ class BlogPost(models.Model):
 
         is_owner = self.author == user
         if not user.has_perm('blog.can_approve'):
-            return is_owner and (self.status == BlogPost.STATUS_DRAFT)
+            return is_owner and (
+                (self.status == BlogPost.STATUS_DRAFT)
+                or (self.is_quickshare() and self.status == BlogPost.STATUS_PUBLISHED)
+            )
         else:
-            return (is_owner and self.status == BlogPost.STATUS_DRAFT) or (self.status > BlogPost.STATUS_DRAFT)
+            return (
+                (is_owner and self.status == BlogPost.STATUS_DRAFT)
+                or (self.status > BlogPost.STATUS_DRAFT)
+            )
 
     def change_status(self, user, new_status):
         """
@@ -255,6 +262,9 @@ class BlogPost(models.Model):
         """
 
         return [str(x) for x in self.tags.split(' ') if len(x) > 0]
+
+    def is_quickshare(self):
+        return 'quickshare' in self.tags_list()
 
     def __str__(self):
         return str(self.title)

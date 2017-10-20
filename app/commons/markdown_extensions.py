@@ -3,7 +3,7 @@ from django.template.defaultfilters import truncatechars
 import markdown
 import re
 
-from helpers.regex import RE_URL
+from helpers.regex import RE_URL, RE_HASHTAG
 
 
 def shorten_link(link, length=25):
@@ -91,3 +91,34 @@ class BBCodeQuoteExtension(markdown.Extension):
     def extendMarkdown(self, md, md_globals):
         md.postprocessors.add('BBCodeQuote', BBCodeQuoteExtension.BBCodeQuotePostProcessor(), '_end')
 
+
+class HashtagExtension(markdown.Extension):
+    """
+    Convert #things into a link.
+    Reverse function must be provided, ie. a function that receives a tag and produce an URI.
+
+    Notice that this extension slightly changes the way headers are identified by
+    Markdown: a space is needed between # and the text.
+    """
+    def __init__(self, reverse, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._reverse = reverse
+
+    class HashtagPattern(markdown.inlinepatterns.Pattern):
+        def __init__(self, reverse, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self._reverse = reverse
+
+        def handleMatch(self, m):
+            tag = m.group(2)
+
+            el = markdown.util.etree.Element('a')
+            el.set('class', 'hashtag')
+            el.set('href', self._reverse(tag))
+            el.text = tag
+
+            return el
+
+    def extendMarkdown(self, md, md_globals):
+        md.inlinePatterns.add('hashtag', HashtagExtension.HashtagPattern(self._reverse, '({})'.format(RE_HASHTAG), md), '_end')
+        md.parser.blockprocessors['hashheader'].RE = re.compile(r'(^|\n)(?P<level>#{1,6}) (?P<header>.*?)#*(\n|$)')

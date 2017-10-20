@@ -1,0 +1,41 @@
+<div class="quickshare-list">
+    <div class="row">
+        {% for post in posts|slice:':2' %}
+            <div class="col-sm-6">
+            {% include 'blog/_post_quickshare.html' %}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row">
+        {% for post in posts|slice:'2:5' %}
+            <div class="col-sm-4">
+            {% include 'blog/_post_quickshare.html' with short=True %}
+            </div>
+        {% endfor %}
+    </div>
+
+
+    {% if user.is_authenticated %}
+        <form method="post" class="quickshare-form" action="{% url 'blog_quickshare_create' %}">
+        {% csrf_token %}
+        <div class="quickshare-form-content">
+            <div class="quickshare-form-avatar">
+                <a href="{% url 'profile_show' user %}">
+                    <img title="{{ user.username }}" src="{{ user.profile.avatar }}" class="avatar smallavatar"/>
+                </a>
+            </div>
+            <div class="quickshare-form-button">
+                <button class="btn btn-default btn-circle" type="submit">
+                    <span class="fa fa-pencil"></span>
+                </button>
+                <br/>
+                <a class="text-muted" href="{% url 'blog_quickshare_create' %}"><span class="fa fa-question-circle"></span></a>
+
+            </div>
+            <div class="quickshare-form-input">
+                <textarea name="content" rows="2" class="form-control" placeholder="Partagez vos bonnes adresses !"></textarea>
+            </div>
+        </div>
+        </form>
+    {% endif %}
+</div>

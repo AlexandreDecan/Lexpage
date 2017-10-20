@@ -40,7 +40,7 @@
 
         <h3>
             {{ post.title }}
-            {% if perms.blog.can_approve %}
+            {% if perms.blog.can_approve or user == post.author and post.is_quickshare %}
                 <small>(<a href="{% url 'blog_post_edit' post.pk %}">Modifier</a>)</small>
             {% endif %}
 

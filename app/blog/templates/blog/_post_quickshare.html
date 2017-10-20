@@ -1,0 +1,52 @@
+{% load markup_markdown %}
+{% load smiley %}
+{% load humanize %}
+{% load misc %}
+
+<div class="quickshare-content {% if short %}quickshare-small{% else %}quickshare-large{% endif %}{% if post.date_published >= user.profile.last_visit %} quickshare-recent{% endif %}">
+
+    <div class="post-avatar">
+        <a href="{% url 'profile_show' post.author %}">
+            <img title="{{ post.author.username }}" src="{{ post.author.profile.avatar }}" class="avatar"/>
+        </a>
+    </div>
+    <div class="post-abstract">
+        <div class="markdown">
+            {% if not post.is_quickshare %}
+                {{ post.title }} &ndash;
+            {% endif %}
+            {{ post.abstract|markdown|smiley }}
+
+            {% if post.text %}
+                <div class="post-next">
+                    // <a href="{% url 'blog_post_show' post.pk post.slug %}">lire la suite</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="post-metadata">
+        {% with post.blogboardlink.thread.number|default:0 as number %}
+        <div class="post-comment{% if number > 0 %} with-comment{% else %} without-comment{% endif %}">
+            <a href="{% url 'blog_post_comments' post.pk %}">
+                <span class="fa fa-comments"></span>
+                {{ number }}
+            </a>
+        </div>
+        {% endwith %}
+
+        <div class="post-date">
+            <a href="{% url 'profile_show' post.author %}">{{ post.author.username }}</a>, {{ post.date_published|naturalday:'l' }} {{ post.date_published|time:'G' }}h
+        </div>
+
+        {% comment %}Remind that `and` has higher priority{% endcomment %}
+        {% if perms.blog.can_approve or user == post.author and post.is_quickshare %}
+            <div class="post-edit">
+                <a data-toggle="tooltip" title="Modifier le billet" href="{% url 'blog_post_edit' post.pk %}"><span class="fa fa-edit"></span></a>
+            </div>
+        {% endif %}
+
+    </div>
+
+
+</div>

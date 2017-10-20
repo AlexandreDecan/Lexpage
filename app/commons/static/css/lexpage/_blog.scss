@@ -87,6 +87,147 @@
 }
 
 
+.quickshare-list {
+
+  .quickshare-content {
+    @include z-depth(1);
+
+    &:hover {
+      @include z-depth(0);
+    }
+
+    margin-right: 5px;
+    padding-top: $padding-base-vertical;
+    padding-bottom: 6px;
+    border-left: 0.4em solid transparent;
+
+    &.quickshare-recent {
+      border-left-color: $brand-danger;
+    }
+
+    .post-metadata {
+      clear: both;
+      text-align: left;
+      margin-top: $padding-small-vertical;
+      font-size: $font-size-small;
+
+      .post-date {
+        display: inline;
+        color: $text-muted;
+
+        a { color: $text-muted; }
+
+        &:before {
+          content: "\2013";
+          padding: 0 0.2em;
+        }
+      }
+
+      .post-edit {
+        display: inline;
+        visibility: hidden;
+        opacity: 0;
+
+        a {
+          color: $text-muted;
+        }
+      }
+
+      .post-comment {
+        display: inline;
+
+        a {
+          @extend .badge;
+          &, &:hover { text-decoration: none; }
+        }
+
+        &.with-comment a {
+          background-color: $btn-info-bg;
+        }
+
+        &.without-comment a {
+          background-color: $mutedColor;
+        }
+      }
+    }
+
+    &:hover .post-edit { visibility: visible; opacity: 1; }
+
+    .post-abstract {
+      .markdown p {
+        display: inline;
+      }
+
+      .post-next {
+        display: inline;
+        margin-left: 10px;
+        white-space: nowrap;
+      }
+    }
+
+    .post-avatar {
+      float: right;
+      margin-right: -2 * $padding-base-horizontal;
+    }
+
+    &.quickshare-large {
+      margin: $padding-base-vertical 0px 2 * $padding-base-vertical 0px;
+      padding: $padding-base-vertical $padding-base-horizontal;
+
+      .post-avatar .avatar {
+        @extend .smallavatar;
+      }
+    }
+
+    &.quickshare-small {
+      font-size: $font-size-small;
+      margin: $padding-small-vertical 0 2 * $padding-small-vertical 0;
+      padding: $padding-small-vertical $padding-small-horizontal;
+
+      .post-avatar .avatar {
+        @extend .verysmallavatar;
+      }
+
+      @media (max-width: $screen-sm) {
+        .post-metadata {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .quickshare-form {
+    margin-top: 1em;
+    margin-left: 3em;
+
+    .quickshare-form-content {
+      @include z-depth(0);
+
+      padding: $padding-base-vertical $padding-base-horizontal;
+      padding-left: 2 * $padding-base-horizontal;
+    }
+
+    .quickshare-form-avatar {
+      float: left;
+      margin-left: -4 * $padding-base-horizontal;
+    }
+
+    .quickshare-form-input {
+      margin-right: 3.5em;
+
+      textarea {
+        height: 4em;
+      }
+    }
+
+    .quickshare-form-button {
+      float: right;
+      text-align: center;
+    }
+  }
+}
+
+
 
 .post-list-flat {
 

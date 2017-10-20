@@ -16,7 +16,7 @@
   }
 
   &.board-threadlist-read {
-    border-left-color: $btn-info-bg;
+    border-left-color: $brand-info;
   }
 
   &.board-threadlist-unread {
@@ -24,7 +24,7 @@
   }
 
   &.board-threadlist-updated {
-    border-left-color: $btn-danger-bg;
+    border-left-color: $brand-danger;
   }
 
   .board-threadlist-title {

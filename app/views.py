@@ -8,7 +8,7 @@ from board.models import Thread
 from board.views import BoardLatestsView
 
 
-HOMEPAGE_POST_NUMBER = 10  # Maximum number of posts to display
+HOMEPAGE_POST_NUMBER = 8  # Maximum number of posts to display
 
 
 def homepage(request):
@@ -19,7 +19,7 @@ def homepage(request):
     context = {}
 
     # Latest posts
-    context['post_list'] = BlogPost.published.all().reverse()[:HOMEPAGE_POST_NUMBER]
+    context['post_list'] = BlogPost.published.order_by('-date_published')[:HOMEPAGE_POST_NUMBER]
 
     # Latest threads
     threads_paginator = Paginator(
@@ -29,7 +29,6 @@ def homepage(request):
         allow_empty_first_page=True,
     )
     threads = threads_paginator.page(1)
-
     for thread in threads.object_list:
         thread.annotate_flag(request.user)
 

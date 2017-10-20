@@ -1,4 +1,5 @@
 from django import template
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 from .. import markdown_extensions
@@ -16,7 +17,10 @@ def create_markdown_filter(*extra_extensions):
     return _wrapped
 
 
-register.filter(name='markdown', is_safe=True)(create_markdown_filter(
+blogpost_markdown = create_markdown_filter(
     markdown_extensions.EmbedExtension(),
-    markdown_extensions.InlineURLExtension()
-))
+    markdown_extensions.InlineURLExtension(),
+    markdown_extensions.HashtagExtension(lambda t: reverse('blog_tags', kwargs={'taglist': t[1:]}))
+)
+
+register.filter(name='markdown', is_safe=True)(blogpost_markdown)

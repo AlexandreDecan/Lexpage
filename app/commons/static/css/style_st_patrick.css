@@ -2656,7 +2656,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
   background-color: #fff;
   border-color: #ccc;
 }
-.btn-default .badge, h2 .btn .badge, .btn-toolbar .btn-group .btn .badge {
+.btn-default .badge, h2 .btn .badge, .btn-toolbar .btn-group .btn .badge, .btn-default .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .btn-default a, h2 .btn .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment h2 .btn a, .btn-toolbar .btn-group .btn .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .btn-toolbar .btn-group .btn a {
   color: #fff;
   background-color: #777777;
 }
@@ -2693,7 +2693,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
   background-color: #079e07;
   border-color: #068506;
 }
-.btn-primary .badge {
+.btn-primary .badge, .btn-primary .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .btn-primary a {
   color: #079e07;
   background-color: #fff;
 }
@@ -2730,7 +2730,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
   background-color: #5cb85c;
   border-color: #4cae4c;
 }
-.btn-success .badge {
+.btn-success .badge, .btn-success .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .btn-success a {
   color: #5cb85c;
   background-color: #fff;
 }
@@ -2767,7 +2767,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
   background-color: #08b608;
   border-color: #079e07;
 }
-.btn-info .badge {
+.btn-info .badge, .btn-info .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .btn-info a {
   color: #08b608;
   background-color: #fff;
 }
@@ -2804,7 +2804,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
   background-color: #f0ad4e;
   border-color: #eea236;
 }
-.btn-warning .badge {
+.btn-warning .badge, .btn-warning .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .btn-warning a {
   color: #f0ad4e;
   background-color: #fff;
 }
@@ -2841,7 +2841,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
   background-color: #d9534f;
   border-color: #d43f3a;
 }
-.btn-danger .badge {
+.btn-danger .badge, .btn-danger .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .btn-danger a {
   color: #d9534f;
   background-color: #fff;
 }
@@ -4265,7 +4265,7 @@ a.label:hover, a.label:focus {
   background-color: #c9302c;
 }
 
-.badge {
+.badge, .quickshare-list .quickshare-content .post-metadata .post-comment a {
   display: inline-block;
   min-width: 10px;
   padding: 3px 7px;
@@ -4279,32 +4279,32 @@ a.label:hover, a.label:focus {
   background-color: #777777;
   border-radius: 10px;
 }
-.badge:empty {
+.badge:empty, .quickshare-list .quickshare-content .post-metadata .post-comment a:empty {
   display: none;
 }
-.btn .badge {
+.btn .badge, .btn .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .btn a {
   position: relative;
   top: -1px;
 }
-.btn-xs .badge, .btn-group-xs > .btn .badge, h2 .btn .badge, .btn-group-xs > .btn .badge {
+.btn-xs .badge, .btn-group-xs > .btn .badge, h2 .btn .badge, .btn-xs .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .btn-xs a, .btn-group-xs > .btn .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .btn-group-xs > .btn a, h2 .btn .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment h2 .btn a, .btn-group-xs > .btn .badge, .btn-group-xs > .btn .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .btn-group-xs > .btn a {
   top: 0;
   padding: 1px 5px;
 }
-.list-group-item.active > .badge, .nav-pills > .active > a > .badge {
+.list-group-item.active > .badge, .quickshare-list .quickshare-content .post-metadata .post-comment .list-group-item.active > a, .nav-pills > .active > a > .badge, .quickshare-list .quickshare-content .post-metadata .post-comment .nav-pills > .active > a > a {
   color: #109210;
   background-color: #fff;
 }
-.list-group-item > .badge {
+.list-group-item > .badge, .quickshare-list .quickshare-content .post-metadata .post-comment .list-group-item > a {
   float: right;
 }
-.list-group-item > .badge + .badge {
+.list-group-item > .badge + .badge, .quickshare-list .quickshare-content .post-metadata .post-comment .list-group-item > a + .badge, .quickshare-list .quickshare-content .post-metadata .post-comment .list-group-item > .badge + a, .quickshare-list .quickshare-content .post-metadata .post-comment .list-group-item > a + a {
   margin-right: 5px;
 }
-.nav-pills > li > a > .badge {
+.nav-pills > li > a > .badge, .quickshare-list .quickshare-content .post-metadata .post-comment .nav-pills > li > a > a {
   margin-left: 3px;
 }
 
-a.badge:hover, a.badge:focus {
+a.badge:hover, .quickshare-list .quickshare-content .post-metadata .post-comment a:hover, a.badge:focus, .quickshare-list .quickshare-content .post-metadata .post-comment a:focus {
   color: #fff;
   text-decoration: none;
   cursor: pointer;
@@ -4909,7 +4909,7 @@ button.list-group-item-danger.active:focus {
 .panel-default > .panel-heading + .panel-collapse > .panel-body {
   border-top-color: #ddd;
 }
-.panel-default > .panel-heading .badge {
+.panel-default > .panel-heading .badge, .panel-default > .panel-heading .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .panel-default > .panel-heading a {
   color: #f5f5f5;
   background-color: #333333;
 }
@@ -4928,7 +4928,7 @@ button.list-group-item-danger.active:focus {
 .panel-primary > .panel-heading + .panel-collapse > .panel-body {
   border-top-color: #079e07;
 }
-.panel-primary > .panel-heading .badge {
+.panel-primary > .panel-heading .badge, .panel-primary > .panel-heading .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .panel-primary > .panel-heading a {
   color: #079e07;
   background-color: #fff;
 }
@@ -4947,7 +4947,7 @@ button.list-group-item-danger.active:focus {
 .panel-success > .panel-heading + .panel-collapse > .panel-body {
   border-top-color: #d6e9c6;
 }
-.panel-success > .panel-heading .badge {
+.panel-success > .panel-heading .badge, .panel-success > .panel-heading .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .panel-success > .panel-heading a {
   color: #dff0d8;
   background-color: #3c763d;
 }
@@ -4966,7 +4966,7 @@ button.list-group-item-danger.active:focus {
 .panel-info > .panel-heading + .panel-collapse > .panel-body {
   border-top-color: #bce8f1;
 }
-.panel-info > .panel-heading .badge {
+.panel-info > .panel-heading .badge, .panel-info > .panel-heading .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .panel-info > .panel-heading a {
   color: #d9edf7;
   background-color: #31708f;
 }
@@ -4985,7 +4985,7 @@ button.list-group-item-danger.active:focus {
 .panel-warning > .panel-heading + .panel-collapse > .panel-body {
   border-top-color: #faebcc;
 }
-.panel-warning > .panel-heading .badge {
+.panel-warning > .panel-heading .badge, .panel-warning > .panel-heading .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .panel-warning > .panel-heading a {
   color: #fcf8e3;
   background-color: #8a6d3b;
 }
@@ -5004,7 +5004,7 @@ button.list-group-item-danger.active:focus {
 .panel-danger > .panel-heading + .panel-collapse > .panel-body {
   border-top-color: #ebccd1;
 }
-.panel-danger > .panel-heading .badge {
+.panel-danger > .panel-heading .badge, .panel-danger > .panel-heading .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .panel-danger > .panel-heading a {
   color: #f2dede;
   background-color: #a94442;
 }
@@ -5805,7 +5805,7 @@ button.close {
 }
 
 /*********** Avatar */
-.avatar, .smallavatar, .post-list-flat .post-content.post-item-large .post-metadata .post-avatar .avatar, .verysmallavatar, .post-list-flat .post-content.post-item-small .avatar {
+.avatar, .smallavatar, .quickshare-list .quickshare-content.quickshare-large .post-avatar .avatar, .post-list-flat .post-content.post-item-large .post-metadata .post-avatar .avatar, .verysmallavatar, .quickshare-list .quickshare-content.quickshare-small .post-avatar .avatar, .post-list-flat .post-content.post-item-small .avatar {
   border-radius: 50%;
 }
 
@@ -5824,15 +5824,15 @@ button.close {
 .avatar:hover {
   border-radius: 8px;
 }
-.avatar.smallavatar, .post-list-flat .post-content.post-item-large .post-metadata .post-avatar .avatar {
+.avatar.smallavatar, .quickshare-list .quickshare-content.quickshare-large .post-avatar .avatar, .post-list-flat .post-content.post-item-large .post-metadata .post-avatar .avatar {
   width: 40px;
   height: 40px;
 }
-.avatar.verysmallavatar, .post-list-flat .post-content.post-item-small .avatar {
+.avatar.verysmallavatar, .quickshare-list .quickshare-content.quickshare-small .post-avatar .avatar, .post-list-flat .post-content.post-item-small .avatar {
   width: 30px;
   height: 30px;
 }
-.avatar.smallavatar:hover, .post-list-flat .post-content.post-item-large .post-metadata .post-avatar .avatar:hover, .avatar.verysmallavatar:hover, .post-list-flat .post-content.post-item-small .avatar:hover {
+.avatar.smallavatar:hover, .quickshare-list .quickshare-content.quickshare-large .post-avatar .avatar:hover, .post-list-flat .post-content.post-item-large .post-metadata .post-avatar .avatar:hover, .avatar.verysmallavatar:hover, .quickshare-list .quickshare-content.quickshare-small .post-avatar .avatar:hover, .post-list-flat .post-content.post-item-small .avatar:hover {
   border-radius: 4px;
 }
 .avatar.incognito {
@@ -6359,6 +6359,113 @@ button.close {
   padding: 6px 12px;
 }
 
+.quickshare-list .quickshare-content {
+  -webkit-box-shadow: 0 0px 5px 1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0px 5px 1px rgba(0, 0, 0, 0.3);
+  margin-right: 5px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-left: 0.4em solid transparent;
+}
+.quickshare-list .quickshare-content:hover {
+  -webkit-box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.3);
+}
+.quickshare-list .quickshare-content.quickshare-recent {
+  border-left-color: #d9534f;
+}
+.quickshare-list .quickshare-content .post-metadata {
+  clear: both;
+  text-align: left;
+  margin-top: 5px;
+  font-size: 12px;
+}
+.quickshare-list .quickshare-content .post-metadata .post-date {
+  display: inline;
+  color: #777777;
+}
+.quickshare-list .quickshare-content .post-metadata .post-date a {
+  color: #777777;
+}
+.quickshare-list .quickshare-content .post-metadata .post-date:before {
+  content: "\2013";
+  padding: 0 0.2em;
+}
+.quickshare-list .quickshare-content .post-metadata .post-edit {
+  display: inline;
+  visibility: hidden;
+  opacity: 0;
+}
+.quickshare-list .quickshare-content .post-metadata .post-edit a {
+  color: #777777;
+}
+.quickshare-list .quickshare-content .post-metadata .post-comment {
+  display: inline;
+}
+.quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment a:hover {
+  text-decoration: none;
+}
+.quickshare-list .quickshare-content .post-metadata .post-comment.with-comment a {
+  background-color: #08b608;
+}
+.quickshare-list .quickshare-content .post-metadata .post-comment.without-comment a {
+  background-color: lightgray;
+}
+.quickshare-list .quickshare-content:hover .post-edit {
+  visibility: visible;
+  opacity: 1;
+}
+.quickshare-list .quickshare-content .post-abstract .markdown p {
+  display: inline;
+}
+.quickshare-list .quickshare-content .post-abstract .post-next {
+  display: inline;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+.quickshare-list .quickshare-content .post-avatar {
+  float: right;
+  margin-right: -24px;
+}
+.quickshare-list .quickshare-content.quickshare-large {
+  margin: 6px 0px 12px 0px;
+  padding: 6px 12px;
+}
+.quickshare-list .quickshare-content.quickshare-small {
+  font-size: 12px;
+  margin: 5px 0 10px 0;
+  padding: 5px 10px;
+}
+@media (max-width: 768px) {
+  .quickshare-list .quickshare-content.quickshare-small .post-metadata {
+    display: none;
+  }
+}
+.quickshare-list .quickshare-form {
+  margin-top: 1em;
+  margin-left: 3em;
+}
+.quickshare-list .quickshare-form .quickshare-form-content {
+  -webkit-box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0px 2px 0px rgba(0, 0, 0, 0.3);
+  padding: 6px 12px;
+  padding-left: 24px;
+}
+.quickshare-list .quickshare-form .quickshare-form-avatar {
+  float: left;
+  margin-left: -48px;
+}
+.quickshare-list .quickshare-form .quickshare-form-input {
+  margin-right: 3.5em;
+}
+.quickshare-list .quickshare-form .quickshare-form-input textarea {
+  height: 4em;
+}
+.quickshare-list .quickshare-form .quickshare-form-button {
+  float: right;
+  text-align: center;
+}
+
 .post-list-flat .post-embed {
   display: none;
 }
@@ -6522,7 +6629,7 @@ button.close {
 .board-threadlist .board-threadlist-title {
   margin-left: 12px;
 }
-.board-threadlist .board-threadlist-title .badge {
+.board-threadlist .board-threadlist-title .badge, .board-threadlist .board-threadlist-title .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .board-threadlist .board-threadlist-title a {
   margin-top: -3px;
 }
 .board-threadlist .board-threadlist-metadata {
@@ -6699,7 +6806,7 @@ body {
   zoom: 1.0;
 }
 /*********** Transitions */
-a, .btn, button, .navbar .badge {
+a, .btn, button, .navbar .badge, .navbar .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .navbar a {
   -webkit-transition: color, 0.3s, ease, 0.3s;
   -o-transition: color, 0.3s, ease, 0.3s;
   transition: color, 0.3s, ease, 0.3s;
@@ -6916,6 +7023,9 @@ form .markup-toolbar .btn:hover {
 .markdown h6 {
   font-size: 0.7em;
 }
+.markdown .hashtag {
+  color: #777777;
+}
 
 .bbcode blockquote {
   border-top: 1px solid lightgray;
@@ -7008,7 +7118,7 @@ form .markup-toolbar .btn:hover {
     display: none;
   }
 }
-.navbar .badge {
+.navbar .badge, .navbar .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .navbar a {
   color: #fff;
   background-color: #d9534f;
 }
@@ -7044,11 +7154,11 @@ form .markup-toolbar .btn:hover {
     height: 40px;
   }
 }
-.navbar .navbar-right .badge {
+.navbar .navbar-right .badge, .navbar .navbar-right .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .navbar .navbar-right a {
   color: #fff;
   background-color: #d9534f;
 }
-.navbar .navbar-right .badge:hover {
+.navbar .navbar-right .badge:hover, .navbar .navbar-right .quickshare-list .quickshare-content .post-metadata .post-comment a:hover, .quickshare-list .quickshare-content .post-metadata .post-comment .navbar .navbar-right a:hover {
   background-color: #eba5a3;
 }
 .navbar.navbar-hidden {

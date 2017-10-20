@@ -1,8 +1,10 @@
+import datetime
+
 from django.contrib.auth.models import User
 from django.http import Http404
 
 from django.core.urlresolvers import reverse_lazy, reverse
-from django.template.defaultfilters import force_escape
+from django.template.defaultfilters import force_escape, truncatewords
 
 from django.views.generic import ListView, TemplateView, RedirectView
 from django.views.generic.edit import FormView
@@ -14,12 +16,14 @@ from django.utils.decorators import method_decorator
 
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
+
 from notifications.models import Notification
 
-from .forms import UserCreatePostForm, StaffCreatePostForm, UserEditPostForm, StaffEditPostForm, SearchByTagsForm
+from .forms import UserCreatePostForm, StaffCreatePostForm, UserEditPostForm, StaffEditPostForm, SearchByTagsForm, \
+    QuickShareForm
 
 from .models import BlogPost
-from datetime import date
+
 
 
 # ##################### NOTIFICATIONS
@@ -92,7 +96,7 @@ class PostListView(MonthArchiveView):
     def get_context_data(self, **kwargs):
         context = MonthArchiveView.get_context_data(self, **kwargs)
         context['date_list'] = PostListView.queryset.dates('date_published', 'month')
-        context['date_current'] = date(int(self.get_year()), int(self.get_month()), 1)
+        context['date_current'] = datetime.date(int(self.get_year()), int(self.get_month()), 1)
         return context
 
 
@@ -186,6 +190,37 @@ def _handle_status(request, post, action):
         messages.warning(request, 'Action invalide sur ce billet.')
 
 
+class QuickShareCreateView(FormView):
+    """
+    Provide form handling to create a quickshare, ie. a blogpost that is created
+    from a single charfield.
+    """
+    template_name = 'blog/quickshare_create.html'
+    form_class = QuickShareForm
+    success_url = reverse_lazy('homepage')
+
+    dispatch = method_decorator(login_required)(FormView.dispatch)
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+
+        post = BlogPost(
+            title=data['title'],
+            author=self.request.user,
+            tags=' '.join(data['tags']),
+            abstract=data['content'],
+            priority=BlogPost.PRIORITY_VERY_HIGH,
+            status=BlogPost.STATUS_PUBLISHED,
+            date_published=datetime.datetime.now(),
+        )
+        post.save()
+
+        # Display a confirmation to the user
+        messages.success(self.request, 'Le lien que vous avez partagé est maintenant publié.')
+
+        return FormView.form_valid(self, form)
+
+
 class PostCreateView(FormView):
     """
     Provide a form that can be used to create a new post.
@@ -265,7 +300,14 @@ class PostEditView(FormView):
         # Change the form if user has permission...
         if self.request.user.has_perm('blog.can_approve'):
             form_class = StaffEditPostForm
-        return FormView.get_form(self, form_class)
+            return super().get_form(form_class)
+
+        post = get_object_or_404(BlogPost, pk=self.kwargs['pk'])
+        if post.is_quickshare() and post.status == BlogPost.STATUS_PUBLISHED and post.can_be_viewed_by(self.request.user):
+            form = super().get_form()
+            form.fields['action'].choices = [(form.ACTION_PUBLISH, 'Modifier le billet')]
+            form.fields['action'].value = form.ACTION_PUBLISH
+            return form
 
     def form_valid(self, form):
         # Raise 404 if post does not exist

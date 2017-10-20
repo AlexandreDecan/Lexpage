@@ -1,4 +1,8 @@
 from django import forms
+from django.template.defaultfilters import truncatewords, striptags, truncatechars
+
+from commons.templatetags.markup_markdown import blogpost_markdown
+from helpers.regex import RE_URL, RE_HASHTAG
 from .models import BlogPost
 
 import re
@@ -35,6 +39,36 @@ class SearchByTagsForm(forms.ModelForm):
     class Meta:
         model = BlogPost
         fields = ['tags']
+
+
+class QuickShareForm(forms.Form):
+    content = forms.CharField(
+        label='Contenu du partage rapide',
+        widget=forms.Textarea(attrs={
+            'class': 'quickshare-input',
+            'rows': 2,
+        }))
+
+    def clean_content(self):
+        data = self.cleaned_data['content']
+
+        # Content must have at least one link
+        if not re.search(RE_URL, data):
+            raise forms.ValidationError('Le texte doit au moins contenir un lien.')
+
+        # Remove newlines
+        data = ' '.join(data.splitlines())
+
+        data_without_markup = striptags(blogpost_markdown(re.sub(RE_URL, '', data)))
+
+        # Set title
+        self.cleaned_data['title'] = truncatechars(truncatewords(data_without_markup, 8), BlogPost._meta.get_field('title').max_length - 3)
+
+        # Set tags
+        tags = ' '.join(re.findall(RE_HASHTAG, data_without_markup) + ['quickshare'])
+        self.cleaned_data['tags'] = clean_tags(tags)
+
+        return data
 
 
 class UserCreatePostForm(forms.ModelForm):
