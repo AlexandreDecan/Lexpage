@@ -5,7 +5,6 @@ from blog.models import BlogPost
 from blog.forms import UserCreatePostForm
 from notifications.models import Notification
 from profile.models import ActiveUser
-import datetime
 
 
 class PostsTests(TestCase):

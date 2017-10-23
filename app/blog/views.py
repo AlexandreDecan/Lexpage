@@ -302,12 +302,13 @@ class PostEditView(FormView):
             form_class = StaffEditPostForm
             return super().get_form(form_class)
 
+        form = super().get_form()
         post = get_object_or_404(BlogPost, pk=self.kwargs['pk'])
         if post.is_quickshare() and post.status == BlogPost.STATUS_PUBLISHED and post.can_be_viewed_by(self.request.user):
-            form = super().get_form()
             form.fields['action'].choices = [(form.ACTION_PUBLISH, 'Modifier le billet')]
             form.fields['action'].value = form.ACTION_PUBLISH
-            return form
+        return form
+
 
     def form_valid(self, form):
         # Raise 404 if post does not exist
