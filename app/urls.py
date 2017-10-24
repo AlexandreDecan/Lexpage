@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 from django.conf.urls import include, url
 from django.contrib.flatpages.views import flatpage
 
