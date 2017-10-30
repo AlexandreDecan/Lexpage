@@ -1,0 +1,63 @@
+@import url("//fonts.googleapis.com/css?family=Frijole");
+
+
+h2 {
+  font-family: "Frijole", Helvetica, sans-serif;
+  border: 0;
+  font-size: $font-size-h2 * 0.9;
+  text-shadow: 0 4px 5px opacify(lighten($brand-primary, 30%), 0.6);
+  .btn {
+    text-shadow: none;
+  }
+}
+
+.navbar {
+  background-image: linear-gradient(#341904, lighten($brand-primary, 10%));
+
+  .navbar-brand {
+    font-family: "Frijole", Helvetica, sans-serif;
+    font-size: $font-size-large * 1.4;
+    white-space: nowrap;
+  }
+}
+
+.pagecontent, .sidebar-block {
+  background-color: white;
+  padding: 0px $padding-large-horizontal $padding-large-vertical $padding-large-horizontal;
+  margin-bottom: 30px;
+
+  @include z-depth(4);
+
+  border-radius: 0px 0px $border-radius-base $border-radius-base;
+  border-top: 6px solid $brand-primary;
+  background-image: linear-gradient(lighten($brand-primary-alt, 50%), white 45px);
+}
+
+.avatar, .smallavatar, .verysmallavatar {
+  border-radius: 40% 40% 0 0;
+  border-bottom: 4px solid #333;
+
+  filter: sepia(1);
+  object-fit: cover;
+
+  height:92px;
+
+  &.smallavatar {
+    height: 48px;
+  }
+  &.verysmallavatar {
+    height: 37px;
+  }
+}
+
+.btn-default {
+  border: none;
+  background-image: url("/static/images/halloween/icon.png");
+  background-size: 2.1em;
+  padding: 0.8em;
+  min-width: 2em;
+  min-height: 1em;
+  background-repeat: no-repeat;
+  background-position-x: 50%;
+  background-position-y: 4px;
+}

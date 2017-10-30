@@ -150,6 +150,7 @@ THEMES = {
         ('style', 'Lexpage'),
         ('style_nowel', 'Nowel'),
         ('style_st_patrick', 'Saint-Patrick'),
+        ('style_halloween', 'Halloween'),
     ),
     'DEFAULT': 'style',
     'FORCED': None,
