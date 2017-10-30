@@ -2736,38 +2736,38 @@ a.btn.disabled, fieldset[disabled] a.btn {
 
 .btn-info {
   color: #fff;
-  background-color: rgba(136, 69, 14, 0.25);
-  border-color: rgba(113, 57, 12, 0.25);
+  background-color: rgba(136, 69, 14, 0.4);
+  border-color: rgba(113, 57, 12, 0.4);
 }
 .btn-info:focus, .btn-info.focus {
   color: #fff;
-  background-color: rgba(90, 46, 9, 0.25);
-  border-color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(90, 46, 9, 0.4);
+  border-color: rgba(0, 0, 0, 0.4);
 }
 .btn-info:hover {
   color: #fff;
-  background-color: rgba(90, 46, 9, 0.25);
-  border-color: rgba(57, 29, 6, 0.25);
+  background-color: rgba(90, 46, 9, 0.4);
+  border-color: rgba(57, 29, 6, 0.4);
 }
 .btn-info:active, .btn-info.active, .open > .btn-info.dropdown-toggle {
   color: #fff;
-  background-color: rgba(90, 46, 9, 0.25);
-  border-color: rgba(57, 29, 6, 0.25);
+  background-color: rgba(90, 46, 9, 0.4);
+  border-color: rgba(57, 29, 6, 0.4);
 }
 .btn-info:active:hover, .btn-info:active:focus, .btn-info:active.focus, .btn-info.active:hover, .btn-info.active:focus, .btn-info.active.focus, .open > .btn-info.dropdown-toggle:hover, .open > .btn-info.dropdown-toggle:focus, .open > .btn-info.dropdown-toggle.focus {
   color: #fff;
-  background-color: rgba(57, 29, 6, 0.25);
-  border-color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(57, 29, 6, 0.4);
+  border-color: rgba(0, 0, 0, 0.4);
 }
 .btn-info:active, .btn-info.active, .open > .btn-info.dropdown-toggle {
   background-image: none;
 }
 .btn-info.disabled, .btn-info.disabled:hover, .btn-info.disabled:focus, .btn-info.disabled.focus, .btn-info.disabled:active, .btn-info.disabled.active, .btn-info[disabled], .btn-info[disabled]:hover, .btn-info[disabled]:focus, .btn-info[disabled].focus, .btn-info[disabled]:active, .btn-info[disabled].active, fieldset[disabled] .btn-info, fieldset[disabled] .btn-info:hover, fieldset[disabled] .btn-info:focus, fieldset[disabled] .btn-info.focus, fieldset[disabled] .btn-info:active, fieldset[disabled] .btn-info.active {
-  background-color: rgba(136, 69, 14, 0.25);
-  border-color: rgba(113, 57, 12, 0.25);
+  background-color: rgba(136, 69, 14, 0.4);
+  border-color: rgba(113, 57, 12, 0.4);
 }
 .btn-info .badge, .btn-info .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .btn-info a {
-  color: rgba(136, 69, 14, 0.25);
+  color: rgba(136, 69, 14, 0.4);
   background-color: #fff;
 }
 
@@ -4116,7 +4116,7 @@ tbody.collapse.in {
   padding: 6px 12px;
   line-height: 1.42857;
   text-decoration: none;
-  color: rgba(136, 69, 14, 0.25);
+  color: rgba(136, 69, 14, 0.4);
   background-color: transparent;
   border: 1px solid lightgray;
   margin-left: -1px;
@@ -4137,8 +4137,8 @@ tbody.collapse.in {
 .pagination > li > span:focus {
   z-index: 3;
   color: white;
-  background-color: rgba(136, 69, 14, 0.25);
-  border-color: rgba(136, 69, 14, 0.25);
+  background-color: rgba(136, 69, 14, 0.4);
+  border-color: rgba(136, 69, 14, 0.4);
 }
 .pagination > .active > a, .pagination > .active > a:hover, .pagination > .active > a:focus,
 .pagination > .active > span,
@@ -4146,7 +4146,7 @@ tbody.collapse.in {
 .pagination > .active > span:focus {
   z-index: 2;
   color: white;
-  background-color: rgba(136, 69, 14, 0.25);
+  background-color: rgba(136, 69, 14, 0.4);
   border-color: transparent;
   cursor: default;
 }
@@ -4244,10 +4244,10 @@ a.label:hover, a.label:focus {
 }
 
 .label-info {
-  background-color: rgba(136, 69, 14, 0.25);
+  background-color: rgba(136, 69, 14, 0.4);
 }
 .label-info[href]:hover, .label-info[href]:focus {
-  background-color: rgba(90, 46, 9, 0.25);
+  background-color: rgba(90, 46, 9, 0.4);
 }
 
 .label-warning {
@@ -5872,403 +5872,403 @@ button.close {
 }
 
 .intensity-1-bg {
-  background-color: rgba(217, 237, 247, 0.9925);
+  background-color: rgba(217, 237, 246, 0.994);
 }
 
 .intensity-2-bg {
-  background-color: rgba(217, 237, 246, 0.985);
+  background-color: rgba(217, 236, 246, 0.988);
 }
 
 .intensity-3-bg {
-  background-color: rgba(217, 236, 246, 0.9775);
+  background-color: rgba(216, 236, 245, 0.982);
 }
 
 .intensity-4-bg {
-  background-color: rgba(217, 236, 246, 0.97);
+  background-color: rgba(216, 235, 245, 0.976);
 }
 
 .intensity-5-bg {
-  background-color: rgba(216, 236, 245, 0.9625);
+  background-color: rgba(216, 235, 244, 0.97);
 }
 
 .intensity-6-bg {
-  background-color: rgba(216, 235, 245, 0.955);
+  background-color: rgba(216, 234, 243, 0.964);
 }
 
 .intensity-7-bg {
-  background-color: rgba(216, 235, 245, 0.9475);
+  background-color: rgba(216, 234, 243, 0.958);
 }
 
 .intensity-8-bg {
-  background-color: rgba(216, 235, 244, 0.94);
+  background-color: rgba(215, 233, 242, 0.952);
 }
 
 .intensity-9-bg {
-  background-color: rgba(216, 235, 244, 0.9325);
+  background-color: rgba(215, 233, 241, 0.946);
 }
 
 .intensity-10-bg {
-  background-color: rgba(216, 234, 243, 0.925);
+  background-color: rgba(215, 232, 241, 0.94);
 }
 
 .intensity-11-bg {
-  background-color: rgba(216, 234, 243, 0.9175);
+  background-color: rgba(215, 232, 240, 0.934);
 }
 
 .intensity-12-bg {
-  background-color: rgba(215, 234, 243, 0.91);
+  background-color: rgba(214, 231, 239, 0.928);
 }
 
 .intensity-13-bg {
-  background-color: rgba(215, 233, 242, 0.9025);
+  background-color: rgba(214, 231, 239, 0.922);
 }
 
 .intensity-14-bg {
-  background-color: rgba(215, 233, 242, 0.895);
+  background-color: rgba(214, 230, 238, 0.916);
 }
 
 .intensity-15-bg {
-  background-color: rgba(215, 233, 241, 0.8875);
+  background-color: rgba(214, 230, 237, 0.91);
 }
 
 .intensity-16-bg {
-  background-color: rgba(215, 233, 241, 0.88);
+  background-color: rgba(213, 229, 236, 0.904);
 }
 
 .intensity-17-bg {
-  background-color: rgba(215, 232, 240, 0.8725);
+  background-color: rgba(213, 229, 236, 0.898);
 }
 
 .intensity-18-bg {
-  background-color: rgba(215, 232, 240, 0.865);
+  background-color: rgba(213, 228, 235, 0.892);
 }
 
 .intensity-19-bg {
-  background-color: rgba(214, 232, 239, 0.8575);
+  background-color: rgba(213, 228, 234, 0.886);
 }
 
 .intensity-20-bg {
-  background-color: rgba(214, 231, 239, 0.85);
+  background-color: rgba(212, 227, 233, 0.88);
 }
 
 .intensity-21-bg {
-  background-color: rgba(214, 231, 238, 0.8425);
+  background-color: rgba(212, 227, 232, 0.874);
 }
 
 .intensity-22-bg {
-  background-color: rgba(214, 230, 238, 0.835);
+  background-color: rgba(212, 226, 232, 0.868);
 }
 
 .intensity-23-bg {
-  background-color: rgba(214, 230, 237, 0.8275);
+  background-color: rgba(211, 225, 231, 0.862);
 }
 
 .intensity-24-bg {
-  background-color: rgba(214, 230, 237, 0.82);
+  background-color: rgba(211, 225, 230, 0.856);
 }
 
 .intensity-25-bg {
-  background-color: rgba(213, 229, 236, 0.8125);
+  background-color: rgba(211, 224, 229, 0.85);
 }
 
 .intensity-26-bg {
-  background-color: rgba(213, 229, 236, 0.805);
+  background-color: rgba(210, 223, 228, 0.844);
 }
 
 .intensity-27-bg {
-  background-color: rgba(213, 229, 235, 0.7975);
+  background-color: rgba(210, 223, 227, 0.838);
 }
 
 .intensity-28-bg {
-  background-color: rgba(213, 228, 235, 0.79);
+  background-color: rgba(210, 222, 226, 0.832);
 }
 
 .intensity-29-bg {
-  background-color: rgba(213, 228, 234, 0.7825);
+  background-color: rgba(209, 221, 225, 0.826);
 }
 
 .intensity-30-bg {
-  background-color: rgba(212, 227, 234, 0.775);
+  background-color: rgba(209, 221, 224, 0.82);
 }
 
 .intensity-31-bg {
-  background-color: rgba(212, 227, 233, 0.7675);
+  background-color: rgba(209, 220, 223, 0.814);
 }
 
 .intensity-32-bg {
-  background-color: rgba(212, 226, 232, 0.76);
+  background-color: rgba(208, 219, 222, 0.808);
 }
 
 .intensity-33-bg {
-  background-color: rgba(212, 226, 232, 0.7525);
+  background-color: rgba(208, 219, 221, 0.802);
 }
 
 .intensity-34-bg {
-  background-color: rgba(211, 225, 231, 0.745);
+  background-color: rgba(208, 218, 220, 0.796);
 }
 
 .intensity-35-bg {
-  background-color: rgba(211, 225, 230, 0.7375);
+  background-color: rgba(207, 217, 219, 0.79);
 }
 
 .intensity-36-bg {
-  background-color: rgba(211, 225, 230, 0.73);
+  background-color: rgba(207, 216, 218, 0.784);
 }
 
 .intensity-37-bg {
-  background-color: rgba(211, 224, 229, 0.7225);
+  background-color: rgba(207, 215, 217, 0.778);
 }
 
 .intensity-38-bg {
-  background-color: rgba(210, 223, 228, 0.715);
+  background-color: rgba(206, 215, 216, 0.772);
 }
 
 .intensity-39-bg {
-  background-color: rgba(210, 223, 228, 0.7075);
+  background-color: rgba(206, 214, 215, 0.766);
 }
 
 .intensity-40-bg {
-  background-color: rgba(210, 222, 227, 0.7);
+  background-color: rgba(205, 213, 214, 0.76);
 }
 
 .intensity-41-bg {
-  background-color: rgba(210, 222, 226, 0.6925);
+  background-color: rgba(205, 212, 213, 0.754);
 }
 
 .intensity-42-bg {
-  background-color: rgba(209, 221, 225, 0.685);
+  background-color: rgba(205, 211, 211, 0.748);
 }
 
 .intensity-43-bg {
-  background-color: rgba(209, 221, 224, 0.6775);
+  background-color: rgba(204, 210, 210, 0.742);
 }
 
 .intensity-44-bg {
-  background-color: rgba(209, 220, 223, 0.67);
+  background-color: rgba(204, 209, 209, 0.736);
 }
 
 .intensity-45-bg {
-  background-color: rgba(209, 219, 223, 0.6625);
+  background-color: rgba(203, 208, 207, 0.73);
 }
 
 .intensity-46-bg {
-  background-color: rgba(208, 219, 222, 0.655);
+  background-color: rgba(203, 208, 206, 0.724);
 }
 
 .intensity-47-bg {
-  background-color: rgba(208, 218, 221, 0.6475);
+  background-color: rgba(202, 207, 205, 0.718);
 }
 
 .intensity-48-bg {
-  background-color: rgba(208, 217, 220, 0.64);
+  background-color: rgba(202, 206, 203, 0.712);
 }
 
 .intensity-49-bg {
-  background-color: rgba(207, 217, 219, 0.6325);
+  background-color: rgba(201, 204, 202, 0.706);
 }
 
 .intensity-50-bg {
-  background-color: rgba(207, 216, 218, 0.625);
+  background-color: rgba(201, 203, 200, 0.7);
 }
 
 .intensity-51-bg {
-  background-color: rgba(207, 215, 217, 0.6175);
+  background-color: rgba(200, 202, 199, 0.694);
 }
 
 .intensity-52-bg {
-  background-color: rgba(206, 214, 216, 0.61);
+  background-color: rgba(200, 201, 197, 0.688);
 }
 
 .intensity-53-bg {
-  background-color: rgba(206, 214, 215, 0.6025);
+  background-color: rgba(199, 200, 196, 0.682);
 }
 
 .intensity-54-bg {
-  background-color: rgba(205, 213, 214, 0.595);
+  background-color: rgba(199, 199, 194, 0.676);
 }
 
 .intensity-55-bg {
-  background-color: rgba(205, 212, 212, 0.5875);
+  background-color: rgba(198, 198, 192, 0.67);
 }
 
 .intensity-56-bg {
-  background-color: rgba(205, 211, 211, 0.58);
+  background-color: rgba(197, 196, 191, 0.664);
 }
 
 .intensity-57-bg {
-  background-color: rgba(204, 210, 210, 0.5725);
+  background-color: rgba(197, 195, 189, 0.658);
 }
 
 .intensity-58-bg {
-  background-color: rgba(204, 209, 209, 0.565);
+  background-color: rgba(196, 194, 187, 0.652);
 }
 
 .intensity-59-bg {
-  background-color: rgba(203, 208, 207, 0.5575);
+  background-color: rgba(196, 193, 185, 0.646);
 }
 
 .intensity-60-bg {
-  background-color: rgba(203, 207, 206, 0.55);
+  background-color: rgba(195, 191, 183, 0.64);
 }
 
 .intensity-61-bg {
-  background-color: rgba(202, 206, 204, 0.5425);
+  background-color: rgba(194, 190, 182, 0.634);
 }
 
 .intensity-62-bg {
-  background-color: rgba(202, 205, 203, 0.535);
+  background-color: rgba(194, 188, 179, 0.628);
 }
 
 .intensity-63-bg {
-  background-color: rgba(201, 204, 201, 0.5275);
+  background-color: rgba(193, 187, 177, 0.622);
 }
 
 .intensity-64-bg {
-  background-color: rgba(201, 203, 200, 0.52);
+  background-color: rgba(192, 185, 175, 0.616);
 }
 
 .intensity-65-bg {
-  background-color: rgba(200, 202, 198, 0.5125);
+  background-color: rgba(191, 184, 173, 0.61);
 }
 
 .intensity-66-bg {
-  background-color: rgba(199, 201, 196, 0.505);
+  background-color: rgba(191, 182, 171, 0.604);
 }
 
 .intensity-67-bg {
-  background-color: rgba(199, 199, 195, 0.4975);
+  background-color: rgba(190, 180, 169, 0.598);
 }
 
 .intensity-68-bg {
-  background-color: rgba(198, 198, 193, 0.49);
+  background-color: rgba(189, 179, 166, 0.592);
 }
 
 .intensity-69-bg {
-  background-color: rgba(197, 196, 191, 0.4825);
+  background-color: rgba(188, 177, 164, 0.586);
 }
 
 .intensity-70-bg {
-  background-color: rgba(197, 195, 189, 0.475);
+  background-color: rgba(187, 175, 161, 0.58);
 }
 
 .intensity-71-bg {
-  background-color: rgba(196, 193, 187, 0.4675);
+  background-color: rgba(186, 173, 159, 0.574);
 }
 
 .intensity-72-bg {
-  background-color: rgba(195, 192, 184, 0.46);
+  background-color: rgba(185, 171, 156, 0.568);
 }
 
 .intensity-73-bg {
-  background-color: rgba(194, 190, 182, 0.4525);
+  background-color: rgba(184, 169, 153, 0.562);
 }
 
 .intensity-74-bg {
-  background-color: rgba(194, 188, 180, 0.445);
+  background-color: rgba(183, 167, 150, 0.556);
 }
 
 .intensity-75-bg {
-  background-color: rgba(193, 187, 177, 0.4375);
+  background-color: rgba(182, 165, 147, 0.55);
 }
 
 .intensity-76-bg {
-  background-color: rgba(192, 185, 174, 0.43);
+  background-color: rgba(181, 163, 144, 0.544);
 }
 
 .intensity-77-bg {
-  background-color: rgba(191, 183, 172, 0.4225);
+  background-color: rgba(180, 160, 141, 0.538);
 }
 
 .intensity-78-bg {
-  background-color: rgba(190, 181, 169, 0.415);
+  background-color: rgba(179, 158, 138, 0.532);
 }
 
 .intensity-79-bg {
-  background-color: rgba(189, 178, 166, 0.4075);
+  background-color: rgba(178, 156, 134, 0.526);
 }
 
 .intensity-80-bg {
-  background-color: rgba(188, 176, 162, 0.4);
+  background-color: rgba(177, 153, 131, 0.52);
 }
 
 .intensity-81-bg {
-  background-color: rgba(186, 173, 159, 0.3925);
+  background-color: rgba(175, 150, 127, 0.514);
 }
 
 .intensity-82-bg {
-  background-color: rgba(185, 171, 155, 0.385);
+  background-color: rgba(174, 148, 123, 0.508);
 }
 
 .intensity-83-bg {
-  background-color: rgba(184, 168, 151, 0.3775);
+  background-color: rgba(172, 145, 119, 0.502);
 }
 
 .intensity-84-bg {
-  background-color: rgba(182, 165, 147, 0.37);
+  background-color: rgba(171, 142, 115, 0.496);
 }
 
 .intensity-85-bg {
-  background-color: rgba(181, 162, 143, 0.3625);
+  background-color: rgba(170, 139, 110, 0.49);
 }
 
 .intensity-86-bg {
-  background-color: rgba(179, 158, 138, 0.355);
+  background-color: rgba(168, 135, 106, 0.484);
 }
 
 .intensity-87-bg {
-  background-color: rgba(177, 155, 133, 0.3475);
+  background-color: rgba(166, 132, 101, 0.478);
 }
 
 .intensity-88-bg {
-  background-color: rgba(176, 151, 128, 0.34);
+  background-color: rgba(165, 128, 96, 0.472);
 }
 
 .intensity-89-bg {
-  background-color: rgba(174, 147, 122, 0.3325);
+  background-color: rgba(163, 125, 91, 0.466);
 }
 
 .intensity-90-bg {
-  background-color: rgba(171, 143, 116, 0.325);
+  background-color: rgba(161, 121, 86, 0.46);
 }
 
 .intensity-91-bg {
-  background-color: rgba(169, 138, 109, 0.3175);
+  background-color: rgba(159, 117, 80, 0.454);
 }
 
 .intensity-92-bg {
-  background-color: rgba(167, 133, 102, 0.31);
+  background-color: rgba(157, 112, 74, 0.448);
 }
 
 .intensity-93-bg {
-  background-color: rgba(164, 127, 94, 0.3025);
+  background-color: rgba(155, 108, 68, 0.442);
 }
 
 .intensity-94-bg {
-  background-color: rgba(161, 121, 86, 0.295);
+  background-color: rgba(152, 103, 61, 0.436);
 }
 
 .intensity-95-bg {
-  background-color: rgba(158, 114, 77, 0.2875);
+  background-color: rgba(150, 98, 55, 0.43);
 }
 
 .intensity-96-bg {
-  background-color: rgba(154, 107, 67, 0.28);
+  background-color: rgba(148, 93, 47, 0.424);
 }
 
 .intensity-97-bg {
-  background-color: rgba(150, 99, 55, 0.2725);
+  background-color: rgba(145, 87, 40, 0.418);
 }
 
 .intensity-98-bg {
-  background-color: rgba(146, 90, 43, 0.265);
+  background-color: rgba(142, 82, 32, 0.412);
 }
 
 .intensity-99-bg {
-  background-color: rgba(141, 80, 29, 0.2575);
+  background-color: rgba(139, 76, 23, 0.406);
 }
 
 .intensity-100-bg {
-  background-color: rgba(136, 69, 14, 0.25);
+  background-color: rgba(136, 69, 14, 0.4);
 }
 
 /*********** Posts */
@@ -6332,7 +6332,7 @@ button.close {
 .post-list .post-icon span {
   margin-left: -5px;
   width: 50px;
-  color: rgba(136, 69, 14, 0.25);
+  color: rgba(136, 69, 14, 0.4);
   text-align: center;
 }
 .post-list .post-title a {
@@ -6405,7 +6405,7 @@ button.close {
   text-decoration: none;
 }
 .quickshare-list .quickshare-content .post-metadata .post-comment.with-comment a {
-  background-color: rgba(136, 69, 14, 0.25);
+  background-color: rgba(136, 69, 14, 0.4);
 }
 .quickshare-list .quickshare-content .post-metadata .post-comment.without-comment a {
   background-color: lightgray;
@@ -6617,7 +6617,7 @@ button.close {
   border-top: 1px dotted lightgray;
 }
 .board-threadlist.board-threadlist-read {
-  border-left-color: rgba(136, 69, 14, 0.25);
+  border-left-color: rgba(136, 69, 14, 0.4);
 }
 .board-threadlist.board-threadlist-unread {
   /* border-left-color: $alert-danger-bg; */
@@ -6987,7 +6987,7 @@ form .markup-toolbar .btn:hover {
   margin: 10px 10px 10px 10px;
   line-height: 12pt;
   font-size: 11pt;
-  border-color: rgba(136, 69, 14, 0.25);
+  border-color: rgba(136, 69, 14, 0.4);
 }
 .markdown img, .markdown iframe, .bbcode img, .bbcode iframe {
   max-width: 100%;
