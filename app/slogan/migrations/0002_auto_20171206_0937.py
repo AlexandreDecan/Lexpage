@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterModelOptions(
-            name='slogan',
+            name='Slogan',
             options={'ordering': ['date'], 'permissions': (('can_set_visible', 'Peut rendre visible'),)},
         ),
     ]

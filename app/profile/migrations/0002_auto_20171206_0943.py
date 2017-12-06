@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='profile',
+            model_name='Profile',
             name='theme',
             field=models.CharField(blank=True, choices=[('style', 'Lexpage'), ('style_nowel', 'Nowel'), ('style_st_patrick', 'Saint-Patrick'), ('style_halloween', 'Halloween')], help_text='Laissez vide pour adopter automatiquement le thème du moment.', max_length=16, null=True, verbose_name='Thème'),
         ),
