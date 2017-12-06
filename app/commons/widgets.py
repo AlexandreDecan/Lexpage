@@ -13,11 +13,7 @@ from django.utils.encoding import force_text
 
 class DateTimePicker(DateTimeInput):
     class Media:
-        class JsFiles(object):
-            def __iter__(self):
-                yield 'libs/moment/moment-datepicker.min.js'
-
-        js = JsFiles()
+        js = ['libs/moment/moment-datepicker.min.js']
         css = {'all': ('libs/moment/datepicker.css',), }
 
     # http://momentjs.com/docs/#/parsing/string-format/

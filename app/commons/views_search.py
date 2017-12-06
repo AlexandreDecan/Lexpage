@@ -47,4 +47,4 @@ class SearchView(View):
             context['result_title'] = self.search['title']
             context['result_list'] = result_list
 
-        return render(self.request, 'commons/search.html', context)
+        return render(request, 'commons/search.html', context)

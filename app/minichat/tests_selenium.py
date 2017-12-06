@@ -4,7 +4,7 @@ import time
 from django.contrib.auth.models import User
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.core.cache import cache
-from django.urlss import reverse
+from django.urls import reverse
 from helpers.selenium import *
 from minichat.models import Message
 from minichat.templatetags.minichat import highlight_anchor

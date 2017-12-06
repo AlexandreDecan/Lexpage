@@ -133,7 +133,7 @@ class MessageViewsTests(TestCase):
 
     def setUp(self):
         self.client.login(username='user1', password='user1')
-        self.messages = Message.objects.filter(author=ActiveUser.objects.filter(username='user1'))
+        self.messages = Message.objects.filter(author=ActiveUser.objects.get(username='user1'))
 
     def test_messageshow(self):
         url = reverse('board_message_show', kwargs={'message': self.messages[0].pk})
