@@ -1,10 +1,7 @@
 import os
-from django.core.exceptions import SuspiciousOperation
 from django.urls import reverse
 
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.decorators.cache import never_cache
-from django.views.decorators.csrf import csrf_protect
 from django.views.generic import ListView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
@@ -13,8 +10,7 @@ from django.conf import settings
 
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.contrib.auth.views import login as view_login
-from django.contrib.auth import authenticate, login, REDIRECT_FIELD_NAME
+from django.contrib.auth.views import LoginView as DefaultLoginView
 
 from notifications.models import Notification
 
@@ -82,40 +78,21 @@ class ProfileShowView(TemplateView):
         return context
 
 
-class LoginView(FormView):
-    form_class = LoginForm
+class LoginView(DefaultLoginView):
     template_name = 'profile/login.html'
-    http_method_names = ['get', 'post']
-    redirect_field_name = REDIRECT_FIELD_NAME
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        redirect_to = self.request.GET.get(self.redirect_field_name, reverse(settings.LOGIN_REDIRECT_URL))
-        if not redirect_to.startswith('/'):
-            raise SuspiciousOperation()
-        context[self.redirect_field_name] = redirect_to
-
-        return context
+    authentication_form = LoginForm
 
     def form_valid(self, form):
-        username = form.cleaned_data['username']
-        password = form.cleaned_data['password']
+        response = super().form_valid(form)
+
         remember_me = form.cleaned_data['remember_me']
         incognito = form.cleaned_data['incognito']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(self.request, user)
-                # Handle pre-v4 account
-                if user.password[0:3] == 'md5':
-                    user.set_password(self.request.POST.get('password'))
-                    user.save()
-                if not remember_me:
-                    self.request.session.set_expiry(0)
-                self.request.session['incognito'] = incognito
-                messages.success(self.request, 'Bienvenue %s !' % user.get_username())
-        return view_login(self.request)
+        if not remember_me:
+            self.request.session.set_expiry(0)
+        self.request.session['incognito'] = incognito
+        messages.success(self.request, 'Bienvenue %s !' % self.request.user.get_username())
+
+        return response
 
 
 class ProfileListView(ListView):
