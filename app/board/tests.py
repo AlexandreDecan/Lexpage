@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 from board.models import Thread, Message, Flag
 from blog.models import BlogPost

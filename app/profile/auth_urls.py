@@ -1,7 +1,7 @@
 from commons.context_processors import global_settings
 from django.conf.urls import url
 
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 
 from django.contrib.auth import views as auth_views
 from .views import LoginView

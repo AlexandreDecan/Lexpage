@@ -3,7 +3,7 @@ import datetime
 from django.contrib.auth.models import User
 from django.http import Http404
 
-from django.core.urlresolvers import reverse_lazy, reverse
+from django.urls import reverse_lazy, reverse
 from django.template.defaultfilters import force_escape, truncatewords
 
 from django.views.generic import ListView, TemplateView, RedirectView

@@ -3,7 +3,7 @@ from unittest import skipIf
 
 from django.conf import settings
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from time import sleep
 from django.utils.module_loading import import_string

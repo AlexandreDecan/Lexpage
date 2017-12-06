@@ -1,5 +1,5 @@
 from django.core.cache import cache
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.models import User
 from django.utils.lorem_ipsum import words
 from notifications.models import Notification

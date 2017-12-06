@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 from blog.models import BlogPost
 from blog.forms import UserCreatePostForm
