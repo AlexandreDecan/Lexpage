@@ -24,8 +24,8 @@ class Migration(migrations.Migration):
                 ('date_modified', models.DateTimeField(auto_now=True, verbose_name='Date de derni\xe8re modification', null=True)),
                 ('priority', models.SmallIntegerField(default=5, verbose_name='Priorit\xe9', choices=[(1, 'Urgente'), (2, 'Haute'), (5, 'Normale'), (8, 'Faible'), (14, 'Tr\xe8s faible')])),
                 ('status', models.SmallIntegerField(default=1, verbose_name='\xc9tat', choices=[(1, 'Brouillon'), (2, 'Propos\xe9'), (3, 'Valid\xe9'), (4, 'Publi\xe9'), (5, 'Masqu\xe9')])),
-                ('approved_by', models.ForeignKey(related_name='+', verbose_name='Validateur', blank=True, to=settings.AUTH_USER_MODEL, null=True)),
-                ('author', models.ForeignKey(verbose_name='Auteur', to=settings.AUTH_USER_MODEL)),
+                ('approved_by', models.ForeignKey(related_name='+', verbose_name='Validateur', blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)),
+                ('author', models.ForeignKey(verbose_name='Auteur', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
                 'ordering': ['-date_published'],

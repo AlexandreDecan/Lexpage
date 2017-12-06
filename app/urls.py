@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^about/$', flatpage, {'url': '/about/'}, name='about'),
 
     # Django admin URLs
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
 
     # Flatpages URLs
     url(r'^pages/', include('django.contrib.flatpages.urls')),

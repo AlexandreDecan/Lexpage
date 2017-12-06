@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('text', models.CharField(max_length=180, verbose_name='Message')),
                 ('date', models.DateTimeField(auto_now_add=True, verbose_name='Heure')),
-                ('user', models.ForeignKey(related_name='+', to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(related_name='+', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
                 'ordering': ['date'],
