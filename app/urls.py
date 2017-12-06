@@ -1,4 +1,4 @@
-from django.conf.urls import include, url
+from django.urls import include, path
 from django.contrib.flatpages.views import flatpage
 
 from views import homepage
@@ -8,27 +8,26 @@ from django.contrib import admin
 
 urlpatterns = [
     # Applications URLs
-    url(r'^accounts/', include('profile.auth_urls')),
-    url(r'^registration/', include('profile.register_urls')),
-    url(r'^profile/', include('profile.urls')),
-    url(r'^slogan/', include('slogan.urls')),
-    url(r'^minichat/', include('minichat.urls')),
-    url(r'^posts/', include('blog.urls')),
-    url(r'^messaging/', include('messaging.urls')),
-    url(r'^board/', include('board.urls')),
-    url(r'^notifications/', include('notifications.urls')),
+    path('accounts/', include('profile.auth_urls')),
+    path('registration/', include('profile.register_urls')),
+    path('profile/', include('profile.urls')),
+    path('slogan/', include('slogan.urls')),
+    path('minichat/', include('minichat.urls')),
+    path('posts/', include('blog.urls')),
+    path('messaging/', include('messaging.urls')),
+    path('board/', include('board.urls')),
+    path('notifications/', include('notifications.urls')),
 
     # Specific URLs
-    url(r'^$', homepage, name='homepage'),
-    url(r'^go.php$', homepage),
-    url(r'^search/', include('commons.urls_search')),
-    url(r'^markup/', include('commons.urls_markup')),
-    url(r'^about/$', flatpage, {'url': '/about/'}, name='about'),
+    path('', homepage, name='homepage'),
+    path('search/', include('commons.urls_search')),
+    path('markup/', include('commons.urls_markup')),
+    path('about/', flatpage, {'url': '/about/'}, name='about'),
 
     # Django admin URLs
-    url(r'^admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
 
     # Flatpages URLs
-    url(r'^pages/', include('django.contrib.flatpages.urls')),
+    path('pages/', include('django.contrib.flatpages.urls')),
 ]
 

@@ -1,7 +1,4 @@
-from django.conf.urls import include
-from django.conf.urls import url
-
-from django.urls import reverse_lazy
+from django.urls import include, path, re_path, reverse_lazy
 
 from django.views.generic import RedirectView
 from django.contrib.flatpages.views import flatpage
@@ -14,87 +11,45 @@ from .feeds import LatestEntriesFeed
 from datetime import date
 
 post_patterns = [
-    url(r'^$',
-        PostShowView.as_view(),
-        name='blog_post_show'),
-    url(r'^edit/$',
-        PostEditView.as_view(),
-        name='blog_post_edit'),
-    url(r'^comments/$',
-        PostCommentsView.as_view(),
-        name='blog_post_comments'),
+    path('', PostShowView.as_view(), name='blog_post_show'),
+    path(r'edit/', PostEditView.as_view(), name='blog_post_edit'),
+    path('comments/', PostCommentsView.as_view(), name='blog_post_comments'),
 ]
 
 draft_patterns = [
-    url(r'^$',
-        DraftPostListView.as_view(),
-        name='blog_draft_list'),
-    url(r'^create/$',
-        PostCreateView.as_view(),
-        name='blog_draft_create'),
-    url(r'^(?P<pk>\d+)/$',
-        DraftPostEditView.as_view(),
-        name='blog_draft_edit'),
-]
-
-draft_patterns += [
-    url(r'^help/$', flatpage, {'url': '/bloghelp/'}, name='blog_draft_help'),
+    path('', DraftPostListView.as_view(),name='blog_draft_list'),
+    path('create/', PostCreateView.as_view(), name='blog_draft_create'),
+    path('<int:pk>/', DraftPostEditView.as_view(), name='blog_draft_edit'),
+    path('help/', flatpage, {'url': '/bloghelp/'}, name='blog_draft_help'),
 ]
 
 pending_patterns = [
-    url(r'^$',
-        PendingPostListView.as_view(),
-        name='blog_pending_list'),
-    url(r'^(?P<pk>\d+)/$',
-        PendingPostEditView.as_view(),
-        name='blog_pending_edit'),
+    path('', PendingPostListView.as_view(), name='blog_pending_list'),
+    path('<int:pk>', PendingPostEditView.as_view(), name='blog_pending_edit'),
 ]
 
 tag_patterns = [
-    url(r'^api/list$',
-        TagsListView.as_view(),
-        name='blog_api_tags'),
-    url(r'^$',
-        TagListView.as_view(),
-        {'taglist': ''},
-        name='blog_tags'),
-    url(r'^(?P<taglist>[\w+\-]+)/$',
-        TagListView.as_view(),
-        name='blog_tags'),
-    url(r'^(?P<taglist>[\w+\-]+)/(?P<page>\d+)/$',
-        TagListView.as_view(),
-        name='blog_tags'),
+    path('api/list', TagsListView.as_view(), name='blog_api_tags'),
+    path('', TagListView.as_view(), {'taglist': ''}, name='blog_tags'),
+    re_path(r'^(?P<taglist>[\w+\-]+)/$', TagListView.as_view(), name='blog_tags'),
+    re_path(r'^(?P<taglist>[\w+\-]+)/(?P<page>\d+)/$', TagListView.as_view(), name='blog_tags'),
 ]
 
 urlpatterns = [
-    url(r'^archives/$',
-        RedirectView.as_view(
-            url=reverse_lazy('blog_archives',
-                             kwargs={'year': date.today().year, 'month': date.today().month}),
+    path('archives/', RedirectView.as_view(
+            url=reverse_lazy('blog_archives', kwargs={'year': date.today().year, 'month': date.today().month}),
             permanent=False,
-        ),
-        name='blog_archives'),
-    url(r'^archives/(?P<year>\d{4})/(?P<month>\d+)/$',
-        PostListView.as_view(month_format='%m'),
-        name='blog_archives'),
+        ), name='blog_archives'),
+    path('archives/<int:year>/<int:month>/', PostListView.as_view(month_format='%m'), name='blog_archives'),
 
-    url(r'^(?P<pk>\d+)/',
-        include(post_patterns)),
-    url(r'^(?P<pk>\d+)-(?P<slug>[\w-]+)/',
-        include(post_patterns)),
+    path('<int:pk>/', include(post_patterns)),
+    path('<int:pk>-<slug:slug>/', include(post_patterns)),
 
-    url(r'^quickshare/$',
-        QuickShareCreateView.as_view(),
-        name='blog_quickshare_create'),
+    path('quickshare/', QuickShareCreateView.as_view(), name='blog_quickshare_create'),
 
-    url(r'^pending/',
-        include(pending_patterns)),
-    url(r'^draft/',
-        include(draft_patterns)),
-    url(r'^tags/',
-        include(tag_patterns)),
+    path('pending/', include(pending_patterns)),
+    path('draft/', include(draft_patterns)),
+    path('tags/', include(tag_patterns)),
 
-    url(r'^rss/$',
-        LatestEntriesFeed(),
-        name='blog_rss'),
+    path('rss/', LatestEntriesFeed(), name='blog_rss'),
 ]
