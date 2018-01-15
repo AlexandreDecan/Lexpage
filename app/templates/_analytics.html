@@ -4,8 +4,10 @@
 <script type="text/javascript">
   var _paq = _paq || [];
   {% if user.is_authenticated %}
-  _paq.push(['setCustomVariable', 1, 'authenticated', 'yes', 'visit']);  
-  _paq.push(['setUserId', '{{ user.get_username }}']);
+  _paq.push(['setCustomVariable', 1, 'authenticated', 'yes', 'visit']);
+  {# _paq.push(['setUserId', '{{ user.get_username }}']); #}
+  {% else %}
+  _paq.push(['setCustomVariable', 1, 'authenticated', 'no', 'visit']);
   {% endif %}
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
