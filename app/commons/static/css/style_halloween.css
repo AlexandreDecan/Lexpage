@@ -6455,7 +6455,7 @@ button.close {
   margin-left: -48px;
 }
 .quickshare-list .quickshare-form .quickshare-form-input {
-  margin-right: 5em;
+  margin-right: 4em;
 }
 .quickshare-list .quickshare-form .quickshare-form-input textarea {
   height: 4em;
@@ -6463,6 +6463,7 @@ button.close {
 .quickshare-list .quickshare-form .quickshare-form-button {
   float: right;
   text-align: center;
+  padding-top: 1em;
 }
 
 .post-list-flat .post-embed {

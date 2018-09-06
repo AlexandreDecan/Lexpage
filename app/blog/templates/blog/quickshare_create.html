@@ -19,8 +19,8 @@
         {% include "_form_field.html" with field=field %}
     {% endfor %}
 
-    <button class="btn btn-primary" type="submit">Publier</button>
-    <button class="btn btn-default" name="queue" type="submit">Mettre en attente</button>
+    <button class="btn btn-primary" type="submit">Publier maintenant</button>
+    <button class="btn btn-default" name="queue" type="submit">Publier plus tard</button>
     <a class="btn btn-default" href="{% url 'homepage' %}">Annuler</a>
     </form>
 
