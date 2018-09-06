@@ -15,15 +15,22 @@ bower_components
 # Sass cache
 *.sass-cache
 
+# Misc
+Gemfile.lock
+.bundle
+
 # node modules
 node_modules/*
 
-# pycharm
-.idea/*
+# IDE
+.idea
+.vscode
+.pytest_cache
 
-# Virtualenv
+# Python
 env_lexpage*
 venv*
+.mypy_cache
 
 # Gunicorn
 gunicorn.pid
@@ -31,3 +38,4 @@ gunicorn.pid
 # Static files
 app/static_pub/*
 vendor/
+

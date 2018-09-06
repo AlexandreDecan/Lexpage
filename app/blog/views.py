@@ -209,14 +209,17 @@ class QuickShareCreateView(FormView):
             author=self.request.user,
             tags=' '.join(data['tags']),
             abstract=data['content'],
-            priority=BlogPost.PRIORITY_VERY_HIGH,
-            status=BlogPost.STATUS_PUBLISHED,
+            priority=BlogPost.PRIORITY_HIGH,
             date_published=datetime.datetime.now(),
         )
         post.save()
 
-        # Display a confirmation to the user
-        messages.success(self.request, 'Le lien que vous avez partagé est maintenant publié.')
+        if 'queue' in self.request.POST:
+            post.change_status(self.request.user, BlogPost.STATUS_APPROVED)
+            messages.success(self.request, 'Le lien que vous avez partagé a été mis en attente pour publication.')
+        else:
+            post.change_status(self.request.user, BlogPost.STATUS_PUBLISHED)
+            messages.success(self.request, 'Le lien que vous avez partagé est maintenant publié.')
 
         return FormView.form_valid(self, form)
 
