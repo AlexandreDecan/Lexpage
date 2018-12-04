@@ -11,10 +11,10 @@
 
     {% block stylesheets %}
         {%  if THEMES.FORCED %}
-            <link href="{% static "css/"|add:THEMES.FORCED|add:".css" %}?20180906-3" rel="stylesheet"/>
+            <link href="{% static "css/"|add:THEMES.FORCED|add:".css" %}?20181204" rel="stylesheet"/>
         {% else %}
             {% with theme=user.profile.get_theme|default:THEMES.DEFAULT %}
-                <link href="{% static "css/"|add:theme|add:".css" %}?20180906-3" rel="stylesheet"/>
+                <link href="{% static "css/"|add:theme|add:".css" %}?20181204" rel="stylesheet"/>
             {% endwith %}
         {% endif %}
         <link href="{% static "libs/font-awesome/css/font-awesome.css" %}" rel="stylesheet"/>
