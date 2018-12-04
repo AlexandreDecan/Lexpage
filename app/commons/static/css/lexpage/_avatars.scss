@@ -11,7 +11,7 @@
   background-color: #444;
 
   @include z-depth(1);
-  @include transition(border-radius, 0.4s, ease-out);
+  @include transition(border-radius 0.4s ease-out);
 
   &:hover {
     border-radius: 8px;

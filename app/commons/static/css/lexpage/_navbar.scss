@@ -47,7 +47,7 @@
       width: 60px;
       height: 60px;
 
-      @include transition(opacity, 0.5s, linear);
+      @include transition(opacity 0.5s linear);
       @include z-depth(3);
 
       &:hover {

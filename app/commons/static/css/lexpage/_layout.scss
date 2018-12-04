@@ -5,13 +5,13 @@
 
 /*********** Transitions */
 a, .btn, button, .navbar .badge {
-  @include transition(color, 0.3s, ease, 0.3s);
-  @include transition(background-color, 0.3s, ease-out, 0.3s);
-  @include transition(border-radius, 0.3s, ease-out, 0.3s);
+  @include transition(color 0.3s ease 0.3s);
+  @include transition(background-color 0.3s ease-out 0.3s);
+  @include transition(border-radius 0.3s ease-out 0.3s);
 }
 
 * {
-  @include transition(box-shadow, 0.3s, ease-out);
+  @include transition(box-shadow 0.3s ease-out);
 }
 
 /*********** General layout */

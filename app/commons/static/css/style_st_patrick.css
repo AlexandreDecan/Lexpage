@@ -5817,9 +5817,9 @@ button.close {
   background-color: #444;
   -webkit-box-shadow: 0 0px 5px 1px rgba(0, 0, 0, 0.3);
   box-shadow: 0 0px 5px 1px rgba(0, 0, 0, 0.3);
-  -webkit-transition: border-radius, 0.4s, ease-out;
-  -o-transition: border-radius, 0.4s, ease-out;
-  transition: border-radius, 0.4s, ease-out;
+  -webkit-transition: border-radius 0.4s ease-out;
+  -o-transition: border-radius 0.4s ease-out;
+  transition: border-radius 0.4s ease-out;
 }
 .avatar:hover {
   border-radius: 8px;
@@ -6808,21 +6808,21 @@ body {
 }
 /*********** Transitions */
 a, .btn, button, .navbar .badge, .navbar .quickshare-list .quickshare-content .post-metadata .post-comment a, .quickshare-list .quickshare-content .post-metadata .post-comment .navbar a {
-  -webkit-transition: color, 0.3s, ease, 0.3s;
-  -o-transition: color, 0.3s, ease, 0.3s;
-  transition: color, 0.3s, ease, 0.3s;
-  -webkit-transition: background-color, 0.3s, ease-out, 0.3s;
-  -o-transition: background-color, 0.3s, ease-out, 0.3s;
-  transition: background-color, 0.3s, ease-out, 0.3s;
-  -webkit-transition: border-radius, 0.3s, ease-out, 0.3s;
-  -o-transition: border-radius, 0.3s, ease-out, 0.3s;
-  transition: border-radius, 0.3s, ease-out, 0.3s;
+  -webkit-transition: color 0.3s ease 0.3s;
+  -o-transition: color 0.3s ease 0.3s;
+  transition: color 0.3s ease 0.3s;
+  -webkit-transition: background-color 0.3s ease-out 0.3s;
+  -o-transition: background-color 0.3s ease-out 0.3s;
+  transition: background-color 0.3s ease-out 0.3s;
+  -webkit-transition: border-radius 0.3s ease-out 0.3s;
+  -o-transition: border-radius 0.3s ease-out 0.3s;
+  transition: border-radius 0.3s ease-out 0.3s;
 }
 
 * {
-  -webkit-transition: box-shadow, 0.3s, ease-out;
-  -o-transition: box-shadow, 0.3s, ease-out;
-  transition: box-shadow, 0.3s, ease-out;
+  -webkit-transition: box-shadow 0.3s ease-out;
+  -o-transition: box-shadow 0.3s ease-out;
+  transition: box-shadow 0.3s ease-out;
 }
 
 /*********** General layout */
@@ -7140,9 +7140,9 @@ form .markup-toolbar .btn:hover {
   margin-bottom: -40px;
   width: 60px;
   height: 60px;
-  -webkit-transition: opacity, 0.5s, linear;
-  -o-transition: opacity, 0.5s, linear;
-  transition: opacity, 0.5s, linear;
+  -webkit-transition: opacity 0.5s linear;
+  -o-transition: opacity 0.5s linear;
+  transition: opacity 0.5s linear;
   -webkit-box-shadow: 0 0px 11px 3px rgba(0, 0, 0, 0.3);
   box-shadow: 0 0px 11px 3px rgba(0, 0, 0, 0.3);
 }
