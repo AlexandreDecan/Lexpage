@@ -6,6 +6,8 @@ h2 {
 }
 
 .navbar {
+  @include gradient-vertical($brand-primary, $brand-primary-alt, 50%, 90%);
+
   .navbar-brand {
     &:after {
       content: " de Nowel";
