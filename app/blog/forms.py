@@ -45,7 +45,7 @@ class QuickShareForm(forms.Form):
     content = forms.CharField(
         label='Contenu du partage rapide',
         widget=forms.Textarea(attrs={
-            'class': 'quickshare-input',
+            'class': 'quickshare-input markup-input markup-input-markdown',
             'rows': 2,
         }))
 

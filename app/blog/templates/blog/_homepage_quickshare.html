@@ -25,18 +25,40 @@
                 </a>
             </div>
             <div class="quickshare-form-button">
-                <button class="btn btn-default btn-xs" type="submit" data-toggle="tooltip" data-placement="right" title="Publier maintenant">
+                <button class="btn btn-default btn-xs" type="submit" title="Publier maintenant">
                     <span class="fa fa-fw fa-check"></span>
                 </button>
-                <button class="btn btn-default btn-xs" name="queue" type="submit" data-toggle="tooltip" data-placement="right" title="Publier plus tard">
+                <button class="btn btn-default btn-xs" name="queue" type="submit" title="Publier plus tard">
                     <span class="fa fa-fw fa-hourglass-half"></span>
                 </button>
                 <br/>
-                <a class="text-muted" href="{% url 'blog_quickshare_create' %}"><span class="fa fa-question-circle"></span></a>
+                <a class="text-muted" id="preview_quickshare" href="javascript:preview_quickshare();" title="prévisualiser"><span class="fa fa-eye"></span></a>
+                <script language="javascript">
+                    function preview_quickshare() {
+                        var target = $(".quickshare-form-input #quickshare-content");
+                        var preview = target.next(".markup-preview").get(0);
+
+                        if (preview) {
+                            // Remove preview and display target
+                            $(preview).remove();
+                            target.removeClass("hidden");
+                        } else {
+                            // Hide target and add preview div
+                            var div = $("<div>", {"class": "markup-preview"});
+                            div.css('min-height', target.css("height"));
+                            div.css('max-height', target.css('height'));
+                            div.css('overflow', 'auto');
+                            target.addClass("hidden");
+                            target.after(div);
+                            preview_markup(MARKUP_URL.preview["markdown"], target.val(), div);
+                        }
+                    }
+                </script>
+                <a class="text-muted" href="{% url 'blog_quickshare_create' %}" title="aide"><span class="fa fa-question-circle"></span></a>
 
             </div>
             <div class="quickshare-form-input">
-                <textarea name="content" rows="2" class="form-control" placeholder="Partagez vos bonnes adresses !"></textarea>
+                <textarea id="quickshare-content" name="content" rows="2" class="form-control" placeholder="Partagez vos bonnes adresses !"></textarea>
             </div>
         </div>
         </form>
