@@ -49,13 +49,13 @@ Tester localement le site se fait de manière assez simple, pour peu que vous sa
 ### Mettre en place un environnement virtuel
 
 Que vous utilisiez `docker`, `vagrant` ou `virtualenv`, l'important est d'isoler votre environnement.
-Lexpage nécessite Python 3.4 ou supérieur pour fonctionner, ainsi qu'une petite liste de dépendances que
+Lexpage nécessite Python 3.6 ou supérieur pour fonctionner, ainsi qu'une petite liste de dépendances que
 vous retrouverez dans le fichier *requirements.txt*.
 
-Si vous avez Python 3.4 (ou supérieur) sur votre système, c'est très simple :
+Si vous avez Python 3.6 (ou supérieur) sur votre système, c'est très simple :
  - On commence par installer de quoi gérer un environnement virtuel : `pip install virtualenv` (droits d'administrateur
  requis sauf si vous installez localement, consultez la documentation de `pip`)
- - On crée l'environnement : `virtualenv venv -p python3.4` va créer un environnement avec Python 3.4 dedans,
+ - On crée l'environnement : `virtualenv venv -p python3.6` va créer un environnement avec Python 3.6 dedans,
    dans le répertoire *venv*.
  - On saute dedans avec `source venv/bin/activate`
  - On installe les dépendances avec `pip install -r requirements_dev.txt`

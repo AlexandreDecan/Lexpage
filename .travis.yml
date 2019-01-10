@@ -1,10 +1,10 @@
 language: python
 python:
-- 3.4
+- 3.6
 sudo: true
 dist: trusty
 addons:
-  postgresql: "9.4"
+  postgresql: "9.6"
   firefox: "latest"
 services:
 - redis-server
