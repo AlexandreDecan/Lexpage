@@ -42,9 +42,6 @@ _simple_tags = [
 
     # embed
     (r'\[embed\]('+RE_URL+')\[/embed\]', r'<a class="oembed" href="\1">\1</a>', r'\1'),
-
-    # spoiler
-    (r'\[spoiler\](.*?)\[/spoiler\]', '<span class="spoiler" onclick="$(this).toggleClass(\'spoiler-show\');"><span>\\1</span></span>', r'\1'),
 ]
 
 _advanced_tags = [
@@ -58,6 +55,9 @@ _advanced_tags = [
  
     # sign=
     (r'\[sign=(.*?)\](.*?)\[/sign\]', r'<div class="smiley-sign"><div class="smiley-sign-text">\2</div><div class="smiley-sign-smiley">\1</div></div>', r'\2'),
+
+    # spoiler
+    (r'\[spoiler\](.*?)\[/spoiler\]', '<span class="spoiler" onclick="$(this).toggleClass(\'spoiler-show\');"><span>\\1</span></span>', r'\1'),
 ]
 
 
