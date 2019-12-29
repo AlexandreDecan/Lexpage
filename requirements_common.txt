@@ -1,6 +1,6 @@
-django==2.0.10
+django==2.0.13
 django-recaptcha==1.5.0
-django-widget-tweaks==1.4.3
-djangorestframework==3.9.0
+django-widget-tweaks==1.4.5
+djangorestframework==3.11.0
 Markdown==2.6.11
 yuicompressor==2.4.8
