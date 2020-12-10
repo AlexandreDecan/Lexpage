@@ -3,7 +3,6 @@ from django.core.files.base import ContentFile
 from django.conf import settings
 from django.utils.deconstruct import deconstructible
 
-from tempfile import NamedTemporaryFile
 from css_html_js_minify import css_minify, js_minify
 
 import logging
@@ -31,7 +30,7 @@ class MinifyStatic(StaticFilesStorage):
 
             if func is not None:
                 try:
-                    content = original_file.read()
+                    content = original_file.read().decode()
                     minified = func(content)
                     file = ContentFile(minified)
                 except Exception:  # pragma: no cover
