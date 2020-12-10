@@ -3,4 +3,5 @@ django-recaptcha==1.5.0
 django-widget-tweaks==1.4.5
 djangorestframework==3.11.0
 Markdown==2.6.11
-css-html-js-minify==2.5.5
+jsmin==2.2.2
+csscompressor==0.9.5

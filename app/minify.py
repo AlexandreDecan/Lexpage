@@ -3,7 +3,8 @@ from django.core.files.base import ContentFile
 from django.conf import settings
 from django.utils.deconstruct import deconstructible
 
-from css_html_js_minify import css_minify, js_minify
+from jsmin import jsmin
+from csscompressor import compress
 
 import logging
 
@@ -22,9 +23,9 @@ class MinifyStatic(StaticFilesStorage):
         file = original_file
         if not any((name.startswith(prefix) for prefix in self._ignored_prefixes)):
             if name.endswith('.js') and not name.endswith('.min.js') and self.minify_enabled('js'):
-                func = js_minify
+                func = jsmin
             elif name.endswith('.css') and not name.endswith('.min.css') and self.minify_enabled('css'):
-                func = css_minify
+                func = compress
             else:
                 func = None
 
