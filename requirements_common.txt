@@ -1,7 +1,7 @@
 django==2.0.13
 django-recaptcha==1.5.0
 django-widget-tweaks==1.4.5
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 Markdown==2.6.11
 jsmin==2.2.2
 csscompressor==0.9.5
