@@ -8,6 +8,7 @@ addons:
   firefox: "latest"
 services:
 - redis-server
+- xfvb
 env:
   global:
   - DJANGO_SETTINGS_MODULE=settings_travis
@@ -32,9 +33,6 @@ install:
 - travis_retry bundle install
 before_script:
 - psql -c 'create database appdb;' -U postgres
-- "export DISPLAY=:99.0"
-- "sh -e /etc/init.d/xvfb start"
-- sleep 3 # give xvfb some time to start
 script:
 - coverage run    --source app/ --omit */migrations/* --omit */management/* app/manage.py collectstatic --noinput
 - coverage run -a --source app/ --omit */migrations/* --omit */management/* app/manage.py test -v 3
