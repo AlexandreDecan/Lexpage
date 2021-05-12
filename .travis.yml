@@ -2,7 +2,7 @@ language: python
 python:
 - 3.6
 sudo: true
-dist: trusty
+dist: bionic
 addons:
   postgresql: "9.6"
   firefox: "latest"
