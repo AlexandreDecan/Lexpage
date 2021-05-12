@@ -14,7 +14,7 @@ env:
   - DJANGO_SETTINGS_MODULE=settings_travis
   - RUN_NPM_TESTS="yes"
   matrix:
-  - SELENIUM_WEBDRIVER=selenium.webdriver.chrome.webdriver.WebDriver
+  # - SELENIUM_WEBDRIVER=selenium.webdriver.chrome.webdriver.WebDriver
   - SELENIUM_WEBDRIVER=selenium.webdriver.firefox.webdriver.WebDriver
 before_install:
 - wget https://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip
