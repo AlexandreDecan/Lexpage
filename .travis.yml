@@ -1,19 +1,19 @@
+os: linux
+dist: bionic
 language: python
 python:
 - 3.6
-sudo: true
-dist: bionic
 addons:
   postgresql: "9.6"
   firefox: "latest"
 services:
-- redis-server
-- xfvb
+- redis
+- xvfb
 env:
   global:
   - DJANGO_SETTINGS_MODULE=settings_travis
   - RUN_NPM_TESTS="yes"
-  matrix:
+  jobs:
   # - SELENIUM_WEBDRIVER=selenium.webdriver.chrome.webdriver.WebDriver
   - SELENIUM_WEBDRIVER=selenium.webdriver.firefox.webdriver.WebDriver
 before_install:
