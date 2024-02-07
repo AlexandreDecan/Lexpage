@@ -1,4 +1,4 @@
-django==2.0.13
+django==3.2.24
 django-recaptcha==1.5.0
 django-widget-tweaks==1.4.5
 djangorestframework==3.11.0
