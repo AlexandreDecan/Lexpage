@@ -1,5 +1,5 @@
 -r requirements_common.txt
 psycopg2==2.7.6.1
-gunicorn==19.9.0
+gunicorn==22.0.0
 django-redis-cache==1.8.1
 redis>=2.10.0,<3
